@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 Operações - Promover</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIÁVEIS DE TEMA (MATEMÁTICA = AZUL) --- */
+        :root {
+            --bg-color: #F8F9FA;
+            --text-color: #2D3748;
+            --border-color: #000000;
+            
+            /* CORES DA MATÉRIA */
+            --theme-color: #D0EFFF; 
+            --theme-active: #2B9AF3; 
+            --theme-text-active: #FFFFFF;
+            
+            /* CORES DE FEEDBACK */
+            --correct-bg: #C6F6D5;
+            --correct-border: #276749;
+            --wrong-bg: #FED7D7;
+            --wrong-border: #C53030;
+            
+            /* LAYOUT */
+            --white: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-bottom: 80px; /* Espaço para footer fixo */
+        }
+
+        /* --- ESTILO DA LOGO --- */
+        .logo-header {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0 10px 0;
+        }
+
+        .logo-img {
+            max-height: 80px; /* Ajustei para ficar bom com logomarcas */
+            width: auto;
+            display: block;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        /* --- NAVEGAÇÃO SUPERIOR --- */
+        .top-nav {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-close {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* --- O INTERRUPTOR (TOGGLE) --- */
+        .toggle-container {
+            background-color: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            padding: 4px;
+            display: flex;
+            margin-bottom: 25px;
+            box-shadow: 3px 3px 0px var(--border-color);
+        }
+
+        .toggle-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 12px 0;
+            border-radius: 40px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background-color: var(--theme-active);
+            color: var(--theme-text-active);
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* --- SEÇÃO EXPLICAÇÃO --- */
+        .section-view {
+            display: none; 
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .card-content {
+            background-color: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 4px 4px 0px var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        .card-header-icon {
+            font-size: 1.5rem;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .example-box {
+            background-color: #E6FFFA;
+            border-left: 5px solid #38B2AC;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .example-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #234E52;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* --- SEÇÃO PRATICAR (QUIZ) --- */
+        .question-map {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 5px;
+            margin-bottom: 20px;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .question-map::-webkit-scrollbar { display: none; }
+
+        .map-dot {
+            min-width: 40px;
+            height: 40px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #888;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .map-dot.active {
+            border-color: var(--border-color);
+            background-color: var(--theme-active);
+            color: white;
+            box-shadow: 2px 2px 0px var(--border-color);
+            transform: scale(1.05);
+        }
+        
+        .map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+        .map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 16px;
+            background-color: var(--white);
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .opt-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* ESTADOS DE FEEDBACK */
+        .option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); }
+        .option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+
+        .option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.8; }
+        .option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+        
+        .option-btn.disabled { pointer-events: none; }
+
+        /* BOX DE CORREÇÃO */
+        .feedback-box {
+            display: none;
+            margin-top: 20px;
+            background-color: #EDF2F7;
+            border: 2px solid #2D3748;
+            border-radius: 12px;
+            padding: 20px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .feedback-title {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- RODAPÉ FIXO --- */
+        .quiz-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            border-top: 2px solid var(--border-color);
+            padding: 15px 20px;
+            display: none; 
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+        }
+        .btn-next { background-color: var(--theme-active); color: white; box-shadow: 2px 2px 0px var(--border-color); }
+        .btn-prev { background-color: #f0f0f0; color: #555; }
+        .btn-prev:disabled { opacity: 0.5; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="logo-header">
+        <img src="logo.png" alt="Logo Promover" class="logo-img">
+    </div>
+
+    <div class="container">
+        
+        <nav class="top-nav">
+            <a href="6ano-matematica.html" class="btn-close">⬅ Voltar</a>
+            <span style="font-size: 0.8rem; font-weight: 700; color: #888;">MATEMÁTICA</span>
+        </nav>
+
+        <div class="toggle-container">
+            <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📘 Explicação</button>
+            <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🧠 Praticar</button>
+        </div>
+
+        <div id="viewExplanation" class="section-view" style="display: block;">
+            
+            <h1 style="font-size: 1.5rem; margin-bottom: 15px; line-height: 1.2;">As Quatro Operações</h1>
+            <p style="color: #555; margin-bottom: 20px;">Vamos relembrar como somar, subtrair, multiplicar e dividir números naturais.</p>
+            
+            <div class="card-content">
+                <h3><span class="card-header-icon">➕</span> Adição</h3>
+                <p style="margin-top: 10px;">Usada para juntar quantidades ou acrescentar algo.</p>
+                <p><strong>Termos:</strong> Parcela + Parcela = Soma (ou Total).</p>
+                
+                <div class="example-box">
+                    <span class="example-tag">Exemplo: Juntar</span>
+                    <p>Você tem 15 figurinhas e ganhou mais 10.</p>
+                    <p><strong>15 + 10 = 25</strong></p>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <h3><span class="card-header-icon">➖</span> Subtração</h3>
+                <p style="margin-top: 10px;">Usada para tirar, comparar (quanto falta) ou separar.</p>
+                <p><strong>Termos:</strong> Minuendo - Subtraendo = Resto (ou Diferença).</p>
+                
+                <div class="example-box">
+                    <span class="example-tag">Exemplo: Troco</span>
+                    <p>Você pagou R$ 50,00 numa conta de R$ 30,00.</p>
+                    <p><strong>50 - 30 = 20</strong> (Seu troco é R$ 20,00).</p>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <h3><span class="card-header-icon">✖️</span> Multiplicação</h3>
+                <p style="margin-top: 10px;">É uma forma rápida de somar parcelas iguais.</p>
+                <p><strong>Termos:</strong> Fator x Fator = Produto.</p>
+                
+                <div class="example-box">
+                    <span class="example-tag">Exemplo: Pacotes</span>
+                    <p>4 caixas com 6 ovos cada.</p>
+                    <p>Em vez de 6+6+6+6, fazemos: <strong>4 x 6 = 24</strong>.</p>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <h3><span class="card-header-icon">➗</span> Divisão</h3>
+                <p style="margin-top: 10px;">Usada para repartir igualmente ou descobrir quantos cabem.</p>
+                <p><strong>Termos:</strong> Dividendo ÷ Divisor = Quociente (e sobra o Resto).</p>
+                
+                <div class="example-box">
+                    <span class="example-tag">Exemplo: Repartir</span>
+                    <p>20 balas para 4 crianças.</p>
+                    <p><strong>20 ÷ 4 = 5</strong> (5 balas para cada um).</p>
+                    <p style="font-size: 0.8rem; margin-top:5px; color:#C53030;"><strong>⚠️ Atenção:</strong> Nunca se pode dividir por zero!</p>
+                </div>
+            </div>
+
+            <button onclick="setMode('practice')" style="width: 100%; padding: 15px; background: var(--text-color); color: white; border: none; border-radius: 12px; font-weight: 700; margin-bottom: 20px;">
+                Ir para Exercícios ➜
+            </button>
+        </div>
+
+        <div id="viewPractice" class="section-view">
+            
+            <div style="margin-bottom: 15px;">
+                <h2>Agora é sua vez!</h2>
+                <p style="color: #666; font-size: 0.9rem;">Toque na alternativa correta.</p>
+            </div>
+
+            <div class="question-map" id="qMap"></div>
+
+            <div id="quizContainer" style="margin-bottom: 100px;">
+                </div>
+
+        </div>
+
+    </div>
+
+    <footer class="quiz-footer" id="quizFooter">
+        <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+        <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+    </footer>
+
+    <script>
+        // --- BANCO DE QUESTÕES (AS 4 OPERAÇÕES) ---
+        const questions = [
+            // FIXAÇÃO (1-5)
+            {
+                id: 1,
+                text: "Na conta <strong>10 + 5 = 15</strong>, o número 15 é chamado de:",
+                options: ["Parcela", "Soma ou Total", "Resto", "Produto", "Fator"],
+                correct: 1,
+                explanation: "<strong>Correto!</strong> O resultado de uma adição é sempre chamado de Soma ou Total. Parcela são os números que estamos somando."
+            },
+            {
+                id: 2,
+                text: "Se você tem 20 reais e gasta 8 reais, qual operação você faz para saber quanto sobrou?",
+                options: ["Adição (+)", "Subtração (-)", "Multiplicação (x)", "Divisão (÷)", "Potenciação"],
+                correct: 1,
+                explanation: "<strong>Exato!</strong> Se você gastou, você tirou. Tirar é uma ideia da Subtração. 20 - 8 = 12."
+            },
+            {
+                id: 3,
+                text: "Todo número multiplicado por <strong>zero</strong> resulta em:",
+                options: ["Zero", "Um", "Ele mesmo", "Dez", "Infinito"],
+                correct: 0,
+                explanation: "<strong>Isso aí!</strong> Qualquer coisa vezes nada é nada. Exemplo: 5 x 0 = 0. 1000 x 0 = 0."
+            },
+            {
+                id: 4,
+                text: "Qual é o resultado de <strong>45 ÷ 5</strong>?",
+                options: ["8", "7", "9", "5", "10"],
+                correct: 2,
+                explanation: "<strong>Muito bem!</strong> Pois 9 vezes 5 é igual a 45. A divisão é o inverso da multiplicação."
+            },
+            {
+                id: 5,
+                text: "Na divisão, é impossível dividir um número por:",
+                options: ["1", "2", "10", "Zero", "100"],
+                correct: 3,
+                explanation: "<strong>Perfeito!</strong> Não existe divisão por zero na matemática. Tente dividir 10 balas para 0 pessoas... não faz sentido!"
+            },
+            // PRÁTICA (6-15)
+            {
+                id: 6,
+                text: "Num cinema há 12 fileiras com 10 poltronas em cada uma. Quantas poltronas há no total?",
+                options: ["22", "120", "100", "110", "112"],
+                correct: 1,
+                explanation: "<strong>Lógica correta!</strong> Temos parcelas iguais (12 vezes o 10). Fazemos 12 x 10 = 120 poltronas."
+            },
+            {
+                id: 7,
+                text: "João quer comprar um tênis de R$ 150,00, mas só tem R$ 90,00. Quanto falta?",
+                options: ["R$ 60,00", "R$ 50,00", "R$ 240,00", "R$ 40,00", "R$ 70,00"],
+                correct: 0,
+                explanation: "<strong>Certo!</strong> Para saber a diferença (quanto falta), subtraímos: 150 - 90 = 60 reais."
+            },
+            {
+                id: 8,
+                text: "Qual operação é a inversa da <strong>Adição</strong>?",
+                options: ["Multiplicação", "Divisão", "Subtração", "Potenciação", "Radiciação"],
+                correct: 2,
+                explanation: "<strong>Isso mesmo!</strong> O contrário de somar (pôr) é subtrair (tirar). Assim como o contrário de multiplicar é dividir."
+            },
+            {
+                id: 9,
+                text: "Uma caixa tem 24 chocolates. Quero dividir igualmente entre 3 amigos. Quantos cada um recebe?",
+                options: ["6", "7", "8", "9", "12"],
+                correct: 2,
+                explanation: "<strong>Correto!</strong> Repartir igualmente é dividir. 24 ÷ 3 = 8. (Pois 8 x 3 = 24)."
+            },
+            {
+                id: 10,
+                text: "O triplo de 15 é:",
+                options: ["30", "45", "18", "150", "35"],
+                correct: 1,
+                explanation: "<strong>Exato!</strong> Triplo significa multiplicar por 3. Então, 15 x 3 = 45."
+            },
+            {
+                id: 11,
+                text: "Em uma subtração, se o Minuendo é 50 e o Subtraendo é 20, qual é o Resto?",
+                options: ["70", "30", "20", "50", "100"],
+                correct: 1,
+                explanation: "<strong>Muito bem!</strong> Minuendo (o que tenho) - Subtraendo (o que tiro) = Resto. 50 - 20 = 30."
+            },
+            {
+                id: 12,
+                text: "Qual o valor de <strong>12 + 8 - 5</strong>?",
+                options: ["10", "20", "25", "15", "14"],
+                correct: 3,
+                explanation: "<strong>Passo a passo!</strong> Primeiro somamos: 12 + 8 = 20. Depois subtraímos: 20 - 5 = 15."
+            },
+            {
+                id: 13,
+                text: "Comprei 3 camisas por R$ 30,00 cada uma. Paguei com uma nota de R$ 100,00. Qual o troco?",
+                options: ["R$ 10,00", "R$ 20,00", "R$ 30,00", "R$ 70,00", "R$ 90,00"],
+                correct: 0,
+                explanation: "<strong>Raciocínio perfeito!</strong> Primeiro o gasto: 3 x 30 = 90 reais. Depois o troco: 100 - 90 = 10 reais."
+            },
+            {
+                id: 14,
+                text: "Qual número dividido por 5 dá resultado 6?",
+                options: ["11", "25", "30", "35", "1"],
+                correct: 2,
+                explanation: "<strong>Operação inversa!</strong> Se um número dividido por 5 é 6, então 6 vezes 5 é esse número. 6 x 5 = 30."
+            },
+            {
+                id: 15,
+                text: "Maria tem o dobro da idade de Ana. Ana tem 12 anos. Qual a idade de Maria?",
+                options: ["6 anos", "14 anos", "24 anos", "10 anos", "20 anos"],
+                correct: 2,
+                explanation: "<strong>Certo!</strong> Dobro significa multiplicar por 2. Se Ana tem 12, Maria tem 12 x 2 = 24 anos."
+            }
+        ];
+
+        // --- ESTADO DO APP ---
+        let currentQuestion = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+
+        // --- NAVEGAÇÃO ENTRE ABAS ---
+        function setMode(mode) {
+            const expDiv = document.getElementById('viewExplanation');
+            const pracDiv = document.getElementById('viewPractice');
+            const expBtn = document.getElementById('btnExp');
+            const pracBtn = document.getElementById('btnPrac');
+            const footer = document.getElementById('quizFooter');
+
+            if(mode === 'explanation') {
+                expDiv.style.display = 'block';
+                pracDiv.style.display = 'none';
+                expBtn.classList.add('active');
+                pracBtn.classList.remove('active');
+                footer.style.display = 'none';
+            } else {
+                expDiv.style.display = 'none';
+                pracDiv.style.display = 'block';
+                expBtn.classList.remove('active');
+                pracBtn.classList.add('active');
+                footer.style.display = 'flex';
+                renderQuestion();
+                renderMap();
+            }
+            window.scrollTo(0,0);
+        }
+
+        // --- RENDERIZAÇÃO DO QUIZ ---
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            const container = document.getElementById('quizContainer');
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+            const userAnswer = userAnswers[currentQuestion]; 
+            const isAnswered = userAnswer !== null;
+
+            let optionsHTML = '';
+            q.options.forEach((opt, idx) => {
+                let statusClass = '';
+                if (isAnswered) {
+                    if (idx === q.correct) statusClass = 'correct'; 
+                    else if (idx === userAnswer) statusClass = 'wrong'; 
+                    else statusClass = 'disabled'; 
+                }
+
+                optionsHTML += `
+                    <div class="option-btn ${statusClass}" onclick="handleAnswer(${idx})">
+                        <div class="opt-circle">${letters[idx]}</div>
+                        <div style="flex: 1;">${opt}</div>
+                    </div>
+                `;
+            });
+
+            let feedbackHTML = '';
+            if (isAnswered) {
+                const feedbackTitle = userAnswer === q.correct 
+                    ? '<span style="color:#276749">✅ Resposta Correta!</span>' 
+                    : '<span style="color:#C53030">❌ Atenção!</span>';
+                
+                feedbackHTML = `
+                    <div class="feedback-box">
+                        <div class="feedback-title">${feedbackTitle}</div>
+                        <p style="font-size: 0.95rem; line-height: 1.5;">${q.explanation}</p>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #888; text-transform: uppercase;">Questão ${currentQuestion + 1} de ${questions.length}</span>
+                    <h2 style="font-size: 1.1rem; margin-top: 5px;">${q.text}</h2>
+                </div>
+                <div class="options-list">
+                    ${optionsHTML}
+                </div>
+                ${feedbackHTML}
+            `;
+
+            updateNavButtons();
+            renderMap();
+        }
+
+        function handleAnswer(selectedIdx) {
+            if (userAnswers[currentQuestion] !== null) return;
+            userAnswers[currentQuestion] = selectedIdx;
+            renderQuestion();
+        }
+
+        function renderMap() {
+            const map = document.getElementById('qMap');
+            map.innerHTML = '';
+            
+            questions.forEach((q, idx) => {
+                const dot = document.createElement('div');
+                let className = 'map-dot';
+                if (idx === currentQuestion) className += ' active';
+                
+                const ans = userAnswers[idx];
+                if (ans !== null) {
+                    if (ans === q.correct) className += ' answered-correct';
+                    else className += ' answered-wrong';
+                }
+
+                dot.className = className;
+                dot.textContent = idx + 1;
+                dot.onclick = () => { currentQuestion = idx; renderQuestion(); };
+                map.appendChild(dot);
+            });
+
+            const currentDot = map.children[currentQuestion];
+            if (currentDot) {
+                currentDot.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+        }
+
+        function changeQuestion(dir) {
+            const next = currentQuestion + dir;
+            if (next >= 0 && next < questions.length) {
+                currentQuestion = next;
+                renderQuestion();
+            }
+        }
+
+        function updateNavButtons() {
+            document.getElementById('btnPrev').disabled = currentQuestion === 0;
+            const btnNext = document.getElementById('btnNext');
+            
+            if (currentQuestion === questions.length - 1) {
+                btnNext.textContent = "Finalizar";
+            } else {
+                btnNext.textContent = "Próxima";
+            }
+        }
+
+        // Inicia na aba Explicação
+        setMode('explanation');
+
+    </script>
+</body>
+</html>

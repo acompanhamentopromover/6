@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemática 6º Ano - Promover</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Variáveis Globais (Mesma identidade) --- */
+        :root {
+            --bg-color: #F8F9FA;
+            --text-color: #2D3748;
+            --border-color: #000000;
+            
+            /* Tema da Página (Matemática) */
+            --theme-color: #D0EFFF; 
+            --theme-darker: #2B9AF3; /* Para detalhes */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 60px; /* Espaço extra no fim para scroll */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Navegação de Retorno */
+        .back-nav {
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            background-color: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 2px 2px 0px var(--border-color);
+            transition: transform 0.1s;
+        }
+
+        .btn-back:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px var(--border-color);
+        }
+
+        /* Cabeçalho Específico */
+        header { text-align: center; margin-bottom: 10px; }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: 400;
+        }
+
+        /* Estilo das Seções */
+        .content-section {
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            background-color: var(--theme-color);
+            display: inline-block;
+            padding: 6px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 50px; /* Formato de pílula */
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            box-shadow: 3px 3px 0px var(--border-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Lista de Tópicos */
+        .topic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Botões de Conteúdo */
+        .topic-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            background-color: white;
+            box-shadow: 4px 4px 0px var(--border-color);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .topic-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--border-color);
+            background-color: #f0f7ff; /* Leve azul ao clicar */
+        }
+
+        .arrow { font-size: 1.2rem; color: var(--text-color); }
+
+        footer {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="back-nav">
+            <a href="6ano.html" class="btn-back">
+                ⬅ Voltar
+            </a>
+        </nav>
+
+        <header>
+            <h1>Matemática<br><span style="font-size: 1.2rem; font-weight: 500;">6º Ano</span></h1>
+            <p class="subtitle">Escolha o conteúdo que deseja estudar</p>
+        </header>
+
+        <div class="content-section">
+            <div class="section-title">Números</div>
+            <div class="topic-list">
+     /* */           <a href="numeros-sistema.html" class="topic-btn">Sistema de Numeração Decimal <span class="arrow">➜</span></a>
+                <a href="operacoes-naturais.html" class="topic-btn">As quatro operações com naturais <span class="arrow">➜</span></a>
+                <a href="potenciacao-raiz.html" class="topic-btn">Potenciação e raiz quadrada <span class="arrow">➜</span></a>
+                <a href="expressoes-numericas.html" class="topic-btn">Expressões numéricas <span class="arrow">➜</span></a>
+                <a href="criterios-divisibilidade.html" class="topic-btn">Critérios de divisibilidade <span class="arrow">➜</span></a>
+                <a href="primos-compostos.html" class="topic-btn">Números primos e compostos <span class="arrow">➜</span></a>
+                <a href="fatores-primos.html" class="topic-btn">Decomposição em fatores primos <span class="arrow">➜</span></a>
+                <a href="mmc-mdc.html" class="topic-btn">MMC e MDC <span class="arrow">➜</span></a>
+                <a href="fracoes.html" class="topic-btn">Frações <span class="arrow">➜</span></a>
+                <a href="numeros-decimais.html" class="topic-btn">Números decimais <span class="arrow">➜</span></a>
+                <a href="porcentagem.html" class="topic-btn">Porcentagem <span class="arrow">➜</span></a>
+            </div>
+        </div>
+
+        <div class="content-section" style="margin-top: 20px;">
+            <div class="section-title">Álgebra</div>
+            <div class="topic-list">
+                <a href="sequencias-numericas.html" class="topic-btn">Sequências numéricas e padrões <span class="arrow">➜</span></a>
+                <a href="linguagem-algebrica.html" class="topic-btn">Introdução à Linguagem algébrica <span class="arrow">➜</span></a>
+                <a href="propriedades-igualdade.html" class="topic-btn">Propriedades da igualdade <span class="arrow">➜</span></a>
+            </div>
+        </div>
+
+        <div class="content-section" style="margin-top: 20px;">
+            <div class="section-title">Geometria</div>
+            <div class="topic-list">
+                <a href="solidos-geometricos.html" class="topic-btn">Sólidos geométricos <span class="arrow">➜</span></a>
+                <a href="prismas-piramides.html" class="topic-btn">Prismas e pirâmides <span class="arrow">➜</span></a>
+                <a href="planificacao-vistas.html" class="topic-btn">Planificação e vistas <span class="arrow">➜</span></a>
+                <a href="poligonos.html" class="topic-btn">Polígonos (Classificação) <span class="arrow">➜</span></a>
+                <a href="triangulos-quadrilateros.html" class="topic-btn">Triângulos e quadriláteros <span class="arrow">➜</span></a>
+                <a href="angulos.html" class="topic-btn">Ângulos <span class="arrow">➜</span></a>
+                <a href="retas.html" class="topic-btn">Retas <span class="arrow">➜</span></a>
+            </div>
+        </div>
+
+        <div class="content-section" style="margin-top: 20px;">
+            <div class="section-title">Grandezas e Medidas</div>
+            <div class="topic-list">
+                <a href="medidas-comprimento.html" class="topic-btn">Medidas de comprimento e massa <span class="arrow">➜</span></a>
+                <a href="perimetro.html" class="topic-btn">Perímetro <span class="arrow">➜</span></a>
+                <a href="area-quadrados.html" class="topic-btn">Área de quadrados e retângulos <span class="arrow">➜</span></a>
+                <a href="nocao-volume.html" class="topic-btn">Noção de volume <span class="arrow">➜</span></a>
+                <a href="medidas-tempo.html" class="topic-btn">Medidas de tempo <span class="arrow">➜</span></a>
+            </div>
+        </div>
+
+        <div class="content-section" style="margin-top: 20px;">
+            <div class="section-title">Probabilidade</div>
+            <div class="topic-list">
+                <a href="leitura-graficos.html" class="topic-btn">Leitura de gráficos <span class="arrow">➜</span></a>
+                <a href="tabelas-dados.html" class="topic-btn">Tabelas e organização de dados <span class="arrow">➜</span></a>
+                <a href="probabilidade-simples.html" class="topic-btn">Probabilidade simples <span class="arrow">➜</span></a>
+                <a href="fluxogramas.html" class="topic-btn">Fluxogramas <span class="arrow">➜</span></a>
+            </div>
+        </div>
+
+        <footer>
+            © 2026 Promover Educação
+        </footer>
+    </div>
+
+</body>
+</html>
