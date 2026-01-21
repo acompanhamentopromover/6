@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aula Mestre - Promover</title>
+    <title>Sistema de Numeração Decimal - Promover</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* --- VARIÁVEIS DE TEMA (FÁCIL CUSTOMIZAÇÃO) --- */
+        /* --- VARIÁVEIS DE TEMA --- */
         :root {
             --bg-color: #F8F9FA;
             --text-color: #2D3748;
             --border-color: #000000;
             
-            /* CORES DA MATÉRIA (Matemática = Azul) */
-            --theme-color: #D0EFFF; 
-            --theme-active: #2B9AF3; 
+            /* CORES DA MATÉRIA: TEMA TEAL (Estrutura/Ordem) */
+            --theme-color: #B2F5EA; 
+            --theme-active: #319795; 
             --theme-text-active: #FFFFFF;
             
-            /* CORES DE FEEDBACK */
+            /* FEEDBACK */
             --correct-bg: #C6F6D5;
             --correct-border: #276749;
             --wrong-bg: #FED7D7;
             --wrong-border: #C53030;
             
-            /* LAYOUT */
             --white: #FFFFFF;
         }
 
@@ -41,21 +42,35 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding-bottom: 80px; /* Espaço para footer fixo */
+            padding-bottom: 80px;
+            overflow-x: hidden;
         }
 
-        /* --- NOVO: ESTILO DA LOGO --- */
+        /* ANIMAÇÃO DE TREMOR (ERRO) */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake-effect {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* --- LOGO --- */
         .logo-header {
             width: 100%;
             max-width: 600px;
             display: flex;
             justify-content: center;
-            padding: 20px 0 10px 0; /* Espaçamento */
+            padding: 20px 0 10px 0;
         }
 
         .logo-img {
-            max-height: 60px; /* Altura máxima da logo */
-            width: auto;      /* Mantém a proporção */
+            max-height: 80px;
+            width: auto;
             display: block;
         }
 
@@ -65,7 +80,7 @@
             padding: 20px;
         }
 
-        /* --- NAVEGAÇÃO SUPERIOR --- */
+        /* --- NAVEGAÇÃO --- */
         .top-nav {
             width: 100%;
             display: flex;
@@ -84,7 +99,7 @@
             gap: 5px;
         }
 
-        /* --- O INTERRUPTOR (TOGGLE) --- */
+        /* --- TOGGLE --- */
         .toggle-container {
             background-color: var(--white);
             border: 2px solid var(--border-color);
@@ -115,9 +130,9 @@
             box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* --- SEÇÃO EXPLICAÇÃO --- */
+        /* --- CONTEÚDO --- */
         .section-view {
-            display: none; /* Controlado via JS */
+            display: none; 
             animation: fadeIn 0.3s ease-in-out;
         }
 
@@ -131,8 +146,8 @@
         }
 
         .example-box {
-            background-color: #E6FFFA;
-            border-left: 5px solid #38B2AC;
+            background-color: #E6FFFA; /* Teal bem claro */
+            border-left: 5px solid #319795;
             padding: 15px;
             margin: 15px 0;
             border-radius: 8px;
@@ -142,14 +157,36 @@
             font-size: 0.75rem;
             text-transform: uppercase;
             font-weight: 800;
-            color: #234E52;
+            color: #285E61;
             margin-bottom: 5px;
             display: block;
         }
 
-        /* --- SEÇÃO PRATICAR (QUIZ) --- */
-        
-        /* Mapa de Questões (Bolinhas) */
+        /* TABELA DE CLASSES */
+        .class-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        .class-table th {
+            background-color: #319795;
+            color: white;
+            padding: 5px;
+            border: 1px solid #000;
+        }
+        .class-table td {
+            border: 1px solid #000;
+            padding: 5px;
+        }
+        .class-header {
+            background-color: #B2F5EA;
+            font-weight: 700;
+            color: #234E52;
+        }
+
+        /* --- QUIZ MAPA --- */
         .question-map {
             display: flex;
             gap: 8px;
@@ -188,7 +225,7 @@
         .map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
         .map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
 
-        /* Área da Questão */
+        /* --- OPÇÕES --- */
         .option-btn {
             display: flex;
             align-items: center;
@@ -217,33 +254,17 @@
             flex-shrink: 0;
         }
 
-        /* ESTADOS DE FEEDBACK (CORREÇÃO) */
-        .option-btn.correct {
-            background-color: var(--correct-bg);
-            border-color: var(--correct-border);
-        }
-        .option-btn.correct .opt-circle {
-            background-color: var(--correct-border);
-            color: white;
-            border-color: var(--correct-border);
-        }
+        .option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); }
+        .option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
 
-        .option-btn.wrong {
-            background-color: var(--wrong-bg);
-            border-color: var(--wrong-border);
-            opacity: 0.8;
-        }
-        .option-btn.wrong .opt-circle {
-            background-color: var(--wrong-border);
-            color: white;
-            border-color: var(--wrong-border);
-        }
+        .option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.8; }
+        .option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
         
         .option-btn.disabled { pointer-events: none; }
 
-        /* BOX DE CORREÇÃO COMENTADA */
+        /* --- FEEDBACK DETALHADO --- */
         .feedback-box {
-            display: none; /* Aparece ao responder */
+            display: block; 
             margin-top: 20px;
             background-color: #EDF2F7;
             border: 2px solid #2D3748;
@@ -256,11 +277,47 @@
             font-weight: 800;
             text-transform: uppercase;
             font-size: 0.85rem;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
+
+        /* --- TELA DE RESULTADO --- */
+        #viewResult {
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .result-card {
+            background: white;
+            border: 2px solid black;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 6px 6px 0px black;
+            margin-bottom: 30px;
+        }
+
+        .stars-container { font-size: 3rem; margin: 10px 0; }
+        .score-text { font-size: 1.2rem; font-weight: 700; color: var(--text-color); }
+        .percentage-big { font-size: 3.5rem; font-weight: 800; color: var(--theme-active); line-height: 1; margin: 10px 0; }
+
+        .btn-retry {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--theme-active);
+            color: white;
+            border: 2px solid black;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px black;
+            transition: transform 0.1s;
+        }
+        
+        .btn-retry:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px black; }
 
         /* --- RODAPÉ FIXO --- */
         .quiz-footer {
@@ -271,7 +328,7 @@
             background-color: var(--white);
             border-top: 2px solid var(--border-color);
             padding: 15px 20px;
-            display: none; /* Visível só no Praticar */
+            display: none; 
             justify-content: space-between;
             align-items: center;
             z-index: 100;
@@ -296,13 +353,14 @@
 <body>
 
     <div class="logo-header">
-        <img src="https://via.placeholder.com/200x60?text=LOGO+AQUI" alt="Logo Promover" class="logo-img">
+        <img src="logo.png" alt="Logo Promover" class="logo-img">
     </div>
+
     <div class="container">
         
         <nav class="top-nav">
             <a href="6ano-matematica.html" class="btn-close">⬅ Voltar</a>
-            <span style="font-size: 0.8rem; font-weight: 700; color: #888;">SISTEMA DECIMAL</span>
+            <span style="font-size: 0.8rem; font-weight: 700; color: #888;">MATEMÁTICA</span>
         </nav>
 
         <div class="toggle-container">
@@ -312,50 +370,56 @@
 
         <div id="viewExplanation" class="section-view" style="display: block;">
             
-            <h1 style="font-size: 1.5rem; margin-bottom: 15px; line-height: 1.2;">Entendendo os Números</h1>
+            <h1 style="font-size: 1.5rem; margin-bottom: 15px; line-height: 1.2;">Sistema de Numeração</h1>
+            <p style="color: #555; margin-bottom: 20px;">O nosso sistema é <strong>Decimal</strong> (base 10) e <strong>Posicional</strong> (o lugar do número muda seu valor).</p>
             
             <div class="card-content">
-                <h3>O Sistema Decimal</h3>
-                <p style="margin-top: 10px;">Nosso sistema usa agrupamentos de <strong>10 em 10</strong>. Usamos apenas 10 símbolos (0 a 9) para escrever qualquer número, dependendo da posição deles.</p>
+                <h3>🏛️ Classes e Ordens</h3>
+                <p>Os números são organizados em "casinhas" da direita para a esquerda. Cada 3 algarismos formam uma <strong>Classe</strong>.</p>
                 
+                <table class="class-table">
+                    <tr>
+                        <th colspan="3" class="class-header" style="background-color:#E6FFFA; color:black;">Classe dos Milhares</th>
+                        <th colspan="3" class="class-header" style="background-color:#E6FFFA; color:black;">Classe das Unidades</th>
+                    </tr>
+                    <tr>
+                        <td>CM</td>
+                        <td>DM</td>
+                        <td>UM</td>
+                        <td>C</td>
+                        <td>D</td>
+                        <td>U</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td><strong>2</strong></td>
+                        <td><strong>5</strong></td>
+                        <td><strong>4</strong></td>
+                        <td><strong>1</strong></td>
+                        <td><strong>9</strong></td>
+                    </tr>
+                </table>
+                <p style="margin-top: 10px; font-size: 0.9rem; text-align: center;">Lemos: "Trezentos e vinte e cinco <strong>MIL</strong>, quatrocentos e dezenove".</p>
+            </div>
+
+            <div class="card-content">
+                <h3>🧐 Valor Posicional</h3>
+                <p>O mesmo algarismo tem valores diferentes dependendo de onde está.</p>
                 <div class="example-box">
-                    <span class="example-tag">Exemplo 1: Decomposição</span>
-                    <p><strong>Número 345</strong></p>
-                    <p>3 Centenas (300) + 4 Dezenas (40) + 5 Unidades (5).</p>
+                    <span class="example-tag">Número 222</span>
+                    <p><strong>1º "2" (Direita):</strong> Vale 2 unidades.</p>
+                    <p><strong>2º "2" (Meio):</strong> Vale 20 (2 dezenas).</p>
+                    <p><strong>3º "2" (Esquerda):</strong> Vale 200 (2 centenas).</p>
                 </div>
             </div>
 
             <div class="card-content">
-                <h3>Valor Posicional</h3>
-                <p style="margin-top: 10px;">O valor do algarismo muda conforme a casa onde ele está.</p>
-
-                <div class="example-box">
-                    <span class="example-tag">Exemplo 2: O valor do 2</span>
-                    <p>No número <strong>25</strong>, o 2 vale 20.</p>
-                    <p>No número <strong>205</strong>, o 2 vale 200.</p>
-                </div>
-
-                <div class="example-box">
-                    <span class="example-tag">Exemplo 3: Zero à esquerda</span>
-                    <p>05 é a mesma coisa que 5. O zero à esquerda não muda o valor em números inteiros.</p>
-                </div>
-            </div>
-
-            <div class="card-content">
-                <h3>Ordenação</h3>
-                <p style="margin-top: 10px;">Para comparar, olhe sempre a ordem maior (a da esquerda).</p>
-
-                <div class="example-box">
-                    <span class="example-tag">Exemplo 4: Comparação</span>
-                    <p>Qual é maior: <strong>1.200</strong> ou <strong>1.199</strong>?</p>
-                    <p>Olhe a centena: 2 é maior que 1. Logo, 1.200 vence.</p>
-                </div>
-
-                <div class="example-box">
-                    <span class="example-tag">Exemplo 5: Escrita</span>
-                    <p><strong>1.340</strong> ➝ Mil trezentos e quarenta.</p>
-                    <p>(Não usamos "e" entre milhar e centena se não for exato).</p>
-                </div>
+                <h3>⚖️ Comparação e Ordenação</h3>
+                <p>Para saber qual número é maior:</p>
+                <ol style="margin-left: 20px; margin-top: 10px; font-size: 0.95rem;">
+                    <li style="margin-bottom: 5px;">Conte os algarismos. Quem tem mais algarismos é maior. (Ex: 100 > 99).</li>
+                    <li>Se tiverem a mesma quantidade, compare o primeiro algarismo da esquerda. (Ex: <strong>5</strong>20 > <strong>4</strong>90).</li>
+                </ol>
             </div>
 
             <button onclick="setMode('practice')" style="width: 100%; padding: 15px; background: var(--text-color); color: white; border: none; border-radius: 12px; font-weight: 700; margin-bottom: 20px;">
@@ -364,17 +428,24 @@
         </div>
 
         <div id="viewPractice" class="section-view">
-            
             <div style="margin-bottom: 15px;">
-                <h2>Agora é sua vez!</h2>
-                <p style="color: #666; font-size: 0.9rem;">Toque na alternativa correta.</p>
+                <h2>Hora de Praticar!</h2>
+                <p style="color: #666; font-size: 0.9rem;">Acerte para ganhar estrelas.</p>
             </div>
-
             <div class="question-map" id="qMap"></div>
+            <div id="quizContainer" style="margin-bottom: 100px;"></div>
+        </div>
 
-            <div id="quizContainer" style="margin-bottom: 100px;">
-                </div>
-
+        <div id="viewResult">
+            <div class="result-card">
+                <h2>Simulado Finalizado!</h2>
+                <div class="stars-container" id="finalStars">⭐⭐⭐⭐⭐</div>
+                <div class="percentage-big" id="finalPercent">100%</div>
+                <p class="score-text" id="finalScoreText">Você acertou 15 de 15</p>
+                <p style="color:#666; margin-top:10px; font-size:0.9rem;" id="finalMessage">Incrível! Você domina o sistema decimal.</p>
+            </div>
+            <button class="btn-retry" onclick="resetQuiz()">🔄 Refazer Simulado</button>
+            <a href="6ano-matematica.html" style="display:block; margin-top:15px; text-decoration:none; color:#555; font-weight:600;">Voltar para o Menu</a>
         </div>
 
     </div>
@@ -385,144 +456,184 @@
     </footer>
 
     <script>
-        // --- BANCO DE QUESTÕES (TEMPLATE) ---
-        // Para novas aulas, basta alterar este array.
+        // --- BANCO DE QUESTÕES (SISTEMA DE NUMERAÇÃO) ---
         const questions = [
-            // FIXAÇÃO
+            // NÍVEL 1: CONCEITO DE ALGARISMO E VALOR
             {
                 id: 1,
-                text: "No número <strong>358</strong>, qual é o valor posicional do algarismo 5?",
-                options: ["5", "50", "500", "5000", "0,5"],
-                correct: 1, // Índice B (0, 1, 2, 3...)
-                explanation: "<strong>Correto!</strong> O 5 está na casa das Dezenas. Portanto, 5 x 10 = 50.<br>A opção A (5) seria se estivesse na unidade, e a C (500) se estivesse na centena."
+                text: "Quantos algarismos existem no nosso sistema decimal?",
+                options: ["9", "10", "Infinitos", "100", "5"],
+                correct: 1,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> São 10 símbolos: 0, 1, 2, 3, 4, 5, 6, 7, 8 e 9. Com eles formamos qualquer número.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> Muita gente esquece de contar o Zero, achando que são 9.</div>`
             },
             {
                 id: 2,
-                text: "Como se escreve por extenso o número <strong>2.015</strong>?",
-                options: ["Dois mil e quinze", "Dois mil cento e cinco", "Vinte mil e quinze", "Dois mil e cinquenta", "Duzentos e quinze"],
-                correct: 0,
-                explanation: "<strong>Isso aí!</strong> O 2 está na unidade de milhar (2.000) e o 15 na classe das unidades simples. Juntando, temos: Dois mil e quinze."
+                text: "No número <strong>5.432</strong>, qual algarismo ocupa a ordem das centenas?",
+                options: ["5", "4", "3", "2", "Nenhum"],
+                correct: 1,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> Vamos ler da direita para a esquerda: 2 (unidade), 3 (dezena), 4 (centena).</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> 5 é milhar, 3 é dezena.</div>`
             },
             {
                 id: 3,
-                text: "Qual a decomposição correta de <strong>403</strong>?",
-                options: ["400 + 30", "40 + 3", "400 + 3", "4 + 0 + 3", "4000 + 3"],
+                text: "O valor posicional do algarismo 7 no número <strong>702</strong> é:",
+                options: ["7", "70", "700", "7000", "702"],
                 correct: 2,
-                explanation: "<strong>Muito bem!</strong> O 4 vale 400 (Centena). O 0 na dezena não soma valor. O 3 vale 3 (Unidade). Logo: 400 + 3."
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> O 7 está na casa das centenas. 7 centenas = 700.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> 7 seria se estivesse na unidade. 70 na dezena.</div>`
             },
+            // NÍVEL 2: CLASSES E ORDENS
             {
                 id: 4,
-                text: "Quantas ordens (casas) tem o número <strong>12.500</strong>?",
-                options: ["3 ordens", "4 ordens", "5 ordens", "6 ordens", "2 ordens"],
-                correct: 2,
-                explanation: "<strong>Certo!</strong> Conte da direita para a esquerda: 0, 0, 5, 2, 1. São 5 algarismos ocupando 5 posições (ordens)."
+                text: "O número <strong>1.234.567</strong> tem quantas classes?",
+                options: ["2", "3", "7", "4", "1"],
+                correct: 1,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> Classes são grupos de 3 números. Temos: (567) Unidades, (234) Milhares, (1) Milhões. Total: 3 classes.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> 7 é o número de ordens (algarismos).</div>`
             },
             {
                 id: 5,
-                text: "Qual número é maior: <strong>3.100</strong> ou <strong>3.099</strong>?",
-                options: ["3.099 é maior", "3.100 é maior", "São iguais", "Não dá para saber", "Depende do zero"],
+                text: "A <strong>5ª ordem</strong> de um número corresponde a:",
+                options: ["Unidade de Milhar", "Dezena de Milhar", "Centena", "Unidade de Milhão", "Dezena"],
                 correct: 1,
-                explanation: "<strong>Exato!</strong> O milhar é igual (3). O desempate é na centena: 1 (de 3.100) é maior que 0 (de 3.099)."
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> 1ª(U), 2ª(D), 3ª(C), 4ª(UM), 5ª(Dezena de Milhar).</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> Centena é a 3ª. Unidade de milhar é a 4ª.</div>`
             },
-            // PRÁTICA
             {
                 id: 6,
-                text: "Forme o MAIOR número possível usando os dígitos: <strong>1, 8, 4</strong>.",
-                options: ["148", "481", "814", "841", "184"],
-                correct: 3,
-                explanation: "<strong>Lógica perfeita!</strong> Para ter o maior número, colocamos o maior dígito na maior ordem. 8 na centena, 4 na dezena, 1 na unidade: 841."
+                text: "Como se escreve o número formado por <strong>3 centenas e 5 unidades</strong>?",
+                options: ["35", "350", "305", "3005", "53"],
+                correct: 2,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> 3 centenas = 300. 5 unidades = 5. Soma: 300 + 5 = 305.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> 35 são 3 dezenas. 350 são 3 centenas e 5 dezenas. Cuidado com o zero no meio!</div>`
             },
+            // NÍVEL 3: LEITURA E ESCRITA
             {
                 id: 7,
-                text: "O antecessor de <strong>10.000</strong> é:",
-                options: ["9.999", "9.000", "10.001", "9.900", "999"],
+                text: "Qual a escrita correta de <strong>12.040</strong>?",
+                options: ["Doze mil e quarenta", "Doze mil e quatrocentos", "Cento e vinte e quarenta", "Doze mil e quatro", "Mil duzentos e quarenta"],
                 correct: 0,
-                explanation: "<strong>Correto!</strong> Antecessor é o número que vem imediatamente antes (-1). 10.000 menos 1 é igual a 9.999."
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> Temos 12 na classe dos milhares e 040 na classe das unidades (quarenta).</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> Quatrocentos seria 12.400. Quatro seria 12.004.</div>`
             },
             {
                 id: 8,
-                text: "No número <strong>5.555</strong>, o primeiro 5 (esquerda) vale quanto a mais que o último 5 (direita)?",
-                options: ["Vale a mesma coisa", "Vale 10 vezes mais", "Vale 1000 vezes mais", "Vale 100 vezes mais", "Vale 5 vezes mais"],
-                correct: 2,
-                explanation: "<strong>Avançado!</strong> O primeiro 5 vale 5.000. O último vale 5. O primeiro é Unidade de Milhar, o último é Unidade simples. 5.000 é 1000 vezes maior que 5."
+                text: "O número <strong>'cinco milhões e trezentos'</strong> é representado por:",
+                options: ["5.300", "5.000.300", "5.003.000", "5.300.000", "500.300"],
+                correct: 1,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> 5 na classe dos milhões, 000 nos milhares (não falou nada) e 300 nas unidades.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> 5.300 é cinco mil. 5.300.000 é cinco milhões e trezentos MIL.</div>`
             },
             {
                 id: 9,
-                text: "Uma escola tem <strong>12 centenas</strong> de alunos. Quantos alunos são?",
-                options: ["120", "1200", "12.000", "12", "102"],
-                correct: 1,
-                explanation: "<strong>Certo!</strong> Uma centena é 100. Se temos 12 centenas, fazemos 12 x 100 = 1.200."
+                text: "Decompondo o número <strong>4.502</strong>, temos:",
+                options: ["4000 + 500 + 2", "4000 + 50 + 2", "4 + 5 + 0 + 2", "400 + 50 + 2", "4000 + 500 + 20"],
+                correct: 0,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> 4 unidades de milhar (4000), 5 centenas (500) e 2 unidades (2).</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> Não há dezenas, então não usamos 50 ou 20.</div>`
             },
+            // NÍVEL 4: COMPARAÇÃO E ORDENAÇÃO
             {
                 id: 10,
-                text: "Qual alternativa mostra a sequência correta de 10 em 10?",
-                options: ["10, 20, 30, 35...", "100, 101, 102...", "50, 60, 70, 80...", "10, 15, 20, 25...", "20, 40, 60..."],
-                correct: 2,
-                explanation: "<strong>Isso!</strong> A opção C pula de 10 em 10 (50+10=60, 60+10=70...). As outras pulam de 1 em 1, ou 5 em 5."
+                text: "Qual destes números é o <strong>maior</strong>?",
+                options: ["9.999", "10.000", "9.899", "1.999", "8.999"],
+                correct: 1,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> 10.000 tem 5 algarismos. Todos os outros têm apenas 4. Quem tem mais casas ganha.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> Mesmo cheios de noves, eles não chegam a dez mil.</div>`
             },
             {
                 id: 11,
-                text: "Se trocarmos o 3 pelo 9 no número <strong>320</strong>, quanto aumentamos?",
-                options: ["Aumentamos 6", "Aumentamos 60", "Aumentamos 600", "Diminuímos 600", "Aumentamos 900"],
-                correct: 2,
-                explanation: "<strong>Raciocínio lógico!</strong> O 3 valia 300. Virou 9, valendo 900. A diferença é 900 - 300 = 600."
+                text: "Coloque em ordem crescente: <strong>205, 250, 25, 2005</strong>.",
+                options: ["25, 205, 250, 2005", "25, 250, 205, 2005", "2005, 250, 205, 25", "25, 205, 2005, 250", "Nenhuma"],
+                correct: 0,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> 25 (2 dígitos) < 205 (3 dígitos, centena 2, dezena 0) < 250 (3 dígitos, centena 2, dezena 5) < 2005 (4 dígitos).</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> Atenção na comparação entre 205 e 250.</div>`
             },
             {
                 id: 12,
-                text: "O número <strong>dez mil e quatro</strong> é escrito como:",
-                options: ["10.004", "10.400", "1.004", "10.040", "104"],
+                text: "Qual sinal completa corretamente: <strong>4.500 ___ 4.050</strong>",
+                options: ["> (Maior que)", "< (Menor que)", "= (Igual)", "+ (Mais)", "x (Vezes)"],
                 correct: 0,
-                explanation: "<strong>Atenção aos zeros!</strong> Dez mil (10.000) mais quatro (4) resulta em 10.004. As casas da centena e dezena ficam com zero."
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> Ambos têm 4 dígitos. A unidade de milhar é igual (4). A centena do primeiro é 5, do segundo é 0. Logo, 4.500 é maior.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> O número 4.050 é menor.</div>`
             },
+            // NÍVEL 5: DESAFIOS E LÓGICA
             {
                 id: 13,
-                text: "Qual é a 3ª ordem do número <strong>45.678</strong>?",
-                options: ["8 (Unidade)", "7 (Dezena)", "6 (Centena)", "5 (Unid. Milhar)", "4 (Dez. Milhar)"],
-                correct: 2,
-                explanation: "<strong>Certo!</strong> Contamos as ordens da direita para a esquerda. 1ª(8), 2ª(7), 3ª(6). O 6 está na Centena."
+                text: "Sou o maior número par de 3 algarismos diferentes. Quem sou eu?",
+                options: ["998", "986", "987", "988", "100"],
+                correct: 1,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> Começo com o maior (9), depois o próximo (8). O próximo seria 7, mas sou PAR, então uso o 6. Resposta: 986.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> 998 repete o 9. 988 repete o 8. 987 é ímpar.</div>`
             },
             {
                 id: 14,
-                text: "Um cheque foi preenchido com: 'Um mil, duzentos e trinta reais'. O valor é:",
-                options: ["R$ 1.203,00", "R$ 1.230,00", "R$ 1.023,00", "R$ 123,00", "R$ 10.230,00"],
-                correct: 1,
-                explanation: "<strong>Correto!</strong> Duzentos (200) e trinta (30) = 230. Junto com o milhar: 1.230."
+                text: "Qual é o antecessor de <strong>1.000.000</strong>?",
+                options: ["999.999", "999.000", "1.000.001", "900.000", "99.999"],
+                correct: 0,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> É só subtrair 1. Um milhão menos um é novecentos e noventa e nove mil, novecentos e noventa e nove.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> 99.999 está longe. 1.000.001 é o sucessor.</div>`
             },
             {
                 id: 15,
-                text: "Qual o menor número de 3 algarismos diferentes?",
-                options: ["100", "102", "123", "012", "101"],
-                correct: 1,
-                explanation: "<strong>Desafio final!</strong> Para ser o menor, a centena deve ser 1 (0 não conta). A dezena deve ser a menor possível diferente de 1 (ou seja, 0). A unidade a menor diferente de 0 e 1 (ou seja, 2). Resposta: 102."
+                text: "Quantas centenas cabem no número <strong>2.500</strong>?",
+                options: ["2", "5", "25", "250", "20"],
+                correct: 2,
+                explanation: `
+                    <div style="margin-bottom:10px;">✅ <strong>Por que está certo:</strong> 2.500 dividido por 100 é 25. Ou seja, são 25 notas de 100 reais.</div>
+                    <div>❌ <strong>Por que os outros estão errados:</strong> O algarismo da centena é 5, mas o número TOTAL de centenas é 25.</div>`
             }
         ];
 
         // --- ESTADO DO APP ---
         let currentQuestion = 0;
-        let userAnswers = new Array(questions.length).fill(null); // null = não respondeu
+        let userAnswers = new Array(questions.length).fill(null);
+        let score = 0;
 
-        // --- FUNÇÕES DE NAVEGAÇÃO ---
+        // --- NAVEGAÇÃO ENTRE ABAS ---
         function setMode(mode) {
             const expDiv = document.getElementById('viewExplanation');
             const pracDiv = document.getElementById('viewPractice');
+            const resDiv = document.getElementById('viewResult');
             const expBtn = document.getElementById('btnExp');
             const pracBtn = document.getElementById('btnPrac');
             const footer = document.getElementById('quizFooter');
 
+            expDiv.style.display = 'none';
+            pracDiv.style.display = 'none';
+            resDiv.style.display = 'none';
+            footer.style.display = 'none';
+
             if(mode === 'explanation') {
                 expDiv.style.display = 'block';
-                pracDiv.style.display = 'none';
                 expBtn.classList.add('active');
                 pracBtn.classList.remove('active');
-                footer.style.display = 'none';
-            } else {
-                expDiv.style.display = 'none';
+            } else if (mode === 'practice') {
                 pracDiv.style.display = 'block';
                 expBtn.classList.remove('active');
                 pracBtn.classList.add('active');
                 footer.style.display = 'flex';
                 renderQuestion();
                 renderMap();
+            } else if (mode === 'result') {
+                resDiv.style.display = 'block';
+                expBtn.classList.remove('active');
+                pracBtn.classList.remove('active');
             }
             window.scrollTo(0,0);
         }
@@ -532,23 +643,16 @@
             const q = questions[currentQuestion];
             const container = document.getElementById('quizContainer');
             const letters = ['A', 'B', 'C', 'D', 'E'];
-            const userAnswer = userAnswers[currentQuestion]; // Índice respondido ou null
+            const userAnswer = userAnswers[currentQuestion]; 
             const isAnswered = userAnswer !== null;
 
-            // HTML das Opções
             let optionsHTML = '';
             q.options.forEach((opt, idx) => {
                 let statusClass = '';
-                
                 if (isAnswered) {
-                    // Lógica de Cores da Correção
-                    if (idx === q.correct) {
-                        statusClass = 'correct'; // A correta sempre fica verde
-                    } else if (idx === userAnswer) {
-                        statusClass = 'wrong'; // A errada que o usuário clicou fica vermelha
-                    } else {
-                        statusClass = 'disabled'; // As outras ficam desabilitadas
-                    }
+                    if (idx === q.correct) statusClass = 'correct'; 
+                    else if (idx === userAnswer) statusClass = 'wrong'; 
+                    else statusClass = 'disabled'; 
                 }
 
                 optionsHTML += `
@@ -559,7 +663,6 @@
                 `;
             });
 
-            // HTML da Correção Comentada (só aparece se respondido)
             let feedbackHTML = '';
             if (isAnswered) {
                 const feedbackTitle = userAnswer === q.correct 
@@ -569,7 +672,7 @@
                 feedbackHTML = `
                     <div class="feedback-box">
                         <div class="feedback-title">${feedbackTitle}</div>
-                        <p style="font-size: 0.95rem; line-height: 1.5;">${q.explanation}</p>
+                        <div style="font-size: 0.95rem; line-height: 1.5;">${q.explanation}</div>
                     </div>
                 `;
             }
@@ -589,19 +692,26 @@
             renderMap();
         }
 
-        // --- LÓGICA DE RESPOSTA ---
         function handleAnswer(selectedIdx) {
-            // Se já respondeu, não faz nada (Bloqueia troca de resposta)
-            if (userAnswers[currentQuestion] !== null) return;
+            if (userAnswers[currentQuestion] !== null) return; // Já respondeu
 
-            // Salva a resposta
             userAnswers[currentQuestion] = selectedIdx;
-            
-            // Re-renderiza para mostrar correções
+            const isCorrect = (selectedIdx === questions[currentQuestion].correct);
+
+            if (isCorrect) {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            } else {
+                document.body.classList.add('shake-effect');
+                setTimeout(() => document.body.classList.remove('shake-effect'), 500);
+            }
+
             renderQuestion();
         }
 
-        // --- MAPA E NAVEGAÇÃO ---
         function renderMap() {
             const map = document.getElementById('qMap');
             map.innerHTML = '';
@@ -609,10 +719,8 @@
             questions.forEach((q, idx) => {
                 const dot = document.createElement('div');
                 let className = 'map-dot';
-                
                 if (idx === currentQuestion) className += ' active';
                 
-                // Cores no mapa baseadas no acerto/erro
                 const ans = userAnswers[idx];
                 if (ans !== null) {
                     if (ans === q.correct) className += ' answered-correct';
@@ -625,7 +733,6 @@
                 map.appendChild(dot);
             });
 
-            // Auto-scroll do mapa para manter a bolinha atual visível
             const currentDot = map.children[currentQuestion];
             if (currentDot) {
                 currentDot.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
@@ -646,13 +753,61 @@
             
             if (currentQuestion === questions.length - 1) {
                 btnNext.textContent = "Finalizar";
-                // Lógica de finalização pode ser adicionada aqui
+                btnNext.onclick = finishQuiz;
+                btnNext.style.backgroundColor = "#276749"; 
             } else {
                 btnNext.textContent = "Próxima";
+                btnNext.onclick = () => changeQuestion(1);
+                btnNext.style.backgroundColor = ""; 
             }
         }
 
-        // Inicia na Explicação
+        function finishQuiz() {
+            score = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === questions[idx].correct) score++;
+            });
+
+            const total = questions.length;
+            const percent = Math.round((score / total) * 100);
+            
+            let stars = "";
+            let msg = "";
+            if (percent === 100) { stars = "⭐⭐⭐⭐⭐"; msg = "Perfeito! Você é um mestre!"; }
+            else if (percent >= 80) { stars = "⭐⭐⭐⭐"; msg = "Muito bom! Quase gabaritou."; }
+            else if (percent >= 60) { stars = "⭐⭐⭐"; msg = "Bom trabalho. Continue praticando."; }
+            else if (percent >= 40) { stars = "⭐⭐"; msg = "Você pode melhorar. Revise a explicação."; }
+            else { stars = "⭐"; msg = "Não desista! Leia a explicação e tente de novo."; }
+
+            document.getElementById('finalStars').textContent = stars;
+            document.getElementById('finalPercent').textContent = percent + "%";
+            document.getElementById('finalScoreText').textContent = `Você acertou ${score} de ${total}`;
+            document.getElementById('finalMessage').textContent = msg;
+
+            if (percent >= 60) {
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+                function randomInOut(min, max) { return Math.random() * (max - min) + min; }
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) { return clearInterval(interval); }
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+            }
+
+            setMode('result');
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            setMode('explanation'); 
+        }
+
         setMode('explanation');
 
     </script>
