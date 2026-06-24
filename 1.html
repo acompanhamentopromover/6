@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Português e Redação 6º Ano - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    /* Cores Vibrantes e Amigáveis para o 6º Ano */
+    --bg-color: #F0F9FF;
+    --text-color: #0F172A;
+    --border-color: #0F172A;
+    --white: #FFFFFF;
+    
+    --theme-light: #E0F2FE;
+    --theme-medium: #7DD3FC;
+    --theme-dark: #0284C7;
+    --theme-contrast: #F59E0B;
+    --theme-accent: #EF4444;
+    --theme-text-active: #FFFFFF;
+
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #E11D48;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 20px; 
+    padding-bottom: 100px;
+    background-image: radial-gradient(var(--theme-medium) 1.5px, transparent 1.5px);
+    background-size: 25px 25px;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+
+@keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.pulse-effect { animation: pulse 1.5s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+
+.logo-header { 
+    width: 100%; 
+    max-width: 650px; 
+    display: flex; 
+    justify-content: center;
+    flex-direction: column; 
+    align-items: center; 
+    padding: 25px 0 15px 0; 
+}
+
+.css-logo { 
+    font-size: 1.8rem; 
+    font-weight: 900; 
+    color: var(--white); 
+    text-transform: uppercase; 
+    letter-spacing: -1px; 
+    border: 3px solid var(--border-color); 
+    padding: 10px 25px;
+    border-radius: 16px; 
+    background: var(--theme-dark); 
+    box-shadow: 5px 5px 0px var(--theme-contrast); 
+    text-align: center; 
+    margin-bottom: 15px; 
+    transform: rotate(-2deg);
+}
+
+h1 { 
+    font-size: 1.9rem; 
+    font-weight: 900; 
+    color: var(--text-color); 
+    text-transform: uppercase;
+    letter-spacing: 1px; 
+    text-shadow: 2px 2px 0px var(--white); 
+    text-align: center; 
+    line-height: 1.2;
+}
+
+.subtitle { 
+    font-size: 1rem; 
+    color: var(--theme-dark); 
+    font-weight: 700; 
+    text-align: center;
+    margin-top: 5px;
+    background: var(--white);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 2px solid var(--border-color);
+}
+
+.container { 
+    width: 100%; 
+    max-width: 650px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 25px;
+}
+
+.toggle-container { 
+    background-color: var(--white); 
+    border: 3px solid var(--border-color);
+    border-radius: 50px; 
+    padding: 6px; 
+    display: flex; 
+    margin-bottom: 5px; 
+    box-shadow: 4px 4px 0px var(--border-color); 
+}
+
+.toggle-btn {
+    flex: 1; 
+    border: none; 
+    background: none; 
+    padding: 12px 0; 
+    border-radius: 40px;
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 800; 
+    font-size: 1.05rem; 
+    color: var(--theme-dark);
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+}
+
+.toggle-btn.active { 
+    background-color: var(--theme-dark); 
+    color: var(--theme-text-active);
+    box-shadow: 0px 3px 0px rgba(0,0,0,0.2) inset; 
+}
+
+.view-section { 
+    display: none; 
+    animation: fadeIn 0.5s ease; 
+    flex-direction: column; 
+    gap: 20px;
+}
+
+.search-container { position: relative; width: 100%; }
+
+.search-input { 
+    width: 100%; 
+    padding: 16px 20px 16px 55px; 
+    border: 3px solid var(--border-color); 
+    border-radius: 50px; 
+    background-color: var(--white); 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1rem; 
+    font-weight: 700; 
+    color: var(--text-color); 
+    box-shadow: 4px 4px 0px var(--theme-medium); 
+    outline: none; 
+    transition: all 0.2s ease; 
+}
+
+.search-input:focus { 
+    transform: translate(2px, 2px); 
+    box-shadow: 2px 2px 0px var(--theme-contrast); 
+    border-color: var(--theme-dark); 
+}
+
+.search-icon {
+    position: absolute; 
+    left: 22px; 
+    top: 50%; 
+    transform: translateY(-50%);
+    font-size: 1.4rem; 
+}
+
+#no-results { 
+    text-align: center; 
+    background: var(--white);
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px dashed var(--theme-accent);
+    color: var(--theme-accent); 
+    font-weight: 700; 
+    display: none; 
+}
+
+.content-group {
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+.section-badge { 
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: var(--theme-contrast); 
+    color: var(--border-color); 
+    font-size: 1rem; 
+    font-weight: 900; 
+    border-radius: 12px;
+    border: 3px solid var(--border-color); 
+    box-shadow: 4px 4px 0px var(--border-color); 
+    text-transform: uppercase; 
+    align-self: flex-start; 
+    margin-bottom: 5px; 
+    transform: rotate(-1deg);
+}
+
+.theory-box { 
+    display: flex; 
+    flex-direction: column; 
+    padding: 25px; 
+    border-radius: 20px;
+    background-color: var(--white); 
+    border: 3px solid var(--border-color); 
+    box-shadow: 6px 6px 0px var(--border-color); 
+    font-weight: 500; 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+    position: relative;
+    overflow: hidden; 
+    gap: 15px; 
+    transition: transform 0.2s ease;
+}
+
+.theory-box:hover {
+    transform: translateY(-3px);
+}
+
+.image-banner {
+    background-color: var(--theme-light);
+    margin: -25px -25px 15px -25px;
+    padding: 20px;
+    border-bottom: 3px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--theme-dark);
+    text-align: center;
+}
+
+.theory-box h3 {
+    font-size: 1.3rem; 
+    font-weight: 900; 
+    color: var(--theme-dark);
+    margin-bottom: 5px; 
+    padding-bottom: 8px;
+    border-bottom: 3px dashed var(--theme-light); 
+    display: flex; 
+    align-items: center; 
+    gap: 10px;
+}
+
+/* Grids e Organização Visual */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.card-item {
+    background: #F8FAFC;
+    border: 2px solid var(--border-color);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0px var(--theme-light);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.card-item strong {
+    color: var(--theme-dark);
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.visual-area { 
+    background: #FFFBEB; 
+    border: 3px dashed var(--theme-contrast); 
+    border-radius: 12px; 
+    padding: 15px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    flex-wrap: wrap;
+    gap: 15px; 
+    font-weight: 800; 
+    font-size: 1.1rem; 
+    color: #B45309; 
+    text-align: center;
+}
+
+.highlight-box { 
+    background-color: #E0F2FE; 
+    border: 3px solid var(--theme-dark);
+    border-left-width: 8px;
+    padding: 15px; 
+    border-radius: 12px; 
+    font-size: 0.95rem; 
+    color: #075985; 
+}
+
+.highlight-box.warning { 
+    background-color: #FEF2F2; 
+    border-color: var(--theme-accent); 
+    color: #991B1B; 
+    box-shadow: 3px 3px 0px var(--theme-accent);
+}
+
+.difficulty-badge {
+    display: inline-block; 
+    padding: 6px 14px; 
+    border-radius: 20px; 
+    font-size: 0.8rem; 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    margin-bottom: 12px; 
+    border: 2px solid var(--border-color); 
+    box-shadow: 3px 3px 0px var(--border-color); 
+}
+
+.dif-facil {background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+.question-map { 
+    display: flex; 
+    gap: 10px; 
+    overflow-x: auto; 
+    padding: 10px 5px 15px 5px;
+    margin-bottom: 20px; 
+    white-space: nowrap; 
+    -webkit-overflow-scrolling: touch; 
+    scroll-behavior: smooth; 
+}
+
+.question-map::-webkit-scrollbar { height: 8px; }
+.question-map::-webkit-scrollbar-track { background: var(--theme-light); border-radius: 10px; border: 1px solid var(--border-color); }
+.question-map::-webkit-scrollbar-thumb { background: var(--theme-dark); border-radius: 10px; border: 1px solid var(--border-color); }
+
+.map-dot { 
+    min-width: 40px; 
+    height: 40px; 
+    border: 2px solid var(--border-color);
+    border-radius: 10px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: 900;
+    font-size: 0.9rem; 
+    color: var(--border-color); 
+    background: white; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.map-dot.active { 
+    background-color: var(--theme-dark); 
+    color: white; 
+    box-shadow: 3px 3px 0px var(--theme-contrast); 
+    transform: scale(1.15) translateY(-2px); 
+}
+
+.map-dot.answered-correct {
+    background-color: var(--correct-bg); 
+    color: var(--correct-border); 
+}
+
+.map-dot.answered-wrong { 
+    background-color: var(--wrong-bg); 
+    color: var(--wrong-border); 
+}
+
+.option-btn { 
+    display: flex; 
+    align-items: center; 
+    width: 100%; 
+    padding: 18px;
+    background-color: var(--white); 
+    border: 3px solid var(--border-color); 
+    border-radius: 16px;
+    margin-bottom: 15px; 
+    cursor: pointer; 
+    transition: all 0.15s ease; 
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1); 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1rem; 
+    font-weight: 600;
+    text-align: left; 
+    color: var(--text-color); 
+}
+
+.option-btn:hover:not(:disabled) { 
+    transform: translate(-3px, -3px); 
+    box-shadow: 7px 7px 0px var(--theme-medium); 
+}
+
+.opt-circle { 
+    width: 36px; 
+    height: 36px; 
+    border-radius: 50%; 
+    border: 3px solid var(--border-color); 
+    margin-right: 15px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-weight: 900; 
+    font-size: 1.1rem; 
+    flex-shrink: 0; 
+    background: var(--theme-light); 
+    color: var(--border-color); 
+}
+
+.option-btn.correct {
+    background-color: var(--correct-bg); 
+    border-color: var(--correct-border); 
+    box-shadow: 4px 4px 0px var(--correct-border); 
+}
+
+.option-btn.correct .opt-circle {
+    background-color: var(--correct-border); 
+    color: white;
+    border-color: var(--correct-border); 
+}
+
+.option-btn.wrong {
+    background-color: var(--wrong-bg); 
+    border-color: var(--wrong-border); 
+    opacity: 0.95; 
+    box-shadow: 4px 4px 0px var(--wrong-border); 
+}
+
+.option-btn.wrong .opt-circle {
+    background-color: var(--wrong-border); 
+    color: white;
+    border-color: var(--wrong-border); 
+}
+
+.option-btn.disabled {pointer-events: none; opacity: 0.7; }
+
+.feedback-box { 
+    display: block; 
+    margin-top: 25px; 
+    background-color: #F8FAFC; 
+    border: 3px dashed var(--border-color); 
+    border-radius: 16px; 
+    padding: 25px; 
+    animation: slideUp 0.3s ease-out; 
+}
+
+.feedback-title { 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    font-size: 1.1rem;
+    margin-bottom: 15px; 
+    display:flex; 
+    align-items:center; 
+    gap:8px; 
+}
+
+.feedback-item { 
+    margin-bottom: 10px; 
+    font-size: 0.95rem; 
+    padding-left: 12px; 
+    border-left: 4px solid #CBD5E1; 
+    line-height: 1.6; 
+}
+
+.feedback-item.correct-opt {
+    border-left-color: var(--correct-border); 
+    font-weight: 700;
+    color: var(--correct-border); 
+    background: var(--white); 
+    border: 2px solid var(--correct-border);
+    padding: 15px; 
+    border-radius: 12px; 
+    box-shadow: 3px 3px 0px var(--correct-bg);
+}
+
+.feedback-item.wrong-opt {
+    border-left-color: var(--wrong-border); 
+    color: #9F1239; 
+    background: var(--white);
+    padding: 10px;
+    border-radius: 0 8px 8px 0;
+}
+
+.result-card {
+    background: white; 
+    border: 3px solid var(--border-color); 
+    border-radius: 20px; 
+    padding: 40px 30px; 
+    box-shadow: 8px 8px 0px var(--border-color); 
+    margin-bottom: 30px;
+    text-align: center; 
+}
+
+.stars-container { font-size: 4rem; margin: 15px 0; letter-spacing: 5px; }
+
+.percentage-big {
+    font-size: 5rem; 
+    font-weight: 900; 
+    color: var(--theme-dark);
+    line-height: 1; 
+    margin: 15px 0; 
+    text-shadow: 4px 4px 0px var(--theme-contrast); 
+}
+
+.btn-action { 
+    width: 100%; 
+    padding: 20px; 
+    background-color: var(--theme-dark); 
+    color: white; 
+    border: 3px solid var(--border-color); 
+    border-radius: 16px; 
+    font-size: 1.2rem; 
+    font-weight: 900; 
+    cursor: pointer; 
+    box-shadow: 5px 5px 0px var(--theme-contrast); 
+    transition: all 0.1s;
+    text-transform: uppercase; 
+    margin-top: 20px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-action:active { 
+    transform: translate(3px, 3px); 
+    box-shadow: 2px 2px 0px var(--theme-contrast); 
+}
+
+.quiz-footer { 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    background-color: var(--white); 
+    border-top: 3px solid var(--border-color); 
+    padding: 15px 25px; 
+    display: none;
+    justify-content: space-between; 
+    align-items: center; 
+    z-index: 100; 
+    box-shadow: 0px -5px 15px rgba(0,0,0,0.05);
+}
+
+.nav-btn { 
+    padding: 14px 28px; 
+    border-radius: 12px; 
+    font-weight: 900; 
+    border: 3px solid var(--border-color); 
+    cursor: pointer; 
+    box-shadow: 3px 3px 0px var(--border-color); 
+    font-family: 'Poppins', sans-serif; 
+    text-transform: uppercase;
+    transition: transform 0.1s;
+}
+.nav-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border-color); }
+
+.btn-next { background-color: var(--theme-contrast); color: var(--border-color); }
+.btn-prev { background-color: var(--theme-light); color: var(--border-color); }
+
+.prova-banner {
+    margin-bottom: 25px; 
+    background-color: var(--theme-dark); 
+    color: var(--white);
+    padding: 25px; 
+    border-radius: 16px; 
+    border: 3px solid var(--border-color); 
+    box-shadow: 6px 6px 0px var(--theme-contrast);
+    text-align: center;
+}
+
+.prova-banner h2 {
+    font-weight: 900; 
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 0px var(--border-color);
+}
+
+.prova-banner p {
+    font-size: 1rem; 
+    font-weight: 600;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px dashed rgba(255,255,255,0.5);
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">📖</span> PROMOVER</div>
+        <h1>PORTUGUÊS E REDAÇÃO<br>6º ANO</h1>
+        <p class="subtitle">✨ Gêneros Textuais e Gramática ✨</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📚 Estudar a Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">✍️ Fazer Exercícios (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar matéria ou palavra...">
+        </div>
+        
+        <div id="no-results"><p>Esta palavra não foi encontrada.</p></div>
+
+        <!-- TEORIA: GÊNEROS TEXTUAIS -->
+        <div class="content-group">
+            <div class="section-badge">Gêneros Textuais 📜</div>
+            
+            <div class="theory-box">
+                <div class="image-banner">
+                    
+                </div>
+                <h3>🌍 1. Lendas e Relatos Científicos</h3>
+                <div class="grid-2">
+                    <div class="card-item">
+                        <strong>🧚‍♀️ O que é uma Lenda Indígena?</strong>
+                        <p>São histórias muito antigas dos povos indígenas. Eles inventaram essas histórias para tentar explicar como as coisas surgiram (como a chuva e a noite). As lendas misturam realidade com magia.</p>
+                        <p><strong>Quem participa:</strong> Animais que falam e personagens com poderes mágicos.<br><strong>Quando acontece:</strong> O tempo não é exato. Exemplo: <em>"Há muitos anos..."</em> ou <em>"No princípio de tudo..."</em>.</p>
+                    </div>
+                    <div class="card-item">
+                        <strong>🔬 O que é um Relato Científico?</strong>
+                        <p>É um texto escrito por cientistas. Ele mostra como foi feita uma pesquisa real e quais foram os resultados.</p>
+                        <p><strong>Como é escrito:</strong> Não existe magia neste texto. Ele usa números, datas exatas e fatos que podem ser provados.</p>
+                    </div>
+                </div>
+                
+                <div class="highlight-box warning">
+                    <strong>🚨 ATENÇÃO PARA NÃO CONFUNDIR:</strong><br>
+                    Se o texto diz que ficou de noite porque <strong>"um animal engoliu o Sol"</strong>, é uma Lenda.<br> 
+                    Se o texto diz que ficou de noite por causa da <strong>"rotação do planeta Terra"</strong>, é um Relato Científico.
+                </div>
+            </div>
+
+            <div class="theory-box">
+                <div class="image-banner" style="background-color: #FEF3C7;">
+                    
+                </div>
+                <h3>📑 2. Textos Oficiais e Cartas</h3>
+                <p>Estes são textos formais, usados na vida real para comunicação oficial. Veja a diferença entre eles:</p>
+                
+                <div class="grid-2">
+                    <div class="card-item" style="border-color: #059669; box-shadow: 3px 3px 0px #A7F3D0;">
+                        <strong>📝 O que é um Requerimento?</strong>
+                        <p>É um documento. Você usa o requerimento para <strong>pedir algo que é seu direito</strong> a uma pessoa que tem autoridade.</p>
+                        <p><strong>Exemplo:</strong> Pedir um documento na escola. Você deve usar palavras de respeito, como: <em>"Senhor Diretor..."</em>.</p>
+                    </div>
+                    <div class="card-item" style="border-color: #E11D48; box-shadow: 3px 3px 0px #FECDD3;">
+                        <strong>😡 O que é uma Carta de Reclamação?</strong>
+                        <p>É um texto que você escreve para <strong>reclamar de um problema</strong> em um produto ou serviço, e pedir que resolvam a situação.</p>
+                        <p><strong>Exemplo:</strong> Reclamar de um celular que veio quebrado. Você deve explicar o problema claramente, sem ofender ou xingar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEORIA: GRAMÁTICA -->
+        <div class="content-group">
+            <div class="section-badge" style="background-color: var(--theme-dark); color: white;">Gramática 🧠</div>
+
+            <div class="theory-box">
+                <div class="image-banner" style="background-color: #E0E7FF;">
+                    
+                </div>
+                <h3>📦 3. O que são os Substantivos?</h3>
+                <p><strong>Substantivo</strong> é a palavra que usamos para <strong>dar nome</strong> a todas as coisas: pessoas, lugares, objetos e sentimentos. Veja os tipos:</p>
+                
+                <div class="grid-2">
+                    <div class="card-item">
+                        <strong>🏷️ Próprio e Comum</strong>
+                        <strong>Próprio:</strong> Dá nome específico a alguém ou a um lugar. Começa com letra maiúscula (Ex: <em>Brasil, Maria</em>).<br>
+                        <strong>Comum:</strong> Dá nome geral para as coisas (Ex: <em>país, menina</em>).
+                    </div>
+                    <div class="card-item">
+                        <strong>🌱 Primitivo e Derivado</strong>
+                        <strong>Primitivo:</strong> É a primeira palavra, ela não vem de nenhuma outra (Ex: <em>Pedra</em>).<br>
+                        <strong>Derivado:</strong> É a palavra formada a partir da palavra primitiva (Ex: <em>Pedreira</em>).
+                    </div>
+                    <div class="card-item">
+                        <strong>🧩 Simples e Composto</strong>
+                        <strong>Simples:</strong> É formado por apenas 1 palavra (Ex: <em>Chuva</em>).<br>
+                        <strong>Composto:</strong> É formado por 2 ou mais palavras juntas (Ex: <em>Guarda-chuva</em>).
+                    </div>
+                    <div class="card-item">
+                        <strong>👻 Concreto e Abstrato</strong>
+                        <strong>Concreto:</strong> Dá nome a coisas que existem de forma independente, você consegue desenhar (Ex: <em>Fada, Mesa</em>).<br>
+                        <strong>Abstrato:</strong> Dá nome a sentimentos, ações e qualidades. Dependem de alguém para existir (Ex: <em>Amor, Tristeza, Corrida</em>).
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 10px;">
+                    🐟 <strong>E o que é o Substantivo Coletivo?</strong> É uma palavra que fica no singular, mas serve para indicar um grupo de várias coisas da mesma espécie. Exemplo: <em>Cardume</em> significa "vários peixes". <em>Matilha</em> significa "vários cães".
+                </div>
+            </div>
+
+            <div class="theory-box">
+                <h3>🤝 4. Palavras que acompanham o Substantivo</h3>
+                <p>Os substantivos costumam vir acompanhados de outras palavras na frase. São elas:</p>
+
+                <div class="grid-2">
+                    <div class="card-item">
+                        <strong>🅰️ Artigos</strong>
+                        <p>Aparecem antes do substantivo. Podem ser <strong>Definidos</strong> quando apontam para algo específico (<em>o, a, os, as</em>) ou <strong>Indefinidos</strong> quando apontam para qualquer coisa (<em>um, uma, uns, umas</em>).</p>
+                    </div>
+                    <div class="card-item">
+                        <strong>🔢 Numerais</strong>
+                        <p>Servem para indicar quantidade ou ordem. Podem ser <strong>Cardinais</strong> (1, 2), <strong>Ordinais</strong> (1º, 2º), <strong>Fracionários</strong> (meio) ou <strong>Multiplicativos</strong> (dobro).</p>
+                    </div>
+                    <div class="card-item" style="grid-column: span 2;">
+                        <strong>👤 Pronomes Pessoais</strong>
+                        <p>São palavras que usamos para substituir os nomes, para não repetir a mesma palavra toda hora (Exemplo: "Ana saiu e <strong>ela</strong> voltou").</p>
+                        <ul style="margin-left: 15px; margin-top: 5px;">
+                            <li><strong>Caso Reto:</strong> São os que praticam a ação na frase (<em>eu, tu, ele, nós, vós, eles</em>).</li>
+                            <li><strong>Caso Oblíquo:</strong> São os que recebem a ação na frase (<em>me, te, se, o, a, lhe</em>).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theory-box">
+                <div class="image-banner" style="background-color: #FFEDD5;">
+                    
+                </div>
+                <h3>⚙️ 5. Verbos e Figuras de Linguagem</h3>
+                
+                <div class="visual-area">
+                    Verbo: Palavra que indica ação, estado ou fenômeno da natureza.
+                </div>
+                
+                <p>O <strong>Modo Verbal</strong> mostra a atitude da pessoa que está falando. Pode ser de três tipos:</p>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                    <li>🎯 <strong>Modo Indicativo:</strong> Mostra uma certeza. Algo que é um fato real (<em>Eu estudo de manhã</em>).</li>
+                    <li>🤔 <strong>Modo Subjuntivo:</strong> Mostra uma dúvida ou uma possibilidade (<em>Se eu estudasse...</em>).</li>
+                    <li>📢 <strong>Modo Imperativo:</strong> É usado para dar uma ordem, fazer um pedido ou dar um conselho (<em>Estude agora</em>).</li>
+                </ul>
+
+                <hr style="border: 1px dashed var(--theme-medium); margin: 5px 0;">
+                
+                <strong>🎨 O que são Figuras de Linguagem?</strong>
+                <p>São formas de escrever que mudam o sentido direto das palavras para chamar mais a atenção do leitor. As principais são:</p>
+                
+                <div class="grid-2">
+                    <div class="card-item">
+                        <strong>⚖️ Comparação</strong>
+                        Compara duas coisas usando a palavra "como" (<em>Ele é forte <strong>como</strong> um touro</em>).
+                    </div>
+                    <div class="card-item">
+                        <strong>🎭 Metáfora</strong>
+                        Afirma diretamente que uma coisa é outra, sem usar a palavra "como" (<em>Ele <strong>é</strong> um touro</em>).
+                    </div>
+                    <div class="card-item" style="grid-column: span 2;">
+                        <strong>🧍 Personificação</strong>
+                        É quando dizemos que objetos ou coisas da natureza fazem ações de seres humanos (<em>O vento <strong>cantou</strong> na janela</em>).
+                    </div>
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3>✍️ 6. Regras de Ortografia: S, SS, C ou Ç?</h3>
+                <p>Para não errar a escrita dessas palavras, lembre-se destas regras diretas:</p>
+                <div class="grid-2">
+                    <div class="card-item" style="border-left: 6px solid var(--theme-dark);">
+                        <strong>✅ Regra do Ç:</strong> A letra Ç tem o mesmo som de "S", mas <strong>só pode ser usada antes das vogais A, O e U</strong> (Exemplo: Paçoca, Açúcar). Nunca use Ç antes de E ou I.
+                    </div>
+                    <div class="card-item" style="border-left: 6px solid var(--theme-contrast);">
+                        <strong>✅ Regra do SS:</strong> <strong>Nenhuma palavra começa com SS.</strong> Ele só é usado no meio da palavra, entre duas vogais, para manter o som forte (Exemplo: Pássaro).
+                    </div>
+                    <div class="card-item" style="grid-column: span 2; border-left: 6px solid #10B981;">
+                        <strong>✅ A letra S sozinha no meio:</strong> Quando a letra "S" fica sozinha no meio de duas vogais, ela passa a ter <strong>som de Z</strong> (Exemplo: Casa, Mesa, Casamento).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">
+            🚀 Iniciar os Exercícios (30 Q)
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div class="prova-banner">
+            <h2>🔥 Exercícios de Fixação</h2>
+            <p>
+                Aqui estão 30 questões sobre a teoria. Tente acertar pelo menos <strong>80% (24/30)</strong>. Leia a explicação de cada erro para aprender mais.
+            </p>
+        </div>
+
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">📊 Relatório Final</h2>
+            <div class="stars-container" id="finalStars">★</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.3rem; font-weight:800; color:var(--text-color);" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">⬅️ Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima ➡️</button>
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// Configuração e Inicialização do Firebase na Nuvem
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+let currentUser = null;
+
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+// ARRAY DE QUESTÕES - 30 QUESTÕES DIVIDIDAS RIGOROSAMENTE (FÁCIL, MÉDIO, DIFÍCIL)
+const questions = [
+    // --- GÊNEROS TEXTUAIS: FÁCIL ---
+    {
+        id: 1, level: "Fácil",
+        text: "Qual das expressões abaixo é um marcador de tempo típico de lendas indígenas?",
+        options: ["Em 15 de março de 2023...", "Segundo os dados do IBGE...", "Há muitas luas, no princípio do mundo...", "Amanhã, às 14 horas..."],
+        correct: 2,
+        explanation: {
+            correct: "Lendas não usam datas exatas. Elas usam um tempo vago, como 'Há muitas luas'.",
+            options: ["Isso é uma data exata, usada em jornais.", "Isso é um dado usado em pesquisas.", "A resposta correta é a C.", "Lendas não acontecem no futuro com hora marcada."]
+        }
+    },
+    {
+        id: 2, level: "Fácil",
+        text: "Qual é a principal função de um Relato Científico?",
+        options: ["Contar uma história mágica para crianças.", "Registrar e divulgar os resultados de uma pesquisa real.", "Reclamar de um buraco na rua.", "Pedir um documento oficial na prefeitura."],
+        correct: 1,
+        explanation: {
+            correct: "O relato científico serve para mostrar os resultados de pesquisas baseadas em fatos reais.",
+            options: ["Isso é função das lendas.", "A resposta correta é a B.", "Isso é função da Carta de Reclamação.", "Isso é função do Requerimento."]
+        }
+    },
+    {
+        id: 3, level: "Fácil",
+        text: "Se você comprou um celular e ele chegou quebrado, qual texto você deve usar para pedir uma solução à loja?",
+        options: ["Lenda Indígena.", "Relato Científico.", "Carta de Reclamação.", "Requerimento."],
+        correct: 2,
+        explanation: {
+            correct: "A Carta de Reclamação é o texto usado para relatar um problema em uma compra e pedir que seja consertado.",
+            options: ["Lendas não resolvem problemas de compras.", "Pesquisas não servem para reclamar com lojas.", "A resposta correta é a C.", "Requerimento pede documentos, não exige consertos."]
+        }
+    },
+    {
+        id: 4, level: "Fácil",
+        text: "Lendas indígenas costumam explicar a origem das coisas. Qual elemento NÃO faz parte desse tipo de texto?",
+        options: ["Magia e transformação.", "Dados de matemática e gráficos.", "Elementos da natureza com vida.", "Tempo vago e distante."],
+        correct: 1,
+        explanation: {
+            correct: "Dados de matemática e gráficos aparecem apenas em textos científicos, e não em lendas.",
+            options: ["A magia faz parte das lendas.", "A resposta correta é a B.", "Dar vida à natureza faz parte das lendas.", "O tempo vago faz parte das lendas."]
+        }
+    },
+    {
+        id: 5, level: "Fácil",
+        text: "O 'Requerimento' é um texto usado para pedir algo que temos direito. Como deve ser a escrita desse texto?",
+        options: ["Informal e com gírias.", "Com versos e rimas.", "Com mistério.", "Formal e muito respeitosa."],
+        correct: 3,
+        explanation: {
+            correct: "O requerimento é um documento oficial enviado a uma autoridade. Por isso, a linguagem precisa ser séria e respeitosa.",
+            options: ["Gírias não são permitidas em documentos oficiais.", "Rimas são para poemas.", "Mistério é para histórias.", "A resposta correta é a D."]
+        }
+    },
+    // --- GRAMÁTICA: FÁCIL ---
+    {
+        id: 6, level: "Fácil",
+        text: "A palavra 'floresta' dá nome a um lugar físico, que não depende de sentimentos. Ela é um:",
+        options: ["Substantivo abstrato.", "Substantivo concreto.", "Numeral.", "Artigo definido."],
+        correct: 1,
+        explanation: {
+            correct: "Nomes de lugares e coisas que existem de forma física são chamados de substantivos concretos.",
+            options: ["Abstrato é usado para sentimentos e ações.", "A resposta correta é a B.", "Numeral indica números e quantidades.", "Artigo é a palavra que acompanha o substantivo."]
+        }
+    },
+    {
+        id: 7, level: "Fácil",
+        text: "Leia: 'O menino achou um cachorro'. As palavras destacadas ('O' e 'um') são, respectivamente:",
+        options: ["Artigo definido e Artigo indefinido.", "Artigo indefinido e Artigo definido.", "Pronome e Numeral.", "Substantivo e Verbo."],
+        correct: 0,
+        explanation: {
+            correct: "A letra 'O' indica um menino específico (definido). A palavra 'um' indica qualquer cachorro (indefinido).",
+            options: ["A resposta correta é a A.", "A ordem apresentada está invertida.", "A palavra 'um' não está indicando quantidade aqui, é artigo.", "Não são nomes de coisas nem ações."]
+        }
+    },
+    {
+        id: 8, level: "Fácil",
+        text: "Na frase 'Eu comi o dobro de bolo', a palavra destacada ('dobro') é um numeral de que tipo?",
+        options: ["Cardinal.", "Ordinal.", "Multiplicativo.", "Fracionário."],
+        correct: 2,
+        explanation: {
+            correct: "Palavras como dobro e triplo servem para multiplicar uma quantidade, por isso são numerais multiplicativos.",
+            options: ["Cardinal é usado para contar (um, dois).", "Ordinal é usado para ordem (primeiro, segundo).", "A resposta correta é a C.", "Fracionário é usado para dividir (metade)."]
+        }
+    },
+    {
+        id: 9, level: "Fácil",
+        text: "Qual opção abaixo apresenta um Pronome Pessoal do Caso Reto (aquele que faz a ação)?",
+        options: ["Lhe.", "Nós.", "O.", "Me."],
+        correct: 1,
+        explanation: {
+            correct: "A palavra 'Nós' é um pronome do caso reto, assim como eu, tu, ele, vós e eles. Eles praticam a ação do verbo.",
+            options: ["É pronome oblíquo.", "A resposta correta é a B.", "Pode ser artigo ou oblíquo.", "É pronome oblíquo."]
+        }
+    },
+    {
+        id: 10, level: "Fácil",
+        text: "Quando você diz uma ordem como 'Pare agora!', você está usando o verbo em qual modo?",
+        options: ["Subjuntivo.", "Indicativo.", "Imperativo.", "Exclamativo."],
+        correct: 2,
+        explanation: {
+            correct: "O modo Imperativo é aquele usado para dar ordens, conselhos ou fazer pedidos.",
+            options: ["Subjuntivo indica dúvida.", "Indicativo indica certeza.", "A resposta correta é a C.", "Exclamativo é um tipo de frase, não modo verbal."]
+        }
+    },
+    // --- GÊNEROS TEXTUAIS: MÉDIO ---
+    {
+        id: 11, level: "Médio",
+        text: "Leia a frase: 'Pesquisadores confirmaram que dormir pouco reduz a atenção em 40%'. Por que isso é um texto científico?",
+        options: ["Porque usa tempo vago.", "Porque usa dados exatos, números e não opinações.", "Porque o autor está reclamando de sono.", "Porque explica quem inventou o sono."],
+        correct: 1,
+        explanation: {
+            correct: "Textos científicos são baseados em fatos. O uso de números exatos (40%) comprova que foi feita uma pesquisa séria.",
+            options: ["Isso é regra das Lendas.", "A resposta correta é a B.", "Reclamações sobre a vida pessoal não são ciência.", "Lendas explicam quem inventou as coisas."]
+        }
+    },
+    {
+        id: 12, level: "Médio",
+        text: "O texto que começa com 'Senhor Diretor da Escola, venho pedir meu histórico escolar' pertence a qual tipo?",
+        options: ["Requerimento.", "Carta de Reclamação.", "Relato científico.", "Lenda Indígena."],
+        correct: 0,
+        explanation: {
+            correct: "Esse texto usa uma forma respeitosa para pedir um documento a uma autoridade da escola. Isso se chama Requerimento.",
+            options: ["A resposta correta é a A.", "Não há nenhuma reclamação ou defeito sendo relatado.", "Não apresenta nenhuma pesquisa.", "Não apresenta magia."]
+        }
+    },
+    {
+        id: 13, level: "Médio",
+        text: "Observe: 1. 'As estrelas nasceram das lágrimas da deusa Jaci'. 2. 'As estrelas são bolas de gás luminoso'. Marque a certa:",
+        options: ["A frase 1 é ciência; a frase 2 é lenda.", "Ambas são textos científicos.", "A frase 1 é lenda; a frase 2 é ciência.", "Ambas são cartas de reclamação."],
+        correct: 2,
+        explanation: {
+            correct: "A frase 1 usa uma deusa e choro para explicar algo (magia/lenda). A frase 2 usa fatos da física (ciência).",
+            options: ["A ordem está invertida.", "A ciência não fala sobre deusas que choram estrelas.", "A resposta correta é a C.", "Ninguém está reclamando de defeitos."]
+        }
+    },
+    {
+        id: 14, level: "Médio",
+        text: "Em uma Carta de Reclamação, você precisa apresentar argumentos. O que são argumentos nesse caso?",
+        options: ["Xingamentos ao vendedor.", "Um feitiço para o produto funcionar.", "Fatos que provam o defeito para que o problema seja resolvido.", "Uma lista com números da física."],
+        correct: 2,
+        explanation: {
+            correct: "Argumentar significa apresentar as provas e os motivos claros pelos quais o produto tem defeito e você merece um conserto.",
+            options: ["Xingar invalida o seu direito.", "Feitiços não existem na vida real comercial.", "A resposta correta é a C.", "Números de física são para relatos científicos."]
+        }
+    },
+    {
+        id: 15, level: "Médio",
+        text: "Por que as lendas começam com frases como 'No tempo em que os animais falavam'?",
+        options: ["Para provar que a ciência errou.", "Porque os indígenas não sabiam os dias.", "Para colocar a história em um passado misterioso que não sabemos a data.", "Para confundir quem está lendo a história."],
+        correct: 2,
+        explanation: {
+            correct: "Frases de tempo vago servem para mostrar que a história aconteceu em uma época muito antiga e misteriosa, que não pode ser medida.",
+            options: ["Lendas não brigam com a ciência.", "Os indígenas sabiam medir o tempo observando o sol.", "A resposta correta é a C.", "O objetivo é contar uma história, não causar confusão."]
+        }
+    },
+    // --- GRAMÁTICA: MÉDIO ---
+    {
+        id: 16, level: "Médio",
+        text: "Qual opção abaixo tem um substantivo derivado seguido de um substantivo abstrato, NESSA ordem?",
+        options: ["Pedra e Mesa.", "Pedreira e Alegria.", "Sol e Menina.", "Tristeza e Jornaleiro."],
+        correct: 1,
+        explanation: {
+            correct: "A ordem pedida foi: 1. Derivado e 2. Abstrato. A palavra 'Pedreira' vem de pedra (derivado). 'Alegria' é um sentimento (abstrato).",
+            options: ["Ambos são concretos. Pedra é primitivo.", "A resposta correta é a B.", "Ambos são concretos.", "A ordem foi invertida nesta opção."]
+        }
+    },
+    {
+        id: 17, level: "Médio",
+        text: "Na frase: 'A lua sorriu hoje à noite', o verbo 'sorrir' (que é de humanos) foi dado à lua. Qual o nome disso?",
+        options: ["Metáfora.", "Comparação.", "Discurso direto.", "Personificação."],
+        correct: 3,
+        explanation: {
+            correct: "Personificação é a figura de linguagem usada para dar características ou ações de pessoas para seres que não são humanos.",
+            options: ["Metáfora é dizer que uma coisa é outra.", "Comparação usa a palavra 'como'.", "Discurso direto é a fala exata de uma pessoa.", "A resposta correta é a D."]
+        }
+    },
+    {
+        id: 18, level: "Médio",
+        text: "Sabendo as regras das letras C, Ç e SS, marque a palavra que está escrita INCORRETAMENTE:",
+        options: ["Paçoca.", "Pássaro.", "Açuçar.", "Cenoura."],
+        correct: 2,
+        explanation: {
+            correct: "Atenção à regra: nunca usamos a letra 'Ç' antes das vogais E ou I. A forma correta de escrever é Açúcar.",
+            options: ["Correto. Usamos Ç antes da vogal O.", "Correto. O SS está no meio da palavra.", "A resposta correta é a C.", "Correto, começa com C."]
+        }
+    },
+    {
+        id: 19, level: "Médio",
+        text: "Leia: Maria falou: — Eu estou muito cansada! O uso do travessão (—) indica a fala exata da Maria. O nome disso é:",
+        options: ["Discurso Indireto.", "Discurso Direto.", "Verbo Imperativo.", "Substantivo Próprio."],
+        correct: 1,
+        explanation: {
+            correct: "Quando a fala exata do personagem aparece no texto (geralmente com travessão), isso é chamado de Discurso Direto.",
+            options: ["No indireto, o narrador diz o que ela falou.", "A resposta correta é a B.", "Imperativo é modo verbal.", "Maria é o substantivo, a frase inteira é o discurso."]
+        }
+    },
+    {
+        id: 20, level: "Médio",
+        text: "Na frase 'Se nós estudássemos mais, tiraríamos dez', o verbo 'estudássemos' indica uma dúvida. Ele está no modo:",
+        options: ["Indicativo.", "Imperativo.", "Subjuntivo.", "Infinitivo."],
+        correct: 2,
+        explanation: {
+            correct: "O modo Subjuntivo é usado para indicar uma ação que é apenas uma possibilidade, uma hipótese, algo que não é certeza.",
+            options: ["Indicativo é usado para certezas.", "Imperativo é usado para ordens.", "A resposta correta é a C.", "Infinitivo é o nome do verbo sem mudança (estudar)."]
+        }
+    },
+    // --- GÊNEROS TEXTUAIS: DIFÍCIL ---
+    {
+        id: 21, level: "Difícil",
+        text: "Comprei um sapato e a sola soltou. Vou escrever pedindo a troca. Por que meu texto NÃO será chamado de Requerimento?",
+        options: ["Requerimentos não servem para sapatos.", "Não terá o meu nome.", "Porque meu objetivo é reclamar de um defeito para uma loja, o que é uma Carta de Reclamação.", "A loja não aceita cartas."],
+        correct: 2,
+        explanation: {
+            correct: "O erro comum é não observar o objetivo. Se o objetivo é apontar um defeito e pedir solução para a loja, o gênero é Carta de Reclamação.",
+            options: ["O foco não é a palavra 'sapato', é o objetivo do texto.", "Toda carta precisa de nome (remetente).", "A resposta correta é a C.", "As lojas têm setores para receber essas reclamações."]
+        }
+    },
+    {
+        id: 22, level: "Difícil",
+        text: "Um texto de pesquisa científica e uma lenda indígena podem falar sobre a mesma coisa (exemplo: A Floresta Amazônica)?",
+        options: ["Sim, e ambos usarão testes e cálculos.", "Não, lendas não falam sobre florestas.", "Sim, o tema pode ser o mesmo. Mas a ciência usará fatos, e a lenda usará magia.", "Não, a ciência é proibida de estudar florestas."],
+        correct: 2,
+        explanation: {
+            correct: "O assunto de um texto pode ser o mesmo. A grande diferença é como o autor escreve sobre ele: usando dados comprovados ou usando histórias inventadas.",
+            options: ["Lendas não usam cálculos matemáticos.", "Florestas são cenários comuns em lendas.", "A resposta correta é a C.", "Florestas são muito estudadas por biólogos."]
+        }
+    },
+    {
+        id: 23, level: "Difícil",
+        text: "O aluno escreveu no seu texto de ciências: 'Eu acho que a água ferveu porque estava quente'. Esse é um bom relato científico?",
+        options: ["Sim, cientistas baseiam tudo no que eles 'acham'.", "Não. Textos científicos não usam opiniões como 'eu acho', eles exigem fatos exatos.", "Sim, porque água quente é assunto de ciência.", "Não, água fervendo é um assunto das lendas."],
+        correct: 1,
+        explanation: {
+            correct: "A escrita da ciência exige palavras exatas e fatos provados. Termos como 'eu acho' mostram opinião pessoal, o que não é aceito em relatos.",
+            options: ["Cientistas testam antes de escrever os resultados.", "A resposta correta é a B.", "O assunto é ciências, mas as palavras escolhidas foram erradas.", "Ferver a água é física real, não magia."]
+        }
+    },
+    {
+        id: 24, level: "Difícil",
+        text: "Qual destas frases, se for colocada no começo de uma história, estraga a regra principal do tempo em uma Lenda Indígena?",
+        options: ["No começo de todas as coisas...", "Antes do sol existir...", "No dia 10 de maio de 1500, às 14 horas...", "Quando as águas dos rios começaram a correr..."],
+        correct: 2,
+        explanation: {
+            correct: "Lendas não têm uma data exata. Se você coloca dia, mês e hora exatos, a história vira uma notícia ou um relato jornalístico.",
+            options: ["Esta frase é perfeitamente vaga.", "Esta frase é vaga e antiga.", "A resposta correta é a C.", "Esta frase é sobre a origem antiga das coisas."]
+        }
+    },
+    {
+        id: 25, level: "Difícil",
+        text: "O aluno entregou um atestado do médico para não fazer Educação Física. Qual texto ele preencheu para pedir isso ao Diretor?",
+        options: ["Requerimento, pois ele está solicitando um direito oficial para uma autoridade.", "Carta de Reclamação, para reclamar da aula.", "Relato Científico, para provar que a doença existe.", "Lenda, pois ele inventou a doença."],
+        correct: 0,
+        explanation: {
+            correct: "O aluno está usando os meios corretos e um atestado médico para solicitar formalmente um direito que ele tem à direção da escola.",
+            options: ["A resposta correta é a A.", "Ele não está dizendo que a aula tem defeitos.", "O objetivo não é dar aula de biologia.", "Ele tem um atestado real, não é invenção."]
+        }
+    },
+    // --- GRAMÁTICA: DIFÍCIL ---
+    {
+        id: 26, level: "Difícil",
+        text: "A frase 'O coração dele é uma pedra de gelo' é uma metáfora (afirmação direta). Como podemos transformá-la em uma Comparação?",
+        options: ["A pedra de gelo é o coração dele.", "O coração dele é tão frio COMO uma pedra de gelo.", "O gelo bate dentro do peito.", "Ele tem um coração feito de pedra."],
+        correct: 1,
+        explanation: {
+            correct: "Para que a frase seja considerada uma Comparação pela gramática, é obrigatório adicionar a palavra 'como' no meio das duas coisas comparadas.",
+            options: ["Isso apenas inverteu a ordem da frase direta.", "A resposta correta é a B.", "Isso continua sendo metáfora.", "Não usou a palavra conectiva (como)."]
+        }
+    },
+    {
+        id: 27, level: "Difícil",
+        text: "Na frase 'O professor entregou o livro para ele.', a palavra destacada ('ele') é um Pronome. Para que ela serve ali?",
+        options: ["Para indicar que ele praticou a ação.", "Para substituir o nome de quem sofreu/recebeu a ação.", "Para substituir o objeto que foi entregue.", "Para dar uma qualidade ao menino."],
+        correct: 1,
+        explanation: {
+            correct: "O pronome (ele) está no lugar do nome do aluno que recebeu a ação de entrega, feita pelo professor. Quem recebe a ação é chamado de caso oblíquo ou alvo.",
+            options: ["Quem praticou a ação foi o professor.", "A resposta correta é a B.", "O objeto foi o 'livro'.", "Quem dá qualidades são os adjetivos (ex: inteligente)."]
+        }
+    },
+    {
+        id: 28, level: "Difícil",
+        text: "Complete os espaços em branco com a escrita correta (S, SS, C ou Ç): 'A mo_a limpou o _apato sujo de gra_a'.",
+        options: ["ç, s, x.", "ss, c, ch.", "ç, ss, ch.", "c, s, ss."],
+        correct: 0,
+        explanation: {
+            correct: "Análise da escrita correta: Moça (usamos Ç antes da vogal A). Sapato (nenhuma palavra começa com SS ou Ç). Graxa (se escreve com X).",
+            options: ["A resposta correta é a A.", "Não existe 'Mossa' nem 'Capato'.", "Nenhuma palavra se inicia com SS.", "Não existe 'Moca'."]
+        }
+    },
+    {
+        id: 29, level: "Difícil",
+        text: "Leia: 'A professora e a coordenadora entraram na sala.' Qual pronome podemos colocar no lugar dos dois nomes para encurtar a frase?",
+        options: ["Elas.", "Nós.", "Vós.", "Elas mesmas."],
+        correct: 0,
+        explanation: {
+            correct: "A professora e a coordenadora representam a 3ª pessoa do plural, no feminino. O pronome correto que substitui os nomes perfeitamente é 'Elas'.",
+            options: ["A resposta correta é a A.", "O 'nós' só pode ser usado se você estiver no meio das pessoas.", "Vós é antigo e para 2ª pessoa.", "Não é usado como sujeito reto."]
+        }
+    },
+    {
+        id: 30, level: "Difícil",
+        text: "Procure a opção que tem as seguintes palavras na ordem exata: 1 Coletivo, 1 Artigo Indefinido e 1 Numeral Fracionário.",
+        options: ["Matilha, a, dobro.", "Cardume, uma, terço.", "Pássaros, o, metade.", "Arquipélago, uns, triplo."],
+        correct: 1,
+        explanation: {
+            correct: "Conferindo a ordem correta: Cardume (coletivo de peixes). Uma (Artigo indefinido feminino). Terço (Indica divisão por três, é fração).",
+            options: ["A letra 'a' é artigo definido, e 'dobro' não é fração.", "A resposta correta é a B.", "Pássaros é plural comum, não coletivo.", "Triplo indica multiplicação, não fração."]
+        }
+    }
+];
+
+// --- SISTEMA DE SALVAMENTO (NUVEM/FIRESTORE) E LÓGICA ---
+let currentQuestion = 0;
+let userAnswers = new Array(questions.length).fill(null);
+
+// Inicializa a autenticação antes de qualquer consulta à base de dados
+const initAuth = async () => {
+    try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+            await signInAnonymously(auth);
+        }
+    } catch (error) {
+        console.error("Erro na autenticação:", error);
+    }
+};
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUser = user;
+        const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'quiz_state', 'portugues_6ano');
+        
+        try {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists() && docSnap.data().answers) {
+                userAnswers = docSnap.data().answers;
+            } else {
+                userAnswers = new Array(questions.length).fill(null);
+            }
+            
+            // Retoma de onde o aluno parou caso já existam respostas preenchidas
+            if (userAnswers.some(ans => ans !== null)) {
+                window.setMode('practice');
+            } else {
+                window.setMode('explanation');
+            }
+        } catch (error) {
+            console.error("Erro ao recuperar os dados na nuvem:", error);
+            window.setMode('explanation');
+        }
+    }
+});
+
+initAuth();
+
+// Funções acopladas ao Window (necessário por ser type="module")
+window.setMode = function(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+
+    if (mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        window.renderQuestion();
+        window.renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+        window.scrollTo(0,0);
+    }
+};
+
+window.renderQuestion = function() {
+    if (questions.length === 0) return;
+    
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    
+    let badgeClass = '';
+    if (q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if (q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 6px 6px 0px var(--border-color); padding: 25px; border-radius: 16px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        
+        <div style="margin-bottom: 25px;">
+            <span style="font-size: 0.85rem; font-weight: 900; color: var(--theme-dark); text-transform: uppercase; letter-spacing: 1px;">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.25rem; margin-top: 8px; color: var(--text-color); font-weight: 900; line-height: 1.4;">${q.text}</h2>
+        </div>
+        
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `
+                <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `;
+            }).join('')}
+        </div>
+        
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '✅ Resposta Correta!' : '❌ Resposta Incorreta:'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>Apenas esta opção é a certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top:12px; font-size:1rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                💡 ${q.explanation.correct}
+            </div>
+            
+            <div style="margin-top:15px; border-top:2px dashed #CBD5E1; padding-top:15px;">
+                <small style="color:var(--theme-dark); font-size:0.9rem; text-transform: uppercase;"><strong>🔎 Por que as outras opções estão erradas:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `
+                <div class="feedback-item wrong-opt" style="margin-top:10px;"><strong>${letters[i]})</strong> ${exp}</div>
+                ` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>`;
+    
+    window.updateNav();
+};
+
+window.handleAnswer = async function(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    
+    userAnswers[currentQuestion] = idx;
+    
+    // Salva o progresso na nuvem em tempo real
+    if (currentUser) {
+        try {
+            await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'quiz_state', 'portugues_6ano'), {
+                answers: userAnswers
+            }, { merge: true });
+        } catch (error) {
+            console.error("Erro ao salvar as respostas na nuvem:", error);
+        }
+    }
+    
+    if (idx === questions[currentQuestion].correct) {
+        const duration = 1500;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6}, colors: ['#10B981', '#059669', '#34D399', '#047857', '#FDE047'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6}, colors: ['#10B981', '#059669', '#34D399', '#047857', '#FDE047'] });
+            if (Date.now() < end) { requestAnimationFrame(frame); }
+        }());
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    
+    window.renderQuestion();
+    window.renderMap();
+};
+
+window.renderMap = function() {
+    if (questions.length === 0) return;
+    
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+    }).join('');
+    
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+        }
+    }, 50);
+};
+
+window.goTo = function(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    window.renderQuestion();
+    window.renderMap();
+};
+
+window.changeQuestion = function(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) window.goTo(n);
+};
+
+window.updateNav = function() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar 🎯";
+        next.onclick = window.finish;
+    } else {
+        next.textContent = "Próxima ➡️";
+        next.onclick = () => window.changeQuestion(1);
+    }
+};
+
+window.finish = function() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    
+    if (window.confetti) confetti.reset();
+    
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "🏆⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+    
+    let summary = '<div style="text-align:left; margin-top:25px;">';
+    
+    if (percent < 80) {
+        summary += `<div style="background:var(--wrong-bg); padding:20px; border-radius:12px; margin-bottom:25px; border:3px solid var(--wrong-border); color:var(--wrong-border);">
+        <strong style="font-size: 1.1rem;">⚠️ Precisa Estudar Mais!</strong><br><br>Você não atingiu a meta de 80%. O mais indicado agora é voltar para a tela de Teoria, ler as explicações novamente com calma e tentar refazer os exercícios.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">🔄 Apagar as respostas e tentar de novo</button>';
+    } else {
+        summary += `<div style="background:var(--correct-bg); padding:20px; border-radius:12px; margin-bottom:25px; border:3px solid var(--correct-border); color:var(--correct-border);">
+        <strong style="font-size: 1.1rem;">🎉 Você foi muito bem!</strong><br><br>Você demonstrou que entendeu as regras gramaticais e os gêneros textuais explicados na teoria.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">🔄 Refazer os Exercícios</button>';
+    }
+    
+    if (correct < questions.length) {
+        summary += '<h3 style="margin-bottom:15px; color:var(--text-color); font-weight:900;">Revise as questões que você errou:</h3>';
+        questions.forEach((q, i) => {
+            if (userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                summary += `<div style="margin-bottom:15px; padding:20px; background:var(--white); border-radius:12px; border:3px dashed var(--theme-dark);">
+                <strong style="color:var(--theme-dark); font-size:1.1rem;">Questão ${i + 1}:</strong> <span style="font-weight: 600;">${q.text}</span><br><br>
+                <span style="color:var(--wrong-border); font-size:0.95rem; font-weight:700; display:block; margin-bottom:5px;">❌ A sua resposta: ${q.options[userAnswers[i]]}</span>
+                <span style="color:var(--correct-border); font-size:0.95rem; font-weight:700; display:block;">✅ A resposta certa era: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    window.setMode('result');
+};
+
+window.reset = async function() {
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    
+    // Atualiza a nuvem com os dados em branco/limpos
+    if (currentUser) {
+        try {
+            await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'quiz_state', 'portugues_6ano'), {
+                answers: userAnswers
+            }, { merge: true });
+        } catch (error) {
+            console.error("Erro ao resetar as respostas:", error);
+        }
+    }
+    
+    window.setMode('practice');
+};
+
+</script>
+</body>
+</html>
