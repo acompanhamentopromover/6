@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Português 7º Ano - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    /* Cores Vibrantes e Amigáveis */
+    --bg-color: #F0F9FF;
+    --text-color: #0F172A;
+    --border-color: #0F172A;
+    --white: #FFFFFF;
+    
+    --theme-light: #E0F2FE;
+    --theme-medium: #7DD3FC;
+    --theme-dark: #0284C7;
+    --theme-contrast: #F59E0B;
+    --theme-accent: #EF4444;
+    --theme-text-active: #FFFFFF;
+
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #E11D48;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 20px; 
+    padding-bottom: 100px;
+    background-image: radial-gradient(var(--theme-medium) 1.5px, transparent 1.5px);
+    background-size: 25px 25px;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+
+@keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.pulse-effect { animation: pulse 1.5s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+
+.logo-header { 
+    width: 100%; 
+    max-width: 650px; 
+    display: flex; 
+    justify-content: center;
+    flex-direction: column; 
+    align-items: center; 
+    padding: 25px 0 15px 0; 
+}
+
+.css-logo { 
+    font-size: 1.8rem; 
+    font-weight: 900; 
+    color: var(--white); 
+    text-transform: uppercase; 
+    letter-spacing: -1px; 
+    border: 3px solid var(--border-color); 
+    padding: 10px 25px;
+    border-radius: 16px; 
+    background: var(--theme-dark); 
+    box-shadow: 5px 5px 0px var(--theme-contrast); 
+    text-align: center; 
+    margin-bottom: 15px; 
+    transform: rotate(-2deg);
+}
+
+h1 { 
+    font-size: 1.9rem; 
+    font-weight: 900; 
+    color: var(--text-color); 
+    text-transform: uppercase;
+    letter-spacing: 1px; 
+    text-shadow: 2px 2px 0px var(--white); 
+    text-align: center; 
+    line-height: 1.2;
+}
+
+.subtitle { 
+    font-size: 1rem; 
+    color: var(--theme-dark); 
+    font-weight: 700; 
+    text-align: center;
+    margin-top: 5px;
+    background: var(--white);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 2px solid var(--border-color);
+}
+
+.container { 
+    width: 100%; 
+    max-width: 650px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 25px;
+}
+
+.toggle-container { 
+    background-color: var(--white); 
+    border: 3px solid var(--border-color);
+    border-radius: 50px; 
+    padding: 6px; 
+    display: flex; 
+    margin-bottom: 5px; 
+    box-shadow: 4px 4px 0px var(--border-color); 
+}
+
+.toggle-btn {
+    flex: 1; 
+    border: none; 
+    background: none; 
+    padding: 12px 0; 
+    border-radius: 40px;
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 800; 
+    font-size: 1.05rem; 
+    color: var(--theme-dark);
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+}
+
+.toggle-btn.active { 
+    background-color: var(--theme-dark); 
+    color: var(--theme-text-active);
+    box-shadow: 0px 3px 0px rgba(0,0,0,0.2) inset; 
+}
+
+.view-section { 
+    display: none; 
+    animation: fadeIn 0.5s ease; 
+    flex-direction: column; 
+    gap: 20px;
+}
+
+.search-container { position: relative; width: 100%; }
+
+.search-input { 
+    width: 100%; 
+    padding: 16px 20px 16px 55px; 
+    border: 3px solid var(--border-color); 
+    border-radius: 50px; 
+    background-color: var(--white); 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1rem; 
+    font-weight: 700; 
+    color: var(--text-color); 
+    box-shadow: 4px 4px 0px var(--theme-medium); 
+    outline: none; 
+    transition: all 0.2s ease; 
+}
+
+.search-input:focus { 
+    transform: translate(2px, 2px); 
+    box-shadow: 2px 2px 0px var(--theme-contrast); 
+    border-color: var(--theme-dark); 
+}
+
+.search-icon {
+    position: absolute; 
+    left: 22px; 
+    top: 50%; 
+    transform: translateY(-50%);
+    font-size: 1.4rem; 
+}
+
+#no-results { 
+    text-align: center; 
+    background: var(--white);
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px dashed var(--theme-accent);
+    color: var(--theme-accent); 
+    font-weight: 700; 
+    display: none; 
+}
+
+.content-group {
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+.section-badge { 
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: var(--theme-contrast); 
+    color: var(--border-color); 
+    font-size: 1rem; 
+    font-weight: 900; 
+    border-radius: 12px;
+    border: 3px solid var(--border-color); 
+    box-shadow: 4px 4px 0px var(--border-color); 
+    text-transform: uppercase; 
+    align-self: flex-start; 
+    margin-bottom: 5px; 
+    transform: rotate(-1deg);
+}
+
+.theory-box { 
+    display: flex; 
+    flex-direction: column; 
+    padding: 25px; 
+    border-radius: 20px;
+    background-color: var(--white); 
+    border: 3px solid var(--border-color); 
+    box-shadow: 6px 6px 0px var(--border-color); 
+    font-weight: 500; 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+    position: relative;
+    overflow: hidden; 
+    gap: 15px; 
+    transition: transform 0.2s ease;
+}
+
+.theory-box:hover {
+    transform: translateY(-3px);
+}
+
+.image-banner {
+    background-color: var(--theme-light);
+    margin: -25px -25px 15px -25px;
+    padding: 20px;
+    border-bottom: 3px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--theme-dark);
+    text-align: center;
+}
+
+.theory-box h3 {
+    font-size: 1.3rem; 
+    font-weight: 900; 
+    color: var(--theme-dark);
+    margin-bottom: 5px; 
+    padding-bottom: 8px;
+    border-bottom: 3px dashed var(--theme-light); 
+    display: flex; 
+    align-items: center; 
+    gap: 10px;
+}
+
+/* Grids e Organização Visual */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.card-item {
+    background: #F8FAFC;
+    border: 2px solid var(--border-color);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0px var(--theme-light);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.card-item strong {
+    color: var(--theme-dark);
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.visual-area { 
+    background: #FFFBEB; 
+    border: 3px dashed var(--theme-contrast); 
+    border-radius: 12px; 
+    padding: 15px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    flex-wrap: wrap;
+    gap: 15px; 
+    font-weight: 800; 
+    font-size: 1.1rem; 
+    color: #B45309; 
+    text-align: center;
+}
+
+.highlight-box { 
+    background-color: #E0F2FE; 
+    border: 3px solid var(--theme-dark);
+    border-left-width: 8px;
+    padding: 15px; 
+    border-radius: 12px; 
+    font-size: 0.95rem; 
+    color: #075985; 
+}
+
+.highlight-box.warning { 
+    background-color: #FEF2F2; 
+    border-color: var(--theme-accent); 
+    color: #991B1B; 
+    box-shadow: 3px 3px 0px var(--theme-accent);
+}
+
+.difficulty-badge {
+    display: inline-block; 
+    padding: 6px 14px; 
+    border-radius: 20px; 
+    font-size: 0.8rem; 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    margin-bottom: 12px; 
+    border: 2px solid var(--border-color); 
+    box-shadow: 3px 3px 0px var(--border-color); 
+}
+
+.dif-facil {background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+.question-map { 
+    display: flex; 
+    gap: 10px; 
+    overflow-x: auto; 
+    padding: 10px 5px 15px 5px;
+    margin-bottom: 20px; 
+    white-space: nowrap; 
+    -webkit-overflow-scrolling: touch; 
+    scroll-behavior: smooth; 
+}
+
+.question-map::-webkit-scrollbar { height: 8px; }
+.question-map::-webkit-scrollbar-track { background: var(--theme-light); border-radius: 10px; border: 1px solid var(--border-color); }
+.question-map::-webkit-scrollbar-thumb { background: var(--theme-dark); border-radius: 10px; border: 1px solid var(--border-color); }
+
+.map-dot { 
+    min-width: 40px; 
+    height: 40px; 
+    border: 2px solid var(--border-color);
+    border-radius: 10px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: 900;
+    font-size: 0.9rem; 
+    color: var(--border-color); 
+    background: white; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.map-dot.active { 
+    background-color: var(--theme-dark); 
+    color: white; 
+    box-shadow: 3px 3px 0px var(--theme-contrast); 
+    transform: scale(1.15) translateY(-2px); 
+}
+
+.map-dot.answered-correct {
+    background-color: var(--correct-bg); 
+    color: var(--correct-border); 
+}
+
+.map-dot.answered-wrong { 
+    background-color: var(--wrong-bg); 
+    color: var(--wrong-border); 
+}
+
+.option-btn { 
+    display: flex; 
+    align-items: center; 
+    width: 100%; 
+    padding: 18px;
+    background-color: var(--white); 
+    border: 3px solid var(--border-color); 
+    border-radius: 16px;
+    margin-bottom: 15px; 
+    cursor: pointer; 
+    transition: all 0.15s ease; 
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1); 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1rem; 
+    font-weight: 600;
+    text-align: left; 
+    color: var(--text-color); 
+}
+
+.option-btn:hover:not(:disabled) { 
+    transform: translate(-3px, -3px); 
+    box-shadow: 7px 7px 0px var(--theme-medium); 
+}
+
+.opt-circle { 
+    width: 36px; 
+    height: 36px; 
+    border-radius: 50%; 
+    border: 3px solid var(--border-color); 
+    margin-right: 15px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-weight: 900; 
+    font-size: 1.1rem; 
+    flex-shrink: 0; 
+    background: var(--theme-light); 
+    color: var(--border-color); 
+}
+
+.option-btn.correct {
+    background-color: var(--correct-bg); 
+    border-color: var(--correct-border); 
+    box-shadow: 4px 4px 0px var(--correct-border); 
+}
+
+.option-btn.correct .opt-circle {
+    background-color: var(--correct-border); 
+    color: white;
+    border-color: var(--correct-border); 
+}
+
+.option-btn.wrong {
+    background-color: var(--wrong-bg); 
+    border-color: var(--wrong-border); 
+    opacity: 0.95; 
+    box-shadow: 4px 4px 0px var(--wrong-border); 
+}
+
+.option-btn.wrong .opt-circle {
+    background-color: var(--wrong-border); 
+    color: white;
+    border-color: var(--wrong-border); 
+}
+
+.option-btn.disabled {pointer-events: none; opacity: 0.7; }
+
+.feedback-box { 
+    display: block; 
+    margin-top: 25px; 
+    background-color: #F8FAFC; 
+    border: 3px dashed var(--border-color); 
+    border-radius: 16px; 
+    padding: 25px; 
+    animation: slideUp 0.3s ease-out; 
+}
+
+.feedback-title { 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    font-size: 1.1rem;
+    margin-bottom: 15px; 
+    display:flex; 
+    align-items:center; 
+    gap:8px; 
+}
+
+.feedback-item { 
+    margin-bottom: 10px; 
+    font-size: 0.95rem; 
+    padding-left: 12px; 
+    border-left: 4px solid #CBD5E1; 
+    line-height: 1.6; 
+}
+
+.feedback-item.correct-opt {
+    border-left-color: var(--correct-border); 
+    font-weight: 700;
+    color: var(--correct-border); 
+    background: var(--white); 
+    border: 2px solid var(--correct-border);
+    padding: 15px; 
+    border-radius: 12px; 
+    box-shadow: 3px 3px 0px var(--correct-bg);
+}
+
+.feedback-item.wrong-opt {
+    border-left-color: var(--wrong-border); 
+    color: #9F1239; 
+    background: var(--white);
+    padding: 10px;
+    border-radius: 0 8px 8px 0;
+}
+
+.result-card {
+    background: white; 
+    border: 3px solid var(--border-color); 
+    border-radius: 20px; 
+    padding: 40px 30px; 
+    box-shadow: 8px 8px 0px var(--border-color); 
+    margin-bottom: 30px;
+    text-align: center; 
+}
+
+.stars-container { font-size: 4rem; margin: 15px 0; letter-spacing: 5px; }
+
+.percentage-big {
+    font-size: 5rem; 
+    font-weight: 900; 
+    color: var(--theme-dark);
+    line-height: 1; 
+    margin: 15px 0; 
+    text-shadow: 4px 4px 0px var(--theme-contrast); 
+}
+
+.btn-action { 
+    width: 100%; 
+    padding: 20px; 
+    background-color: var(--theme-dark); 
+    color: white; 
+    border: 3px solid var(--border-color); 
+    border-radius: 16px; 
+    font-size: 1.2rem; 
+    font-weight: 900; 
+    cursor: pointer; 
+    box-shadow: 5px 5px 0px var(--theme-contrast); 
+    transition: all 0.1s;
+    text-transform: uppercase; 
+    margin-top: 20px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-action:active { 
+    transform: translate(3px, 3px); 
+    box-shadow: 2px 2px 0px var(--theme-contrast); 
+}
+
+.quiz-footer { 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    background-color: var(--white); 
+    border-top: 3px solid var(--border-color); 
+    padding: 15px 25px; 
+    display: none;
+    justify-content: space-between; 
+    align-items: center; 
+    z-index: 100; 
+    box-shadow: 0px -5px 15px rgba(0,0,0,0.05);
+}
+
+.nav-btn { 
+    padding: 14px 28px; 
+    border-radius: 12px; 
+    font-weight: 900; 
+    border: 3px solid var(--border-color); 
+    cursor: pointer; 
+    box-shadow: 3px 3px 0px var(--border-color); 
+    font-family: 'Poppins', sans-serif; 
+    text-transform: uppercase;
+    transition: transform 0.1s;
+}
+.nav-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border-color); }
+
+.btn-next { background-color: var(--theme-contrast); color: var(--border-color); }
+.btn-prev { background-color: var(--theme-light); color: var(--border-color); }
+
+.prova-banner {
+    margin-bottom: 25px; 
+    background-color: var(--theme-dark); 
+    color: var(--white);
+    padding: 25px; 
+    border-radius: 16px; 
+    border: 3px solid var(--border-color); 
+    box-shadow: 6px 6px 0px var(--theme-contrast);
+    text-align: center;
+}
+
+.prova-banner h2 {
+    font-weight: 900; 
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 0px var(--border-color);
+}
+
+.prova-banner p {
+    font-size: 1rem; 
+    font-weight: 600;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px dashed rgba(255,255,255,0.5);
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">📖</span> PROMOVER</div>
+        <h1>PORTUGUÊS<br>7º ANO</h1>
+        <p class="subtitle">✨ Gramática e Acentuação ✨</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📚 Estudar a Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">✍️ Fazer Exercícios (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar matéria ou palavra...">
+        </div>
+        
+        <div id="no-results"><p>Esta palavra não foi encontrada.</p></div>
+
+        <!-- TEORIA: UNIDADE 3 -->
+        <div class="content-group">
+            <div class="section-badge">Unidade 3 📘</div>
+            
+            <div class="theory-box">
+                <div class="image-banner">
+                                    </div>
+                <h3>🌍 1. Determinantes do Substantivo</h3>
+                <p><strong>O que são?</strong> O substantivo é a palavra principal (ex: <em>casa</em>). Os determinantes são as palavras que ficam ao lado dele para dar mais detalhes (quantidade, posse, definição).</p>
+                <div class="grid-2">
+                    <div class="card-item">
+                        <strong>🅰️ Artigos</strong>
+                        <p>Definem ou indefinem o nome. (Ex: <em><strong>O</strong> carro, <strong>uma</strong> bicicleta</em>).</p>
+                    </div>
+                    <div class="card-item">
+                        <strong>🎨 Adjetivos</strong>
+                        <p>Dão qualidades ou características. (Ex: <em>carro <strong>novo</strong></em>).</p>
+                    </div>
+                    <div class="card-item">
+                        <strong>🔢 Numerais</strong>
+                        <p>Indicam quantidade exata. (Ex: <em><strong>Dois</strong> carros</em>).</p>
+                    </div>
+                    <div class="card-item">
+                        <strong>👤 Pronomes</strong>
+                        <p>Indicam posse ou apontam. (Ex: <em><strong>Meu</strong> carro, <strong>aquele</strong> carro</em>).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theory-box">
+                <div class="image-banner" style="background-color: #FEF3C7;">
+                                    </div>
+                <h3>⏱️ 2. Advérbio</h3>
+                <p><strong>O que é?</strong> É a palavra que indica a circunstância (o detalhe) em que uma ação aconteceu. O advérbio modifica o verbo, um adjetivo ou outro advérbio.</p>
+                
+                <div class="grid-2">
+                    <div class="card-item" style="border-color: #059669; box-shadow: 3px 3px 0px #A7F3D0;">
+                        <strong>Tempo e Lugar</strong>
+                        <p><strong>Tempo:</strong> hoje, amanhã, nunca, sempre.<br><strong>Lugar:</strong> aqui, ali, longe, perto.</p>
+                    </div>
+                    <div class="card-item" style="border-color: #E11D48; box-shadow: 3px 3px 0px #FECDD3;">
+                        <strong>Modo e Intensidade</strong>
+                        <p><strong>Modo:</strong> bem, mal, rapidamente.<br><strong>Intensidade:</strong> muito, pouco, bastante.</p>
+                    </div>
+                </div>
+                <p style="margin-top: 10px;"><em>Exemplo: Ele correu <strong>muito</strong> (Intensidade) <strong>ontem</strong> (Tempo).</em></p>
+            </div>
+        </div>
+
+        <!-- TEORIA: UNIDADE 4 -->
+        <div class="content-group">
+            <div class="section-badge" style="background-color: var(--theme-dark); color: white;">Unidade 4 🧠</div>
+
+            <div class="theory-box">
+                <div class="image-banner" style="background-color: #E0E7FF;">
+                                    </div>
+                <h3>🌉 3. Verbo de Ligação e Predicativo do Sujeito</h3>
+                <p><strong>Verbo de Ligação:</strong> É o verbo que <strong>não indica ação</strong>. Ele serve apenas como uma ponte para ligar o sujeito a uma característica dele. Os principais são: <em>ser, estar, permanecer, ficar, tornar, andar, parecer, virar, continuar.</em></p>
+                
+                <p><strong>Predicativo do Sujeito:</strong> É o nome dado a essa característica ou estado que vem logo depois do verbo de ligação.</p>
+                
+                <div class="highlight-box" style="margin-top: 10px;">
+                    Exemplo: A aluna <strong>está</strong> (Verbo de Ligação) <strong>cansada</strong> (Predicativo do Sujeito).
+                </div>
+                
+                <div class="highlight-box warning">
+                    <strong>🚨 ATENÇÃO:</strong><br>
+                    O verbo "andar" pode ser ação ou ligação.<br>
+                    - Ele <strong>anda</strong> rápido na rua. (Ação).<br> 
+                    - Ele <strong>anda</strong> triste ultimamente. (Ligação / Estado).
+                </div>
+            </div>
+
+            <div class="theory-box">
+                <h3>✍️ 4. Acentuação dos Ditongos Abertos</h3>
+                <p>Ditongos abertos são os encontros de vogais com som aberto: <strong>ÉI, ÓI, ÉU</strong>. Houve uma mudança na regra de acentuação:</p>
+
+                <div class="grid-2">
+                    <div class="card-item" style="border-left: 6px solid var(--theme-accent);">
+                        <strong>❌ Perderam o Acento</strong>
+                        <p>Nas palavras <strong>paroxítonas</strong> (a sílaba forte é a penúltima).<br>Exemplos corretos sem acento: <em>ideia, jiboia, colmeia, heroico</em>.</p>
+                    </div>
+                    <div class="card-item" style="border-left: 6px solid var(--correct-border);">
+                        <strong>✅ Mantêm o Acento</strong>
+                        <p>Nas palavras <strong>oxítonas</strong> (a sílaba forte é a última) e monossílabas.<br>Exemplos corretos com acento: <em>herói, chapéu, papéis, dói</em>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theory-box">
+                <div class="image-banner" style="background-color: #FFEDD5;">
+                                    </div>
+                <h3>🔍 5. Acentos Diferenciais</h3>
+                <p>Servem para não confundirmos palavras que se escrevem de forma parecida. Veja as regras diretas:</p>
+                
+                <div class="grid-2">
+                    <div class="card-item">
+                        <strong>Tem / Têm</strong>
+                        <p><strong>Tem</strong> (sem acento): Singular. (Ele tem).<br><strong>Têm</strong> (com acento): Plural. (Eles têm).</p>
+                    </div>
+                    <div class="card-item">
+                        <strong>Vem / Vêm</strong>
+                        <p><strong>Vem</strong> (sem acento): Singular. (Ele vem).<br><strong>Vêm</strong> (com acento): Plural. (Eles vêm).</p>
+                    </div>
+                    <div class="card-item">
+                        <strong>Pode / Pôde</strong>
+                        <p><strong>Pode</strong> (sem acento): Presente. (Hoje ele pode).<br><strong>Pôde</strong> (com acento): Passado. (Ontem ele pôde).</p>
+                    </div>
+                    <div class="card-item">
+                        <strong>Por / Pôr</strong>
+                        <p><strong>Por</strong> (sem acento): Preposição. (Vou por ali).<br><strong>Pôr</strong> (com acento): Verbo colocar. (Vou pôr aqui).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">
+            🚀 Iniciar os Exercícios (30 Q)
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div class="prova-banner">
+            <h2>🔥 Exercícios de Fixação</h2>
+            <p>
+                Aqui estão 30 questões sobre a teoria. Tente acertar pelo menos <strong>80% (24/30)</strong>. Leia a explicação de cada erro para aprender mais.
+            </p>
+        </div>
+
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">📊 Relatório Final</h2>
+            <div class="stars-container" id="finalStars">★</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.3rem; font-weight:800; color:var(--text-color);" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">⬅️ Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima ➡️</button>
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// Configuração e Inicialização do Firebase na Nuvem
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+let currentUser = null;
+
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+// ARRAY DE QUESTÕES - 30 QUESTÕES (10 Fáceis, 10 Médias, 10 Difíceis)
+const questions = [
+    // --- FÁCEIS ---
+    {
+        id: 1, level: "Fácil",
+        text: "Na frase 'O meu cachorro sumiu', quais palavras são os determinantes do substantivo 'cachorro'?",
+        options: ["sumiu.", "O, sumiu.", "O, meu.", "cachorro."],
+        correct: 2,
+        explanation: {
+            correct: "As palavras 'O' (artigo) e 'meu' (pronome) acompanham e detalham o substantivo cachorro.",
+            options: ["Sumiu é verbo (ação).", "Sumiu é verbo, não determinante.", "A resposta correta é a C.", "Cachorro é o próprio substantivo principal."]
+        }
+    },
+    {
+        id: 2, level: "Fácil",
+        text: "O que é um determinante do substantivo?",
+        options: ["Uma palavra que indica ação.", "Uma palavra que acompanha o substantivo para dar detalhes.", "Uma palavra que liga o sujeito ao seu estado.", "Uma palavra usada apenas no plural."],
+        correct: 1,
+        explanation: {
+            correct: "Determinantes são palavras (artigos, pronomes, numerais, adjetivos) que acompanham o substantivo principal.",
+            options: ["Quem indica ação é o verbo.", "A resposta correta é a B.", "Quem faz a ligação é o verbo de ligação.", "Determinantes podem ser singulares ou plurais."]
+        }
+    },
+    {
+        id: 3, level: "Fácil",
+        text: "Na frase 'Comprei dois cadernos novos', quais palavras são determinantes?",
+        options: ["Comprei, dois.", "dois, novos.", "Comprei, cadernos.", "cadernos, novos."],
+        correct: 1,
+        explanation: {
+            correct: "A palavra 'dois' (numeral) e 'novos' (adjetivo) estão acompanhando o substantivo cadernos.",
+            options: ["Comprei é verbo.", "A resposta correta é a B.", "Comprei é verbo e cadernos é o substantivo.", "Cadernos é o substantivo principal."]
+        }
+    },
+    {
+        id: 4, level: "Fácil",
+        text: "Qual é a função do Advérbio em uma frase?",
+        options: ["Dar nome aos objetos.", "Indicar uma característica física do sujeito.", "Indicar a circunstância (tempo, lugar, modo) de uma ação.", "Ligar duas frases diferentes."],
+        correct: 2,
+        explanation: {
+            correct: "O advérbio modifica o verbo para mostrar quando, onde ou como a ação aconteceu.",
+            options: ["Dar nome é função do substantivo.", "Isso é função do adjetivo ou predicativo.", "A resposta correta é a C.", "Quem liga frases são as conjunções."]
+        }
+    },
+    {
+        id: 5, level: "Fácil",
+        text: "Na frase 'Ele chegou ontem', a palavra destacada ('ontem') é um advérbio de:",
+        options: ["Lugar.", "Modo.", "Intensidade.", "Tempo."],
+        correct: 3,
+        explanation: {
+            correct: "A palavra 'ontem' indica exatamente o momento em que a ação de chegar aconteceu.",
+            options: ["Lugar indica onde (ex: aqui).", "Modo indica como (ex: bem).", "Intensidade indica força (ex: muito).", "A resposta correta é a D."]
+        }
+    },
+    {
+        id: 6, level: "Fácil",
+        text: "Qual dos verbos abaixo é um Verbo de Ligação?",
+        options: ["Correr.", "Estar.", "Pular.", "Comer."],
+        correct: 1,
+        explanation: {
+            correct: "O verbo 'estar' não indica uma ação que a pessoa faz, mas sim um estado em que ela se encontra.",
+            options: ["Correr é uma ação física.", "A resposta correta é a B.", "Pular é uma ação física.", "Comer é uma ação física."]
+        }
+    },
+    {
+        id: 7, level: "Fácil",
+        text: "Na frase 'A menina parece cansada', qual é o Predicativo do Sujeito?",
+        options: ["A.", "menina.", "parece.", "cansada."],
+        correct: 3,
+        explanation: {
+            correct: "A palavra 'cansada' é a característica do sujeito (menina) que vem depois do verbo de ligação (parece).",
+            options: ["A é apenas um artigo determinante.", "Menina é o sujeito da frase.", "Parece é o verbo de ligação.", "A resposta correta é a D."]
+        }
+    },
+    {
+        id: 8, level: "Fácil",
+        text: "Qual é a palavra escrita corretamente de acordo com a Nova Regra de Acentuação?",
+        options: ["Idéia.", "Jibóia.", "Ideia.", "Colméia."],
+        correct: 2,
+        explanation: {
+            correct: "O ditongo 'ei' em palavras paroxítonas (penúltima sílaba forte) perdeu o acento.",
+            options: ["A palavra perdeu o acento na nova regra.", "A palavra perdeu o acento na nova regra.", "A resposta correta é a C.", "A palavra perdeu o acento na nova regra."]
+        }
+    },
+    {
+        id: 9, level: "Fácil",
+        text: "Por que a palavra 'chapéu' continua tendo acento na nova regra?",
+        options: ["Porque é uma palavra oxítona.", "Porque é uma palavra paroxítona.", "Porque termina com a letra U.", "Porque é o nome de uma roupa."],
+        correct: 0,
+        explanation: {
+            correct: "As palavras oxítonas (última sílaba forte) com ditongos abertos (éu, éi, ói) não perderam o acento.",
+            options: ["A resposta correta é a A.", "Se fosse paroxítona, teria perdido.", "A letra final não muda essa regra específica.", "O significado da palavra não muda a regra."]
+        }
+    },
+    {
+        id: 10, level: "Fácil",
+        text: "Na frase 'Os alunos ___ prova amanhã', qual é a palavra correta para preencher o espaço?",
+        options: ["tem", "têm", "vem", "vêm"],
+        correct: 1,
+        explanation: {
+            correct: "Como 'os alunos' está no plural, o verbo precisa do acento circunflexo diferencial.",
+            options: ["Tem sem acento é usado apenas no singular.", "A resposta correta é a B.", "O sentido da frase pede o verbo ter, não o verbo vir.", "O sentido da frase pede o verbo ter."]
+        }
+    },
+    // --- MÉDIAS ---
+    {
+        id: 11, level: "Médio",
+        text: "Na frase 'Aquelas três maçãs verdes caíram', identifique todos os determinantes do substantivo maçãs.",
+        options: ["Aquelas, três, maçãs.", "três, maçãs, caíram.", "Aquelas, três, verdes.", "maçãs, verdes, caíram."],
+        correct: 2,
+        explanation: {
+            correct: "Pronome (Aquelas), Numeral (três) e Adjetivo (verdes) estão determinando o núcleo 'maçãs'.",
+            options: ["Maçãs é o próprio substantivo principal.", "Caíram é verbo.", "A resposta correta é a C.", "Caíram é verbo."]
+        }
+    },
+    {
+        id: 12, level: "Médio",
+        text: "Leia: 'Ele fala muito' e 'Ele tem muito dinheiro'. Qual a diferença da palavra 'muito' nas duas frases?",
+        options: ["Na primeira é adjetivo, na segunda é verbo.", "Nas duas é advérbio.", "Na primeira é advérbio (intensidade), na segunda é determinante (pronome indefinido).", "Nas duas é pronome."],
+        correct: 2,
+        explanation: {
+            correct: "Na primeira, 'muito' modifica o verbo falar (intensidade). Na segunda, 'muito' acompanha o substantivo dinheiro, indicando quantidade incerta.",
+            options: ["Muito nunca funciona como verbo.", "Só é advérbio quando modifica verbo ou adjetivo.", "A resposta correta é a C.", "Só é pronome quando acompanha um substantivo."]
+        }
+    },
+    {
+        id: 13, level: "Médio",
+        text: "Na frase 'Eles moram longe', a palavra 'longe' funciona como:",
+        options: ["Substantivo.", "Determinante.", "Verbo de Ligação.", "Advérbio de lugar."],
+        correct: 3,
+        explanation: {
+            correct: "A palavra 'longe' indica a circunstância de lugar onde ocorre a ação de morar.",
+            options: ["Longe não é o nome de um lugar ou objeto.", "Não acompanha nenhum substantivo aqui.", "Moram é verbo de ação. Longe não é verbo.", "A resposta correta é a D."]
+        }
+    },
+    {
+        id: 14, level: "Médio",
+        text: "Assinale a opção em que o verbo destacado é de LIGAÇÃO:",
+        options: ["O menino ANDA rápido.", "O menino ANDA muito cansado.", "O cachorro CORREU ontem.", "Ela FALOU alto."],
+        correct: 1,
+        explanation: {
+            correct: "Neste caso, 'anda' não significa caminhar. Significa o estado do menino (ele está cansado).",
+            options: ["Aqui 'anda' é ação de caminhar.", "A resposta correta é a B.", "Correr é sempre ação.", "Falar é ação."]
+        }
+    },
+    {
+        id: 15, level: "Médio",
+        text: "O Predicativo do Sujeito só aparece quando temos:",
+        options: ["Um verbo de ação forte.", "Um determinante numeral.", "Uma característica atribuída ao sujeito, geralmente por verbo de ligação.", "Um advérbio de tempo no final."],
+        correct: 2,
+        explanation: {
+            correct: "O predicativo do sujeito é exatamente essa característica ou estado que se liga ao sujeito.",
+            options: ["Verbo de ação geralmente tem objeto, não predicativo.", "Determinantes acompanham o substantivo no sujeito ou objeto.", "A resposta correta é a C.", "Advérbios não criam o predicativo."]
+        }
+    },
+    {
+        id: 16, level: "Médio",
+        text: "Na frase 'A prova de matemática estava fácil', a palavra 'fácil' é:",
+        options: ["Determinante do verbo.", "Advérbio de modo.", "Verbo de ligação.", "Predicativo do sujeito."],
+        correct: 3,
+        explanation: {
+            correct: "É a característica do sujeito (A prova), conectada pelo verbo de ligação 'estava'.",
+            options: ["Não existe determinante do verbo.", "Não está modificando um verbo de ação.", "O verbo de ligação é 'estava'.", "A resposta correta é a D."]
+        }
+    },
+    {
+        id: 17, level: "Médio",
+        text: "Por que as palavras 'herói' e 'ideia' têm regras diferentes de acentuação se ambas têm o som 'éi/ói'?",
+        options: ["Porque 'ideia' é uma invenção e 'herói' é real.", "Porque 'herói' é oxítona e 'ideia' é paroxítona.", "Porque 'ideia' está no plural.", "Porque 'herói' termina em I e 'ideia' termina em A."],
+        correct: 1,
+        explanation: {
+            correct: "A regra diz que os ditongos abertos só perdem o acento nas palavras paroxítonas (ideia, colmeia). Oxítonas mantêm o acento (herói, papéis).",
+            options: ["A regra não tem relação com o significado.", "A resposta correta é a B.", "Nenhuma delas está no plural.", "A terminação não dita a regra, mas sim a posição da sílaba tônica."]
+        }
+    },
+    {
+        id: 18, level: "Médio",
+        text: "Marque a alternativa correta quanto ao uso do acento diferencial:",
+        options: ["Aquele aluno têm boas notas.", "Os meninos tem muito talento.", "As árvores têm frutos doces.", "A árvore têm galhos altos."],
+        correct: 2,
+        explanation: {
+            correct: "Como 'As árvores' está no plural, a forma correta do verbo exige o acento circunflexo (têm).",
+            options: ["Aluno é singular, logo deveria ser 'tem'.", "Meninos é plural, logo deveria ser 'têm'.", "A resposta correta é a C.", "Árvore é singular, logo deveria ser 'tem'."]
+        }
+    },
+    {
+        id: 19, level: "Médio",
+        text: "Leia: 'Ele não ___ comparecer ontem, mas hoje ele ___'. Complete os espaços com as palavras certas:",
+        options: ["pode / pôde", "pôde / pode", "pode / pode", "pôde / pôde"],
+        correct: 1,
+        explanation: {
+            correct: "A palavra 'pôde' (com acento) indica passado (ontem). A palavra 'pode' (sem acento) indica presente (hoje).",
+            options: ["A ordem está invertida.", "A resposta correta é a B.", "Os tempos verbais são diferentes nas duas partes.", "Os tempos verbais são diferentes nas duas partes."]
+        }
+    },
+    {
+        id: 20, level: "Médio",
+        text: "Qual é a diferença entre 'por' e 'pôr' na frase: 'Vou ___ o livro ___ aqui'?",
+        options: ["pôr (verbo) / por (preposição).", "por (preposição) / pôr (verbo).", "Os dois não têm acento.", "Os dois têm acento."],
+        correct: 0,
+        explanation: {
+            correct: "A primeira palavra é a ação de colocar (pôr, com acento). A segunda indica o lugar/caminho (por, sem acento).",
+            options: ["A resposta correta é a A.", "A ordem exigida pela frase é inversa.", "A regra determina acento diferencial para o verbo.", "Apenas o verbo leva acento."]
+        }
+    },
+    // --- DIFÍCEIS ---
+    {
+        id: 21, level: "Difícil",
+        text: "Na frase 'As minhas duas amigas chegaram', o substantivo é amigas. A palavra 'As' funciona como:",
+        options: ["Pronome demonstrativo.", "Advérbio de companhia.", "Artigo definido feminino plural atuando como determinante.", "Verbo de ligação."],
+        correct: 2,
+        explanation: {
+            correct: "A palavra 'As' define o grupo de amigas de forma específica. É um artigo definido que funciona como determinante.",
+            options: ["Aquelas/Estas são pronomes demonstrativos.", "Não existe advérbio com essa classificação.", "A resposta correta é a C.", "Verbos de ligação são palavras como ser, estar, ficar."]
+        }
+    },
+    {
+        id: 22, level: "Difícil",
+        text: "Leia a frase: 'A menina desenhou muito bem o gato branco na folha.' Qual das opções abaixo tem UM advérbio e UM determinante?",
+        options: ["menina, desenhou.", "bem, branco.", "muito, desenhou.", "gato, folha."],
+        correct: 1,
+        explanation: {
+            correct: "'Bem' é um advérbio de modo (modifica como ela desenhou). 'Branco' é um adjetivo atuando como determinante do substantivo 'gato'.",
+            options: ["Substantivo e Verbo.", "A resposta correta é a B.", "Advérbio e Verbo.", "Substantivo e Substantivo."]
+        }
+    },
+    {
+        id: 23, level: "Difícil",
+        text: "Um advérbio PODE modificar um substantivo? Exemplo: A palavra 'felizmente' pode determinar a palavra 'mesa'?",
+        options: ["Sim, os advérbios detalham os objetos.", "Não. Advérbios modificam apenas verbos, adjetivos ou outros advérbios. Determinantes (como adjetivos) modificam substantivos.", "Sim, mas só no modo imperativo.", "Não, advérbios só modificam verbos de ligação."],
+        correct: 1,
+        explanation: {
+            correct: "Regra fundamental: Advérbio não encosta em substantivo! Quem detalha o substantivo são os determinantes (artigos, adjetivos, numerais, pronomes).",
+            options: ["Isso é função dos adjetivos.", "A resposta correta é a B.", "Modos verbais não alteram essa regra.", "Eles modificam principalmente verbos de ação."]
+        }
+    },
+    {
+        id: 24, level: "Difícil",
+        text: "Na frase 'O prato de vidro caiu e ficou quebrado', qual palavra é o Predicativo do Sujeito e por quê?",
+        options: ["Vidro, porque explica o material.", "Caiu, porque é o que aconteceu.", "Quebrado, porque é o estado do sujeito após o verbo de ligação (ficou).", "Ficou, porque liga as partes da frase."],
+        correct: 2,
+        explanation: {
+            correct: "A palavra 'quebrado' é o estado (característica) final do prato, ligado a ele através do verbo 'ficar'.",
+            options: ["Vidro atua como parte do determinante do prato.", "Caiu é um verbo de ação.", "A resposta correta é a C.", "Ficou é o verbo de ligação, não o predicativo."]
+        }
+    },
+    {
+        id: 25, level: "Difícil",
+        text: "Observe: 'A plateia permaneceu calada'. Se trocarmos a palavra 'permaneceu' por 'estava', o sentido muda. Por quê?",
+        options: ["Porque 'estava' é verbo de ação.", "Porque os verbos de ligação dão ideias diferentes sobre o estado (continuidade vs. estado momentâneo).", "Porque 'estava' não precisa de predicativo.", "Porque 'permaneceu' é advérbio."],
+        correct: 1,
+        explanation: {
+            correct: "Embora ambos sejam de ligação, eles têm nuances. Permanecer indica que o estado continuou. Estar indica como se encontrava naquele momento exato.",
+            options: ["Estar é verbo de ligação.", "A resposta correta é a B.", "Todo verbo de ligação pede um predicativo.", "Permaneceu é verbo."]
+        }
+    },
+    {
+        id: 26, level: "Difícil",
+        text: "Muitos alunos confundem a regra. Assinale a frase onde a palavra 'virar' é verbo de ligação:",
+        options: ["O motorista virou o carro na esquina.", "O vento forte virou a placa na rua.", "O sapo virou um príncipe.", "Ele virou a página do livro rapidamente."],
+        correct: 2,
+        explanation: {
+            correct: "Aqui, 'virou' não é a ação física de girar algo. Significa 'tornar-se', indicando o novo estado do sujeito (príncipe).",
+            options: ["Ação física de girar a direção.", "Ação física de tombar o objeto.", "A resposta correta é a C.", "Ação física de mudar a folha."]
+        }
+    },
+    {
+        id: 27, level: "Difícil",
+        text: "Das palavras abaixo, qual teve seu acento removido pela última Reforma Ortográfica?",
+        options: ["Chapéu.", "Dói.", "Joia.", "Papéis."],
+        correct: 2,
+        explanation: {
+            correct: "A palavra 'Joia' é paroxítona (sílaba forte no 'joi') e tem o ditongo aberto. Por isso, perdeu o acento.",
+            options: ["É oxítona, mantém o acento.", "É monossílabo, mantém o acento.", "A resposta correta é a C.", "É oxítona, mantém o acento."]
+        }
+    },
+    {
+        id: 28, level: "Difícil",
+        text: "Leia o texto: 'Os passageiros do ônibus ___ reclamar, pois o motorista ___ uma frenagem brusca'. (Preencha com vem/vêm/têm/tem).",
+        options: ["vêm / têm.", "têm / tem.", "vêm / tem.", "tem / têm."],
+        correct: 2,
+        explanation: {
+            correct: "Os passageiros (plural = vêm com acento). O motorista (singular = tem sem acento). Mas a frase pede o verbo vir (vêm) e o verbo ter (tem) pelo sentido.",
+            options: ["Motorista é singular (tem).", "O sentido correto do primeiro espaço pede o verbo vir (vêm reclamar).", "A resposta correta é a C.", "Passageiros é plural."]
+        }
+    },
+    {
+        id: 29, level: "Difícil",
+        text: "Leia as frases: I. Meu pai ___ do interior hoje. II. Meus tios ___ nos visitar amanhã. Qual a forma correta do verbo vir?",
+        options: ["I. vem; II. vem.", "I. vêm; II. vêm.", "I. vêm; II. vem.", "I. vem; II. vêm."],
+        correct: 3,
+        explanation: {
+            correct: "Na frase I o sujeito é singular (Pai = vem). Na frase II o sujeito é plural (Tios = vêm com acento).",
+            options: ["A frase II exige o acento de plural.", "A frase I não pode ter o acento de plural.", "A ordem das formas plural/singular está invertida.", "A resposta correta é a D."]
+        }
+    },
+    {
+        id: 30, level: "Difícil",
+        text: "Assinale a alternativa em que todas as palavras estão acentuadas CORRETAMENTE:",
+        options: ["Eu vou por a panela alí, pois ela não pôde esfriar a tempo.", "A platéia aplaudiu o herói que salvou a jibóia.", "A ideia dele foi ótima, mas ele não pôde falar ontem.", "Eles tem muito dinheiro, mas não vem nos visitar."],
+        correct: 2,
+        explanation: {
+            correct: "Ideia (sem acento, nova regra paroxítona). Pôde (com acento, passado diferencial).",
+            options: ["'por' verbo deve ter acento (pôr). 'ali' não tem acento.", "Platéia e Jibóia perderam o acento.", "A resposta correta é a C.", "Eles 'têm' e 'vêm' precisam de acento plural."]
+        }
+    }
+];
+
+// --- SISTEMA DE SALVAMENTO (NUVEM/FIRESTORE) E LÓGICA ---
+let currentQuestion = 0;
+let userAnswers = new Array(questions.length).fill(null);
+
+// Inicializa a autenticação antes de qualquer consulta à base de dados
+const initAuth = async () => {
+    try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+            await signInAnonymously(auth);
+        }
+    } catch (error) {
+        console.error("Erro na autenticação:", error);
+    }
+};
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUser = user;
+        const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'quiz_state', 'portugues_7ano');
+        
+        try {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists() && docSnap.data().answers) {
+                userAnswers = docSnap.data().answers;
+            } else {
+                userAnswers = new Array(questions.length).fill(null);
+            }
+            
+            // Retoma de onde o aluno parou caso já existam respostas preenchidas
+            if (userAnswers.some(ans => ans !== null)) {
+                window.setMode('practice');
+            } else {
+                window.setMode('explanation');
+            }
+        } catch (error) {
+            console.error("Erro ao recuperar os dados na nuvem:", error);
+            window.setMode('explanation');
+        }
+    }
+});
+
+initAuth();
+
+// Funções acopladas ao Window (necessário por ser type="module")
+window.setMode = function(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+
+    if (mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        window.renderQuestion();
+        window.renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+        window.scrollTo(0,0);
+    }
+};
+
+window.renderQuestion = function() {
+    if (questions.length === 0) return;
+    
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    
+    let badgeClass = '';
+    if (q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if (q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 6px 6px 0px var(--border-color); padding: 25px; border-radius: 16px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        
+        <div style="margin-bottom: 25px;">
+            <span style="font-size: 0.85rem; font-weight: 900; color: var(--theme-dark); text-transform: uppercase; letter-spacing: 1px;">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.25rem; margin-top: 8px; color: var(--text-color); font-weight: 900; line-height: 1.4;">${q.text}</h2>
+        </div>
+        
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `
+                <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `;
+            }).join('')}
+        </div>
+        
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '✅ Resposta Correta!' : '❌ Resposta Incorreta:'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>Apenas esta opção é a certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top:12px; font-size:1rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                💡 ${q.explanation.correct}
+            </div>
+            
+            <div style="margin-top:15px; border-top:2px dashed #CBD5E1; padding-top:15px;">
+                <small style="color:var(--theme-dark); font-size:0.9rem; text-transform: uppercase;"><strong>🔎 Por que as outras opções estão erradas:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `
+                <div class="feedback-item wrong-opt" style="margin-top:10px;"><strong>${letters[i]})</strong> ${exp}</div>
+                ` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>`;
+    
+    window.updateNav();
+};
+
+window.handleAnswer = async function(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    
+    userAnswers[currentQuestion] = idx;
+    
+    // Salva o progresso na nuvem em tempo real
+    if (currentUser) {
+        try {
+            await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'quiz_state', 'portugues_7ano'), {
+                answers: userAnswers
+            }, { merge: true });
+        } catch (error) {
+            console.error("Erro ao salvar as respostas na nuvem:", error);
+        }
+    }
+    
+    if (idx === questions[currentQuestion].correct) {
+        const duration = 1500;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6}, colors: ['#10B981', '#059669', '#34D399', '#047857', '#FDE047'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6}, colors: ['#10B981', '#059669', '#34D399', '#047857', '#FDE047'] });
+            if (Date.now() < end) { requestAnimationFrame(frame); }
+        }());
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    
+    window.renderQuestion();
+    window.renderMap();
+};
+
+window.renderMap = function() {
+    if (questions.length === 0) return;
+    
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+    }).join('');
+    
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+        }
+    }, 50);
+};
+
+window.goTo = function(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    window.renderQuestion();
+    window.renderMap();
+};
+
+window.changeQuestion = function(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) window.goTo(n);
+};
+
+window.updateNav = function() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar 🎯";
+        next.onclick = window.finish;
+    } else {
+        next.textContent = "Próxima ➡️";
+        next.onclick = () => window.changeQuestion(1);
+    }
+};
+
+window.finish = function() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    
+    if (window.confetti) confetti.reset();
+    
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "🏆⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+    
+    let summary = '<div style="text-align:left; margin-top:25px;">';
+    
+    if (percent < 80) {
+        summary += `<div style="background:var(--wrong-bg); padding:20px; border-radius:12px; margin-bottom:25px; border:3px solid var(--wrong-border); color:var(--wrong-border);">
+        <strong style="font-size: 1.1rem;">⚠️ Precisa Estudar Mais!</strong><br><br>Você não atingiu a meta de 80%. O mais indicado agora é voltar para a tela de Teoria, ler as explicações novamente com calma e tentar refazer os exercícios.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">🔄 Apagar as respostas e tentar de novo</button>';
+    } else {
+        summary += `<div style="background:var(--correct-bg); padding:20px; border-radius:12px; margin-bottom:25px; border:3px solid var(--correct-border); color:var(--correct-border);">
+        <strong style="font-size: 1.1rem;">🎉 Você foi muito bem!</strong><br><br>Você demonstrou que entendeu as regras explicadas na teoria.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">🔄 Refazer os Exercícios</button>';
+    }
+    
+    if (correct < questions.length) {
+        summary += '<h3 style="margin-bottom:15px; color:var(--text-color); font-weight:900;">Revise as questões que você errou:</h3>';
+        questions.forEach((q, i) => {
+            if (userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                summary += `<div style="margin-bottom:15px; padding:20px; background:var(--white); border-radius:12px; border:3px dashed var(--theme-dark);">
+                <strong style="color:var(--theme-dark); font-size:1.1rem;">Questão ${i + 1}:</strong> <span style="font-weight: 600;">${q.text}</span><br><br>
+                <span style="color:var(--wrong-border); font-size:0.95rem; font-weight:700; display:block; margin-bottom:5px;">❌ A sua resposta: ${q.options[userAnswers[i]]}</span>
+                <span style="color:var(--correct-border); font-size:0.95rem; font-weight:700; display:block;">✅ A resposta certa era: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    window.setMode('result');
+};
+
+window.reset = async function() {
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    
+    // Atualiza a nuvem com os dados em branco/limpos
+    if (currentUser) {
+        try {
+            await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'quiz_state', 'portugues_7ano'), {
+                answers: userAnswers
+            }, { merge: true });
+        } catch (error) {
+            console.error("Erro ao resetar as respostas:", error);
+        }
+    }
+    
+    window.setMode('practice');
+};
+
+</script>
+</body>
+</html>
