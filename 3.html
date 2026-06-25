@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Português 7º Ano - Sintaxe e Concordância</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    /* Cores Vibrantes e Amigáveis */
+    --bg-color: #F8FAFC;
+    --text-color: #0F172A;
+    --border-color: #1E293B;
+    --white: #FFFFFF;
+    
+    --theme-light: #E0E7FF;
+    --theme-medium: #818CF8;
+    --theme-dark: #4F46E5;
+    --theme-contrast: #10B981;
+    --theme-accent: #F43F5E;
+    --theme-text-active: #FFFFFF;
+
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #E11D48;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 20px; 
+    padding-bottom: 100px;
+    background-image: radial-gradient(var(--theme-light) 1.5px, transparent 1.5px);
+    background-size: 25px 25px;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+
+@keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.pulse-effect { animation: pulse 1.5s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+
+.logo-header { 
+    width: 100%; 
+    max-width: 650px; 
+    display: flex; 
+    justify-content: center;
+    flex-direction: column; 
+    align-items: center; 
+    padding: 25px 0 15px 0; 
+}
+
+.css-logo { 
+    font-size: 1.8rem; 
+    font-weight: 900; 
+    color: var(--white); 
+    text-transform: uppercase; 
+    letter-spacing: -1px; 
+    border: 3px solid var(--border-color); 
+    padding: 10px 25px;
+    border-radius: 16px; 
+    background: var(--theme-dark); 
+    box-shadow: 5px 5px 0px var(--theme-contrast); 
+    text-align: center; 
+    margin-bottom: 15px; 
+    transform: rotate(-2deg);
+}
+
+h1 { 
+    font-size: 1.9rem; 
+    font-weight: 900; 
+    color: var(--text-color); 
+    text-transform: uppercase;
+    letter-spacing: 1px; 
+    text-shadow: 2px 2px 0px var(--white); 
+    text-align: center; 
+    line-height: 1.2;
+}
+
+.subtitle { 
+    font-size: 1rem; 
+    color: var(--white); 
+    font-weight: 700; 
+    text-align: center;
+    margin-top: 5px;
+    background: var(--theme-dark);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 2px solid var(--border-color);
+}
+
+.container { 
+    width: 100%; 
+    max-width: 650px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 25px;
+}
+
+.toggle-container { 
+    background-color: var(--white); 
+    border: 3px solid var(--border-color);
+    border-radius: 50px; 
+    padding: 6px; 
+    display: flex; 
+    margin-bottom: 5px; 
+    box-shadow: 4px 4px 0px var(--border-color); 
+}
+
+.toggle-btn {
+    flex: 1; 
+    border: none; 
+    background: none; 
+    padding: 12px 0; 
+    border-radius: 40px;
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 800; 
+    font-size: 1.05rem; 
+    color: var(--theme-dark);
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+}
+
+.toggle-btn.active { 
+    background-color: var(--theme-dark); 
+    color: var(--theme-text-active);
+    box-shadow: 0px 3px 0px rgba(0,0,0,0.2) inset; 
+}
+
+.view-section { 
+    display: none; 
+    animation: fadeIn 0.5s ease; 
+    flex-direction: column; 
+    gap: 20px;
+}
+
+.search-container { position: relative; width: 100%; }
+
+.search-input { 
+    width: 100%; 
+    padding: 16px 20px 16px 55px; 
+    border: 3px solid var(--border-color); 
+    border-radius: 50px; 
+    background-color: var(--white); 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1rem; 
+    font-weight: 700; 
+    color: var(--text-color); 
+    box-shadow: 4px 4px 0px var(--theme-medium); 
+    outline: none; 
+    transition: all 0.2s ease; 
+}
+
+.search-input:focus { 
+    transform: translate(2px, 2px); 
+    box-shadow: 2px 2px 0px var(--theme-contrast); 
+    border-color: var(--theme-dark); 
+}
+
+.search-icon {
+    position: absolute; 
+    left: 22px; 
+    top: 50%; 
+    transform: translateY(-50%);
+    font-size: 1.4rem; 
+}
+
+#no-results { 
+    text-align: center; 
+    background: var(--white);
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px dashed var(--theme-accent);
+    color: var(--theme-accent); 
+    font-weight: 700; 
+    display: none; 
+}
+
+.content-group {
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+}
+
+.section-badge { 
+    display: inline-block; 
+    padding: 10px 20px; 
+    background-color: var(--theme-contrast); 
+    color: var(--white); 
+    font-size: 1rem; 
+    font-weight: 900; 
+    border-radius: 12px;
+    border: 3px solid var(--border-color); 
+    box-shadow: 4px 4px 0px var(--border-color); 
+    text-transform: uppercase; 
+    align-self: flex-start; 
+    margin-bottom: 5px; 
+    transform: rotate(-1deg);
+}
+
+.theory-box { 
+    display: flex; 
+    flex-direction: column; 
+    padding: 25px; 
+    border-radius: 20px;
+    background-color: var(--white); 
+    border: 3px solid var(--border-color); 
+    box-shadow: 6px 6px 0px var(--border-color); 
+    font-weight: 500; 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+    position: relative;
+    overflow: hidden; 
+    gap: 15px; 
+    transition: transform 0.2s ease;
+}
+
+.theory-box:hover { transform: translateY(-3px); }
+
+.theory-box h3 {
+    font-size: 1.3rem; 
+    font-weight: 900; 
+    color: var(--theme-dark);
+    margin-bottom: 5px; 
+    padding-bottom: 8px;
+    border-bottom: 3px dashed var(--theme-light); 
+    display: flex; 
+    align-items: center; 
+    gap: 10px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.card-item {
+    background: #F8FAFC;
+    border: 2px solid var(--border-color);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 3px 3px 0px var(--theme-light);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.card-item strong {
+    color: var(--theme-dark);
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.highlight-box { 
+    background-color: #F0FDF4; 
+    border: 3px solid var(--correct-border);
+    border-left-width: 8px;
+    padding: 15px; 
+    border-radius: 12px; 
+    font-size: 0.95rem; 
+    color: #064E3B; 
+}
+
+.highlight-box.warning { 
+    background-color: #FFFBEB; 
+    border-color: #D97706; 
+    color: #92400E; 
+    box-shadow: 3px 3px 0px #FCD34D;
+}
+
+.difficulty-badge {
+    display: inline-block; 
+    padding: 6px 14px; 
+    border-radius: 20px; 
+    font-size: 0.8rem; 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    margin-bottom: 12px; 
+    border: 2px solid var(--border-color); 
+    box-shadow: 3px 3px 0px var(--border-color); 
+}
+
+.dif-facil {background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+.question-map { 
+    display: flex; 
+    gap: 10px; 
+    overflow-x: auto; 
+    padding: 10px 5px 15px 5px;
+    margin-bottom: 20px; 
+    white-space: nowrap; 
+    -webkit-overflow-scrolling: touch; 
+    scroll-behavior: smooth; 
+}
+
+.question-map::-webkit-scrollbar { height: 8px; }
+.question-map::-webkit-scrollbar-track { background: var(--theme-light); border-radius: 10px; border: 1px solid var(--border-color); }
+.question-map::-webkit-scrollbar-thumb { background: var(--theme-dark); border-radius: 10px; border: 1px solid var(--border-color); }
+
+.map-dot { 
+    min-width: 40px; 
+    height: 40px; 
+    border: 2px solid var(--border-color);
+    border-radius: 10px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: 900;
+    font-size: 0.9rem; 
+    color: var(--border-color); 
+    background: white; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    box-shadow: 2px 2px 0px var(--border-color);
+}
+
+.map-dot.active { 
+    background-color: var(--theme-dark); 
+    color: white; 
+    box-shadow: 3px 3px 0px var(--theme-contrast); 
+    transform: scale(1.15) translateY(-2px); 
+}
+
+.map-dot.answered-correct { background-color: var(--correct-bg); color: var(--correct-border); }
+.map-dot.answered-wrong { background-color: var(--wrong-bg); color: var(--wrong-border); }
+
+.option-btn { 
+    display: flex; 
+    align-items: center; 
+    width: 100%; 
+    padding: 18px;
+    background-color: var(--white); 
+    border: 3px solid var(--border-color); 
+    border-radius: 16px;
+    margin-bottom: 15px; 
+    cursor: pointer; 
+    transition: all 0.15s ease; 
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1); 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1rem; 
+    font-weight: 600;
+    text-align: left; 
+    color: var(--text-color); 
+}
+
+.option-btn:hover:not(:disabled) { 
+    transform: translate(-3px, -3px); 
+    box-shadow: 7px 7px 0px var(--theme-medium); 
+}
+
+.opt-circle { 
+    width: 36px; 
+    height: 36px; 
+    border-radius: 50%; 
+    border: 3px solid var(--border-color); 
+    margin-right: 15px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-weight: 900; 
+    font-size: 1.1rem; 
+    flex-shrink: 0; 
+    background: var(--theme-light); 
+    color: var(--border-color); 
+}
+
+.option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 4px 4px 0px var(--correct-border); }
+.option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.95; box-shadow: 4px 4px 0px var(--wrong-border); }
+.option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+
+.feedback-box { 
+    display: block; 
+    margin-top: 25px; 
+    background-color: #F8FAFC; 
+    border: 3px dashed var(--border-color); 
+    border-radius: 16px; 
+    padding: 25px; 
+    animation: slideUp 0.3s ease-out; 
+}
+
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 1.1rem; margin-bottom: 15px; display:flex; align-items:center; gap:8px; }
+.feedback-item { margin-bottom: 10px; font-size: 0.95rem; padding-left: 12px; border-left: 4px solid #CBD5E1; line-height: 1.6; }
+.feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--white); border: 2px solid var(--correct-border); padding: 15px; border-radius: 12px; box-shadow: 3px 3px 0px var(--correct-bg); }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #9F1239; background: var(--white); padding: 10px; border-radius: 0 8px 8px 0; }
+
+.result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 40px 30px; box-shadow: 8px 8px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 4rem; margin: 15px 0; letter-spacing: 5px; }
+.percentage-big { font-size: 5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 15px 0; text-shadow: 4px 4px 0px var(--theme-contrast); }
+
+.btn-action { 
+    width: 100%; padding: 20px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); 
+    border-radius: 16px; font-size: 1.2rem; font-weight: 900; cursor: pointer; box-shadow: 5px 5px 0px var(--theme-contrast); 
+    transition: all 0.1s; text-transform: uppercase; margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 10px;
+}
+.btn-action:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+
+.quiz-footer { 
+    position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--white); border-top: 3px solid var(--border-color); 
+    padding: 15px 25px; display: none; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0px -5px 15px rgba(0,0,0,0.05);
+}
+
+.nav-btn { 
+    padding: 14px 28px; border-radius: 12px; font-weight: 900; border: 3px solid var(--border-color); cursor: pointer; 
+    box-shadow: 3px 3px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase; transition: transform 0.1s;
+}
+.nav-btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border-color); }
+.nav-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
+.btn-next { background-color: var(--theme-contrast); color: white; }
+.btn-prev { background-color: var(--theme-light); color: var(--border-color); }
+
+.prova-banner { margin-bottom: 25px; background-color: var(--theme-dark); color: var(--white); padding: 25px; border-radius: 16px; border: 3px solid var(--border-color); box-shadow: 6px 6px 0px var(--theme-contrast); text-align: center; }
+.prova-banner h2 { font-weight: 900; font-size: 1.8rem; margin-bottom: 10px; text-shadow: 2px 2px 0px var(--border-color); }
+.prova-banner p { font-size: 1rem; font-weight: 600; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; border: 2px dashed rgba(255,255,255,0.5); }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">📖</span> PROMOVER</div>
+        <h1>PORTUGUÊS<br>7º ANO</h1>
+        <p class="subtitle">✨ Sintaxe, Pronomes e Concordância ✨</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📚 Estudar a Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">✍️ Fazer Exercícios (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar matéria ou palavra...">
+        </div>
+        
+        <div id="no-results"><p>Esta palavra não foi encontrada.</p></div>
+
+        <!-- Transitividade -->
+        <div class="content-group">
+            <div class="section-badge" style="background-color: #3B82F6;">Sintaxe Verbal 🎯</div>
+            
+            <div class="theory-box">
+                <h3>🔄 1. Transitividade Verbal</h3>
+                <p>Alguns verbos precisam de um "complemento" para fazerem sentido. Outros não. Vamos entender:</p>
+                <div class="grid-2">
+                    <div class="card-item" style="border-left: 5px solid #10B981;">
+                        <strong>🕊️ Verbo Intransitivo (VI)</strong>
+                        <p>Tem sentido completo sozinho. Não precisa de objeto.<br><em>Ex: O bebê <strong>nasceu</strong>. O pássaro <strong>voou</strong>.</em></p>
+                    </div>
+                    <div class="card-item" style="border-left: 5px solid #F59E0B;">
+                        <strong>🎯 Verbo Transitivo Direto (VTD)</strong>
+                        <p>Precisa de complemento SEM preposição (Objeto Direto).<br><em>Ex: Eu comprei <strong>um carro</strong>. (Comprei o quê?)</em></p>
+                    </div>
+                    <div class="card-item" style="border-left: 5px solid #F43F5E;">
+                        <strong>🔗 Verbo Transitivo Indireto (VTI)</strong>
+                        <p>Precisa de complemento COM preposição obrigatória (de, em, para...). É o Objeto Indireto.<br><em>Ex: Eu gosto <strong>de chocolate</strong>. (Gosta DE quê?)</em></p>
+                    </div>
+                    <div class="card-item" style="border-left: 5px solid #8B5CF6;">
+                        <strong>🎁 Verbo Transitivo Direto e Indireto (VTDI)</strong>
+                        <p>Precisa dos dois complementos ao mesmo tempo.<br><em>Ex: Dei <strong>um presente</strong> (OD) <strong>para minha mãe</strong> (OI).</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pronomes -->
+            <div class="theory-box">
+                <h3>👤 2. Pronomes Possessivos e Demonstrativos</h3>
+                
+                <div class="grid-2">
+                    <div class="card-item">
+                        <strong>🧸 Possessivos</strong>
+                        <p>Indicam <strong>posse</strong>, mostram a quem algo pertence.</p>
+                        <ul style="margin-left: 15px; margin-top: 5px; font-size: 0.9rem;">
+                            <li>Meu, minha (1ª pessoa)</li>
+                            <li>Teu, tua (2ª pessoa)</li>
+                            <li>Seu, sua (3ª pessoa)</li>
+                            <li>Nosso, nossa (Plural)</li>
+                        </ul>
+                    </div>
+                    <div class="card-item">
+                        <strong>👉 Demonstrativos</strong>
+                        <p>Indicam a <strong>posição</strong> de algo (no espaço, tempo ou texto).</p>
+                        <ul style="margin-left: 15px; margin-top: 5px; font-size: 0.9rem;">
+                            <li><strong>ESTE, ESTA, ISTO:</strong> Perto de quem fala. (<em>Esta caneta aqui</em>).</li>
+                            <li><strong>ESSE, ESSA, ISSO:</strong> Perto de quem ouve. (<em>Essa caneta aí</em>).</li>
+                            <li><strong>AQUELE(A), AQUILO:</strong> Longe dos dois. (<em>Aquele pássaro lá</em>).</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="highlight-box warning" style="margin-top: 10px;">
+                    <strong>📝 No Texto (Coesão):</strong> Usamos <strong>ESSE/ISSO</strong> para retomar algo que <em>já foi dito</em>. Usamos <strong>ESTE/ISTO</strong> para apresentar algo que <em>ainda vai ser dito</em>.
+                </div>
+            </div>
+        </div>
+
+        <!-- Adjuntos, Aposto e Concordância -->
+        <div class="content-group">
+            <div class="section-badge" style="background-color: #8B5CF6;">Análise e Concordância 🧩</div>
+
+            <div class="theory-box">
+                <h3>🔍 3. Adjuntos e Aposto</h3>
+                <p>Termos que dão detalhes extras para os nomes ou para a ação.</p>
+                
+                <div class="grid-2">
+                    <div class="card-item" style="border-top: 4px solid #3B82F6;">
+                        <strong>🏷️ Adjunto Adnominal</strong>
+                        <p>Fica "junto do nome" (substantivo) para dar características. Podem ser as seguintes classes:</p>
+                        <ul style="margin-left: 15px; margin-top: 5px; font-size: 0.85rem;">
+                            <li><strong>Artigo:</strong> <em>As</em> meninas... / <em>O</em> menino...</li>
+                            <li><strong>Adjetivo/Locução:</strong> Casa <em>velha</em> / Dia <em>de chuva</em>.</li>
+                            <li><strong>Numeral:</strong> <em>Duas</em> canetas...</li>
+                            <li><strong>Pronome:</strong> <em>Meu</em> caderno...</li>
+                        </ul>
+                    </div>
+                    <div class="card-item" style="border-top: 4px solid #F59E0B;">
+                        <strong>⏱️ Adjunto Adverbial</strong>
+                        <p>Modifica o verbo, indicando as circunstâncias da ação. Principais tipos:</p>
+                        <ul style="margin-left: 15px; margin-top: 5px; font-size: 0.85rem;">
+                            <li><strong>Tempo:</strong> Chegamos <em>ontem</em>.</li>
+                            <li><strong>Lugar:</strong> Mora <em>na cidade</em>.</li>
+                            <li><strong>Modo:</strong> Falou <em>calmamente</em>.</li>
+                            <li><strong>Intensidade:</strong> Comeu <em>muito</em>.</li>
+                            <li><strong>Negação/Afirmação:</strong> <em>Não</em> vou / <em>Sim</em>, farei.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <h4 style="color: var(--theme-dark); margin-bottom: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                        💡 O que é o APOSTO e seus Tipos
+                    </h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 10px;">É um termo que serve para explicar, resumir, detalhar ou enumerar um nome que veio antes dele.</p>
+                    <div class="grid-2">
+                        <div class="card-item">
+                            <strong>📌 Explicativo</strong>
+                            <p style="font-size: 0.85rem;">Explica o termo anterior (sempre entre pontuação).<br><em>Ex: Pelé, <strong>o rei do futebol</strong>, fez muitos gols.</em></p>
+                        </div>
+                        <div class="card-item">
+                            <strong>📋 Enumerativo</strong>
+                            <p style="font-size: 0.85rem;">Lista elementos (geralmente após dois-pontos).<br><em>Ex: Comprei doces: <strong>bala, chiclete e paçoca</strong>.</em></p>
+                        </div>
+                        <div class="card-item">
+                            <strong>🎯 Especificativo</strong>
+                            <p style="font-size: 0.85rem;">Nome próprio que especifica um nome comum (sem vírgula).<br><em>Ex: A cidade de <strong>São Paulo</strong>. O rio <strong>Amazonas</strong>.</em></p>
+                        </div>
+                        <div class="card-item">
+                            <strong>🗜️ Resumitivo</strong>
+                            <p style="font-size: 0.85rem;">Resume termos anteriores com um pronome (tudo, nada, ninguém).<br><em>Ex: Dinheiro e fama, <strong>tudo</strong> passa.</em></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="theory-box">
+                <h3>🤝 4. Concordância Nominal e Verbal</h3>
+                
+                <div class="card-item" style="margin-bottom: 10px;">
+                    <strong>👧 Concordância Nominal</strong>
+                    <p>O artigo, adjetivo, pronome e numeral devem concordar em <strong>gênero</strong> (masc/fem) e <strong>número</strong> (sing/plural) com o substantivo.</p>
+                    <p style="margin-top:5px; color:#E11D48;">❌ Errado: <em>As menina bonito.</em></p>
+                    <p style="color:#059669;">✅ Certo: <em>As meninas bonitas.</em></p>
+                </div>
+
+                <div class="card-item">
+                    <strong>🗣️ Concordância Verbal</strong>
+                    <p>O <strong>verbo</strong> deve sempre concordar com o seu <strong>sujeito</strong>.</p>
+                    <ul style="margin-left: 15px; margin-top: 5px;">
+                        <li><strong>Sujeito Simples:</strong> O menino <strong>saiu</strong>. / Os meninos <strong>saíram</strong>.</li>
+                        <li><strong>Sujeito Composto ANTES do verbo:</strong> O cão e o gato <strong>fugiram</strong>. (Vai para o plural).</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box warning" style="margin-top: 10px;">
+                    <strong>🚨 Palavras Perigosas:</strong><br>
+                    - <strong>Obrigado:</strong> Homem diz "Obrigado". Mulher diz "Obrigada".<br>
+                    - <strong>Meio:</strong> Significa "um pouco"? Não muda! <em>Ela está <strong>meio</strong> cansada</em>. Significa metade? Muda! <em><strong>Meia</strong> hora.</em><br>
+                    - <strong>Anexo:</strong> Concorda com o objeto. <em>As fotos vão <strong>anexas</strong>.</em>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">
+            🚀 Iniciar os Exercícios (30 Q)
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div class="prova-banner">
+            <h2>🔥 Exercícios de Fixação</h2>
+            <p>
+                Aqui estão 30 questões sobre Sintaxe e Concordância. Tente acertar pelo menos <strong>80% (24/30)</strong>. Leia a explicação de cada erro para aprender mais.
+            </p>
+        </div>
+
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">📊 Relatório Final</h2>
+            <div class="stars-container" id="finalStars">★</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.3rem; font-weight:800; color:var(--text-color);" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">⬅️ Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima ➡️</button>
+</footer>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+const questions = [
+    // --- FÁCEIS ---
+    {
+        id: 1, level: "Fácil",
+        text: "O que é um Verbo Intransitivo (VI)?",
+        options: ["Aquele que precisa de dois objetos.", "Aquele que precisa de preposição.", "Aquele que tem sentido completo e não precisa de complemento.", "Aquele que liga o sujeito a uma característica."],
+        correct: 2,
+        explanation: {
+            correct: "Verbos intransitivos (como nascer, morrer, chorar, voar) não precisam de objetos para terem seu sentido compreendido.",
+            options: ["Isso é um verbo bitransitivo (VTDI).", "Isso é um verbo transitivo indireto (VTI).", "A resposta correta é a C.", "Isso é um verbo de ligação."]
+        }
+    },
+    {
+        id: 2, level: "Fácil",
+        text: "Qual é a principal diferença entre o Objeto Direto e o Objeto Indireto?",
+        options: ["O objeto direto é sempre uma pessoa.", "O objeto indireto precisa obrigatoriamente de uma preposição (de, para, em...).", "O objeto direto precisa de preposição.", "O objeto indireto é usado apenas no plural."],
+        correct: 1,
+        explanation: {
+            correct: "O que torna um objeto 'Indireto' é a presença obrigatória da preposição ligando ele ao verbo.",
+            options: ["Pessoas podem ser objetos diretos ou indiretos.", "A resposta correta é a B.", "Quem precisa de preposição é o objeto indireto.", "O número (plural/singular) não muda a classificação do objeto."]
+        }
+    },
+    {
+        id: 3, level: "Fácil",
+        text: "Assinale a alternativa que apresenta um Pronome Possessivo.",
+        options: ["Aquele", "Esta", "Nosso", "Quem"],
+        correct: 2,
+        explanation: {
+            correct: "A palavra 'nosso' indica posse, ou seja, diz a quem pertence algo (pertence a nós).",
+            options: ["'Aquele' indica distância (Demonstrativo).", "'Esta' indica distância (Demonstrativo).", "A resposta correta é a C.", "'Quem' é pronome interrogativo ou relativo."]
+        }
+    },
+    {
+        id: 4, level: "Fácil",
+        text: "Imagine que você está segurando uma borracha e falando sobre ela. Qual pronome demonstrativo você deve usar?",
+        options: ["Aquela borracha", "Essa borracha", "Esta borracha", "Sua borracha"],
+        correct: 2,
+        explanation: {
+            correct: "Usamos ESTE(A) ou ISTO para nos referirmos a coisas que estão perto de quem está falando.",
+            options: ["Aquela é para o que está longe dos dois.", "Essa é para o que está perto da pessoa com quem você fala.", "A resposta correta é a C.", "Sua é pronome possessivo."]
+        }
+    },
+    {
+        id: 5, level: "Fácil",
+        text: "Para que serve o Adjunto Adverbial em uma oração?",
+        options: ["Para indicar de quem é o objeto.", "Para substituir o sujeito.", "Para dar características de beleza ao substantivo.", "Para indicar as circunstâncias em que o verbo aconteceu (tempo, lugar, modo)."],
+        correct: 3,
+        explanation: {
+            correct: "O adjunto adverbial é a função sintática do advérbio, servindo para detalhar como, quando ou onde a ação ocorreu.",
+            options: ["Isso é função do pronome possessivo.", "Quem substitui o sujeito é o pronome pessoal.", "Isso é função do adjetivo/adjunto adnominal.", "A resposta correta é a D."]
+        }
+    },
+    {
+        id: 6, level: "Fácil",
+        text: "Na frase 'As flores amarelas murcharam', qual é a função das palavras 'As' e 'amarelas'?",
+        options: ["São verbos de ligação.", "São adjuntos adnominais, pois acompanham o nome 'flores'.", "São adjuntos adverbiais.", "São objetos indiretos."],
+        correct: 1,
+        explanation: {
+            correct: "Artigos (As) e Adjetivos (amarelas) que ficam 'junto do nome' têm a função de Adjunto Adnominal.",
+            options: ["Não indicam estado, nem são verbos.", "A resposta correta é a B.", "Adverbiais modificam verbos, não substantivos.", "Não completam o sentido de verbos transitivos."]
+        }
+    },
+    {
+        id: 7, level: "Fácil",
+        text: "O que é um Aposto Explicativo?",
+        options: ["Uma palavra que indica ação no passado.", "Um termo que vem entre vírgulas para explicar, detalhar ou resumir um nome anterior.", "Uma característica do verbo.", "Um pronome que indica lugar."],
+        correct: 1,
+        explanation: {
+            correct: "O aposto pega um nome que já foi dito e explica quem é ou o que é. Geralmente fica separado por pontuação.",
+            options: ["Quem indica ação no passado é o verbo.", "A resposta correta é a B.", "Isso seria o adjunto adverbial de modo.", "Prontome que indica lugar é advérbio/demonstrativo."]
+        }
+    },
+    {
+        id: 8, level: "Fácil",
+        text: "Qual frase tem um erro clássico de Concordância Nominal?",
+        options: ["Os cadernos novos sumiram.", "As menina pegou o livro.", "Meus sapatos velhos rasgaram.", "A árvore alta caiu."],
+        correct: 1,
+        explanation: {
+            correct: "O artigo 'As' (plural) não concorda com o substantivo 'menina' (singular). O correto é: As meninas.",
+            options: ["Concordância perfeita: Os (pl) cadernos (pl) novos (pl).", "A resposta correta é a B.", "Concordância perfeita no plural masculino.", "Concordância perfeita no singular feminino."]
+        }
+    },
+    {
+        id: 9, level: "Fácil",
+        text: "A regra básica de Concordância Verbal diz que o verbo deve concordar com quem?",
+        options: ["Com o objeto indireto.", "Com o adjunto adverbial.", "Com o sujeito da frase.", "Com o aposto."],
+        correct: 2,
+        explanation: {
+            correct: "O verbo muda (singular ou plural) dependendo estritamente do seu sujeito. (Eu vou / Nós vamos).",
+            options: ["O verbo não concorda com o objeto.", "O verbo não concorda com advérbios.", "A resposta correta é a C.", "O verbo não concorda com o aposto."]
+        }
+    },
+    {
+        id: 10, level: "Fácil",
+        text: "Identifique a frase escrita corretamente (Concordância Verbal):",
+        options: ["Nós foi ao mercado.", "Eles chegou cedo.", "A turma fizeram muito barulho.", "O aluno prestou atenção."],
+        correct: 3,
+        explanation: {
+            correct: "O sujeito 'O aluno' (singular) concorda perfeitamente com o verbo 'prestou' (singular).",
+            options: ["O correto é 'Nós fomos'.", "O correto é 'Eles chegaram'.", "A turma é uma palavra no singular, logo o verbo deve ficar no singular: 'A turma fez'.", "A resposta correta é a D."]
+        }
+    },
+
+    // --- MÉDIAS ---
+    {
+        id: 11, level: "Médio",
+        text: "Na frase 'O fazendeiro precisa de ajuda', o verbo 'precisar' é classificado como:",
+        options: ["Verbo Intransitivo (VI).", "Verbo Transitivo Direto (VTD).", "Verbo Transitivo Indireto (VTI).", "Verbo de Ligação."],
+        correct: 2,
+        explanation: {
+            correct: "Quem precisa, precisa DE algo. A preposição 'de' é obrigatória, o que faz dele um verbo transitivo indireto.",
+            options: ["Ele precisa de complemento, então não é intransitivo.", "VTD não tem preposição.", "A resposta correta é a C.", "Ele indica uma ação mental de necessitar, não apenas um estado."]
+        }
+    },
+    {
+        id: 12, level: "Médio",
+        text: "Qual frase abaixo possui um Verbo Transitivo Direto e Indireto (VTDI)?",
+        options: ["Choveu muito ontem à noite.", "Eles compraram um bolo grande.", "A mãe entregou o presente ao filho.", "Eu gosto de música agitada."],
+        correct: 2,
+        explanation: {
+            correct: "O verbo 'entregar' precisa de dois objetos: entregar O QUÊ? (o presente - Objeto Direto) e A QUEM? (ao filho - Objeto Indireto).",
+            options: ["Chover é VI.", "Comprar é VTD (o bolo).", "A resposta correta é a C.", "Gostar é VTI (de música)."]
+        }
+    },
+    {
+        id: 13, level: "Médio",
+        text: "Você está escrevendo uma redação. Você fala sobre 'poluição' e na frase seguinte quer se referir a ela. Qual pronome usar?",
+        options: ["Esta poluição", "Aquela poluição", "Essa poluição", "Vossa poluição"],
+        correct: 2,
+        explanation: {
+            correct: "Para retomar uma ideia que JÁ FOI dita no texto, usamos pronomes com 'SS': esse, essa, isso.",
+            options: ["'Esta' é usado para coisas que AINDA VÃO ser ditas.", "'Aquela' indicaria um terceiro elemento muito distante.", "A resposta correta é a C.", "Pronome de tratamento que não faz sentido aqui."]
+        }
+    },
+    {
+        id: 14, level: "Médio",
+        text: "Leia: 'As duas bolas vermelhas estouraram'. Quais palavras são Adjuntos Adnominais do sujeito 'bolas'?",
+        options: ["estouraram e vermelhas.", "As, duas, vermelhas.", "bolas, estouraram.", "Apenas vermelhas."],
+        correct: 1,
+        explanation: {
+            correct: "Tudo que orbita o nome (bolas) para especificá-lo: 'As' (Artigo), 'duas' (Numeral) e 'vermelhas' (Adjetivo).",
+            options: ["Estouraram é o verbo.", "A resposta correta é a B.", "Bolas é o núcleo, estouraram é o verbo.", "Faltou o artigo e o numeral."]
+        }
+    },
+    {
+        id: 15, level: "Médio",
+        text: "Em 'Os alunos conversaram alegremente no pátio', as expressões destacadas ('alegremente' e 'no pátio') são, respectivamente, adjuntos adverbiais de:",
+        options: ["Lugar e Tempo.", "Modo e Lugar.", "Intensidade e Tempo.", "Causa e Modo."],
+        correct: 1,
+        explanation: {
+            correct: "'Alegremente' mostra a maneira (modo) como conversaram. 'No pátio' mostra o espaço físico (lugar) onde conversaram.",
+            options: ["Alegremente não é lugar.", "A resposta correta é a B.", "Alegremente não é quantidade/intensidade.", "Alegremente não é o motivo (causa)."]
+        }
+    },
+    {
+        id: 16, level: "Médio",
+        text: "Qual frase abaixo contém um Aposto Explicativo?",
+        options: ["João, Maria e José saíram cedo.", "Brasília, a capital do Brasil, fica no centro do país.", "Comprei maçã, banana e uva.", "O livro é muito, muito chato."],
+        correct: 1,
+        explanation: {
+            correct: "A expressão 'a capital do Brasil' está entre vírgulas apenas para explicar quem é 'Brasília'. Isso é um aposto.",
+            options: ["É uma enumeração de sujeitos.", "A resposta correta é a B.", "É uma enumeração de objetos diretos.", "É uma repetição de intensidade."]
+        }
+    },
+    {
+        id: 17, level: "Médio",
+        text: "Qual é a regra correta de Concordância Verbal para a frase: 'O caderno e a caneta ___ na mesa'?",
+        options: ["está (porque a caneta está mais perto).", "estão (porque é um sujeito composto com dois núcleos).", "estive.", "estarão (só vale para futuro)."],
+        correct: 1,
+        explanation: {
+            correct: "Temos um sujeito composto (caderno + caneta) posicionado ANTES do verbo. A regra obriga o verbo a ir para o plural.",
+            options: ["Se estivessem depois do verbo, até poderia concordar com o mais próximo, mas estão antes.", "A resposta correta é a B.", "Conjugação totalmente errada.", "O tempo verbal não muda a regra de número."]
+        }
+    },
+    {
+        id: 18, level: "Médio",
+        text: "Marque a alternativa correta quanto à concordância da palavra 'MEIO':",
+        options: ["Eu pedi meia porção de batatas.", "A aluna estava meia preocupada.", "São meio dia e meia.", "A porta estava meias aberta."],
+        correct: 0,
+        explanation: {
+            correct: "Quando 'meio' significa 'metade de algo' (porção), ele é numeral e varia (meia porção). Quando significa 'um pouco' (estado), não varia.",
+            options: ["A resposta correta é a A.", "Deveria ser 'meio preocupada' (um pouco preocupada).", "Deveria ser 'É meio-dia e MEIA' (meia hora).", "Meio como advérbio não varia, deveria ser 'meio aberta'."]
+        }
+    },
+    {
+        id: 19, level: "Médio",
+        text: "Na frase 'A maioria dos torcedores ___ o estádio', qual a concordância verbal permitida?",
+        options: ["Apenas 'deixou' (concordando com maioria).", "Apenas 'deixaram' (concordando com torcedores).", "Ambas as formas ('deixou' ou 'deixaram') estão corretas.", "Nenhuma das anteriores."],
+        correct: 2,
+        explanation: {
+            correct: "Com expressões partitivas (a maioria de, grande parte de), o verbo pode concordar no singular com o núcleo (maioria) ou no plural com o especificador (torcedores).",
+            options: ["Não é obrigatório ficar só no singular.", "Não é obrigatório ficar só no plural.", "A resposta correta é a C.", "Existe regra sim."]
+        }
+    },
+    {
+        id: 20, level: "Médio",
+        text: "A frase 'João pediu a Maria para ler o seu livro' é ambígua (tem duplo sentido). Por qual pronome o 'seu' deve ser trocado para deixar claro que o livro é de Maria?",
+        options: ["O livro dele.", "O livro de vós.", "O livro dela.", "O vosso livro."],
+        correct: 2,
+        explanation: {
+            correct: "O pronome 'seu' causa confusão de posse na 3ª pessoa. Usar 'dela' garante que o livro pertence à Maria.",
+            options: ["Isso indicaria que o livro é de João.", "Não se usa vós em linguagem comum assim.", "A resposta correta é a C.", "Refere-se à 2ª pessoa do plural."]
+        }
+    },
+
+    // --- DIFÍCEIS ---
+    {
+        id: 21, level: "Difícil",
+        text: "Atenção à regência e transitividade! Na frase 'O médico assistiu o paciente', o verbo assistir é VTD (sem preposição). O que significa?",
+        options: ["Que o médico sentou no sofá e ficou olhando o paciente.", "Que o médico prestou socorro/ajuda ao paciente.", "Que o médico tem direito sobre o paciente.", "Que o médico morou no paciente."],
+        correct: 1,
+        explanation: {
+            correct: "O verbo 'assistir' no sentido de AJUDAR é Transitivo Direto (sem preposição). No sentido de VER/PRESENCIAR, ele exigiria preposição 'a' (assistiu ao jogo).",
+            options: ["Seria 'assistiu AO paciente'.", "A resposta correta é a B.", "Assistir com sentido de direito (caber) também exige 'a'.", "Sentido de morar usa a preposição 'em'."]
+        }
+    },
+    {
+        id: 22, level: "Difícil",
+        text: "O que é um Objeto Direto Preposicionado? Exemplo: 'Amai a Deus'.",
+        options: ["É um objeto indireto disfarçado.", "É quando o verbo é de ligação.", "É um objeto que o verbo NÃO pede preposição, mas nós colocamos para evitar confusão ou por ênfase.", "É um erro de gramática."],
+        correct: 2,
+        explanation: {
+            correct: "Quem ama, ama ALGUÉM (VTD, não pede preposição). Mas, por respeito (Deus) ou para evitar duplo sentido, adicionamos a preposição 'a' artificialmente.",
+            options: ["Não, o verbo continua sendo classificado como VTD.", "A resposta correta é a C.", "Não há verbo de ligação.", "É um recurso gramatical avançado, perfeitamente aceito."]
+        }
+    },
+    {
+        id: 23, level: "Difícil",
+        text: "Leia: 'Comprei maçãs e laranjas. ___ estavam azedas e ___ estavam doces'. Quais pronomes preenchem corretamente se eu quero dizer que laranjas azedaram e maçãs estavam doces?",
+        options: ["Estas / aquelas.", "Essas / estas.", "Aquelas / estas.", "Essas / aquelas."],
+        correct: 0,
+        explanation: {
+            correct: "Regra de referência: 'Estas' refere-se ao último que foi dito (laranjas). 'Aquelas' refere-se ao que foi dito primeiro e ficou mais distante na frase (maçãs).",
+            options: ["A resposta correta é a A.", "'Essas' não se usa nesse tipo de retomada dupla.", "Inverteria o sentido (laranjas doces, maçãs azedas).", "'Essas' é inadequado."]
+        }
+    },
+    {
+        id: 24, level: "Difícil",
+        text: "Qual é a diferença funcional entre o Adjunto Adnominal e o Adjunto Adverbial na análise sintática de uma frase?",
+        options: ["O adnominal modifica apenas verbos; o adverbial modifica apenas adjetivos.", "Não há diferença, são nomes diferentes para a mesma coisa.", "O adnominal é sempre essencial para a frase ter sentido, o adverbial não.", "O adnominal faz parte de uma estrutura ligada a um substantivo (nome), o adverbial está ligado ao verbo indicando circunstância."],
+        correct: 3,
+        explanation: {
+            correct: "O Adjunto Adnominal nunca se desgruda do seu substantivo. Já o Adverbial é o modificador livre do verbo, indicando onde, como e quando a ação ocorreu.",
+            options: ["Totalmente invertido e errado.", "Têm funções estruturais completamente opostas.", "Ambos são termos acessórios, a frase sobrevive sem eles.", "A resposta correta é a D."]
+        }
+    },
+    {
+        id: 25, level: "Difícil",
+        text: "Identifique a frase com erro de Concordância Nominal com a palavra 'ANEXO':",
+        options: ["As provas seguem anexas.", "O arquivo vai anexo ao e-mail.", "Seguem anexo os documentos solicitados.", "Os relatórios estão anexos."],
+        correct: 2,
+        explanation: {
+            correct: "A palavra 'anexo' é um adjetivo e DEVE concordar com o substantivo. Se são 'OS documentos', o correto é 'Seguem ANEXOS os documentos'.",
+            options: ["As provas (fem pl) -> anexas. Correto.", "O arquivo (masc sing) -> anexo. Correto.", "A resposta correta é a C.", "Os relatórios (masc pl) -> anexos. Correto."]
+        }
+    },
+    {
+        id: 26, level: "Difícil",
+        text: "Observe o uso da palavra 'PROIBIDO'. Qual frase está correta?",
+        options: ["É proibida entrada de estranhos.", "É proibido a entrada de estranhos.", "É proibida a entrada de estranhos.", "É proibido pessoas sem crachá."],
+        correct: 2,
+        explanation: {
+            correct: "Só fazemos a concordância (proibidA) se o sujeito vier acompanhado de um determinante (no caso, o artigo 'A'). 'É proibida A entrada'. Sem o artigo, fica masculino: 'É proibido entrada'.",
+            options: ["Faltou o artigo para justificar o 'proibida'.", "Tem artigo 'a', então não pode ser 'proibido' masc.", "A resposta correta é a C.", "Pessoas está no plural, seria proibido pessoas (sem determinante) ou proibidas as pessoas."]
+        }
+    },
+    {
+        id: 27, level: "Difícil",
+        text: "Regra do sujeito composto POSPOSTO (depois do verbo). Qual está CERTA?",
+        options: ["Passou o carro e o caminhão.", "Passaram o carro e o caminhão.", "As duas formas ('Passou' concordando com o mais próximo, ou 'Passaram' no plural) estão corretas.", "Somente a forma no plural está correta."],
+        correct: 2,
+        explanation: {
+            correct: "Quando o sujeito composto vem DEPOIS do verbo, você pode escolher: ou deixa no plural (concordância lógica) ou concorda apenas com o primeiro elemento (concordância atrativa).",
+            options: ["Sim, essa está certa por atração, mas a plural também está.", "Sim, essa está certa no plural, mas a singular também está.", "A resposta correta é a C.", "Falso, a regra permite as duas."]
+        }
+    },
+    {
+        id: 28, level: "Difícil",
+        text: "Em 'Nós mesmos resolvemos o problema', a palavra 'mesmos' concorda com 'nós'. Se fossem apenas mulheres falando, como ficaria?",
+        options: ["Nós mesmas resolvemos.", "Nós mesmos resolvemos.", "Nós próprio resolvemos.", "Nós mesma resolvemos."],
+        correct: 0,
+        explanation: {
+            correct: "A palavra 'mesmo' quando atua como pronome de reforço, varia em gênero e número para concordar com o pronome pessoal. Se são mulheres, 'nós mesmas'.",
+            options: ["A resposta correta é a A.", "Isso seria se houvesse homens, ou linguagem neutra de grupo misto.", "'Próprio' também deve variar (próprias).", "Nós é plural, mesma é singular. Erro de número."]
+        }
+    },
+    {
+        id: 29, level: "Difícil",
+        text: "Na frase 'Todos os dias, a professora apaga o quadro', por que existe uma vírgula depois de 'dias'?",
+        options: ["Para separar o sujeito do verbo.", "Para separar um aposto explicativo.", "Para marcar o deslocamento de um Adjunto Adverbial grande (de tempo) para o início da frase.", "Para mostrar que a frase é interrogativa."],
+        correct: 2,
+        explanation: {
+            correct: "O lugar natural do adjunto adverbial é no final da frase. Quando pegamos um advérbio longo e jogamos para o começo, a gramática exige uma vírgula para marcar essa troca de lugar.",
+            options: ["É terminantemente proibido separar sujeito de verbo com vírgula.", "Não está explicando 'dias'.", "A resposta correta é a C.", "Ponto de interrogação faz isso."]
+        }
+    },
+    {
+        id: 30, level: "Difícil",
+        text: "Análise Sintática Completa: 'O pai coruja comprou um brinquedo caro ontem'. Identifique o VTD, o Objeto Direto e o Adjunto Adverbial, nessa ordem.",
+        options: ["pai, comprou, caro.", "comprou, um brinquedo caro, ontem.", "comprou, ontem, caro.", "coruja, brinquedo, comprou."],
+        correct: 1,
+        explanation: {
+            correct: "VTD: comprou. Objeto Direto: 'um brinquedo caro' (recebeu a ação). Adjunto Adverbial de Tempo: 'ontem' (quando ocorreu).",
+            options: ["Pai é núcleo do sujeito.", "A resposta correta é a B.", "Ontem não é o objeto comprado.", "Coruja é adjunto adnominal."]
+        }
+    }
+];
+
+let currentQuestion = 0;
+let userAnswers = new Array(questions.length).fill(null);
+const STORAGE_KEY = 'quiz_7ano_sintaxe_final_v1';
+
+function saveProgress() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(userAnswers)); } catch (e) {}
+}
+
+function loadProgress() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length === questions.length) {
+                userAnswers = parsed;
+                if (userAnswers.some(ans => ans !== null)) {
+                    setMode('practice');
+                    return;
+                }
+            }
+        } catch (error) {}
+    }
+    setMode('explanation');
+}
+
+function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+
+    if (mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        renderQuestion();
+        renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+        window.scrollTo(0,0);
+    }
+}
+
+function renderQuestion() {
+    if (questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    
+    let badgeClass = q.level === 'Fácil' ? 'dif-facil' : (q.level === 'Médio' ? 'dif-medio' : 'dif-dificil');
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 6px 6px 0px var(--border-color); padding: 25px; border-radius: 16px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 25px;">
+            <span style="font-size: 0.85rem; font-weight: 900; color: var(--theme-dark); text-transform: uppercase; letter-spacing: 1px;">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.25rem; margin-top: 8px; color: var(--text-color); font-weight: 900; line-height: 1.4;">${q.text}</h2>
+        </div>
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `<button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                            <div class="opt-circle">${letters[i]}</div><div>${opt}</div>
+                        </button>`;
+            }).join('')}
+        </div>
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '✅ Resposta Correta!' : '❌ Resposta Incorreta:'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>Apenas esta opção é a certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top:12px; font-size:1rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">💡 ${q.explanation.correct}</div>
+            <div style="margin-top:15px; border-top:2px dashed #CBD5E1; padding-top:15px;">
+                <small style="color:var(--theme-dark); font-size:0.9rem; text-transform: uppercase;"><strong>🔎 Por que as outras opções estão erradas:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:10px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+        </div>` : ''}
+    </div>`;
+    updateNav();
+}
+
+function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    saveProgress();
+    
+    if (idx === questions[currentQuestion].correct) {
+        const end = Date.now() + 1500;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6}, colors: ['#10B981', '#3B82F6', '#FBBF24'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6}, colors: ['#10B981', '#3B82F6', '#FBBF24'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+}
+
+function renderMap() {
+    if (questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot' + (i === currentQuestion ? ' active' : '');
+        if (userAnswers[i] !== null) cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+    }).join('');
+    
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+    }, 50);
+}
+
+function goTo(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+}
+
+function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar 🎯";
+        next.onclick = finish;
+    } else {
+        next.textContent = "Próxima ➡️";
+        next.onclick = () => changeQuestion(1);
+    }
+}
+
+function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    if (window.confetti) confetti.reset();
+    
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "🏆⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+    
+    let summary = '<div style="text-align:left; margin-top:25px;">';
+    if (percent < 80) {
+        summary += `<div style="background:var(--wrong-bg); padding:20px; border-radius:12px; margin-bottom:25px; border:3px solid var(--wrong-border); color:var(--wrong-border);">
+        <strong style="font-size: 1.1rem;">⚠️ Precisa Estudar Mais!</strong><br><br>Volte para a tela de Teoria, revise a análise sintática e as regras de concordância, e tente novamente.</div>`;
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">🔄 Apagar as respostas e tentar de novo</button>';
+    } else {
+        summary += `<div style="background:var(--correct-bg); padding:20px; border-radius:12px; margin-bottom:25px; border:3px solid var(--correct-border); color:var(--correct-border);">
+        <strong style="font-size: 1.1rem;">🎉 Você foi muito bem!</strong><br><br>Você demonstrou que entendeu as regras de sintaxe e concordância!</div>`;
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">🔄 Refazer os Exercícios</button>';
+    }
+    
+    if (correct < questions.length) {
+        summary += '<h3 style="margin-bottom:15px; color:var(--text-color); font-weight:900;">Revise as questões que você errou:</h3>';
+        questions.forEach((q, i) => {
+            if (userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                summary += `<div style="margin-bottom:15px; padding:20px; background:var(--white); border-radius:12px; border:3px dashed var(--theme-dark);">
+                <strong style="color:var(--theme-dark); font-size:1.1rem;">Questão ${i + 1}:</strong> <span style="font-weight: 600;">${q.text}</span><br><br>
+                <span style="color:var(--wrong-border); font-size:0.95rem; font-weight:700; display:block; margin-bottom:5px;">❌ A sua resposta: ${q.options[userAnswers[i]]}</span>
+                <span style="color:var(--correct-border); font-size:0.95rem; font-weight:700; display:block;">✅ A resposta certa era: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+}
+
+function reset() {
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    saveProgress();
+    setMode('practice');
+}
+
+loadProgress();
+</script>
+</body>
+</html>
