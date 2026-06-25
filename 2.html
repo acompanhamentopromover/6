@@ -786,19 +786,7 @@ h1 {
     <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima ➡️</button>
 </footer>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-// Configuração e Inicialização do Firebase na Nuvem
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-let currentUser = null;
-
+<script>
 const searchInput = document.getElementById('searchInput');
 const contentGroups = document.querySelectorAll('.content-group');
 const noResultsMsg = document.getElementById('no-results');
@@ -1127,53 +1115,40 @@ const questions = [
     }
 ];
 
-// --- SISTEMA DE SALVAMENTO (NUVEM/FIRESTORE) E LÓGICA ---
+// --- SISTEMA DE SALVAMENTO LOCAL (GITHUB PAGES COMPATÍVEL) ---
 let currentQuestion = 0;
 let userAnswers = new Array(questions.length).fill(null);
+const STORAGE_KEY = 'quiz_7ano_portugues_state';
 
-// Inicializa a autenticação antes de qualquer consulta à base de dados
-const initAuth = async () => {
+function saveProgress() {
     try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-            await signInAnonymously(auth);
-        }
-    } catch (error) {
-        console.error("Erro na autenticação:", error);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(userAnswers));
+    } catch (e) {
+        console.error("Erro ao salvar no localStorage:", e);
     }
-};
+}
 
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        currentUser = user;
-        const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'quiz_state', 'portugues_7ano');
-        
+function loadProgress() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
         try {
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists() && docSnap.data().answers) {
-                userAnswers = docSnap.data().answers;
-            } else {
-                userAnswers = new Array(questions.length).fill(null);
-            }
-            
-            // Retoma de onde o aluno parou caso já existam respostas preenchidas
-            if (userAnswers.some(ans => ans !== null)) {
-                window.setMode('practice');
-            } else {
-                window.setMode('explanation');
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length === questions.length) {
+                userAnswers = parsed;
+                if (userAnswers.some(ans => ans !== null)) {
+                    setMode('practice');
+                    return;
+                }
             }
         } catch (error) {
-            console.error("Erro ao recuperar os dados na nuvem:", error);
-            window.setMode('explanation');
+            console.error("Erro ao ler o progresso salvo:", error);
         }
     }
-});
+    setMode('explanation');
+}
 
-initAuth();
-
-// Funções acopladas ao Window (necessário por ser type="module")
-window.setMode = function(mode) {
+// Funções globais da interface
+function setMode(mode) {
     const views = ['viewExplanation', 'viewPractice', 'viewResult'];
     views.forEach(v => document.getElementById(v).style.display = 'none');
     document.getElementById('quizFooter').style.display = 'none';
@@ -1187,16 +1162,16 @@ window.setMode = function(mode) {
         document.getElementById('quizFooter').style.display = 'flex';
         document.getElementById('btnExp').classList.remove('active');
         document.getElementById('btnPrac').classList.add('active');
-        window.renderQuestion();
-        window.renderMap();
+        renderQuestion();
+        renderMap();
     } else if (mode === 'result') {
         document.getElementById('viewResult').style.display = 'block';
         document.getElementById('quizFooter').style.display = 'none';
         window.scrollTo(0,0);
     }
-};
+}
 
-window.renderQuestion = function() {
+function renderQuestion() {
     if (questions.length === 0) return;
     
     const q = questions[currentQuestion];
@@ -1255,24 +1230,14 @@ window.renderQuestion = function() {
         ` : ''}
     </div>`;
     
-    window.updateNav();
-};
+    updateNav();
+}
 
-window.handleAnswer = async function(idx) {
+function handleAnswer(idx) {
     if (userAnswers[currentQuestion] !== null) return;
     
     userAnswers[currentQuestion] = idx;
-    
-    // Salva o progresso na nuvem em tempo real
-    if (currentUser) {
-        try {
-            await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'quiz_state', 'portugues_7ano'), {
-                answers: userAnswers
-            }, { merge: true });
-        } catch (error) {
-            console.error("Erro ao salvar as respostas na nuvem:", error);
-        }
-    }
+    saveProgress();
     
     if (idx === questions[currentQuestion].correct) {
         const duration = 1500;
@@ -1290,11 +1255,11 @@ window.handleAnswer = async function(idx) {
         setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
     }
     
-    window.renderQuestion();
-    window.renderMap();
-};
+    renderQuestion();
+    renderMap();
+}
 
-window.renderMap = function() {
+function renderMap() {
     if (questions.length === 0) return;
     
     const map = document.getElementById('qMap');
@@ -1313,34 +1278,34 @@ window.renderMap = function() {
             activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
         }
     }, 50);
-};
+}
 
-window.goTo = function(i) {
+function goTo(i) {
     if (window.confetti) confetti.reset();
     currentQuestion = i;
-    window.renderQuestion();
-    window.renderMap();
-};
+    renderQuestion();
+    renderMap();
+}
 
-window.changeQuestion = function(d) {
+function changeQuestion(d) {
     let n = currentQuestion + d;
-    if (n >= 0 && n < questions.length) window.goTo(n);
-};
+    if (n >= 0 && n < questions.length) goTo(n);
+}
 
-window.updateNav = function() {
+function updateNav() {
     document.getElementById('btnPrev').disabled = (currentQuestion === 0);
     const next = document.getElementById('btnNext');
     
     if (currentQuestion === questions.length - 1) {
         next.textContent = "Finalizar 🎯";
-        next.onclick = window.finish;
+        next.onclick = finish;
     } else {
         next.textContent = "Próxima ➡️";
-        next.onclick = () => window.changeQuestion(1);
+        next.onclick = () => changeQuestion(1);
     }
-};
+}
 
-window.finish = function() {
+function finish() {
     let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
     let percent = Math.round((correct / questions.length) * 100);
     
@@ -1379,26 +1344,18 @@ window.finish = function() {
     
     summary += '</div>';
     document.getElementById('review-container').innerHTML = summary;
-    window.setMode('result');
-};
+    setMode('result');
+}
 
-window.reset = async function() {
+function reset() {
     userAnswers = new Array(questions.length).fill(null);
     currentQuestion = 0;
-    
-    // Atualiza a nuvem com os dados em branco/limpos
-    if (currentUser) {
-        try {
-            await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'quiz_state', 'portugues_7ano'), {
-                answers: userAnswers
-            }, { merge: true });
-        } catch (error) {
-            console.error("Erro ao resetar as respostas:", error);
-        }
-    }
-    
-    window.setMode('practice');
-};
+    saveProgress();
+    setMode('practice');
+}
+
+// Inicializa a aplicação
+loadProgress();
 
 </script>
 </body>
