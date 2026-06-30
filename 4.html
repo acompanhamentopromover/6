@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas e Reprodução - Promover</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            /* Cores adaptadas para Ciências/Biologia (Verde/Azul) */
+            --bg-color: #F0FDF4;
+            --text-color: #0F172A;
+            --border-color: #064E3B;
+            --white: #FFFFFF;
+            --theme-light: #D1FAE5;
+            --theme-medium: #10B981;
+            --theme-dark: #047857;
+            --theme-contrast: #059669;
+            --theme-accent: #34D399;
+            --theme-text-active: #FFFFFF;
+
+            /* NÃO ALTERAR AS CORES ABAIXO */
+            --correct-bg: #D1FAE5;
+            --correct-border: #059669;
+            --wrong-bg: #FFE4E6;
+            --wrong-border: #BE123C;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; padding: 20px; padding-bottom: 100px;
+            background-image: linear-gradient(var(--theme-light) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+            100% { transform: translateX(0); }
+        }
+        .shake-effect { animation: shake 0.4s ease-in-out; }
+
+        @keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.15); color: var(--theme-contrast); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); color: var(--theme-contrast); }
+            100% { transform: scale(1); }
+        }
+
+        .logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center;
+        flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+
+        .css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; 
+        letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px;
+        border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); 
+        text-align: center; margin-bottom: 15px; }
+
+        h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase;
+        letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+
+        .subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+
+        .container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+        .toggle-container { background-color: var(--white); border: 2px solid var(--border-color);
+        border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+
+        .toggle-btn {flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px;
+        font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark);
+        cursor: pointer; transition: all 0.3s ease; }
+
+        .toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active);
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+
+        .search-container { position: relative; width: 100%; }
+
+        .search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); 
+        border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; 
+        font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); 
+        outline: none; transition: all 0.2s ease; }
+
+        .search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); 
+        border-color: var(--theme-dark); }
+
+        .search-icon {position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+        font-size: 1.2rem; opacity: 0.7; }
+
+        #no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+        .content-group {display: flex; flex-direction: column; gap: 12px; }
+
+        .section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); 
+        color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px;
+        border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; 
+        align-self: flex-start; margin-bottom: 5px; }
+
+        .theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px;
+        background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); 
+        font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+
+        .theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px;
+        background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+        
+        .theory-box h3 {font-size: 1.2rem; font-weight: 900; color: var(--theme-dark);
+        margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px;
+        display: flex; align-items: center; gap: 8px;}
+
+        .visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; 
+        padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+        gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+
+        .highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast);
+        padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+
+        .highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+        .difficulty-badge {display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; 
+        font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); 
+        box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+
+        .dif-facil {background: #D1FAE5; color: #065F46; }
+        .dif-medio { background: #FEF08A; color: #713F12; }
+        .dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+        .question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px;
+        margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+
+        .question-map::-webkit-scrollbar {display: none; }
+
+        .map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color);
+        border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800;
+        font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+
+        .map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); 
+        transform: scale(1.1); }
+
+        .map-dot.answered-correct {background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+        .map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+        .option-btn { display: flex; align-items: center; width: 100%; padding: 16px;
+        background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px;
+        margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); 
+        font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+
+        .option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); 
+        border-color: var(--theme-dark); }
+
+        .opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); 
+        margin-right: 15px; display: flex; align-items: center; justify-content: center;
+        font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+
+        .option-btn.correct {background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+        .option-btn.correct .opt-circle {background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+
+        .option-btn.wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+        .option-btn.wrong .opt-circle {background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+
+        .option-btn.disabled {pointer-events: none; opacity: 0.7; }
+
+        .feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); 
+        border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+
+        .feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem;
+        margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+
+        .feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; 
+        line-height: 1.5; color: #0F172A; }
+
+        .feedback-item.correct-opt {border-left-color: var(--correct-border); font-weight: 700;
+        color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+
+        .feedback-item.wrong-opt {border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+        .svg-illustration { width: 100%; border-radius: 12px; background: #F8FAFC; border: 2px solid #E2E8F0; margin: 15px 0; display: block; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+
+        .result-card {background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; 
+        box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+
+        .stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+        .percentage-big {font-size: 4.5rem; font-weight: 900; color: var(--theme-dark);
+        line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+
+        .btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; 
+        border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; 
+        cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s;
+        text-transform: uppercase; margin-top: 20px; }
+
+        .btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+
+        .quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); 
+        border-top: 3px solid var(--border-color); padding: 15px 20px; display: none;
+        justify-content: space-between; align-items: center; z-index: 100; }
+
+        .nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); 
+        cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+
+        .btn-next { background-color: var(--theme-dark); color: white; }
+        .btn-prev { background-color: white; color: var(--text-color); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🧠</span> PROMOVER</div>
+        <h1>CIÊNCIAS / 8º ANO</h1>
+        <p class="subtitle">Unid. 3 (Locomotor e Endócrino) & Unid. 4 (Reprodução e Anticoncepcionais)</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📚 Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🎯 Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>Termo não encontrado.</p></div>
+
+        <!-- DIVS TEÓRICAS -->
+        <div class="content-group">
+            <span class="section-badge">Unidade 03</span>
+            <div class="theory-box">
+                <h3>Sistemas Esquelético e Muscular</h3>
+                <p>O <strong>Sistema Esquelético</strong> humano possui cerca de 206 ossos na fase adulta. Ele atua na sustentação do corpo, proteção de órgãos vitais (como o crânio protegendo o cérebro e as costelas protegendo coração e pulmões), produção de células sanguíneas (na medula óssea vermelha) e armazenamento de sais minerais, como o cálcio.</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#334155" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Crânio -->
+                        <circle cx="200" cy="50" r="20" fill="#FFFFFF" />
+                        <path d="M190 65 v10 h20 v-10" fill="#FFFFFF"/>
+                        <!-- Coluna -->
+                        <line x1="200" y1="80" x2="200" y2="180"/>
+                        <!-- Caixa Torácica (Costelas) -->
+                        <path d="M200 95 Q 165 95 165 115 M 200 95 Q 235 95 235 115" />
+                        <path d="M200 115 Q 160 115 160 135 M 200 115 Q 240 115 240 135" />
+                        <path d="M200 135 Q 155 135 155 155 M 200 135 Q 245 135 245 155" />
+                        <!-- Bacia (Pelve) -->
+                        <ellipse cx="200" cy="190" rx="25" ry="12" fill="#FFFFFF"/>
+                        <!-- Pernas -->
+                        <line x1="185" y1="200" x2="170" y2="250" stroke="#10B981" stroke-width="6"/> <!-- Fêmur Destacado -->
+                        <line x1="215" y1="200" x2="230" y2="250" />
+                        <!-- Braços -->
+                        <line x1="200" y1="85" x2="160" y2="120" />
+                        <line x1="200" y1="85" x2="240" y2="120" />
+                        
+                        <!-- Textos -->
+                        <text x="130" y="55" fill="#0F172A" font-size="14" font-family="sans-serif" font-weight="bold" stroke="none" text-anchor="end">Crânio</text>
+                        <text x="120" y="125" fill="#0F172A" font-size="14" font-family="sans-serif" font-weight="bold" stroke="none" text-anchor="end">Caixa Torácica</text>
+                        <text x="130" y="230" fill="#10B981" font-size="16" font-family="sans-serif" font-weight="bold" stroke="none" text-anchor="end">Fêmur</text>
+                        
+                        <!-- Linhas Guia -->
+                        <line x1="135" y1="50" x2="175" y2="50" stroke="#94A3B8" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="125" y1="120" x2="165" y2="120" stroke="#94A3B8" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="135" y1="225" x2="175" y2="225" stroke="#10B981" stroke-width="2" stroke-dasharray="4"/>
+                    </g>
+                </svg>
+                
+                <p>As <strong>articulações</strong> são os pontos de encontro entre os ossos, permitindo (ou não) o movimento. O atrito é evitado pelas cartilagens e pelo líquido sinovial.</p>
+                
+                <div class="highlight-box">
+                    <strong>Atenção:</strong> 🦴 <strong>Ligamentos</strong> unem OSSO a OSSO (garantem estabilidade). 🥩 <strong>Tendões</strong> unem MÚSCULO a OSSO (puxam o osso para gerar movimento)!
+                </div>
+
+                <p>O <strong>Sistema Muscular</strong> é o motor do nosso corpo. Ele funciona em "pares antagônicos" (enquanto um músculo contrai, o seu oposto relaxa). Temos 3 tipos principais:</p>
+                <ul style="padding-left: 20px; margin-top: 10px;">
+                    <li><strong>Estriado Esquelético:</strong> Movimento voluntário (você controla). Estão ligados aos ossos. Ex: Bíceps.</li>
+                    <li><strong>Liso (Não Estriado):</strong> Movimento involuntário e lento. Presente em órgãos internos. Ex: contrações do estômago e bexiga.</li>
+                    <li><strong>Estriado Cardíaco:</strong> Movimento involuntário, rítmico e contínuo. Exclusivo do coração (miocárdio).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">Unidade 03</span>
+            <div class="theory-box">
+                <h3>Sistema Endócrino</h3>
+                <p>O Sistema Endócrino é a nossa rede de comunicação química. Ele é formado por <strong>glândulas</strong> que lançam <strong>hormônios</strong> diretamente na corrente sanguínea. Esses hormônios viajam pelo corpo e dão "ordens" para células específicas funcionarem.</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Silhueta Humana -->
+                    <path d="M200 30 C 175 30 160 55 160 80 C 160 100 175 110 175 120 L 140 145 C 115 160 110 180 110 210 L 110 300 L 290 300 L 290 210 C 290 180 285 160 260 145 L 225 120 C 225 110 240 100 240 80 C 240 55 225 30 200 30 Z" fill="#E2E8F0"/>
+                    
+                    <g font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A">
+                        <!-- Hipófise -->
+                        <circle cx="200" cy="70" r="5" fill="#F59E0B" />
+                        <line x1="205" y1="70" x2="245" y2="70" stroke="#F59E0B" stroke-width="2" stroke-dasharray="3"/>
+                        <rect x="245" y="60" width="85" height="20" rx="4" fill="#FEF3C7" stroke="#F59E0B"/>
+                        <text x="252" y="74" fill="#D97706">Hipófise</text>
+
+                        <!-- Tireoide -->
+                        <path d="M193 110 Q 200 115 207 110 Q 210 120 200 118 Q 190 120 193 110" fill="#EF4444" />
+                        <line x1="193" y1="115" x2="150" y2="115" stroke="#EF4444" stroke-width="2" stroke-dasharray="3"/>
+                        <rect x="75" y="105" width="75" height="20" rx="4" fill="#FEE2E2" stroke="#EF4444"/>
+                        <text x="85" y="119" fill="#B91C1C">Tireoide</text>
+
+                        <!-- Adrenais e Rins -->
+                        <path d="M180 150 C 175 140 190 140 190 150 C 190 160 175 160 180 150" fill="#CBD5E1"/> <!-- Rim -->
+                        <polygon points="180,143 190,143 185,135" fill="#3B82F6"/> <!-- Adrenal -->
+                        <path d="M220 150 C 225 140 210 140 210 150 C 210 160 225 160 220 150" fill="#CBD5E1"/> <!-- Rim -->
+                        <polygon points="210,143 220,143 215,135" fill="#3B82F6"/> <!-- Adrenal -->
+                        
+                        <line x1="180" y1="140" x2="150" y2="140" stroke="#3B82F6" stroke-width="2" stroke-dasharray="3"/>
+                        <rect x="70" y="130" width="80" height="20" rx="4" fill="#DBEAFE" stroke="#3B82F6"/>
+                        <text x="80" y="144" fill="#1D4ED8">Adrenais</text>
+
+                        <!-- Pâncreas -->
+                        <path d="M185 165 Q 210 155 215 165 Q 210 170 185 165" fill="#10B981" />
+                        <line x1="215" y1="165" x2="245" y2="165" stroke="#10B981" stroke-width="2" stroke-dasharray="3"/>
+                        <rect x="245" y="155" width="85" height="20" rx="4" fill="#D1FAE5" stroke="#10B981"/>
+                        <text x="254" y="169" fill="#047857">Pâncreas</text>
+
+                        <!-- Gônadas -->
+                        <circle cx="185" cy="220" r="7" fill="#8B5CF6"/>
+                        <circle cx="215" cy="220" r="7" fill="#8B5CF6"/>
+                        <line x1="222" y1="220" x2="245" y2="220" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="3"/>
+                        <rect x="245" y="210" width="85" height="20" rx="4" fill="#EDE9FE" stroke="#8B5CF6"/>
+                        <text x="257" y="224" fill="#6D28D9">Gônadas</text>
+                    </g>
+                </svg>
+
+                <p><strong>Principais Glândulas e suas Funções:</strong></p>
+                <ul style="padding-left: 20px; margin-bottom: 10px;">
+                    <li>🧠 <strong>Hipófise (Pituítária):</strong> A glândula "mestra". Fica no cérebro e produz hormônios que controlam outras glândulas, além do hormônio do crescimento (GH).</li>
+                    <li>🦋 <strong>Tireoide:</strong> Fica no pescoço. Produz T3 e T4, que controlam o metabolismo (a velocidade que seu corpo gasta energia).</li>
+                    <li>🍃 <strong>Pâncreas:</strong> Controla o açúcar no sangue. A <em>Insulina</em> guarda o açúcar nas células (abaixa a glicose). O <em>Glucagon</em> retira o açúcar das reservas (aumenta a glicose).</li>
+                    <li>⚡ <strong>Suprarrenais (Adrenais):</strong> Ficam acima dos rins. Produzem <em>Adrenalina</em>, o hormônio do "lutar ou fugir", ativado rapidamente no estresse ou perigo.</li>
+                    <li>⚥ <strong>Gônadas:</strong> Testículos (produzem <em>Testosterona</em>) e Ovários (produzem <em>Estrogênio</em> e <em>Progesterona</em>).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">Unidade 04</span>
+            <div class="theory-box">
+                <h3>Reprodução e Adolescência</h3>
+                <p>A <strong>Adolescência</strong> é uma fase de transição psicossocial. A <strong>Puberdade</strong> é a parte física e biológica dessa fase. Ela é desencadeada pelos hormônios sexuais, que amadurecem os órgãos reprodutivos e geram os <strong>caracteres sexuais secundários</strong> (crescimento de pelos, mamas, voz grave, alargamento de quadril ou ombros).</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Fundo do Calendário -->
+                    <rect x="50" y="30" width="300" height="230" rx="12" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="3"/>
+                    
+                    <!-- Cabeçalho do Calendário -->
+                    <path d="M 50 42 Q 50 30 62 30 L 338 30 Q 350 30 350 42 L 350 70 L 50 70 Z" fill="#EF4444"/>
+                    <text x="200" y="55" fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Ciclo Menstrual (28 Dias)</text>
+                    
+                    <!-- Furos do calendário (Design) -->
+                    <rect x="90" y="20" width="8" height="20" rx="4" fill="#CBD5E1" />
+                    <rect x="196" y="20" width="8" height="20" rx="4" fill="#CBD5E1" />
+                    <rect x="302" y="20" width="8" height="20" rx="4" fill="#CBD5E1" />
+
+                    <!-- Dias Menstruação (1 ao 5) -->
+                    <g fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1" rx="6">
+                        <rect x="70" y="90" width="30" height="30" />
+                        <rect x="110" y="90" width="30" height="30" />
+                        <rect x="150" y="90" width="30" height="30" />
+                        <rect x="190" y="90" width="30" height="30" />
+                        <rect x="230" y="90" width="30" height="30" />
+                    </g>
+                    
+                    <!-- Dia 14: Ovulação (Destaque) -->
+                    <rect x="310" y="130" width="30" height="30" rx="15" fill="#FEF08A" stroke="#EAB308" stroke-width="3"/>
+                    
+                    <!-- Números dos Dias -->
+                    <g font-family="sans-serif" font-size="13" fill="#475569" text-anchor="middle" font-weight="bold">
+                        <!-- Linha 1 -->
+                        <text x="85" y="110" fill="#DC2626">1</text>
+                        <text x="125" y="110" fill="#DC2626">2</text>
+                        <text x="165" y="110" fill="#DC2626">3</text>
+                        <text x="205" y="110" fill="#DC2626">4</text>
+                        <text x="245" y="110" fill="#DC2626">5</text>
+                        <text x="285" y="110">6</text>
+                        <text x="325" y="110">7</text>
+                        <!-- Linha 2 -->
+                        <text x="85" y="150">8</text>
+                        <text x="125" y="150">9</text>
+                        <text x="165" y="150">10</text>
+                        <text x="205" y="150">11</text>
+                        <text x="245" y="150">12</text>
+                        <text x="285" y="150">13</text>
+                        <text x="325" y="151" fill="#A16207" font-size="15">14</text>
+                        <!-- Linha 3 -->
+                        <text x="85" y="190">15</text>
+                        <text x="125" y="190">16</text>
+                        <text x="165" y="190">17</text>
+                        <text x="205" y="190">18</text>
+                        <text x="245" y="190">19</text>
+                        <text x="285" y="190">20</text>
+                        <text x="325" y="190">21</text>
+                        <!-- Linha 4 -->
+                        <text x="85" y="230">22</text>
+                        <text x="125" y="230">23</text>
+                        <text x="165" y="230">24</text>
+                        <text x="205" y="230">25</text>
+                        <text x="245" y="230">26</text>
+                        <text x="285" y="230">27</text>
+                        <text x="325" y="230">28</text>
+                    </g>
+                    
+                    <!-- Legenda -->
+                    <circle cx="100" cy="270" r="5" fill="#EF4444" />
+                    <text x="110" y="274" fill="#0F172A" font-family="sans-serif" font-size="12" font-weight="bold">Menstruação</text>
+                    
+                    <circle cx="230" cy="270" r="5" fill="#EAB308" />
+                    <text x="240" y="274" fill="#0F172A" font-family="sans-serif" font-size="12" font-weight="bold">Ovulação (Fértil)</text>
+                </svg>
+
+                <div class="highlight-box warning">
+                    <strong>O Ciclo Menstrual:</strong> Dura, em média, 28 dias.
+                    <br><br>1. <strong>Menstruação:</strong> Descamação e eliminação do endométrio (parede interna do útero) quando não há gravidez.
+                    <br>2. <strong>Ovulação:</strong> Ocorre perto do 14º dia. O ovário libera o óvulo maduro. É o <em>período fértil</em>.
+                    <br>3. <strong>Fecundação:</strong> Encontro do espermatozoide com o óvulo (geralmente ocorre na Tuba Uterina).
+                </div>
+                
+                <p>A gestação humana pode gerar múltiplos bebês. <strong>Gêmeos Monozigóticos</strong> (idênticos) vêm de 1 único óvulo e 1 único espermatozoide que se fundem e depois se dividem em dois embriões. <strong>Gêmeos Dizigóticos</strong> (fraternos) ocorrem quando a mulher libera 2 óvulos e ambos são fecundados por 2 espermatozoides diferentes.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">Unidade 04</span>
+            <div class="theory-box">
+                <h3>Métodos Anticoncepcionais</h3>
+                <p>São métodos utilizados cientificamente para evitar uma gravidez não planejada. Alguns também são fundamentais para prevenir <strong>ISTs (Infecções Sexualmente Transmissíveis)</strong>.</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Camisinha (Método de Barreira) -->
+                    <g transform="translate(40, 40)">
+                        <rect x="0" y="0" width="80" height="80" rx="8" fill="#38BDF8" />
+                        <circle cx="40" cy="40" r="24" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+                        <circle cx="40" cy="40" r="14" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.5"/>
+                        <text x="40" y="105" font-family="sans-serif" font-size="14" font-weight="900" fill="#0F172A" text-anchor="middle">Camisinha</text>
+                        <text x="40" y="120" font-family="sans-serif" font-size="11" font-weight="600" fill="#1D4ED8" text-anchor="middle">Barreira / ISTs</text>
+                    </g>
+
+                    <!-- Pílula (Método Hormonal) -->
+                    <g transform="translate(160, 40)">
+                        <rect x="0" y="0" width="80" height="80" rx="40" fill="#FBCFE8" />
+                        <circle cx="25" cy="25" r="8" fill="#FFFFFF"/>
+                        <circle cx="55" cy="25" r="8" fill="#FFFFFF"/>
+                        <circle cx="25" cy="55" r="8" fill="#FFFFFF"/>
+                        <circle cx="55" cy="55" r="8" fill="#FFFFFF"/>
+                        <circle cx="40" cy="40" r="8" fill="#FFFFFF"/>
+                        <text x="40" y="105" font-family="sans-serif" font-size="14" font-weight="900" fill="#0F172A" text-anchor="middle">Pílula</text>
+                        <text x="40" y="120" font-family="sans-serif" font-size="11" font-weight="600" fill="#BE185D" text-anchor="middle">Hormonal</text>
+                    </g>
+
+                    <!-- DIU (Dispositivo Intrauterino) -->
+                    <g transform="translate(280, 40)">
+                        <rect x="0" y="0" width="80" height="80" rx="40" fill="#FEF3C7" />
+                        <!-- Formato em T -->
+                        <path d="M25 25 L55 25 M40 25 L40 60" stroke="#D97706" stroke-width="5" stroke-linecap="round"/>
+                        <!-- Fiozinho do DIU -->
+                        <path d="M40 60 Q 45 70 35 75" fill="none" stroke="#94A3B8" stroke-width="2"/>
+                        <text x="40" y="105" font-family="sans-serif" font-size="14" font-weight="900" fill="#0F172A" text-anchor="middle">DIU</text>
+                        <text x="40" y="120" font-family="sans-serif" font-size="11" font-weight="600" fill="#B45309" text-anchor="middle">Intrauterino</text>
+                    </g>
+                </svg>
+
+                <ul style="padding-left: 20px;">
+                    <li>🛡️ <strong>Barreira:</strong> Impedem fisicamente o encontro dos gametas. Ex: <strong>Camisinhas</strong> (masculina e feminina). <em>Atenção: São os ÚNICOS métodos que previnem contra ISTs!</em></li>
+                    <li>💊 <strong>Hormonais:</strong> Alteram o ciclo feminino para impedir a ovulação (o ovário não libera o óvulo). Ex: Pílulas anticoncepcionais, injeções, implantes.</li>
+                    <li>⚓ <strong>Dispositivos Intrauterinos (DIU):</strong> Pequenos objetos inseridos no útero por um médico. O de cobre mata ou paralisa os espermatozoides; o hormonal afina o endométrio.</li>
+                    <li>✂️ <strong>Cirúrgicos (Definitivos):</strong> <em>Vasectomia</em> no homem (corta os canais deferentes, o sêmen sai sem espermatozoides). <em>Laqueadura</em> na mulher (corta as tubas uterinas).</li>
+                    <li>📅 <strong>Comportamentais:</strong> Como a "Tabelinha" (evitar atividade sexual no período fértil) ou coito interrompido. <em>Possuem altíssimo risco de falha</em>, pois o ciclo biológico pode variar facilmente por estresse ou emoções.</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">
+            Iniciar Diagnóstico (30 Q) →
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">
+                30 questões rigorosas. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro!
+            </p>
+        </div>
+
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars">★</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const contentGroups = document.querySelectorAll('.content-group');
+    const noResultsMsg = document.getElementById('no-results');
+
+    searchInput.addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let totalVisible = 0;
+
+        contentGroups.forEach(group => {
+            const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if (textContent.includes(term)) {
+                group.style.display = 'flex';
+                totalVisible++;
+            } else {
+                group.style.display = 'none';
+            }
+        });
+        noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+    });
+
+    const questions = [
+        // 10 QUESTÕES FÁCEIS
+        {
+            id: 1, level: "Fácil",
+            text: "Qual é a principal estrutura responsável por conectar um músculo a um osso, permitindo que a contração muscular gere movimento?",
+            options: ["Cartilagem", "Ligamento", "Tendão", "Medula óssea"],
+            correct: 2,
+            explanation: {
+                correct: "Os tendões são cordões fibrosos altamente resistentes que ancoram os músculos aos ossos.",
+                options: ["Erro: Cartilagem amortece o atrito entre os ossos.", "Erro: Ligamentos unem osso com osso.", "Certa: Tendões unem músculo ao osso.", "Erro: A medula óssea produz células sanguíneas."]
+            }
+        },
+        {
+            id: 2, level: "Fácil",
+            text: "Qual das funções abaixo NÃO é uma responsabilidade do sistema esquelético humano?",
+            options: ["Proteção de órgãos vitais como coração e cérebro.", "Armazenamento de minerais como cálcio.", "Produção de células do sangue.", "Produção e liberação de hormônios digestivos."],
+            correct: 3,
+            explanation: {
+                correct: "O esqueleto não tem função digestiva. A liberação de hormônios digestivos é papel de órgãos como o estômago e o pâncreas.",
+                options: ["Erro: O crânio e as costelas protegem os órgãos vitais.", "Erro: Os ossos são grandes reservatórios de cálcio.", "Erro: A medula óssea vermelha produz células do sangue.", "Certa: O sistema esquelético não atua na digestão."]
+            }
+        },
+        {
+            id: 3, level: "Fácil",
+            text: "Qual glândula do sistema endócrino é frequentemente chamada de 'glândula mestra' por controlar o funcionamento de várias outras glândulas?",
+            options: ["Tireoide", "Hipófise (Pituítária)", "Pâncreas", "Suprarrenal"],
+            correct: 1,
+            explanation: {
+                correct: "A hipófise, localizada na base do cérebro, secreta hormônios que ativam a tireoide, gônadas e suprarrenais.",
+                options: ["Erro: A tireoide regula o metabolismo, mas é comandada pela hipófise.", "Certa: A hipófise é a glândula mestra.", "Erro: O pâncreas atua na regulação de açúcar, não comanda outras glândulas.", "Erro: As suprarrenais respondem ao estresse, não comandam o sistema."]
+            }
+        },
+        {
+            id: 4, level: "Fácil",
+            text: "A adrenalina é o hormônio que prepara o corpo para situações de perigo ('luta ou fuga'). Qual glândula a produz?",
+            options: ["Tireoide", "Pâncreas", "Ovários", "Glândulas Suprarrenais (Adrenais)"],
+            correct: 3,
+            explanation: {
+                correct: "As glândulas suprarrenais ficam sobre os rins e liberam adrenalina para aumentar a frequência cardíaca em situações de estresse.",
+                options: ["Erro: A tireoide regula o metabolismo diário.", "Erro: O pâncreas regula a glicose.", "Erro: Os ovários produzem hormônios sexuais femininos.", "Certa: As adrenais produzem adrenalina."]
+            }
+        },
+        {
+            id: 5, level: "Fácil",
+            text: "Qual é a principal função do hormônio insulina, produzido pelo pâncreas?",
+            options: ["Aumentar o nível de cálcio nos ossos.", "Reduzir o nível de glicose (açúcar) no sangue.", "Acelerar os batimentos cardíacos.", "Estimular o crescimento muscular excessivo."],
+            correct: 1,
+            explanation: {
+                correct: "A insulina funciona como uma 'chave' que permite a entrada do açúcar que está no sangue para dentro das células, reduzindo a glicemia.",
+                options: ["Erro: A regulação do cálcio é feita pela calcitonina e paratormônio.", "Certa: A insulina abaixa a glicose sanguínea.", "Erro: O aumento dos batimentos é função da adrenalina.", "Erro: Hormônio do crescimento (GH) cuida disso, não a insulina."]
+            }
+        },
+        {
+            id: 6, level: "Fácil",
+            text: "Durante a puberdade, os testículos aumentam a produção de um hormônio responsável pelo desenvolvimento de caracteres sexuais secundários masculinos (voz grave, pelos). Que hormônio é esse?",
+            options: ["Progesterona", "Estrogênio", "Testosterona", "Insulina"],
+            correct: 2,
+            explanation: {
+                correct: "A testosterona é o principal hormônio sexual masculino, responsável por induzir as mudanças corporais da puberdade nos meninos.",
+                options: ["Erro: Progesterona prepara o útero feminino para gravidez.", "Erro: Estrogênio é o principal hormônio sexual feminino.", "Certa: A testosterona define os caracteres secundários masculinos.", "Erro: Insulina regula açúcar."]
+            }
+        },
+        {
+            id: 7, level: "Fácil",
+            text: "O que é a menstruação no ciclo reprodutivo feminino?",
+            options: ["A liberação de um óvulo maduro do ovário.", "A descamação e eliminação do revestimento do útero (endométrio) quando não há gravidez.", "O encontro do óvulo com o espermatozoide.", "A produção de leite pelas glândulas mamárias."],
+            correct: 1,
+            explanation: {
+                correct: "Se o óvulo não é fecundado, o corpo entende que não haverá gravidez. O endométrio, que havia engrossado para receber o embrião, descama e sangra.",
+                options: ["Erro: A liberação do óvulo é a ovulação.", "Certa: Menstruação é a descamação do endométrio.", "Erro: O encontro dos gametas é a fecundação.", "Erro: A produção de leite é controlada pela prolactina após a gestação."]
+            }
+        },
+        {
+            id: 8, level: "Fácil",
+            text: "Entre os métodos anticoncepcionais abaixo, qual é o ÚNICO que também oferece proteção contra Infecções Sexualmente Transmissíveis (ISTs)?",
+            options: ["Pílula anticoncepcional", "Dispositivo Intrauterino (DIU)", "Camisinha (preservativo)", "Tabelinha"],
+            correct: 2,
+            explanation: {
+                correct: "A camisinha é um método de barreira física. Ela impede a troca de fluidos genitais, bloqueando tanto os espermatozoides quanto os vírus/bactérias.",
+                options: ["Erro: A pílula atua apenas nos hormônios, não bloqueia infecções.", "Erro: O DIU fica dentro do útero e não impede o contato com patógenos vaginais.", "Certa: O preservativo bloqueia o contato físico e os fluidos.", "Erro: A tabelinha é comportamental e não barra vírus."]
+            }
+        },
+        {
+            id: 9, level: "Fácil",
+            text: "Os músculos que controlam os batimentos do coração e o movimento do estômago na digestão são classificados, respectivamente, como:",
+            options: ["Cardíaco e Liso (ambos involuntários).", "Esquelético e Liso (ambos voluntários).", "Liso e Cardíaco (ambos voluntários).", "Cardíaco e Esquelético (ambos involuntários)."],
+            correct: 0,
+            explanation: {
+                correct: "Nós não controlamos conscientemente o coração nem o estômago. O músculo do coração é o estriado cardíaco e o do estômago é o liso.",
+                options: ["Certa: Cardíaco (coração) e Liso (órgãos) são involuntários.", "Erro: Músculos voluntários são apenas os esqueléticos.", "Erro: Nenhum dos dois é voluntário.", "Erro: O músculo esquelético é de controle voluntário."]
+            }
+        },
+        {
+            id: 10, level: "Fácil",
+            text: "Qual é o objetivo principal da utilização de métodos anticoncepcionais?",
+            options: ["Aumentar a fertilidade feminina e masculina.", "Tratar infecções no sistema reprodutor.", "Prevenir uma gravidez não planejada.", "Acelerar a chegada da puberdade."],
+            correct: 2,
+            explanation: {
+                correct: "Os métodos contraceptivos (ou anticoncepcionais) são desenhados para impedir que a fecundação ocorra ou que o embrião se fixe no útero.",
+                options: ["Erro: Eles fazem o oposto, evitam a fecundação.", "Erro: Com exceção da camisinha que barra ISTs, anticoncepcionais não tratam doenças.", "Certa: O foco principal é evitar a gestação.", "Erro: Eles não interferem no início da puberdade."]
+            }
+        },
+
+        // 10 QUESTÕES MÉDIAS
+        {
+            id: 11, level: "Médio",
+            text: "O tecido ósseo não é morto; ele é vivo e dinâmico. Onde ocorre a produção contínua de glóbulos vermelhos, glóbulos brancos e plaquetas?",
+            options: ["Na cartilagem hialina.", "No periósteo (membrana que reveste o osso).", "Na medula óssea amarela (tutano).", "Na medula óssea vermelha."],
+            correct: 3,
+            explanation: {
+                correct: "A medula óssea vermelha, encontrada nas extremidades dos ossos longos e nos ossos chatos, é o tecido hematopoiético (formador de sangue).",
+                options: ["Erro: Cartilagem atua no atrito e amortecimento.", "Erro: Periósteo ajuda no crescimento em espessura e reparo.", "Erro: Medula amarela armazena gordura.", "Certa: A medula vermelha produz as células do sangue."]
+            }
+        },
+        {
+            id: 12, level: "Médio",
+            text: "Um atleta sofreu uma lesão grave onde o tecido que une o osso da sua coxa (fêmur) ao osso da perna (tíbia) no joelho foi rompido. Que estrutura foi danificada?",
+            options: ["Tendão", "Ligamento", "Bursa", "Músculo Liso"],
+            correct: 1,
+            explanation: {
+                correct: "A ligação entre dois ossos em uma articulação é feita por ligamentos. Eles dão estabilidade ao joelho.",
+                options: ["Erro: Tendões ligam o músculo ao osso.", "Certa: Ligamentos unem um osso a outro.", "Erro: Bursa é uma bolsa de líquido que evita atrito.", "Erro: Músculo liso está nos órgãos internos."]
+            }
+        },
+        {
+            id: 13, level: "Médio",
+            text: "Após um exercício físico intenso, pode ocorrer sensação de queimação e fadiga muscular. Isso acontece devido à falta de oxigênio no músculo, que passa a produzir energia gerando qual substância?",
+            options: ["Adrenalina", "Glicogênio", "Ácido Lático", "Insulina"],
+            correct: 2,
+            explanation: {
+                correct: "Na falta de oxigênio suficiente, o músculo faz fermentação lática para gerar energia emergencial. O acúmulo de ácido lático causa a queimação.",
+                options: ["Erro: Adrenalina é hormônio do estresse.", "Erro: Glicogênio é a reserva de energia, não o resíduo da fadiga.", "Certa: O ácido lático é o subproduto metabólico da falta de oxigênio.", "Erro: Insulina regula açúcar."]
+            }
+        },
+        {
+            id: 14, level: "Médio",
+            text: "O pâncreas produz dois hormônios de ações opostas (antagônicas) para manter o nível de açúcar no sangue equilibrado. O Glucagon, diferentemente da Insulina, age para:",
+            options: ["Aumentar a glicose no sangue, retirando o açúcar armazenado no fígado.", "Diminuir a glicose no sangue, forçando as células a usá-la.", "Destruir as moléculas de açúcar na digestão.", "Paralisar a digestão de carboidratos no estômago."],
+            correct: 0,
+            explanation: {
+                correct: "Quando você está de jejum, a glicose cai. O glucagon entra em ação e avisa o fígado para liberar o açúcar reservado, subindo a glicemia.",
+                options: ["Certa: O glucagon aumenta a glicose no sangue.", "Erro: Essa é a exata função da insulina.", "Erro: Glucagon não destrói açúcar, ele o mobiliza.", "Erro: Ele atua no sangue/fígado, não na digestão do estômago."]
+            }
+        },
+        {
+            id: 15, level: "Médio",
+            text: "Fadiga extrema, ganho de peso inexplicável e sensação de frio constante são sintomas de que a tireoide está produzindo menos hormônios (T3 e T4) do que deveria. Qual o nome dessa condição?",
+            options: ["Hipertireoidismo", "Diabetes Mellitus", "Hipotireoidismo", "Nanismo Hipofisário"],
+            correct: 2,
+            explanation: {
+                correct: "O prefixo 'hipo' significa 'pouco' ou 'abaixo'. O Hipotireoidismo deixa o metabolismo corporal muito lento.",
+                options: ["Erro: Hipertireoidismo é o excesso de hormônio (acelera tudo, causa perda de peso).", "Erro: Diabetes tem relação com a insulina do pâncreas.", "Certa: A baixa atividade da tireoide é o Hipotireoidismo.", "Erro: Nanismo é falta de hormônio do crescimento."]
+            }
+        },
+        {
+            id: 16, level: "Médio",
+            text: "No sistema reprodutor feminino, em qual órgão ocorre, na imensa maioria das vezes, a fecundação (o encontro do óvulo com o espermatozoide)?",
+            options: ["No Útero", "Na Vagina", "No Ovário", "Nas Tubas Uterinas (Trompas de Falópio)"],
+            correct: 3,
+            explanation: {
+                correct: "Após a ovulação, o óvulo fica na tuba uterina aguardando. Se houver relação sexual, o espermatozoide nada até lá para fecundá-lo.",
+                options: ["Erro: O útero é onde o embrião já fecundado vai se fixar para crescer.", "Erro: A vagina é o canal de entrada, mas a fecundação ocorre mais acima.", "Erro: O ovário apenas libera o óvulo, não o guarda para a fecundação.", "Certa: A fecundação ocorre no terço distal da tuba uterina."]
+            }
+        },
+        {
+            id: 17, level: "Médio",
+            text: "Durante a puberdade feminina, sob a ação do estrogênio, ocorrem mudanças. Qual das alternativas NÃO representa um caráter sexual secundário feminino típico?",
+            options: ["Desenvolvimento das mamas.", "Alargamento do quadril.", "Crescimento acelerado do pomo de adão e engrossamento da voz.", "Aparecimento de pelos pubianos e nas axilas."],
+            correct: 2,
+            explanation: {
+                correct: "O desenvolvimento pronunciado do 'pomo de adão' (cartilagem tireóidea) e o engrossamento dramático da voz são caracteres masculinos, regidos pela testosterona.",
+                options: ["Erro: O crescimento das mamas é um sinal clássico do estrogênio.", "Erro: O quadril alarga para preparar o corpo para uma futura gestação.", "Certa: Alteração drástica da voz é traço masculino.", "Erro: O crescimento de pelos ocorre em ambos os sexos."]
+            }
+        },
+        {
+            id: 18, level: "Médio",
+            text: "Como funciona a Pílula Anticoncepcional comum (composta por hormônios)?",
+            options: ["Ela cria uma barreira no colo do útero que mata os espermatozoides.", "Ela inibe a ovulação, enganando a hipófise para não liberar o óvulo.", "Ela altera o formato do espermatozoide dentro do corpo feminino.", "Ela provoca a descamação imediata do útero logo após a relação sexual."],
+            correct: 1,
+            explanation: {
+                correct: "Os hormônios da pílula (estrogênio/progesterona) fazem um 'feedback negativo' no cérebro. A hipófise acha que a mulher já ovulou e bloqueia o ciclo.",
+                options: ["Erro: Barreiras mecânicas/químicas são camisinhas e espermicidas.", "Certa: A pílula suspende a ovulação.", "Erro: A pílula não ataca fisicamente o espermatozoide.", "Erro: Ela mantém o endométrio estável, não causa descamação imediata."]
+            }
+        },
+        {
+            id: 19, level: "Médio",
+            text: "A Vasectomia é um método contraceptivo cirúrgico para homens. O que a cirurgia faz exatamente?",
+            options: ["Retira os testículos, parando a produção de testosterona.", "Corta e bloqueia os canais deferentes, impedindo os espermatozoides de chegarem ao sêmen.", "Impede o homem de ter ereções, evitando a relação sexual.", "Aumenta a acidez da urina para matar os espermatozoides."],
+            correct: 1,
+            explanation: {
+                correct: "A vasectomia corta a 'estrada' (ducto deferente) dos espermatozoides. O homem continua ejaculando líquido seminal e prostático, mas sem espermatozoides.",
+                options: ["Erro: A remoção de testículos é castração. A vasectomia não afeta a testosterona.", "Certa: Interrompe apenas a passagem do espermatozoide.", "Erro: A cirurgia não afeta a potência sexual ou ereção.", "Erro: O pH da urina não tem relação com o procedimento."]
+            }
+        },
+        {
+            id: 20, level: "Médio",
+            text: "A cartilagem epifisária (ou disco epifisário) é uma estrutura muito importante no sistema esquelético de adolescentes. Qual é a sua função?",
+            options: ["Permitir que o osso cresça em comprimento.", "Produzir o líquido sinovial das articulações.", "Ligar os ossos do crânio do recém-nascido (moleira).", "Destruir o osso velho para renovação celular."],
+            correct: 0,
+            explanation: {
+                correct: "O disco epifisário fica nas extremidades dos ossos longos. Enquanto for de cartilagem, o osso cresce. Ao final da puberdade, ele calcifica e o crescimento para.",
+                options: ["Certa: É a área responsável pelo crescimento ósseo longitudinal.", "Erro: Líquido sinovial é produzido pela membrana sinovial nas articulações.", "Erro: As moleiras são fontanelas, diferentes das epífises de crescimento.", "Erro: Quem destrói osso velho são os osteoclastos."]
+            }
+        },
+
+        // 10 QUESTÕES DIFÍCEIS
+        {
+            id: 21, level: "Difícil",
+            text: "O tecido ósseo sofre constante remodelação. Quais são as células responsáveis por 'comer/destruir' a matriz óssea velha e quais produzem a matriz óssea nova, respectivamente?",
+            options: ["Osteócitos e Condrócitos", "Osteoblastos e Osteoclastos", "Osteoclastos e Osteoblastos", "Adipócitos e Osteoblastos"],
+            correct: 2,
+            explanation: {
+                correct: "Osteoclastos (C de 'comer') reabsorvem o osso velho. Osteoblastos (B de 'build'/construir) depositam cálcio e colágeno formando osso novo.",
+                options: ["Erro: Condrócitos formam cartilagem.", "Erro: A ordem está invertida. Blasto constrói, Clasto destrói.", "Certa: Osteoclastos (destroem) e Osteoblastos (constroem).", "Erro: Adipócitos armazenam gordura."]
+            }
+        },
+        {
+            id: 22, level: "Difícil",
+            text: "A unidade funcional e estrutural da contração da fibra muscular esquelética, delimitada pelas linhas Z, é chamada de:",
+            options: ["Sarcômero", "Axônio", "Fáscia", "Perimísio"],
+            correct: 0,
+            explanation: {
+                correct: "O sarcômero é o segmento onde filamentos de actina e miosina deslizam uns sobre os outros, encurtando o músculo durante a contração.",
+                options: ["Certa: O sarcômero é a base microscópica da contração.", "Erro: Axônio é a cauda do neurônio.", "Erro: Fáscia é o tecido conjuntivo que envolve o músculo inteiro.", "Erro: Perimísio envolve feixes de fibras, não a unidade contrátil."]
+            }
+        },
+        {
+            id: 23, level: "Difícil",
+            text: "Mesmo quando estamos em repouso parado, nossos músculos esqueléticos mantêm um estado de contração leve e contínua que nos ajuda a manter a postura. Como se chama este fenômeno?",
+            options: ["Fadiga muscular", "Contração tetânica", "Tônus muscular", "Hipertrofia"],
+            correct: 2,
+            explanation: {
+                correct: "O tônus muscular é essa tensão basal involuntária do músculo voluntário, controlada pelo sistema nervoso para manter a firmeza do corpo e a postura.",
+                options: ["Erro: Fadiga é a exaustão do músculo por falta de ATP.", "Erro: Tétano fisiológico é a contração máxima prolongada (cãibra).", "Certa: Tônus muscular é a tensão de repouso.", "Erro: Hipertrofia é o ganho de massa muscular."]
+            }
+        },
+        {
+            id: 24, level: "Difícil",
+            text: "Qual é a via correta de comunicação hormonal que estimula os testículos a produzirem testosterona?",
+            options: ["A Tireoide libera TSH, que age na suprarrenal, que manda sinal aos testículos.", "O Pâncreas libera insulina, que estimula o hipotálamo a ativar os testículos.", "A medula espinhal envia impulsos elétricos diretamente para o escroto.", "O Hipotálamo estimula a Hipófise, que libera os hormônios FSH e LH, que agem nos testículos."],
+            correct: 3,
+            explanation: {
+                correct: "O eixo endócrino correto é sempre em cascata: o Hipotálamo (chefe) avisa a Hipófise (gerente), que lança gonadotrofinas (LH/FSH) para estimular as Gônadas (operárias).",
+                options: ["Erro: O TSH estimula a tireoide, não as gônadas.", "Erro: A insulina atua no metabolismo da glicose, não no eixo reprodutivo.", "Erro: A sinalização principal é química (hormonal), não apenas elétrica.", "Certa: Eixo Hipotálamo -> Hipófise -> Testículos."]
+            }
+        },
+        {
+            id: 25, level: "Difícil",
+            text: "Qual é a diferença biológica fundamental entre o Diabetes Tipo 1 e o Diabetes Tipo 2?",
+            options: ["No Tipo 1 o pâncreas não produz insulina (doença autoimune). No Tipo 2, o corpo produz insulina, mas as células criam resistência a ela.", "O Tipo 1 é causado pelo excesso de consumo de açúcar, o Tipo 2 é exclusivamente genético de nascença.", "O Tipo 1 afeta apenas idosos, enquanto o Tipo 2 afeta apenas crianças.", "No Tipo 1 falta Glucagon. No Tipo 2 falta Insulina."],
+            correct: 0,
+            explanation: {
+                correct: "O Tipo 1 ocorre quando o corpo atrófia o pâncreas jovem (não tem insulina). O Tipo 2 ocorre pelo desgaste/obesidade (tem insulina, mas as células a ignoram, causando resistência).",
+                options: ["Certa: Tipo 1 = Falha de produção. Tipo 2 = Resistência celular.", "Erro: O Tipo 1 é autoimune/genético, o Tipo 2 é muito ligado ao estilo de vida.", "Erro: Tipo 1 é mais comum em jovens, Tipo 2 em adultos/idosos.", "Erro: Ambos envolvem problemas na via da insulina."]
+            }
+        },
+        {
+            id: 26, level: "Difícil",
+            text: "A maioria dos hormônios é regulada por um mecanismo de 'Feedback Negativo' (retroalimentação negativa). O que isso significa na prática?",
+            options: ["O hormônio sempre causa efeitos destrutivos no corpo se atingir os ossos.", "O aumento da concentração de um hormônio no sangue inibe a glândula que o estimulou a ser produzido.", "Quanto mais hormônio tem no sangue, mais a glândula produz, num ciclo infinito.", "Significa que o corpo sempre rejeita hormônios artificiais de pílulas."],
+            correct: 1,
+            explanation: {
+                correct: "Como um termostato de ar condicionado: se o nível de hormônio (ex: testosterona) chega ao ideal, ele manda um 'sinal de pare' para a hipófise não exagerar na dose.",
+                options: ["Erro: Hormônios têm funções naturais, não destrutivas por padrão.", "Certa: Alta concentração inibe a própria produção para gerar equilíbrio (homeostase).", "Erro: Isso descreve o feedback positivo, que é raro (ex: ocitocina no parto).", "Erro: O feedback atua com hormônios endógenos (naturais) também."]
+            }
+        },
+        {
+            id: 27, level: "Difícil",
+            text: "No ciclo menstrual médio de 28 dias, o pico máximo do hormônio LH (Hormônio Luteinizante) causa qual evento fisiológico crítico?",
+            options: ["O início do sangramento menstrual no dia 1.", "A descamação da parede das tubas uterinas.", "A ovulação, rompendo o folículo para liberar o óvulo ao redor do 14º dia.", "A atrofia irreversível do ovário na menopausa."],
+            correct: 2,
+            explanation: {
+                correct: "O LH sofre um aumento repentino (pico) no meio do ciclo. É esse choque hormonal que faz o folículo estourar e liberar o óvulo (ovulação).",
+                options: ["Erro: O sangramento ocorre pela queda da progesterona.", "Erro: A tuba não descama, quem descama é o útero (endométrio).", "Certa: O pico de LH é o gatilho da ovulação.", "Erro: A menopausa é a falência ovariana ao longo dos anos."]
+            }
+        },
+        {
+            id: 28, level: "Difícil",
+            text: "Como se formam os gêmeos Monozigóticos (idênticos)?",
+            options: ["A mulher libera dois óvulos e ambos são fecundados pelo mesmo espermatozoide.", "Um óvulo é fecundado por dois espermatozoides ao mesmo tempo.", "Um único óvulo é fecundado por um espermatozoide e, no início da divisão celular, o embrião se divide em dois completos.", "Eles se formam exclusivamente quando o homem possui testosterona em excesso."],
+            correct: 2,
+            explanation: {
+                correct: "Mono (um) + Zigoto. Um único espermatozoide fecunda um único óvulo. O embrião resultante sofre uma divisão atípica, gerando dois seres com o mesmo DNA.",
+                options: ["Erro: É impossível um espermatozoide fecundar dois óvulos.", "Erro: Fecundação dupla (polispermia) é inviável e gera aborto na espécie humana.", "Certa: Um embrião único se cliva (divide) precocemente formando dois.", "Erro: A formação de gêmeos não depende dos níveis de testosterona."]
+            }
+        },
+        {
+            id: 29, level: "Difícil",
+            text: "A Pílula do Dia Seguinte é considerada um método de contracepção de emergência. Por que ela NÃO deve ser usada como método anticoncepcional de rotina?",
+            options: ["Porque ela bloqueia as trompas de forma definitiva após 3 usos.", "Porque ela é abortiva, destruindo o feto de meses.", "Porque possui uma dose hormonal altíssima, que desregula o ciclo menstrual e tem muitos efeitos colaterais.", "Porque ela só funciona em mulheres que já tiveram filhos."],
+            correct: 2,
+            explanation: {
+                correct: "É uma 'bomba' de hormônios projetada para atrasar a ovulação no desespero. O uso frequente causa falhas no ciclo, hemorragias e perda de eficácia.",
+                options: ["Erro: Ela não causa bloqueio cirúrgico das trompas.", "Erro: Ela não é abortiva; ela impede a ovulação ou a fixação antes do início da gravidez.", "Certa: A alta carga hormonal traz graves efeitos adversos e bagunça o corpo.", "Erro: Pode ser usada independentemente de gestações anteriores."]
+            }
+        },
+        {
+            id: 30, level: "Difícil",
+            text: "O método comportamental da 'Tabelinha' consiste em evitar relações sexuais no período fértil. Por que os médicos alertam que ele possui um altíssimo índice de falha?",
+            options: ["Porque o espermatozoide humano só vive por 1 hora dentro da mulher.", "Porque o ciclo menstrual de muitas mulheres é irregular, sendo quase impossível prever o dia exato da ovulação.", "Porque a tabelinha exige que a mulher tome hormônios perigosos sem supervisão.", "Porque o útero anula os efeitos da tabelinha produzindo mais óvulos no estresse."],
+            correct: 1,
+            explanation: {
+                correct: "Fatores como estresse, dieta e sono podem atrasar ou adiantar a ovulação. Além disso, o espermatozoide sobrevive até 5 dias no corpo feminino esperando o óvulo.",
+                options: ["Erro: O espermatozoide vive de 3 a 5 dias no útero/tubas.", "Certa: O ciclo biológico raramente é um relógio matematicamente exato.", "Erro: Tabelinha é um método natural, sem ingestão de nenhum hormônio.", "Erro: O útero não produz óvulos (quem produz é o ovário) e não age 'por estresse' dessa forma."]
+            }
+        }
+    ];
+
+    // --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+    const storageKey = 'promover_quiz_Ciencias_8ano_Sistemas';
+    let currentQuestion = 0;
+    let savedAnswers = localStorage.getItem(storageKey);
+    let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+    function setMode(mode) {
+        const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+        views.forEach(v => document.getElementById(v).style.display = 'none');
+        document.getElementById('quizFooter').style.display = 'none';
+
+        if(mode === 'explanation') {
+            document.getElementById('viewExplanation').style.display = 'flex';
+            document.getElementById('btnExp').classList.add('active');
+            document.getElementById('btnPrac').classList.remove('active');
+        } else if (mode === 'practice') {
+            document.getElementById('viewPractice').style.display = 'block';
+            document.getElementById('quizFooter').style.display = 'flex';
+            document.getElementById('btnExp').classList.remove('active');
+            document.getElementById('btnPrac').classList.add('active');
+            renderQuestion();
+            renderMap();
+        } else if (mode === 'result') {
+            document.getElementById('viewResult').style.display = 'block';
+            document.getElementById('quizFooter').style.display = 'none';
+            window.scrollTo(0,0);
+        }
+    }
+
+    function renderQuestion() {
+        if(questions.length === 0) return;
+        const q = questions[currentQuestion];
+        const container = document.getElementById('quizContainer');
+        const letters = ['A', 'B', 'C', 'D'];
+        const ans = userAnswers[currentQuestion];
+
+        let badgeClass = '';
+        if(q.level === 'Fácil') badgeClass = 'dif-facil';
+        else if(q.level === 'Médio') badgeClass = 'dif-medio';
+        else badgeClass = 'dif-dificil';
+
+        container.innerHTML = `
+            <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+                <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+                <div style="margin-bottom: 20px;">
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+                    <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+                </div>
+                <div class="options-list">
+                    ${q.options.map((opt, i) => {
+                        let cls = '';
+                        if (ans !== null) {
+                            if (i === q.correct) cls = 'correct';
+                            else if (i === ans) cls = 'wrong';
+                            else cls = 'disabled';
+                        }
+                        return `
+                        <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                            <div class="opt-circle">${letters[i]}</div>
+                            <div>${opt}</div>
+                        </button>`
+                    }).join('')}
+                </div>
+                ${ans !== null ? `
+                <div class="feedback-box">
+                    <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                        ${ans === q.correct ? '☑ Raciocínio Aprovado!' : '☒ Ops! Falha Detectada!'}
+                    </div>
+                    <div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+                    <div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                        ${q.explanation.correct}
+                    </div>
+                    <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                        <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+                        ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        updateNav();
+    }
+
+    function handleAnswer(idx) {
+        if (userAnswers[currentQuestion] !== null) return;
+        userAnswers[currentQuestion] = idx;
+        localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+
+        if (idx === questions[currentQuestion].correct) {
+            const duration = 1500;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6}, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        } else {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.classList.remove('shake-effect');
+            void quizContainer.offsetWidth;
+            quizContainer.classList.add('shake-effect');
+            setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+        }
+        renderQuestion();
+        renderMap();
+    }
+
+    function renderMap() {
+        if(questions.length === 0) return;
+        const map = document.getElementById('qMap');
+        map.innerHTML = questions.map((q, i) => {
+            let cls = 'map-dot';
+            if (i === currentQuestion) cls += ' active';
+            if (userAnswers[i] !== null) {
+                cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+            }
+            return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+        }).join('');
+
+        setTimeout(() => {
+            const activeDot = map.querySelector('.map-dot.active');
+            if (activeDot) {
+                activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+            }
+        }, 50);
+    }
+
+    function goTo(i) {
+        if (window.confetti) confetti.reset();
+        currentQuestion = i;
+        renderQuestion();
+        renderMap();
+    }
+
+    function changeQuestion(d) {
+        let n = currentQuestion + d;
+        if (n >= 0 && n < questions.length) goTo(n);
+    }
+
+    function updateNav() {
+        document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+        const next = document.getElementById('btnNext');
+
+        if (currentQuestion === questions.length - 1) {
+            next.textContent = "Finalizar Diagnóstico";
+            next.onclick = finish;
+        } else {
+            next.textContent = "Avançar";
+            next.onclick = () => changeQuestion(1);
+        }
+    }
+
+    function finish() {
+        let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+        let percent = Math.round((correct/questions.length) * 100);
+
+        if (window.confetti) confetti.reset();
+
+        document.getElementById('finalPercent').textContent = percent + "%";
+        document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+        document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+
+        let summary = '<div style="text-align:left; margin-top:20px;">';
+
+        if (percent < 80) {
+            summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+                <strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Revise a teoria com rigor antes de tentar novamente.
+            </div>`;
+            document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Limpar Histórico e Refazer Prova</button>';
+        } else {
+            summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+                <strong>🏆 Excelente Desempenho!</strong> Você demonstrou uma base sólida, clínica e exata sobre os conceitos avaliados. A sua aprovação técnica está garantida neste módulo.
+            </div>`;
+            document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Refazer Prova (Zerar Histórico)</button>';
+        }
+
+        if (correct < questions.length) {
+            summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+            questions.forEach((q, i) => {
+                if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                    summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                        <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                        <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+                        <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                    </div>`;
+                }
+            });
+        }
+        summary += '</div>';
+
+        document.getElementById('review-container').innerHTML = summary;
+        setMode('result');
+    }
+
+    function reset() {
+        localStorage.removeItem(storageKey);
+        userAnswers = new Array(questions.length).fill(null);
+        currentQuestion = 0;
+        setMode('practice');
+    }
+
+    // Inicialização da interface
+    setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
