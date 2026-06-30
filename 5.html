@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Química: Misturas e Separação - Promover</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            /* Cores adaptadas para Química (Azul Laboratório/Laranja) */
+            --bg-color: #F8FAFC;
+            --text-color: #0F172A;
+            --border-color: #1E3A8A;
+            --white: #FFFFFF;
+            --theme-light: #DBEAFE;
+            --theme-medium: #3B82F6;
+            --theme-dark: #1D4ED8;
+            --theme-contrast: #2563EB;
+            --theme-accent: #60A5FA;
+            --theme-text-active: #FFFFFF;
+
+            /* NÃO ALTERAR AS CORES ABAIXO */
+            --correct-bg: #D1FAE5;
+            --correct-border: #059669;
+            --wrong-bg: #FFE4E6;
+            --wrong-border: #BE123C;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; padding: 20px; padding-bottom: 100px;
+            background-image: linear-gradient(var(--theme-light) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+            100% { transform: translateX(0); }
+        }
+        .shake-effect { animation: shake 0.4s ease-in-out; }
+
+        @keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.15); color: var(--theme-contrast); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); color: var(--theme-contrast); }
+            100% { transform: scale(1); }
+        }
+
+        .logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center;
+        flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+
+        .css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; 
+        letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px;
+        border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); 
+        text-align: center; margin-bottom: 15px; }
+
+        h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase;
+        letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+
+        .subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+
+        .container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+        .toggle-container { background-color: var(--white); border: 2px solid var(--border-color);
+        border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+
+        .toggle-btn {flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px;
+        font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark);
+        cursor: pointer; transition: all 0.3s ease; }
+
+        .toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active);
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+
+        .search-container { position: relative; width: 100%; }
+
+        .search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); 
+        border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; 
+        font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); 
+        outline: none; transition: all 0.2s ease; }
+
+        .search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); 
+        border-color: var(--theme-dark); }
+
+        .search-icon {position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+        font-size: 1.2rem; opacity: 0.7; }
+
+        #no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+        .content-group {display: flex; flex-direction: column; gap: 12px; }
+
+        .section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); 
+        color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px;
+        border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; 
+        align-self: flex-start; margin-bottom: 5px; }
+
+        .theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px;
+        background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); 
+        font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+
+        .theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px;
+        background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+        
+        .theory-box h3 {font-size: 1.2rem; font-weight: 900; color: var(--theme-dark);
+        margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px;
+        display: flex; align-items: center; gap: 8px;}
+
+        .visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; 
+        padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+        gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+
+        .highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast);
+        padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+
+        .highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+        .difficulty-badge {display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; 
+        font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); 
+        box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+
+        .dif-facil {background: #D1FAE5; color: #065F46; }
+        .dif-medio { background: #FEF08A; color: #713F12; }
+        .dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+        .question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px;
+        margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+
+        .question-map::-webkit-scrollbar {display: none; }
+
+        .map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color);
+        border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800;
+        font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+
+        .map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); 
+        transform: scale(1.1); }
+
+        .map-dot.answered-correct {background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+        .map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+        .option-btn { display: flex; align-items: center; width: 100%; padding: 16px;
+        background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px;
+        margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); 
+        font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+
+        .option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); 
+        border-color: var(--theme-dark); }
+
+        .opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); 
+        margin-right: 15px; display: flex; align-items: center; justify-content: center;
+        font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+
+        .option-btn.correct {background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+        .option-btn.correct .opt-circle {background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+
+        .option-btn.wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+        .option-btn.wrong .opt-circle {background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+
+        .option-btn.disabled {pointer-events: none; opacity: 0.7; }
+
+        .feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); 
+        border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+
+        .feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem;
+        margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+
+        .feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; 
+        line-height: 1.5; color: #0F172A; }
+
+        .feedback-item.correct-opt {border-left-color: var(--correct-border); font-weight: 700;
+        color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+
+        .feedback-item.wrong-opt {border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+        .svg-illustration { width: 100%; border-radius: 12px; background: #FFFFFF; border: 2px solid #E2E8F0; margin: 15px 0; display: block; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+
+        .result-card {background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; 
+        box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+
+        .stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+        .percentage-big {font-size: 4.5rem; font-weight: 900; color: var(--theme-dark);
+        line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+
+        .btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; 
+        border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; 
+        cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s;
+        text-transform: uppercase; margin-top: 20px; }
+
+        .btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+
+        .quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); 
+        border-top: 3px solid var(--border-color); padding: 15px 20px; display: none;
+        justify-content: space-between; align-items: center; z-index: 100; }
+
+        .nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); 
+        cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+
+        .btn-next { background-color: var(--theme-dark); color: white; }
+        .btn-prev { background-color: white; color: var(--text-color); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🧪</span> PROMOVER</div>
+        <h1>QUÍMICA / 8º ANO</h1>
+        <p class="subtitle">Cap. 3 (Substâncias) & Cap. 4 (Separação de Misturas)</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📚 Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🎯 Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>Termo não encontrado.</p></div>
+
+        <!-- DIVS TEÓRICAS -->
+        <div class="content-group">
+            <span class="section-badge">Capítulo 03</span>
+            <div class="theory-box">
+                <h3>Substâncias e Suas Classificações</h3>
+                <p>Matéria é tudo aquilo que tem massa e ocupa lugar no espaço. A matéria é formada por moléculas, que são formadas por átomos. Uma <strong>Substância Pura</strong> possui composição química fixa e propriedades constantes (como Ponto de Fusão e Ebulição).</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Substância Simples vs Composta -->
+                    <!-- Simples O2 -->
+                    <g transform="translate(80, 80)">
+                        <rect x="-40" y="-40" width="80" height="80" rx="10" fill="#E0F2FE" stroke="#3B82F6" stroke-width="2"/>
+                        <circle cx="-10" cy="-5" r="15" fill="#EF4444" />
+                        <circle cx="10" cy="5" r="15" fill="#EF4444" />
+                        <text x="0" y="60" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Gás Oxigênio (O₂)</text>
+                        <text x="0" y="75" font-family="sans-serif" font-size="11" fill="#3B82F6" text-anchor="middle">Subst. Simples</text>
+                    </g>
+                    <!-- Composta H2O -->
+                    <g transform="translate(200, 80)">
+                        <rect x="-40" y="-40" width="80" height="80" rx="10" fill="#E0F2FE" stroke="#3B82F6" stroke-width="2"/>
+                        <circle cx="0" cy="0" r="18" fill="#EF4444" />
+                        <circle cx="-15" cy="-15" r="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+                        <circle cx="15" cy="-15" r="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
+                        <text x="0" y="60" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Água (H₂O)</text>
+                        <text x="0" y="75" font-family="sans-serif" font-size="11" fill="#3B82F6" text-anchor="middle">Subst. Composta</text>
+                    </g>
+                    <!-- Mistura -->
+                    <g transform="translate(320, 80)">
+                        <rect x="-40" y="-40" width="80" height="80" rx="10" fill="#FEF3C7" stroke="#D97706" stroke-width="2"/>
+                        <!-- Partículas misturadas -->
+                        <circle cx="-15" cy="15" r="8" fill="#10B981" />
+                        <circle cx="15" cy="-10" r="8" fill="#10B981" />
+                        <circle cx="-5" cy="-15" r="8" fill="#EF4444" />
+                        <circle cx="15" cy="15" r="8" fill="#EF4444" />
+                        <text x="0" y="60" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Água + Sal</text>
+                        <text x="0" y="75" font-family="sans-serif" font-size="11" fill="#D97706" text-anchor="middle">Mistura</text>
+                    </g>
+                </svg>
+                
+                <ul style="padding-left: 20px; margin-top: 5px;">
+                    <li><strong>Substância Simples:</strong> Formada por átomos de UM ÚNICO elemento químico. Ex: O₂, N₂, Fe.</li>
+                    <li><strong>Substância Composta:</strong> Formada por DOIS OU MAIS elementos químicos diferentes. Ex: H₂O (Hidrogênio e Oxigênio), CO₂.</li>
+                </ul>
+                <div class="highlight-box warning">
+                    <strong>Gráficos de Mudança de Estado:</strong> Nas substâncias PURAS, a temperatura fica constante (reta horizontal no gráfico) durante a Fusão e a Ebulição. Nas Misturas comuns, a temperatura varia (linha inclinada).
+                </div>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">Capítulo 03</span>
+            <div class="theory-box">
+                <h3>Misturas: Fases e Componentes</h3>
+                <p>Mistura é a junção de duas ou mais substâncias. <strong>Componente</strong> é cada substância que forma a mistura. <strong>Fase</strong> é cada porção visualmente distinta que conseguimos enxergar no sistema.</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Béquer Mistura Homogênea -->
+                    <g transform="translate(100, 150)">
+                        <path d="M-30,-80 L-30,40 C-30,50 -20,50 -20,50 L20,50 C20,50 30,50 30,40 L30,-80" fill="none" stroke="#475569" stroke-width="3"/>
+                        <path d="M-28,0 L-28,40 C-28,48 -20,48 -20,48 L20,48 C20,48 28,48 28,40 L28,0 Z" fill="#60A5FA" opacity="0.6"/>
+                        <text x="0" y="70" font-family="sans-serif" font-size="13" font-weight="bold" fill="#0F172A" text-anchor="middle">Homogênea</text>
+                        <text x="0" y="85" font-family="sans-serif" font-size="11" fill="#475569" text-anchor="middle">(Ex: Água + Açúcar)</text>
+                        <text x="0" y="-30" font-family="sans-serif" font-size="12" fill="#1D4ED8" font-weight="bold" text-anchor="middle">1 Fase</text>
+                    </g>
+                    <!-- Béquer Mistura Heterogênea -->
+                    <g transform="translate(300, 150)">
+                        <path d="M-30,-80 L-30,40 C-30,50 -20,50 -20,50 L20,50 C20,50 30,50 30,40 L30,-80" fill="none" stroke="#475569" stroke-width="3"/>
+                        <!-- Areia (Fase 3) -->
+                        <path d="M-28,30 L-28,40 C-28,48 -20,48 -20,48 L20,48 C20,48 28,48 28,40 L28,30 Z" fill="#D97706"/>
+                        <!-- Água (Fase 2) -->
+                        <rect x="-28" y="-10" width="56" height="40" fill="#60A5FA" opacity="0.6"/>
+                        <!-- Óleo (Fase 1) -->
+                        <rect x="-28" y="-30" width="56" height="20" fill="#FCD34D" opacity="0.8"/>
+                        
+                        <!-- Linhas indicativas -->
+                        <line x1="-28" y1="-20" x2="-50" y2="-20" stroke="#475569" stroke-width="1"/>
+                        <line x1="-28" y1="10" x2="-50" y2="10" stroke="#475569" stroke-width="1"/>
+                        <line x1="-28" y1="40" x2="-50" y2="40" stroke="#475569" stroke-width="1"/>
+                        <text x="-55" y="-16" font-family="sans-serif" font-size="10" fill="#0F172A" text-anchor="end">Óleo</text>
+                        <text x="-55" y="14" font-family="sans-serif" font-size="10" fill="#0F172A" text-anchor="end">Água</text>
+                        <text x="-55" y="44" font-family="sans-serif" font-size="10" fill="#0F172A" text-anchor="end">Areia</text>
+
+                        <text x="0" y="70" font-family="sans-serif" font-size="13" font-weight="bold" fill="#0F172A" text-anchor="middle">Heterogênea</text>
+                        <text x="0" y="85" font-family="sans-serif" font-size="11" fill="#475569" text-anchor="middle">Neste ex: 3 Fases</text>
+                    </g>
+                </svg>
+
+                <ul style="padding-left: 20px;">
+                    <li><strong>Misturas Homogêneas:</strong> Apresentam apenas UMA fase visual (aspecto uniforme). Ex: Ar atmosférico, ligas metálicas (bronze, aço), água com sal dissolvido.</li>
+                    <li><strong>Misturas Heterogêneas:</strong> Apresentam DUAS OU MAIS fases visuais. Ex: Água e óleo, granito (pedra com 3 cores), água com areia e gelo.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">Capítulo 04</span>
+            <div class="theory-box">
+                <h3>Separação de Misturas Heterogêneas</h3>
+                <p>Os métodos mecânicos ou físicos separam fases que não estão totalmente dissolvidas.</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Filtração -->
+                    <g transform="translate(80, 80)">
+                        <path d="M-20,40 L-10,0 L-10,-20 L10,-20 L10,0 L20,40 C25,50 15,60 0,60 C-15,60 -25,50 -20,40 Z" fill="none" stroke="#475569" stroke-width="2"/>
+                        <path d="M-30,-60 L30,-60 L5,-20 L5,-5 L-5,-5 L-5,-20 Z" fill="none" stroke="#64748B" stroke-width="2"/>
+                        <path d="M-25,-55 L25,-55 L0,-15 Z" fill="#FEE2E2" opacity="0.7"/> 
+                        <rect x="-18" y="20" width="36" height="35" rx="5" fill="#BFDBFE" opacity="0.6"/> 
+                        <path d="M-40,-90 L-10,-90 L-10,-65" fill="none" stroke="#475569" stroke-width="2"/>
+                        <text x="0" y="80" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Filtração</text>
+                    </g>
+                    
+                    <!-- Decantação (Funil) -->
+                    <g transform="translate(280, 80)">
+                        <path d="M-25,-70 L25,-70 L5,0 L5,20 L-5,20 L-5,0 Z" fill="none" stroke="#475569" stroke-width="2"/>
+                        <!-- Óleo -->
+                        <path d="M-23,-65 L23,-65 L14,-35 L-14,-35 Z" fill="#FCD34D" opacity="0.8"/>
+                        <!-- Água -->
+                        <path d="M-13,-30 L13,-30 L3,-0 L-3,-0 Z" fill="#60A5FA" opacity="0.6"/>
+                        <!-- Torneira -->
+                        <rect x="-10" y="5" width="20" height="6" fill="#64748B" rx="2"/>
+                        <!-- Béquer embaixo -->
+                        <path d="M-15,30 L-15,60 C-15,65 15,65 15,60 L15,30" fill="none" stroke="#475569" stroke-width="2"/>
+                        <path d="M-13,45 L-13,60 C-13,63 13,63 13,60 L13,45 Z" fill="#60A5FA" opacity="0.6"/>
+                        <text x="0" y="80" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Decantação</text>
+                    </g>
+
+                    <!-- Separação Magnética -->
+                    <g transform="translate(100, 240)">
+                        <!-- Ímã -->
+                        <path d="M-20,-40 C-20,-60 20,-60 20,-40 L20,-10 L5,-10 L5,-40 C5,-45 -5,-45 -5,-40 L-5,-10 L-20,-10 Z" fill="#EF4444" stroke="#B91C1C" stroke-width="2"/>
+                        <rect x="-20" y="-10" width="15" height="10" fill="#CBD5E1" stroke="#94A3B8" stroke-width="2"/>
+                        <rect x="5" y="-10" width="15" height="10" fill="#CBD5E1" stroke="#94A3B8" stroke-width="2"/>
+                        <!-- Areia e Ferro -->
+                        <path d="M-30,30 Q0,20 30,30 Z" fill="#D97706" opacity="0.6"/>
+                        <circle cx="-10" cy="10" r="2" fill="#1E293B"/>
+                        <circle cx="0" cy="5" r="2" fill="#1E293B"/>
+                        <circle cx="10" cy="12" r="2" fill="#1E293B"/>
+                        <circle cx="0" cy="25" r="2" fill="#1E293B"/>
+                        <circle cx="-5" cy="18" r="2" fill="#1E293B"/>
+                        <!-- Linhas de atração -->
+                        <path d="M-12,0 L-12,5 M12,0 L12,5" stroke="#94A3B8" stroke-width="1" stroke-dasharray="2"/>
+                        <text x="0" y="55" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Sep. Magnética</text>
+                    </g>
+
+                    <!-- Centrifugação -->
+                    <g transform="translate(280, 240)">
+                        <!-- Movimento giratório -->
+                        <path d="M-40,0 A40,20 0 1,1 40,0 A40,20 0 1,1 -40,0" fill="none" stroke="#94A3B8" stroke-width="2" stroke-dasharray="4" opacity="0.5"/>
+                        <!-- Tubo de ensaio inclinado -->
+                        <g transform="rotate(45)">
+                            <rect x="-8" y="-30" width="16" height="60" rx="8" fill="none" stroke="#475569" stroke-width="2"/>
+                            <!-- Plasma -->
+                            <rect x="-6" y="-10" width="12" height="20" fill="#FEF08A"/>
+                            <!-- Hemácias (Fundo) -->
+                            <path d="M-6,10 L14,10 L14,22 C14,26 10,28 6,28 C2,28 -6,26 -6,22 Z" fill="#EF4444"/>
+                        </g>
+                        <text x="0" y="55" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Centrifugação</text>
+                    </g>
+                </svg>
+
+                <ul style="padding-left: 20px;">
+                    <li><strong>Filtração:</strong> Separa Sólido de Líquido ou Gás. Usa papel filtro. (Ex: Coar café, aspirador de pó).</li>
+                    <li><strong>Decantação:</strong> Separa Líquido-Líquido (água e óleo) ou Sólido-Líquido (água e areia). Baseia-se na diferença de densidade (o mais pesado afunda).</li>
+                    <li><strong>Centrifugação:</strong> Máquina que gira rápido para "forçar" e acelerar a decantação (Ex: sangue no laboratório).</li>
+                    <li><strong>Levigação:</strong> Arrastar a parte mais leve usando corrente de água (Ex: garimpo de ouro).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">Capítulo 04</span>
+            <div class="theory-box">
+                <h3>Separação de Misturas Homogêneas</h3>
+                <p>Aqui as substâncias estão completamente dissolvidas, exigindo mudanças de estado físico para separá-las.</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 450 220" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Destilação Simples -->
+                    <g transform="translate(120, 110)">
+                        <circle cx="-50" cy="20" r="25" fill="none" stroke="#475569" stroke-width="2"/>
+                        <path d="M-60,5 A 25 25 0 0 0 -50,45 A 25 25 0 0 0 -40,5 Z" fill="#BFDBFE" opacity="0.6"/>
+                        <rect x="-56" y="-30" width="12" height="30" fill="none" stroke="#475569" stroke-width="2"/>
+                        <line x1="-56" y1="-5" x2="-44" y2="-5" stroke="#FFFFFF" stroke-width="3"/>
+                        <path d="M-55,55 Q-50,45 -45,55 Q-50,65 -55,55" fill="#EF4444"/>
+                        <line x1="-44" y1="-15" x2="30" y2="20" stroke="#475569" stroke-width="6"/>
+                        <line x1="-44" y1="-15" x2="30" y2="20" stroke="#E0F2FE" stroke-width="2"/>
+                        <path d="M-30,-5 L20,18 L15,25 L-35,2 Z" fill="none" stroke="#3B82F6" stroke-width="1" opacity="0.5"/>
+                        <path d="M30,30 L35,50 L55,50 L60,30 L50,15 L40,15 Z" fill="none" stroke="#475569" stroke-width="2"/>
+                        <polygon points="35,50 55,50 50,35 40,35" fill="#BFDBFE" opacity="0.8"/>
+                        
+                        <text x="0" y="80" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Destilação Simples</text>
+                        <text x="0" y="95" font-family="sans-serif" font-size="10" fill="#475569" text-anchor="middle">Ex: Água + Sal</text>
+                    </g>
+
+                    <!-- Destilação Fracionada -->
+                    <g transform="translate(340, 110)">
+                        <circle cx="-50" cy="20" r="25" fill="none" stroke="#475569" stroke-width="2"/>
+                        <path d="M-60,5 A 25 25 0 0 0 -50,45 A 25 25 0 0 0 -40,5 Z" fill="#FCD34D" opacity="0.6"/>
+                        
+                        <!-- Coluna de Fracionamento (Alta com pratos) -->
+                        <rect x="-56" y="-60" width="12" height="60" fill="none" stroke="#475569" stroke-width="2"/>
+                        <line x1="-56" y1="-50" x2="-44" y2="-50" stroke="#475569" stroke-width="2"/>
+                        <line x1="-56" y1="-40" x2="-44" y2="-40" stroke="#475569" stroke-width="2"/>
+                        <line x1="-56" y1="-30" x2="-44" y2="-30" stroke="#475569" stroke-width="2"/>
+                        <line x1="-56" y1="-20" x2="-44" y2="-20" stroke="#475569" stroke-width="2"/>
+                        <line x1="-56" y1="-10" x2="-44" y2="-10" stroke="#475569" stroke-width="2"/>
+                        <line x1="-56" y1="-5" x2="-44" y2="-5" stroke="#FFFFFF" stroke-width="3"/>
+                        
+                        <path d="M-55,55 Q-50,45 -45,55 Q-50,65 -55,55" fill="#EF4444"/>
+                        <line x1="-44" y1="-45" x2="30" y2="-10" stroke="#475569" stroke-width="6"/>
+                        <line x1="-44" y1="-45" x2="30" y2="-10" stroke="#E0F2FE" stroke-width="2"/>
+                        <path d="M-30,-35 L20,-12 L15,-5 L-35,-28 Z" fill="none" stroke="#3B82F6" stroke-width="1" opacity="0.5"/>
+                        <path d="M30,0 L35,20 L55,20 L60,0 L50,-15 L40,-15 Z" fill="none" stroke="#475569" stroke-width="2"/>
+                        <polygon points="35,20 55,20 50,5 40,5" fill="#FCD34D" opacity="0.8"/>
+                        
+                        <text x="0" y="80" font-family="sans-serif" font-size="12" font-weight="bold" fill="#0F172A" text-anchor="middle">Destilação Fracionada</text>
+                        <text x="0" y="95" font-family="sans-serif" font-size="10" fill="#475569" text-anchor="middle">Ex: Água + Álcool</text>
+                    </g>
+                </svg>
+
+                <div class="highlight-box">
+                    <strong>Evaporação vs Destilação:</strong>
+                    Na evaporação (ex: salinas), a água vai para o ar e nós aproveitamos apenas o sólido (o sal). Na Destilação Simples, o vapor de água passa por um condensador, esfria, vira líquido de novo e a água pura é guardada no recipiente final!
+                </div>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Destilação Simples:</strong> Separa Sólido-Líquido (Ex: Água e Sal). Aquece-se até a água ferver; o vapor é resfriado e recolhido, o sal fica no fundo.</li>
+                    <li><strong>Destilação Fracionada:</strong> Separa Líquido-Líquido (Ex: Petróleo ou Água e Álcool). Baseada na diferença dos <em>Pontos de Ebulição</em>. O líquido com menor ponto de ebulição ferve e separa primeiro.</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">
+            Iniciar Diagnóstico (30 Q) →
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">O Laboratório de Testes</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">
+                30 questões rigorosas de Química. Acerte <strong>80% (24/30)</strong> para provar seu domínio analítico. Leia a correção de cada erro!
+            </p>
+        </div>
+
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Analítico</h2>
+            <div class="stars-container" id="finalStars">★</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const contentGroups = document.querySelectorAll('.content-group');
+    const noResultsMsg = document.getElementById('no-results');
+
+    searchInput.addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let totalVisible = 0;
+
+        contentGroups.forEach(group => {
+            const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if (textContent.includes(term)) {
+                group.style.display = 'flex';
+                totalVisible++;
+            } else {
+                group.style.display = 'none';
+            }
+        });
+        noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+    });
+
+    const questions = [
+        // 10 QUESTÕES FÁCEIS
+        {
+            id: 1, level: "Fácil",
+            text: "O que caracteriza uma mistura homogênea a olho nu ou no microscópio?",
+            options: ["Apresenta várias cores diferentes.", "Apresenta apenas uma única fase, com aspecto visual totalmente uniforme.", "Os seus componentes afundam rapidamente.", "Sempre é formada por líquidos que não se misturam."],
+            correct: 1,
+            explanation: {
+                correct: "Uma mistura homogênea (como água e açúcar dissolvido) tem aspecto contínuo e uniforme em toda sua extensão, formando uma única fase.",
+                options: ["Erro: Várias cores indicam múltiplas fases (heterogênea).", "Certa: É visualmente perfeita e apresenta só uma fase.", "Erro: Isso é sedimentação de misturas heterogêneas sólidas/líquidas.", "Erro: Líquidos que não se misturam (água e óleo) formam mistura heterogênea."]
+            }
+        },
+        {
+            id: 2, level: "Fácil",
+            text: "Se colocarmos num copo água pura e óleo de soja, observaremos a formação de um sistema com duas camadas. Como classificamos esse sistema?",
+            options: ["Substância Pura Simples.", "Mistura Homogênea.", "Substância Pura Composta.", "Mistura Heterogênea."],
+            correct: 3,
+            explanation: {
+                correct: "Como a água e o óleo não se dissolvem um no outro, eles formam duas fases visíveis, caracterizando uma mistura heterogênea.",
+                options: ["Erro: São duas substâncias diferentes juntas, logo é mistura.", "Erro: Homogênea tem apenas 1 fase.", "Erro: Não é substância pura, pois há água E óleo.", "Certa: Mais de uma fase visível é mistura heterogênea."]
+            }
+        },
+        {
+            id: 3, level: "Fácil",
+            text: "Você preparou um suco de maracujá natural, mas sobraram as sementes inteiras no líquido. Qual o método mecânico mais simples e comum para separar o suco líquido das sementes sólidas?",
+            svg: `<svg viewBox="0 0 100 80" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+                    <path d="M30,20 C30,40 40,50 50,60 C60,50 70,40 70,20 Z" fill="#FCD34D" opacity="0.8"/>
+                    <path d="M25,20 L75,20 L65,40 L35,40 Z" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="2"/>
+                    <circle cx="45" cy="25" r="2" fill="#0F172A"/><circle cx="55" cy="30" r="2" fill="#0F172A"/>
+                    <path d="M75,20 L85,15 L80,30" fill="none" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+                  </svg>`,
+            options: ["Destilação", "Filtração", "Evaporação", "Magnetismo"],
+            correct: 1,
+            explanation: {
+                correct: "A filtração utiliza um meio poroso (filtro/peneira) que deixa o líquido passar e retém o sólido maior.",
+                options: ["Erro: Destilação é para aquecer e separar líquidos misturados ou sólidos dissolvidos.", "Certa: Filtração/peneiração retém o sólido não dissolvido.", "Erro: A evaporação faria a água sumir, estragando o suco.", "Erro: Sementes não são atraídas por ímãs."]
+            }
+        },
+        {
+            id: 4, level: "Fácil",
+            text: "O gás oxigênio é representado pela fórmula química O₂. Como ele é classificado na Química?",
+            options: ["Mistura heterogênea", "Substância composta", "Substância simples", "Liga metálica"],
+            correct: 2,
+            explanation: {
+                correct: "Como a molécula O₂ é formada por apenas UM TIPO de elemento químico (o Oxigênio), ela é uma substância simples.",
+                options: ["Erro: É um gás puro, não é mistura de várias coisas.", "Erro: Composta precisaria de dois elementos químicos diferentes (ex: H2O).", "Certa: Apenas um elemento químico na fórmula = Substância simples.", "Erro: Oxigênio não é metal."]
+            }
+        },
+        {
+            id: 5, level: "Fácil",
+            text: "Em uma salina, a água do mar é retida em tanques rasos ao sol. A água sobe para a atmosfera e o sal fica no fundo. Qual método de separação é esse?",
+            options: ["Centrifugação", "Decantação", "Filtração", "Evaporação"],
+            correct: 3,
+            explanation: {
+                correct: "A evaporação é o método em que o líquido passa lentamente para o estado gasoso, deixando o sólido (sal) que estava dissolvido no fundo.",
+                options: ["Erro: Centrifugação gira líquidos para o fundo.", "Erro: O sal está dissolvido e não afundaria sozinho por decantação.", "Erro: A água salgada passaria inteira pelo filtro.", "Certa: A água evapora ao sol e o sal recristaliza."]
+            }
+        },
+        {
+            id: 6, level: "Fácil",
+            text: "Um anel de Ouro 18 quilates é feito misturando ouro puro, prata e cobre derretidos, que depois esfriam num bloco uniforme. O que esse anel é?",
+            options: ["Uma mistura homogênea sólida (liga metálica).", "Uma mistura heterogênea trifásica.", "Uma substância pura simples.", "Uma substância pura composta."],
+            correct: 0,
+            explanation: {
+                correct: "Ligas metálicas são misturas homogêneas no estado sólido. Apesar de ter 3 metais, visualmente o anel parece uma coisa só (1 fase).",
+                options: ["Certa: É uma mistura de metais (liga) de fase única.", "Erro: Se fosse trifásica você veria os pedaços de cobre separados do ouro.", "Erro: Tem mais de um elemento misturado.", "Erro: É mistura, não substância."]
+            }
+        },
+        {
+            id: 7, level: "Fácil",
+            text: "A água destilada (H₂O pura, sem sais) é classificada como uma substância composta. Por quê?",
+            options: ["Porque ela tem gosto bom.", "Porque pode ser bebida.", "Porque é formada por dois elementos químicos diferentes: Hidrogênio e Oxigênio.", "Porque tem três fases diferentes misturadas."],
+            correct: 2,
+            explanation: {
+                correct: "Substâncias compostas são aquelas cujas moléculas unem dois ou mais elementos químicos diferentes na tabela periódica (H e O).",
+                options: ["Erro: Gosto não define a composição química da matéria.", "Erro: Pelo contrário, água 100% destilada nem é recomendada para consumo.", "Certa: Tem Hidrogênio e Oxigênio na mesma molécula.", "Erro: A água destilada líquida é uma fase só."]
+            }
+        },
+        {
+            id: 8, level: "Fácil",
+            text: "Num ferro-velho, o operador usa um guindaste com um grande equipamento magnético para separar os carros velhos (aço/ferro) do alumínio, plásticos e vidros. Qual o nome deste método?",
+            svg: `<svg viewBox="0 0 150 100" style="width: 150px; height: auto; display: block; margin: 0 auto;">
+                    <path d="M50,30 C50,10 100,10 100,30 L100,50 L85,50 L85,30 C85,20 65,20 65,30 L65,50 L50,50 Z" fill="#EF4444" stroke="#B91C1C" stroke-width="2"/>
+                    <rect x="50" y="50" width="15" height="10" fill="#CBD5E1" stroke="#94A3B8"/>
+                    <rect x="85" y="50" width="15" height="10" fill="#CBD5E1" stroke="#94A3B8"/>
+                    <circle cx="55" cy="80" r="5" fill="#1E293B"/><circle cx="65" cy="70" r="4" fill="#1E293B"/><circle cx="90" cy="75" r="6" fill="#1E293B"/>
+                    <path d="M57,60 L57,75 M92,60 L92,70" stroke="#94A3B8" stroke-width="2" stroke-dasharray="3"/>
+                  </svg>`,
+            options: ["Sublimação", "Filtração Magnética", "Separação Magnética (Imantação)", "Destilação de metais"],
+            correct: 2,
+            explanation: {
+                correct: "A separação magnética usa um campo magnético (ímã) para atrair especificamente materiais ferromagnéticos (ferro, níquel, cobalto).",
+                options: ["Erro: Sublimação é a passagem direta do sólido para o gás.", "Erro: Filtração usa barreiras porosas, não magnetismo.", "Certa: Usa a atração magnética para afastar metais de ferro.", "Erro: Destilação precisa ferver materiais."]
+            }
+        },
+        {
+            id: 9, level: "Fácil",
+            text: "Quando você tira uma pedra de gelo do congelador e a deixa na pia, ela derrete e vira água líquida. Como chamamos essa mudança de estado físico?",
+            options: ["Solidificação", "Fusão", "Vaporização", "Condensação"],
+            correct: 1,
+            explanation: {
+                correct: "A passagem do estado Sólido (gelo) para o estado Líquido (água) sob aquecimento recebe o nome químico de Fusão.",
+                options: ["Erro: Solidificação é o inverso (líquido para sólido).", "Certa: Fusão é derreter.", "Erro: Vaporização é passar de líquido para gás.", "Erro: Condensação é o vapor virando gotinhas líquidas."]
+            }
+        },
+        {
+            id: 10, level: "Fácil",
+            text: "O ar atmosférico limpo que respiramos é formado principalmente por gás nitrogênio (N₂) e gás oxigênio (O₂). Sendo gases que se misturam perfeitamente, o ar é uma:",
+            options: ["Mistura homogênea", "Mistura heterogênea", "Substância simples", "Substância composta"],
+            correct: 0,
+            explanation: {
+                correct: "Sempre que dois ou mais gases são colocados num mesmo recipiente, eles se misturam uniformemente e formam obrigatoriamente uma mistura homogênea.",
+                options: ["Certa: Misturas de gases são SEMPRE homogêneas.", "Erro: Não dá pra ver os gases separados no ar limpo.", "Erro: Tem N2 e O2 misturados, logo não é substância.", "Erro: São duas substâncias diferentes misturadas."]
+            }
+        },
+
+        // 10 QUESTÕES MÉDIAS
+        {
+            id: 11, level: "Médio",
+            text: "Num recipiente foram colocados: Água líquida, Sal totalmente dissolvido, 3 cubos de gelo e um punhado de Areia no fundo. Qual é o número de FASES e COMPONENTES desse sistema?",
+            svg: `<svg viewBox="0 0 120 120" style="width: 140px; height: auto; display: block; margin: 0 auto;">
+                    <path d="M20,20 L20,100 C20,110 30,110 30,110 L90,110 C90,110 100,110 100,100 L100,20" fill="none" stroke="#475569" stroke-width="3"/>
+                    <path d="M22,50 L22,100 C22,108 30,108 30,108 L90,108 C90,108 98,108 98,100 L98,50 Z" fill="#60A5FA" opacity="0.5"/>
+                    <path d="M22,95 L98,95 L98,105 C98,107 90,108 90,108 L30,108 C30,108 22,107 22,105 Z" fill="#D97706"/>
+                    <rect x="35" y="40" width="15" height="15" fill="#FFFFFF" stroke="#94A3B8" opacity="0.9"/>
+                    <rect x="65" y="45" width="15" height="15" fill="#FFFFFF" stroke="#94A3B8" opacity="0.9"/>
+                    <rect x="45" y="60" width="15" height="15" fill="#FFFFFF" stroke="#94A3B8" opacity="0.9"/>
+                  </svg>`,
+            options: ["4 fases e 4 componentes.", "3 fases e 3 componentes.", "3 fases e 4 componentes.", "4 fases e 3 componentes."],
+            correct: 1,
+            explanation: {
+                correct: "FASES (o que você vê): Água salgada líquida, Areia sólida, Gelo sólido = 3 Fases. COMPONENTES (a química): H2O, Sal e Areia = 3 Componentes (o gelo também é H2O!).",
+                options: ["Erro: O gelo e a água são o mesmo componente (H2O).", "Certa: Fases visuais: 3. Substâncias químicas: 3.", "Erro: O sal dissolve na água, logo não cria uma nova fase.", "Erro: Água e gelo contam como 1 só componente químico."]
+            }
+        },
+        {
+            id: 12, level: "Médio",
+            text: "Para que serve e no que se baseia a Destilação Simples?",
+            options: ["Separar líquidos que não se misturam (água e óleo) através de um filtro de papel fino.", "Separar sólido dissolvido num líquido (água e sal) aproveitando o ponto de ebulição diferente de ambos.", "Separar sólidos de tamanhos diferentes usando uma peneira fina.", "Evaporar a água do sal, deixando a água escapar para o ar livre sem recuperá-la."],
+            correct: 1,
+            explanation: {
+                correct: "Na destilação simples, a mistura homogênea é fervida. A água (líquido) evapora e é condensada em outro frasco, enquanto o sal (sólido com P.E. alto) fica retido.",
+                options: ["Erro: Água e óleo são separados por decantação (funil de bromo).", "Certa: Ferve a água, recolhe o vapor e salva a água e o sólido.", "Erro: O nome disso é Tamisação ou peneiração.", "Erro: A destilação recupera o vapor condensando-o, ao contrário da evaporação aberta."]
+            }
+        },
+        {
+            id: 13, level: "Médio",
+            text: "Ao analisar um gráfico de aquecimento (Temperatura x Tempo), como um químico sabe que se trata de uma Substância Pura e não de uma Mistura comum?",
+            options: ["O gráfico é uma linha reta ascendente sem nenhuma parada.", "A temperatura de Fusão e de Ebulição mantêm-se constantes, formando dois 'patamares' horizontais retos.", "O gráfico desce repentinamente durante a fervura.", "Apenas o Ponto de Fusão varia, enquanto a ebulição é constante."],
+            correct: 1,
+            explanation: {
+                correct: "Características únicas das substâncias puras: durante as mudanças de estado, a temperatura não sobe nem desce até que toda a matéria mude de fase (fica reta).",
+                options: ["Erro: Linha direta e contínua seria um aquecimento sem mudança de estado.", "Certa: Tem dois patamares (retas) constantes em PF e PE.", "Erro: Aquecimento faz subir ou manter, nunca descer a curva.", "Erro: Misturas eutetóides têm 1 variação, puras têm 2 patamares constantes."]
+            }
+        },
+        {
+            id: 14, level: "Médio",
+            text: "Nos laboratórios de análises clínicas, tubos com sangue humano são colocados num aparelho que gira em altíssima rotação. O objetivo é 'forçar' as células (parte pesada) a irem pro fundo, separando-as do plasma. O nome desse aparelho e método é:",
+            options: ["Destilador / Destilação fracionada", "Filtro de pressão / Filtração a vácuo", "Centrífuga / Centrifugação", "Imã potente / Separação Magnética"],
+            correct: 2,
+            explanation: {
+                correct: "A centrifugação é basicamente uma decantação forçada. A rotação extrema empurra as partículas mais densas para o fundo rapidamente devido à inércia.",
+                options: ["Erro: Sangue não é fervido (destilado).", "Erro: O sangue não é filtrado no laboratório padrão para separar plasma.", "Certa: A centrífuga acelera a decantação.", "Erro: O ferro no sangue não responde assim a ímãs de rotina."]
+            }
+        },
+        {
+            id: 15, level: "Médio",
+            text: "O petróleo bruto extraído do oceano não tem uso imediato. Ele é aquecido em torres enormes nas refinarias para separar gasolina, querosene, diesel, etc. Qual é este método?",
+            options: ["Decantação em funil", "Destilação Fracionada", "Filtração industrial", "Flotação fracionada"],
+            correct: 1,
+            explanation: {
+                correct: "A Destilação Fracionada é usada em misturas líquidas homogêneas (como o petróleo). A torre aquece e separa cada derivado em seu exato ponto de ebulição.",
+                options: ["Erro: O petróleo é homogêneo, líquidos não decantam.", "Certa: Aquece e separa por diferentes pontos de ebulição na torre.", "Erro: Filtro só retém sólidos.", "Erro: Flotação usa bolhas, não calor e vapor."]
+            }
+        },
+        {
+            id: 16, level: "Médio",
+            text: "Qual é a principal diferença prática de utilidade entre a Decantação e a Filtração?",
+            options: ["A filtração requer muito mais tempo para ocorrer do que a decantação simples.", "A decantação é perfeita para separar misturas gasosas, a filtração não.", "A decantação separa fases que assentam no fundo pela gravidade. A filtração usa um obstáculo poroso que permite separar sólidos suspensos quase que instantaneamente.", "Ambas servem unicamente para misturas homogêneas de líquidos."],
+            correct: 2,
+            explanation: {
+                correct: "A decantação exige paciência para a gravidade atuar. A filtração é ativa e força o líquido através dos poros, retendo a sujeira na hora.",
+                options: ["Erro: A decantação simples (sem centrífuga) costuma ser muito mais lenta.", "Erro: Decantação não separa gases.", "Certa: Decantar é assentar, Filtrar é usar barreira física.", "Erro: Ambas são para misturas HETEROGÊNEAS."]
+            }
+        },
+        {
+            id: 17, level: "Médio",
+            text: "Os garimpeiros separam o ouro da terra e areia no fundo dos rios usando uma bateia (uma espécie de panela rasa). Eles usam a corrente de água para arrastar a areia mais leve e deixar o ouro (mais pesado) no fundo. Esse método chama-se:",
+            options: ["Sublimação", "Dissolução fracionada", "Levigação", "Cristalização"],
+            correct: 2,
+            explanation: {
+                correct: "Levigação significa 'arrastar'. A água corrente lava e leva a parte menos densa (areia), enquanto a mais densa (ouro) resiste no fundo da bateia.",
+                options: ["Erro: Sublimação é quando a substância evapora do estado sólido direto.", "Erro: Nada é dissolvido na água quimicamente.", "Certa: Levigação é arrastar sólidos leves com água.", "Erro: Cristalização é formar cristais evaporando solventes."]
+            }
+        },
+        {
+            id: 18, level: "Médio",
+            text: "Mistura Azeotrópica e Mistura Eutética são tipos de misturas especiais que costumam 'enganar' químicos iniciantes por terem uma característica de substância pura. O que as difere?",
+            options: ["A Azeotrópica ferve (Ebulição) com temperatura constante; a Eutética derrete (Fusão) com temperatura constante.", "Ambas têm ebulição constante, mas a Azeotrópica é sólida.", "A Eutética evapora sem derreter (sublima).", "A Azeotrópica tem ponto de fusão fixo, enquanto a eutética não ferve nunca."],
+            correct: 0,
+            explanation: {
+                correct: "Mistura Eutética (ex: Solda metálica) tem PF constante (patamar só embaixo). Mistura Azeotrópica (ex: Álcool 96%) tem PE constante (patamar só em cima).",
+                options: ["Certa: Azeotrópica trava na ebulição, Eutética trava na fusão.", "Erro: Misturas azeotrópicas (álcool+água) são geralmente líquidas.", "Erro: Nenhuma delas trata de sublimação específica.", "Erro: A eutética tem o ponto de fusão fixo (a ordem está trocada na opção)."]
+            }
+        },
+        {
+            id: 19, level: "Médio",
+            text: "Como separamos, de forma eficiente, uma mistura com três substâncias misturadas: Areia, Sal e Serragem?",
+            options: ["Joga-se no fogo, depois filtra.", "Usa um ímã forte para puxar a serragem.", "Adiciona-se água, agita, filtra-se a areia/serragem flutuante, e depois destila/evapora a água salgada restante.", "Basta usar peneira fina e o sal passa."],
+            correct: 2,
+            explanation: {
+                correct: "A água dissolve o sal (separando a areia). A serragem boia na água e a areia afunda. Filtra-se para separar os sólidos, depois ferve a água para reaver o sal.",
+                options: ["Erro: Fogo queimaria a serragem.", "Erro: Nenhuma delas é de ferro magnético.", "Certa: É uma separação em etapas (Flotação/Filtração/Evaporação).", "Erro: O sal de cozinha tem grãos que se misturam na areia fina da peneira."]
+            }
+        },
+        {
+            id: 20, level: "Médio",
+            text: "Para separar a água e o óleo misturados num copo, um químico do laboratório não deve usar filtração comum, pois o óleo pode passar junto ou entupir o papel. Qual a vidraria correta para isso?",
+            svg: `<svg viewBox="0 0 100 120" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+                    <path d="M20,10 L80,10 L60,50 L60,90 L40,90 L40,50 Z" fill="none" stroke="#475569" stroke-width="2"/>
+                    <path d="M25,15 L75,15 L65,35 L35,35 Z" fill="#FCD34D" opacity="0.8"/>
+                    <path d="M35,35 L65,35 L60,50 L40,50 L40,80 L60,80 Z" fill="#60A5FA" opacity="0.6"/>
+                    <rect x="35" y="70" width="30" height="6" fill="#64748B" rx="2"/>
+                  </svg>`,
+            options: ["Tubo de ensaio com fogo embaixo.", "Funil de Decantação (ou Funil de Bromo).", "Béquer de plástico grande.", "Condensador de destilação de vidro reto."],
+            correct: 1,
+            explanation: {
+                correct: "O Funil de Decantação tem uma torneira embaixo. A água (mais pesada) fica no fundo, abre-se a torneira, escoa-se a água e fecha-se quando o óleo for passar.",
+                options: ["Erro: Fogo ferveria a água criando bolhas no óleo.", "Certa: O Funil de Decantação/Torneira é ideal para líquidos imiscíveis.", "Erro: Um copo/béquer precisaria que você escorresse derramando (menos preciso).", "Erro: Condensador serve para resfriar vapores na destilação."]
+            }
+        },
+
+        // 10 QUESTÕES DIFÍCEIS
+        {
+            id: 21, level: "Difícil",
+            text: "Durante as etapas de tratamento de água de uma cidade (ETA), há o processo de FLOCULAÇÃO. O que é feito quimicamente nessa etapa?",
+            options: ["A água passa por filtros de carvão ativo para tirar o cloro.", "Adiciona-se sulfato de alumínio, que faz a sujeira fina se juntar, formando 'flocos' pesados que irão afundar na decantação em seguida.", "Ferve-se a água a 100°C para destilar os flocos de bactérias presentes.", "Adiciona-se flúor para proteger os dentes da população."],
+            correct: 1,
+            explanation: {
+                correct: "Partículas de argila minúsculas não afundam sozinhas. A floculação usa reagentes (sulfato de alumínio) para colar as partículas de sujeira até que formem flocos densos e pesados.",
+                options: ["Erro: O carvão serve para desodorizar e a filtração ocorre depois.", "Certa: Floculação cria 'coágulos' de sujeira pesada para ela afundar.", "Erro: Não há fervura em grande escala no tratamento de água municipal.", "Erro: Fluoretação é a etapa preventiva final, não é floculação."]
+            }
+        },
+        {
+            id: 22, level: "Difícil",
+            text: "O ar atmosférico liquefeito (esfriado até virar líquido a -200°C) é uma mistura de gás nitrogênio (PE: -196°C) e gás oxigênio (PE: -183°C). Se usarmos destilação fracionada, quem ferve e sobe na torre primeiro?",
+            options: ["O Oxigênio, porque seu ponto de ebulição (-183°C) é numericamente maior.", "Ambos sobem ao mesmo tempo por serem gases nobres.", "Nenhum deles ferve, os líquidos congelam.", "O Nitrogênio, porque seu Ponto de Ebulição (-196°C) é mais baixo/frio, evaporando antes conforme a torre esquenta."],
+            correct: 3,
+            explanation: {
+                correct: "Na destilação, sai primeiro quem tiver o MENOR ponto de ebulição (ferve mais rápido). Em números negativos, -196°C é mais baixo e mais frio que -183°C.",
+                options: ["Erro: Na destilação fracionada, a substância de MAIOR P.E. ferve por último.", "Erro: Oxigênio e nitrogênio não são gases nobres.", "Erro: O processo aquece o líquido de baixo pra cima.", "Certa: O Nitrogênio (-196°C) ferve e se desprende do líquido primeiro."]
+            }
+        },
+        {
+            id: 23, level: "Difícil",
+            text: "Como separamos uma mistura sólida composta por Iodo e Areia com facilidade, aproveitando uma propriedade única do iodo?",
+            options: ["Filtração simples por peneira de metal.", "Centrifugação térmica.", "Adição de óleo de soja.", "Sublimação, aquecendo o sistema para que o iodo sólido evapore diretamente, separando-se da areia."],
+            correct: 3,
+            explanation: {
+                correct: "O Iodo, assim como a naftalina e o gelo seco, sofre sublimação (passa do estado sólido direto para vapor sem virar líquido ao ser aquecido).",
+                options: ["Erro: A peneira não resolveria se os grãos tivessem tamanhos semelhantes.", "Erro: Centrifugação não separa mistura sólido-sólido pura.", "Erro: Óleo criaria apenas mais bagunça química no sistema.", "Certa: Aquece e o iodo evapora (sublima), deixando a areia pra trás."]
+            }
+        },
+        {
+            id: 24, level: "Difícil",
+            text: "Você espremeu laranjas e tem um suco cheio de gomos em suspensão grossa. Deixou o copo parado e os gomos afundaram. Você quer passar APENAS o líquido limpo para outro copo de forma bem artesanal, usando uma mangueirinha para 'sugar' e transferir a água, por força da gravidade e pressão atmosférica. O nome desse processo é:",
+            options: ["Tamisação", "Cromatografia em tubo", "Destilação", "Sifonação"],
+            correct: 3,
+            explanation: {
+                correct: "A Sifonação é o processo de transferir um líquido de um recipiente mais alto para um mais baixo após uma decantação, usando um canudo/mangueira (sifão).",
+                options: ["Erro: Tamisação é usar peneira.", "Erro: Cromatografia separa tintas/pigmentos no papel/gel.", "Erro: Destilação ferve e condensa vapores.", "Certa: Usar mangueirinha como sifão após decantar é a sifonação."]
+            }
+        },
+        {
+            id: 25, level: "Difícil",
+            text: "No exame anti-dopping e em testes genéticos, é muito comum precisar separar diferentes tipos de pigmentos misturados (como tintas) baseados em como essas substâncias sobem e interagem num papel de filtro molhado com solvente (capilaridade). O nome desse método sofisticado é:",
+            options: ["Flotação pigmentar", "Levigação colorimétrica", "Cromatografia", "Dissolução fracionada reversa"],
+            correct: 2,
+            explanation: {
+                correct: "A cromatografia (Chroma = Cor) baseia-se na afinidade que componentes diferentes têm em aderir ao papel ou 'correr' com o líquido solvente que sobe por capilaridade.",
+                options: ["Erro: Flotação insere bolhas de ar na água (mineração).", "Erro: Levigação arrasta areia com correnteza de água.", "Certa: A Cromatografia separa os componentes das tintas/pigmentos em bandas.", "Erro: Dissolução fracionada dissolve apenas uma parte da mistura com solventes."]
+            }
+        },
+        {
+            id: 26, level: "Difícil",
+            text: "Como se chama o processo de separação usado na mineração, em que minérios moídos são misturados com água e óleo, e então bolhas de ar são injetadas no fundo do tanque fazendo o minério mais leve 'flutuar' na espuma?",
+            options: ["Floculação térmica", "Decantação gravitacional", "Flotação", "Cristalização em tanque"],
+            correct: 2,
+            explanation: {
+                correct: "Na Flotação, produtos químicos (óleo) aderem ao mineral útil e as bolhas de ar sobem, puxando-o para a superfície em forma de espuma, separando-o da rocha inútil (ganga).",
+                options: ["Erro: Floculação ocorre na água da cidade, criando peso para afundar.", "Erro: Decantação esperaria afundar, não flutuar.", "Certa: Bolhas e ar criando flutuação (espuma) é a Flotação.", "Erro: Cristalização solidifica íons da água evaporando-a."]
+            }
+        },
+        {
+            id: 27, level: "Difícil",
+            text: "Uma mistura de Sal e Areia. Para separá-los num laboratório com rigor absoluto e perfeição final recuperando ambos separadamente, a melhor sequência de processos seria:",
+            options: ["Peneiração $\\rightarrow$ Decantação $\\rightarrow$ Fim.", "Dissolução em Água $\\rightarrow$ Filtração $\\rightarrow$ Destilação Simples.", "Levigação em água $\\rightarrow$ Fervura completa até sublimar.", "Adição de álcool puro $\\rightarrow$ Separação Magnética $\\rightarrow$ Centrifugação."],
+            correct: 1,
+            explanation: {
+                correct: "1. A água dissolve só o sal. 2. A Filtração prende a areia limpa. 3. A Destilação Simples ferve a água, guardando o vapor condensado limpo e sobrando só o sal no fundo.",
+                options: ["Erro: A peneira não separaria grãos microscópicos perfeitamente e sobraria sal na areia.", "Certa: A sequência Dissolve, Filtra (salva areia), Destila (salva sal e água) é perfeita.", "Erro: O sal seria carregado pela levigação, perdendo a precisão e não é sublimado.", "Erro: Não há ímã para sal ou areia."]
+            }
+        },
+        {
+            id: 28, level: "Difícil",
+            text: "Para separar a Serragem (pó de madeira) da Areia, podemos jogar os dois dentro de um balde com bastante água. A areia afundará (densa) e a serragem flutuará na água (menos densa). Recolhemos com uma peneirinha. O nome dessa técnica específica onde um líquido intermediário separa pela densidade é:",
+            options: ["Sifonação densimétrica", "Flotação fracionada natural", "Flotação em meio líquido intermediário", "Destilação decantada"],
+            correct: 2,
+            explanation: {
+                correct: "Adicionar um líquido que tenha densidade intermediária entre os dois sólidos (afunda um, faz o outro boiar) é a Flotação natural ou Separação por densidade intermediária.",
+                options: ["Erro: Sifonação suga água decantada com tubo.", "Erro: Flotação fracionada natural não é a terminologia exata aqui, embora seja o princípio da flotação simples sem ar.", "Certa: A água foi usada como meio densimétrico intermediário.", "Erro: Não teve ebulição (destilação)."]
+            }
+        },
+        {
+            id: 29, level: "Difícil",
+            text: "Sobre a curva de aquecimento de uma mistura 'Eutética', assinale a característica de patamares químicos que a define perfeitamente contra os outros compostos:",
+            options: ["Possui patamar de Ebulição e de Fusão variáveis e em diagonal.", "Possui patamar de Fusão fixo (horizontal perfeito), mas temperatura de Ebulição variável (linha inclinada).", "Possui patamar de Ebulição fixo, mas Fusão variável.", "Não apresenta patamares, pois os sólidos queimam de forma explosiva."],
+            correct: 1,
+            explanation: {
+                correct: "A Eutética imita uma substância pura APENAS no momento de derreter (Fusão horizontal). Porém, quando ferve (Ebulição), ela varia a temperatura inclinando a reta do gráfico como as misturas normais.",
+                options: ["Erro: Se os dois fossem variáveis/inclinados, seria uma mistura comum, não eutética.", "Certa: Fusão fixa, Ebulição variável é a marca da mistura eutética.", "Erro: Essa é a característica da Mistura Azeotrópica (PE constante).", "Erro: Patamares visíveis existem desde que a substância não pirolise (queime) e o gráfico mostre a passagem de estado."]
+            }
+        },
+        {
+            id: 30, level: "Difícil",
+            text: "Num mesmo recipiente hermético, inserimos 100g de Gelo, 1 litro de Água líquida purificada, 50g de cloreto de sódio dissolvido na água, 50g de areia marrom no fundo e uma pedrinha brilhante de granito (que contém 3 minerais: mica, quartzo e feldspato visíveis). Quantas FASES visuais esse absurdo sistema possui?",
+            options: ["9 fases.", "5 fases.", "7 fases.", "6 fases."],
+            correct: 3,
+            explanation: {
+                correct: "Fases (o que o olho vê): Gelo (1) + Líquido salgado (2) + Areia (3) + Granito (composto visualmente de 3 cores/fases) = 1 + 1 + 1 + 3 = 6 Fases heterogêneas no sistema.",
+                options: ["Erro: Houve uma contagem errada das propriedades químicas dos compostos dissolvidos em cima da fase.", "Erro: O granito não é visto como uma pedra unicolor, ele possui 3 fases de minerais salpicados na pedra.", "Erro: O sal não conta como fase visível porque ele dissolveu por completo na água líquida.", "Certa: Gelo + Água(salgada) + Areia + Mica + Quartzo + Feldspato = 6 fases."]
+            }
+        }
+    ];
+
+    // --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+    const storageKey = 'promover_quiz_Quimica_8ano_Misturas';
+    let currentQuestion = 0;
+    let savedAnswers = localStorage.getItem(storageKey);
+    let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+    function setMode(mode) {
+        const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+        views.forEach(v => document.getElementById(v).style.display = 'none');
+        document.getElementById('quizFooter').style.display = 'none';
+
+        if(mode === 'explanation') {
+            document.getElementById('viewExplanation').style.display = 'flex';
+            document.getElementById('btnExp').classList.add('active');
+            document.getElementById('btnPrac').classList.remove('active');
+        } else if (mode === 'practice') {
+            document.getElementById('viewPractice').style.display = 'block';
+            document.getElementById('quizFooter').style.display = 'flex';
+            document.getElementById('btnExp').classList.remove('active');
+            document.getElementById('btnPrac').classList.add('active');
+            renderQuestion();
+            renderMap();
+        } else if (mode === 'result') {
+            document.getElementById('viewResult').style.display = 'block';
+            document.getElementById('quizFooter').style.display = 'none';
+            window.scrollTo(0,0);
+        }
+    }
+
+    function renderQuestion() {
+        if(questions.length === 0) return;
+        const q = questions[currentQuestion];
+        const container = document.getElementById('quizContainer');
+        const letters = ['A', 'B', 'C', 'D'];
+        const ans = userAnswers[currentQuestion];
+
+        let badgeClass = '';
+        if(q.level === 'Fácil') badgeClass = 'dif-facil';
+        else if(q.level === 'Médio') badgeClass = 'dif-medio';
+        else badgeClass = 'dif-dificil';
+
+        container.innerHTML = `
+            <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+                <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+                <div style="margin-bottom: 20px;">
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+                    <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+                </div>
+                ${q.svg ? `<div style="background: #F8FAFC; border: 2px dashed #CBD5E1; border-radius: 8px; padding: 15px; margin-bottom: 20px;">${q.svg}</div>` : ''}
+                <div class="options-list">
+                    ${q.options.map((opt, i) => {
+                        let cls = '';
+                        if (ans !== null) {
+                            if (i === q.correct) cls = 'correct';
+                            else if (i === ans) cls = 'wrong';
+                            else cls = 'disabled';
+                        }
+                        return `
+                        <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                            <div class="opt-circle">${letters[i]}</div>
+                            <div>${opt}</div>
+                        </button>`
+                    }).join('')}
+                </div>
+                ${ans !== null ? `
+                <div class="feedback-box">
+                    <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                        ${ans === q.correct ? '☑ Raciocínio Químico Aprovado!' : '☒ Ops! Falha Analítica Detectada!'}
+                    </div>
+                    <div class="feedback-item correct-opt"><strong>O Experimento Correto:</strong> ${q.options[q.correct]}</div>
+                    <div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                        ${q.explanation.correct}
+                    </div>
+                    <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                        <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+                        ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        updateNav();
+    }
+
+    function handleAnswer(idx) {
+        if (userAnswers[currentQuestion] !== null) return;
+        userAnswers[currentQuestion] = idx;
+        localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+
+        if (idx === questions[currentQuestion].correct) {
+            const duration = 1500;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6 }, colors: ['#3B82F6', '#1D4ED8', '#60A5FA', '#E0F2FE'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6}, colors: ['#3B82F6', '#1D4ED8', '#60A5FA', '#E0F2FE'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        } else {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.classList.remove('shake-effect');
+            void quizContainer.offsetWidth;
+            quizContainer.classList.add('shake-effect');
+            setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+        }
+        renderQuestion();
+        renderMap();
+    }
+
+    function renderMap() {
+        if(questions.length === 0) return;
+        const map = document.getElementById('qMap');
+        map.innerHTML = questions.map((q, i) => {
+            let cls = 'map-dot';
+            if (i === currentQuestion) cls += ' active';
+            if (userAnswers[i] !== null) {
+                cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+            }
+            return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+        }).join('');
+
+        setTimeout(() => {
+            const activeDot = map.querySelector('.map-dot.active');
+            if (activeDot) {
+                activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+            }
+        }, 50);
+    }
+
+    function goTo(i) {
+        if (window.confetti) confetti.reset();
+        currentQuestion = i;
+        renderQuestion();
+        renderMap();
+    }
+
+    function changeQuestion(d) {
+        let n = currentQuestion + d;
+        if (n >= 0 && n < questions.length) goTo(n);
+    }
+
+    function updateNav() {
+        document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+        const next = document.getElementById('btnNext');
+
+        if (currentQuestion === questions.length - 1) {
+            next.textContent = "Finalizar Diagnóstico Laboratorial";
+            next.onclick = finish;
+        } else {
+            next.textContent = "Avançar";
+            next.onclick = () => changeQuestion(1);
+        }
+    }
+
+    function finish() {
+        let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+        let percent = Math.round((correct/questions.length) * 100);
+
+        if (window.confetti) confetti.reset();
+
+        document.getElementById('finalPercent').textContent = percent + "%";
+        document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+        document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+
+        let summary = '<div style="text-align:left; margin-top:20px;">';
+
+        if (percent < 80) {
+            summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+                <strong>⚠️ Domínio Químico Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Revise a teoria sobre as técnicas de separação com rigor antes de voltar ao laboratório virtual.
+            </div>`;
+            document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Limpar Reagentes e Refazer Prova</button>';
+        } else {
+            summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+                <strong>🏆 Excelente Desempenho Analítico!</strong> Você demonstrou uma base sólida sobre reações, misturas e processos químicos. A sua aprovação técnica está garantida neste módulo laboratorial.
+            </div>`;
+            document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Refazer Prova (Zerar Histórico)</button>';
+        }
+
+        if (correct < questions.length) {
+            summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+            questions.forEach((q, i) => {
+                if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                    summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                        <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                        <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+                        <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                    </div>`;
+                }
+            });
+        }
+        summary += '</div>';
+
+        document.getElementById('review-container').innerHTML = summary;
+        setMode('result');
+    }
+
+    function reset() {
+        localStorage.removeItem(storageKey);
+        userAnswers = new Array(questions.length).fill(null);
+        currentQuestion = 0;
+        setMode('practice');
+    }
+
+    // Inicialização da interface
+    setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
