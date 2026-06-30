@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Física: Calorimetria e Dilatação - Promover</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            /* Cores adaptadas para Física/Termologia (Fogo/Calor - Laranja/Vermelho) */
+            --bg-color: #FFF7ED;
+            --text-color: #0F172A;
+            --border-color: #7C2D12;
+            --white: #FFFFFF;
+            --theme-light: #FFEDD5;
+            --theme-medium: #F97316;
+            --theme-dark: #C2410C;
+            --theme-contrast: #EA580C;
+            --theme-accent: #FB923C;
+            --theme-text-active: #FFFFFF;
+
+            /* NÃO ALTERAR AS CORES ABAIXO */
+            --correct-bg: #D1FAE5;
+            --correct-border: #059669;
+            --wrong-bg: #FFE4E6;
+            --wrong-border: #BE123C;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; padding: 20px; padding-bottom: 100px;
+            background-image: linear-gradient(var(--theme-light) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+            100% { transform: translateX(0); }
+        }
+        .shake-effect { animation: shake 0.4s ease-in-out; }
+
+        @keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.15); color: var(--theme-contrast); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); color: var(--theme-contrast); }
+            100% { transform: scale(1); }
+        }
+
+        .logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center;
+        flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+
+        .css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; 
+        letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px;
+        border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); 
+        text-align: center; margin-bottom: 15px; }
+
+        h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase;
+        letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+
+        .subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+
+        .container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+        .toggle-container { background-color: var(--white); border: 2px solid var(--border-color);
+        border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+
+        .toggle-btn {flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px;
+        font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark);
+        cursor: pointer; transition: all 0.3s ease; }
+
+        .toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active);
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+
+        .search-container { position: relative; width: 100%; }
+
+        .search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); 
+        border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; 
+        font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); 
+        outline: none; transition: all 0.2s ease; }
+
+        .search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); 
+        border-color: var(--theme-dark); }
+
+        .search-icon {position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+        font-size: 1.2rem; opacity: 0.7; }
+
+        #no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+        .content-group {display: flex; flex-direction: column; gap: 12px; }
+
+        .section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); 
+        color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px;
+        border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; 
+        align-self: flex-start; margin-bottom: 5px; }
+
+        .theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px;
+        background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); 
+        font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+
+        .theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px;
+        background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+        
+        .theory-box h3 {font-size: 1.2rem; font-weight: 900; color: var(--theme-dark);
+        margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px;
+        display: flex; align-items: center; gap: 8px;}
+
+        .visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; 
+        padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
+        gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+
+        .highlight-box { background-color: #FEF3C7; border-left: 4px solid #D97706;
+        padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #92400E; }
+
+        .highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+        .difficulty-badge {display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; 
+        font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); 
+        box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+
+        .dif-facil {background: #D1FAE5; color: #065F46; }
+        .dif-medio { background: #FEF08A; color: #713F12; }
+        .dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+        .question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px;
+        margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+
+        .question-map::-webkit-scrollbar {display: none; }
+
+        .map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color);
+        border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800;
+        font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+
+        .map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); 
+        transform: scale(1.1); }
+
+        .map-dot.answered-correct {background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+        .map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+        .option-btn { display: flex; align-items: center; width: 100%; padding: 16px;
+        background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px;
+        margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); 
+        font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+
+        .option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); 
+        border-color: var(--theme-dark); }
+
+        .opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); 
+        margin-right: 15px; display: flex; align-items: center; justify-content: center;
+        font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+
+        .option-btn.correct {background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+        .option-btn.correct .opt-circle {background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+
+        .option-btn.wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+        .option-btn.wrong .opt-circle {background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+
+        .option-btn.disabled {pointer-events: none; opacity: 0.7; }
+
+        .feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); 
+        border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+
+        .feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem;
+        margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+
+        .feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; 
+        line-height: 1.5; color: #0F172A; }
+
+        .feedback-item.correct-opt {border-left-color: var(--correct-border); font-weight: 700;
+        color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+
+        .feedback-item.wrong-opt {border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+        .svg-illustration { width: 100%; border-radius: 12px; background: #FFFFFF; border: 2px solid #E2E8F0; margin: 15px 0; display: block; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+
+        .result-card {background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; 
+        box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+
+        .stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+        .percentage-big {font-size: 4.5rem; font-weight: 900; color: var(--theme-dark);
+        line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+
+        .btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; 
+        border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; 
+        cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s;
+        text-transform: uppercase; margin-top: 20px; }
+
+        .btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+
+        .quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); 
+        border-top: 3px solid var(--border-color); padding: 15px 20px; display: none;
+        justify-content: space-between; align-items: center; z-index: 100; }
+
+        .nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); 
+        cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+
+        .btn-next { background-color: var(--theme-dark); color: white; }
+        .btn-prev { background-color: white; color: var(--text-color); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🔥</span> PROMOVER</div>
+        <h1>FÍSICA / 8º ANO</h1>
+        <p class="subtitle">Cap. 9 (Calorimetria) & Cap. 10 (Dilatação Térmica)</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📚 Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🎯 Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>Termo não encontrado.</p></div>
+
+        <!-- DIVS TEÓRICAS -->
+        <div class="content-group">
+            <span class="section-badge">Capítulo 09</span>
+            <div class="theory-box">
+                <h3>Temperatura x Calor</h3>
+                <p>Na física, Temperatura e Calor não são a mesma coisa!</p>
+                <ul style="padding-left: 20px;">
+                    <li><strong>Temperatura:</strong> É a medida do grau de agitação das moléculas de um corpo. Quanto mais agitadas, maior a temperatura.</li>
+                    <li><strong>Calor:</strong> É a energia térmica em *trânsito* (em movimento) que flui naturalmente do corpo mais quente para o mais frio.</li>
+                </ul>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Bloco Quente -->
+                    <rect x="50" y="30" width="80" height="80" rx="8" fill="#EF4444" stroke="#B91C1C" stroke-width="2"/>
+                    <text x="90" y="70" font-family="sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">80ºC</text>
+                    
+                    <!-- Seta de Fluxo de Calor -->
+                    <path d="M140 70 L250 70 L240 60 M250 70 L240 80" fill="none" stroke="#EA580C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <text x="195" y="55" font-family="sans-serif" font-size="14" font-weight="bold" fill="#C2410C" text-anchor="middle">CALOR</text>
+
+                    <!-- Bloco Frio -->
+                    <rect x="260" y="30" width="80" height="80" rx="8" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2"/>
+                    <text x="300" y="70" font-family="sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">20ºC</text>
+                    
+                    <text x="200" y="140" font-family="sans-serif" font-size="12" fill="#475569" text-anchor="middle">O calor flui do mais quente para o mais frio até o Equilíbrio Térmico.</text>
+                </svg>
+                
+                <div class="highlight-box warning">
+                    <strong>Alerta de Pega-Ratão!</strong> Ninguém "tem calor". O correto fisicamente é dizer que você "recebeu calor" ou está com a "temperatura alta".
+                </div>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">Capítulo 09</span>
+            <div class="theory-box">
+                <h3>Transmissão de Calor</h3>
+                <p>O calor pode viajar de três maneiras diferentes:</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Fogo -->
+                    <path d="M180 200 Q200 150 220 200 Z" fill="#F59E0B"/>
+                    <path d="M190 200 Q200 170 210 200 Z" fill="#EF4444"/>
+                    
+                    <!-- Panela -->
+                    <path d="M150 130 L250 130 L240 180 L160 180 Z" fill="#94A3B8" stroke="#475569" stroke-width="3"/>
+                    
+                    <!-- Água fervendo (Convecção) -->
+                    <path d="M165 175 L235 175 L240 130 L160 130 Z" fill="#60A5FA" opacity="0.6"/>
+                    <path d="M180 170 C170 150 190 140 180 135" fill="none" stroke="#2563EB" stroke-width="2" stroke-dasharray="3"/>
+                    <path d="M220 170 C230 150 210 140 220 135" fill="none" stroke="#2563EB" stroke-width="2" stroke-dasharray="3"/>
+                    <text x="200" y="155" font-family="sans-serif" font-size="10" font-weight="bold" fill="#1E3A8A" text-anchor="middle">CONVECÇÃO</text>
+                    
+                    <!-- Cabo da panela (Condução) -->
+                    <rect x="70" y="130" width="80" height="8" fill="#475569"/>
+                    <path d="M80 134 L140 134" fill="none" stroke="#F87171" stroke-width="2" stroke-dasharray="4"/>
+                    <text x="100" y="120" font-family="sans-serif" font-size="10" font-weight="bold" fill="#0F172A" text-anchor="middle">CONDUÇÃO</text>
+
+                    <!-- Ondas do Fogo (Irradiação) -->
+                    <path d="M140 190 Q120 200 140 210" fill="none" stroke="#F59E0B" stroke-width="2"/>
+                    <path d="M260 190 Q280 200 260 210" fill="none" stroke="#F59E0B" stroke-width="2"/>
+                    <text x="280" y="205" font-family="sans-serif" font-size="10" font-weight="bold" fill="#0F172A">IRRADIAÇÃO</text>
+                </svg>
+
+                <ul style="padding-left: 20px;">
+                    <li><strong>Condução:</strong> Ocorre principalmente nos <em>Sólidos</em>. O calor passa de partícula para partícula (ex: a colher de metal que esquenta na panela).</li>
+                    <li><strong>Convecção:</strong> Ocorre em fluidos (<em>Líquidos e Gases</em>). O fluido quente fica leve e sobe, o fluido frio fica pesado e desce. É assim que o ar-condicionado gela o quarto!</li>
+                    <li><strong>Irradiação (Radiação):</strong> Único modo que ocorre no <em>Vácuo</em> (espaço sideral). O calor viaja através de ondas eletromagnéticas. (ex: o calor do Sol chegando à Terra).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">Capítulo 10</span>
+            <div class="theory-box">
+                <h3>Dilatação Térmica</h3>
+                <p>Quando a maioria dos materiais é aquecida, suas moléculas vibram mais forte e precisam de mais espaço, fazendo com que o corpo **aumente de tamanho** (Dilatação). Se for resfriado, ele diminui (Contração).</p>
+                
+                <svg class="svg-illustration" viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Trilho Antes -->
+                    <rect x="50" y="40" width="130" height="20" fill="#94A3B8"/>
+                    <rect x="220" y="40" width="130" height="20" fill="#94A3B8"/>
+                    <text x="200" y="30" font-family="sans-serif" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">Normal (Temperatura Ambiente)</text>
+                    <!-- Junta de dilatação (Vão) -->
+                    <path d="M185 40 L185 60 M215 40 L215 60" fill="none" stroke="#EF4444" stroke-width="2" stroke-dasharray="2"/>
+                    <text x="200" y="75" font-family="sans-serif" font-size="10" fill="#EF4444" text-anchor="middle">Vão (Junta de Dilatação)</text>
+                    
+                    <!-- Trilho Depois (Aquecido) -->
+                    <rect x="50" y="120" width="145" height="20" fill="#F87171"/>
+                    <rect x="205" y="120" width="145" height="20" fill="#F87171"/>
+                    <text x="200" y="110" font-family="sans-serif" font-size="12" font-weight="bold" fill="#C2410C" text-anchor="middle">Aquecido (Dia muito quente)</text>
+                    
+                    <!-- Sol indicando calor -->
+                    <circle cx="360" cy="130" r="15" fill="#FBBF24"/>
+                    <path d="M360 105 L360 110 M360 150 L360 155 M335 130 L340 130 M380 130 L385 130" stroke="#F59E0B" stroke-width="2"/>
+                </svg>
+
+                <p>É por isso que calçadas, pontes e trilhos de trem possuem pequenas frestas chamadas <strong>juntas de dilatação</strong>. Se não houvesse esse espaço, as placas empurrariam umas as outras e rachariam no calor!</p>
+                <div class="highlight-box">
+                    <strong>Dilatação dos Líquidos:</strong> Os líquidos se dilatam MAIS que os sólidos. Ao aquecer uma panela cheia até a boca, a panela cresce, mas a água cresce ainda mais e transborda! O que transbordou chamamos de <em>Dilatação Aparente</em>.
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">
+            Iniciar Diagnóstico (30 Q) →
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">O Teste Térmico</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">
+                30 questões rigorosas de Termologia. Acerte <strong>80% (24/30)</strong> para provar seu domínio analítico. Leia a correção de cada erro!
+            </p>
+        </div>
+
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Analítico</h2>
+            <div class="stars-container" id="finalStars">★</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const contentGroups = document.querySelectorAll('.content-group');
+    const noResultsMsg = document.getElementById('no-results');
+
+    searchInput.addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let totalVisible = 0;
+
+        contentGroups.forEach(group => {
+            const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if (textContent.includes(term)) {
+                group.style.display = 'flex';
+                totalVisible++;
+            } else {
+                group.style.display = 'none';
+            }
+        });
+        noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+    });
+
+    const questions = [
+        // ================= 10 QUESTÕES FÁCEIS =================
+        {
+            id: 1, level: "Fácil",
+            text: "No vocabulário do dia a dia, é comum dizermos 'Estou com calor!'. No entanto, para a Física, essa frase está conceitualmente errada. Por quê?",
+            options: ["Porque o calor não é um sentimento, mas sim um fluido chamado 'calórico' que entra nos pulmões.", "Porque corpos não 'possuem' calor. O calor é energia em trânsito entre corpos com temperaturas diferentes.", "Porque o correto é dizer que o corpo está com muita temperatura, e a temperatura é energia em trânsito.", "Porque os seres vivos não absorvem calor, apenas irradiam frio para o ambiente."],
+            correct: 1,
+            explanation: {
+                correct: "O Calor é uma energia em movimento! Assim que ele entra no seu corpo, ele deixa de ser calor e passa a ser 'energia térmica'. Corpos possuem energia interna, mas nunca 'possuem' calor.",
+                options: ["Erro: A teoria do 'fluido calórico' foi derrubada há séculos.", "Certa: Calor é energia cruzando fronteiras devido à diferença de temperatura.", "Erro: A temperatura não é energia em trânsito, ela mede a agitação das moléculas.", "Erro: O 'frio' não existe na física (frio é apenas a ausência de calor)."]
+            }
+        },
+        {
+            id: 2, level: "Fácil",
+            text: "Dois blocos de metal, A (a 90°C) e B (a 10°C), são colocados em contato direto dentro de uma caixa isolada. O que acontecerá espontaneamente com o passar do tempo?",
+            svg: `<svg viewBox="0 0 150 80" style="width: 150px; height: auto; display: block; margin: 0 auto;">
+                    <rect x="20" y="20" width="50" height="50" fill="#EF4444" stroke="#B91C1C" stroke-width="2"/>
+                    <text x="45" y="50" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle">A</text>
+                    <rect x="80" y="20" width="50" height="50" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2"/>
+                    <text x="105" y="50" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle">B</text>
+                  </svg>`,
+            options: ["A temperatura do bloco B vai subir para 90°C, e o A não mudará.", "O calor fluirá do bloco B (mais frio) para o bloco A (mais quente).", "O calor fluirá do bloco A para o bloco B até que ambos atinjam a mesma temperatura (equilíbrio térmico).", "Ambos perderão calor para o vácuo dentro da caixa até congelarem."],
+            correct: 2,
+            explanation: {
+                correct: "A lei fundamental da termologia diz que o calor sempre viaja do corpo de MAIOR temperatura para o de MENOR temperatura, até que os dois se igualem.",
+                options: ["Erro: O bloco A precisa esfriar ao ceder energia para o B.", "Erro: O calor NUNCA flui naturalmente do mais frio pro mais quente.", "Certa: Fluxo do Quente (A) para o Frio (B) até o equilíbrio.", "Erro: A caixa é isolada, a energia não foge."]
+            }
+        },
+        {
+            id: 3, level: "Fácil",
+            text: "A energia do Sol cruza milhões de quilômetros de espaço vazio (vácuo) até aquecer o planeta Terra. Qual é o ÚNICO processo de propagação de calor capaz de ocorrer no vácuo?",
+            options: ["Convecção", "Condução", "Irradiação (Radiação)", "Dilatação Térmica"],
+            correct: 2,
+            explanation: {
+                correct: "Como no vácuo não há matéria (átomos), a condução e a convecção não podem acontecer. A Irradiação ocorre através de ondas eletromagnéticas (como a luz), que não precisam de meio material para viajar.",
+                options: ["Erro: Convecção precisa de fluidos (ar/água).", "Erro: Condução precisa de matéria sólida em contato.", "Certa: Irradiação viaja pelo vácuo via ondas.", "Erro: Dilatação é o crescimento do corpo, não propagação de calor."]
+            }
+        },
+        {
+            id: 4, level: "Fácil",
+            text: "Por que as pontes de concreto, viadutos e trilhos de trem não são construídos em blocos contínuos e sempre apresentam pequenas frestas (vãos) chamadas 'juntas de dilatação' entre eles?",
+            options: ["Para economizar concreto e aço na hora da obra civil.", "Para permitir que a água da chuva escoe facilmente, evitando enchentes no viaduto.", "Para que o vento passe pelas frestas, impedindo que a ponte balance.", "Para dar espaço aos materiais crescerem (dilatarem) nos dias de muito calor sem trincar a estrutura."],
+            correct: 3,
+            explanation: {
+                correct: "Nos dias quentes, os materiais aumentam de tamanho (dilatam). Sem esse vão de folga, os blocos se empurrariam com força colossal, envergando ou quebrando o concreto e o aço.",
+                options: ["Erro: A economia seria insignificante.", "Erro: O escoamento é feito por ralos e tubulação, não rachaduras.", "Erro: Aerodinâmica de pontes não se resolve com frestas no chão.", "Certa: Evitar o rompimento por dilatação no verão."]
+            }
+        },
+        {
+            id: 5, level: "Fácil",
+            text: "O que acontece microscópica e fisicamente quando aquecemos uma barra de ferro no fogão?",
+            options: ["As moléculas do ferro diminuem de tamanho e se aproximam, contraindo a barra.", "As moléculas do ferro passam a vibrar com maior intensidade e se afastam umas das outras, dilatando a barra.", "O fogo insere elétrons novos na barra, o que a faz inchar.", "As moléculas de ferro se transformam em moléculas de ar e a barra evapora na hora."],
+            correct: 1,
+            explanation: {
+                correct: "Aumentar a temperatura significa aumentar a agitação molecular. Moléculas muito agitadas 'batem' mais forte umas nas outras, exigindo mais espaço. O resultado final e macroscópico é a dilatação da barra.",
+                options: ["Erro: Aquecimento gera afastamento, não aproximação (contração).", "Certa: Mais vibração térmica = mais espaço ocupado (dilatação).", "Erro: Fogo não insere partículas para inchar objetos.", "Erro: Ferro tem altíssimo ponto de ebulição, não evapora no fogão."]
+            }
+        },
+        {
+            id: 6, level: "Fácil",
+            text: "Por que os cabos das frigideiras geralmente são feitos de madeira ou plástico duro (baquelite), e não do mesmo metal que o resto da panela?",
+            options: ["Porque a madeira e o plástico são excelentes condutores de calor.", "Porque o plástico atrai o calor do fogo para cozinhar mais rápido.", "Porque a madeira e o plástico são isolantes térmicos, impedindo que o calor chegue à nossa mão por condução.", "Porque eles dilatam mais que o metal, garantindo que a panela não encolha no fogo."],
+            correct: 2,
+            explanation: {
+                correct: "Materiais como madeira, borracha, plástico e isopor dificultam muito a passagem da energia térmica. Como são maus condutores (isolantes), eles protegem a mão do cozinheiro.",
+                options: ["Erro: Metais são excelentes condutores, a madeira não.", "Erro: Plástico não atrai energia.", "Certa: Eles são isolantes e bloqueiam a condução térmica da panela para a mão.", "Erro: A dilatação não tem relação com proteger a mão de queimaduras."]
+            }
+        },
+        {
+            id: 7, level: "Fácil",
+            text: "O ar-condicionado sempre deve ser instalado na parte mais ALTA da parede, perto do teto. Qual processo de transferência de calor justifica essa regra?",
+            options: ["Irradiação", "Condução", "Convecção", "Sublimação"],
+            correct: 2,
+            explanation: {
+                correct: "O ar frio que sai da máquina é mais denso ('pesado') e desce. O ar quente do ambiente é menos denso ('leve') e sobe para ser resfriado pelo aparelho. Isso gera as correntes de convecção.",
+                options: ["Erro: Irradiação não mexe massas de ar dessa forma.", "Erro: Condução é em sólidos.", "Certa: Convecção (o frio desce e o quente sobe).", "Erro: Sublimação é mudança do estado sólido pro gasoso."]
+            }
+        },
+        {
+            id: 8, level: "Fácil",
+            text: "Como funciona um termômetro clínico comum de vidro com líquido vermelho (álcool colorido)?",
+            options: ["O líquido dentro dele atrai as bactérias do paciente, indicando se há infecção.", "O calor do paciente aquece o líquido, fazendo-o dilatar e subir pelo tubinho de vidro, marcando a temperatura.", "O líquido contrai quando esquenta, marcando os graus de baixo para cima.", "O vidro derrete suavemente para se moldar ao corpo e marcar a febre."],
+            correct: 1,
+            explanation: {
+                correct: "Quando você coloca o termômetro na axila, ocorre o equilíbrio térmico. O calor do seu corpo aquece o álcool lá dentro. Por ser um líquido, ele se dilata bastante e sobe pela fina coluna graduada.",
+                options: ["Erro: Termômetros não medem bactérias, só temperatura.", "Certa: Uso prático da dilatação volumétrica dos líquidos.", "Erro: Quase todos os líquidos (exceto a água de 0 a 4ºC) dilatam (aumentam) ao esquentar.", "Erro: O vidro de uso clínico é feito para resistir e não derreter no corpo humano."]
+            }
+        },
+        {
+            id: 9, level: "Fácil",
+            text: "O calor que usamos apenas para mudar a TEMPERATURA de um corpo (sem mudar seu estado físico) é diferente do calor usado para DERRETER ou FERVER um corpo (mudar o estado físico). Como são chamados esses dois calores, respectivamente?",
+            options: ["Calor Específico e Calor Frio.", "Calor Aparente e Calor Térmico.", "Calor Sensível e Calor Latente.", "Calor de Fusão e Calor Mágico."],
+            correct: 2,
+            explanation: {
+                correct: "Calor Sensível: faz a temperatura subir ou descer (você 'sente'). Calor Latente: a temperatura trava/fica constante, e a energia é gasta inteira apenas para transformar gelo em água ou água em vapor ('latente' = oculto).",
+                options: ["Erro: Frio não é uma forma de calor.", "Erro: Nomes inventados para confundir.", "Certa: Sensível (muda o grau Celsius) e Latente (muda o estado físico).", "Erro: 'Calor Mágico' não existe na ciência."]
+            }
+        },
+        {
+            id: 10, level: "Fácil",
+            text: "Quando você pisa no tapete da sala descalço e depois pisa no piso de cerâmica fria, você tem a nítida sensação de que a cerâmica é muito mais gelada que o tapete. O que a física diz sobre isso se a casa inteira está a 20°C?",
+            options: ["A cerâmica realmente guarda o frio da noite anterior, enquanto a lã do tapete produz calor próprio.", "Ambos estão a 20°C, mas a cerâmica é uma boa condutora térmica e 'rouba' o calor do seu pé mais rápido, dando a sensação de frio.", "O tapete tem uma temperatura maior que a cerâmica porque é feito de material orgânico vivo.", "A cerâmica reflete o calor por irradiação para o teto, esfriando o piso na hora do toque."],
+            correct: 1,
+            explanation: {
+                correct: "O tapete e a cerâmica estão em equilíbrio térmico com a sala (20ºC). O seu pé está a 36ºC. A cerâmica rouba energia do seu pé rapidamente (alta condutividade), enganando seu cérebro de que ela é 'mais fria'.",
+                options: ["Erro: Piso e tapete não produzem nem estocam temperaturas mágicas.", "Certa: Condutividade térmica diferente causa sensação térmica diferente.", "Erro: Fios sintéticos ou mortos não geram calor sozinhos.", "Erro: Não é por irradiação, é pelo contato do pé (condução)."]
+            }
+        },
+
+        // ================= 10 QUESTÕES MÉDIAS =================
+        {
+            id: 11, level: "Médio",
+            text: "Você foi à praia ao meio-dia. A areia estava 'pelando', queimando seus pés, mas a água do mar estava geladinha. No entanto, ambos ficaram sob o mesmo sol forte a manhã inteira. Por que isso acontece?",
+            options: ["Porque o calor específico da areia é muito maior que o da água.", "Porque o calor específico da água é muito MAIOR que o da areia, exigindo muito mais energia para a água esquentar um pouco.", "Porque a areia reflete todo o calor e a água absorve tudo.", "Porque as correntes de convecção não ocorrem no mar durante o dia."],
+            correct: 1,
+            explanation: {
+                correct: "O 'Calor Específico' mede a resistência que a matéria tem de esquentar. A água tem um dos maiores calores específicos da natureza: ela demora horas para esquentar e horas para esfriar. A areia esquenta rápido com pouco calor.",
+                options: ["Erro: Se a areia tivesse calor específico maior, ela demoraria mais para esquentar.", "Certa: A água é muito 'teimosa' para esquentar (alto calor específico).", "Erro: A areia escura absorve calor; se refletisse tudo, ficaria fria.", "Erro: As correntes ocorrem, mas não são a principal causa da diferença de temperatura inicial."]
+            }
+        },
+        {
+            id: 12, level: "Médio",
+            text: "Você pegou um pote de vidro com tampa de metal na geladeira e não consegue abri-lo de jeito nenhum porque travou. Sua avó aconselha: 'Jogue água bem quente na tampa!'. Por que essa dica funciona para soltar a tampa?",
+            svg: `<svg viewBox="0 0 100 100" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+                    <rect x="30" y="40" width="40" height="50" rx="4" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                    <rect x="25" y="25" width="50" height="15" rx="2" fill="#F87171" stroke="#B91C1C" stroke-width="2"/>
+                    <path d="M50,10 Q50,0 60,10 Q50,20 50,10" fill="#F59E0B" opacity="0.6"/>
+                    <path d="M40,15 Q40,5 50,15 Q40,25 40,15" fill="#F59E0B" opacity="0.6"/>
+                  </svg>`,
+            options: ["Porque a água quente dissolve a ferrugem do metal.", "Porque o metal da tampa e o vidro do pote têm coeficientes de dilatação diferentes. O metal dilata (cresce) mais rápido e mais intensamente que o vidro com a água quente, afrouxando o encaixe.", "Porque o vidro sofre contração ao receber calor, encolhendo e soltando o metal.", "Porque a água quente evapora a umidade da geladeira que estava servindo como cola."],
+            correct: 1,
+            explanation: {
+                correct: "O metal dilata com muita facilidade. Ao receber água quente, o aro da tampa cresce, aumentando o diâmetro, separando-se das roscas de vidro que crescem muito pouco.",
+                options: ["Erro: A água não dissolve ferrugem instantaneamente e potes não enferrujam por fora tão fácil.", "Certa: O coeficiente de dilatação do metal é superior ao do vidro.", "Erro: O vidro também dilata com calor, não encolhe.", "Erro: Gelo solta com água, mas a trava hermética é mecânica térmica, não 'cola de gelo'."]
+            }
+        },
+        {
+            id: 13, level: "Médio",
+            text: "Ao projetarmos ferrovias, usamos uma fórmula para calcular o quanto o trilho vai crescer no verão: ΔL = L₀ · α · ΔT. Baseado nessa fórmula da Dilatação Linear, de quais fatores depende o crescimento da barra de metal?",
+            options: ["Apenas da variação de temperatura (se esquentou muito ou pouco).", "Do comprimento inicial da barra, do tipo de material que ela é feita (coeficiente alfa) e de quanto a temperatura mudou.", "Da espessura, da largura e da cor do trilho de trem.", "Do peso da barra e do volume do concreto que a segura."],
+            correct: 1,
+            explanation: {
+                correct: "A equação mostra que: quanto maior o trilho era no frio (L₀), de qual metal ele é feito (α) e quantos graus a temperatura subiu (ΔT), maior será o pedaço que vai crescer (ΔL).",
+                options: ["Erro: A fórmula exige três variáveis.", "Certa: Comprimento inicial, material e variação térmica.", "Erro: Dilatação LINEAR importa-se com o comprimento, não com largura ou cor.", "Erro: Massa/peso não entram diretamente na fórmula de dilatação geométrica."]
+            }
+        },
+        {
+            id: 14, level: "Médio",
+            text: "Um copo de vidro comum ('vidro vagabundo') estoura quando jogamos café fervendo dentro dele. Já as vasilhas do tipo 'Pyrex' ou vidro temperado não estouram. Qual o motivo físico da quebra do copo comum?",
+            options: ["O vidro comum tem um baixo calor específico e queima por dentro.", "A parte de dentro do vidro recebe calor e se dilata rapidamente, enquanto a parte de fora, que está fria e é má condutora, não acompanha o crescimento. Essa diferença trinca o copo.", "O vidro reage quimicamente com o café e dissolve sua estrutura.", "A radiação do café fervente derrete instantaneamente o fundo do copo mole."],
+            correct: 1,
+            explanation: {
+                correct: "Como o vidro é mau condutor, o calor demora a atravessar a parede. O miolo do copo cresce, a casca externa fica parada. Esse 'estica-e-puxa' mecânico rompe o vidro duro e sem elasticidade.",
+                options: ["Erro: O copo quebra por força mecânica de dilatação, não porque 'queima'.", "Certa: Choque térmico causado por dilatação desigual.", "Erro: Vidro não dissolve em café.", "Erro: Café emite mínima radiação, insuficiente para derreter vidro."]
+            }
+        },
+        {
+            id: 15, level: "Médio",
+            text: "Em refrigeradores antigos e congeladores simples, por que as prateleiras não são fechadas (chapadas) de plástico ou vidro, mas sim de grades aramadas (furadas)?",
+            options: ["Para economizar material e deixar a geladeira mais barata.", "Para facilitar a formação de gelo em volta dos arames.", "Para permitir que as correntes de convecção do ar (ar frio que desce do congelador e ar quente que sobe da gaveta) circulem por toda a geladeira sem bloqueios.", "Para que as panelas não escorreguem e caiam."],
+            correct: 2,
+            explanation: {
+                correct: "O congelador fica no topo. O ar gélido e pesado 'despenca' furando as grades e gela a comida. O ar quente das verduras, que é leve, sobe pelos mesmos furos para ser resfriado no motor.",
+                options: ["Erro: O motivo central é a termodinâmica, não economia.", "Erro: A formação de gelo nos arames atrapalha a eficiência, e não é desejada.", "Certa: As grades permitem as livres correntes de convecção do ar.", "Erro: Vidros seriam mais seguros contra escorregões, mas piores para o ar circular em modelos velhos sem ventoinha."]
+            }
+        },
+        {
+            id: 16, level: "Médio",
+            text: "Em dias muito ensolarados e quentes, é recomendável usar roupas claras (brancas) e evitar usar camisas pretas. Por qual motivo físico relacionado à Irradiação?",
+            options: ["O preto é uma cor que anula as correntes de convecção do corpo.", "O branco absorve as ondas de calor e as guarda, enquanto o preto reflete o suor.", "A cor preta é a que mais absorve a radiação térmica da luz do sol, enquanto o branco reflete a maior parte dela de volta para o ambiente.", "As roupas pretas são feitas de algodão, que é um bom condutor de calor."],
+            correct: 2,
+            explanation: {
+                correct: "A luz solar carrega energia (irradiação térmica). Objetos pretos ou escuros absorvem quase 100% da luz e esquentam violentamente. O branco reflete quase todas as frequências de luz e esquenta menos.",
+                options: ["Erro: Cor não afeta convecção de líquidos/gases diretamente.", "Erro: É exatamente o inverso. Branco reflete, Preto absorve.", "Certa: Preto absorve máxima irradiação.", "Erro: A cor, não o material de fábrica, é o alvo da irradiação aqui."]
+            }
+        },
+        {
+            id: 17, level: "Médio",
+            text: "A água se comporta de um jeito super 'diferentão' e bizarro em relação a quase todas as outras substâncias do universo quando congelamos ela. Que comportamento 'anômalo' é esse?",
+            svg: `<svg viewBox="0 0 100 100" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+                    <path d="M10,80 L90,80 L90,50 C70,60 30,40 10,50 Z" fill="#3B82F6" opacity="0.6"/> <!-- Água -->
+                    <path d="M10,50 C30,40 70,60 90,50 L90,30 C70,40 30,20 10,30 Z" fill="#E0F2FE" stroke="#38BDF8"/> <!-- Gelo flutuando -->
+                    <path d="M40,70 L50,65 L60,70 L50,75 Z" fill="#F59E0B"/> <!-- Peixe vivo no fundo -->
+                  </svg>`,
+            options: ["Ao invés de contrair (diminuir de tamanho) quando a temperatura cai de 4°C para 0°C, a água se dilata (incha), tornando o gelo menos denso que a água líquida (por isso o gelo boia).", "Ao congelar a 0°C, a água afunda porque o gelo vira o material mais pesado do planeta.", "Ela perde completamente o seu calor específico e esfria o ambiente a -50°C magicamente.", "A água, ao contrário dos metais, não dilata de forma alguma quando é esquentada na panela a 100°C."],
+            correct: 0,
+            explanation: {
+                correct: "De 4ºC até 0ºC, a água faz a mágica de crescer e ficar mais leve por causa da formação das suas pontes de hidrogênio. O gelo boia e protege os peixes que vivem na água líquida no fundo do lago no inverno!",
+                options: ["Certa: Anomalia da água (incha ao invés de encolher perto de congelar).", "Erro: O gelo BOIA, então ele é menos pesado (menos denso) que a água líquida.", "Erro: O calor específico existe, não some.", "Erro: De 4ºC a 100ºC ela dilata igual aos líquidos normais."]
+            }
+        },
+        {
+            id: 18, level: "Médio",
+            text: "O que diz a fórmula de cálculo da quantidade de CALOR SENSÍVEL: Q = m · c · ΔT, famosa pela frase mnemônica do 'Q macete'?",
+            options: ["Que a quantidade de Calor (Q) necessária para esquentar um corpo é inversamente proporcional à sua Massa.", "Que para saber a energia necessária (Q), você deve multiplicar a Massa (m), o Calor Específico do material (c) e o quanto a Temperatura mudou (ΔT).", "Que a Massa multiplica a Temperatura para dar origem à Pressão Atmosférica.", "Que o Calor (Q) é gerado apenas se a substância mudar de estado físico de líquido para gasoso."],
+            correct: 1,
+            explanation: {
+                correct: "A fórmula fundamental da calorimetria resume tudo: para esquentar água pesada e gelada, preciso de muita energia (Q) = muita Massa (m) vezes material chato de esquentar (c da água é alto) vezes um pulo gigante de Graus (ΔT alto).",
+                options: ["Erro: É diretamente proporcional. Mais massa = mais calor necessário.", "Certa: Tradução direta da equação Q = m * c * ΔT.", "Erro: Esta fórmula não lida com pressão.", "Erro: Se muda de estado, a fórmula é do calor latente (Q = m * L)."]
+            }
+        },
+        {
+            id: 19, level: "Médio",
+            text: "Um anel de ferro tem um furo no meio. Se você aquecer intensamente esse anel inteiro, o que acontece com o tamanho do 'buraco' do anel (o furo vazio no centro)?",
+            options: ["O buraco diminui, porque o ferro cresce para todos os lados, apertando o centro até fechá-lo.", "O buraco cresce. Na dilatação térmica, o corpo age como se fosse uma fotografia ampliada: tudo aumenta, inclusive as partes vazias acompanham o crescimento para fora.", "O buraco continua do mesmo tamanho absoluto de antes.", "O anel estoura imediatamente pela pressão."],
+            correct: 1,
+            explanation: {
+                correct: "Essa é uma pegadinha clássica de física! A dilatação superficial afasta as partículas. Imagine um anel de metal; se as moléculas no aro ficam mais distantes umas das outras, a circunferência total do anel cresce, e o furo também alarga.",
+                options: ["Erro: Raciocínio instintivo, mas a física prova que ele dilata de dentro para fora radialmente.", "Certa: A cavidade vazia dilata como se fosse feita do próprio metal.", "Erro: Não há estabilidade, o furo aumenta.", "Erro: Se for uniforme, o anel não rompe, apenas cresce."]
+            }
+        },
+        {
+            id: 20, level: "Médio",
+            text: "O suor humano é um mecanismo formidável de defesa criado pela natureza para regular a nossa temperatura interna. Em termos termológicos, como a gotícula de suor resfria seu corpo num dia quente?",
+            options: ["O suor é uma água mágica produzida pelo fígado que possui temperatura negativa.", "Quando a água do suor evapora na sua pele para virar gás, ela 'rouba' (absorve) um grande calor latente de vaporização da sua pele, resfriando-a.", "O sal presente no suor atrai as ondas de irradiação solar, blindando a pele.", "O líquido tapa os poros hermeticamente e abafa o calor, para que ele saia apenas pela boca."],
+            correct: 1,
+            explanation: {
+                correct: "Toda mudança do estado Líquido para o Gás exige uma quantidade gigante de energia. A gota d'água do suor rouba o calor do seu sangue e pele para poder evaporar e ir pro ar, te resfriando brutalmente no processo.",
+                options: ["Erro: É água normal com sais.", "Certa: Resfriamento por evaporação (roubo de calor latente).", "Erro: O sal não atua como escudo magnético antissolar.", "Erro: Tampar os poros causaria hipertermia (morte por calor)."]
+            }
+        },
+
+        // ================= 10 QUESTÕES DIFÍCEIS =================
+        {
+            id: 21, level: "Difícil",
+            text: "Dentro da Garrafa Térmica (vaso de Dewar), o café consegue ficar quente por muito tempo porque ela possui três barreiras perfeitas contra a fuga do calor. Relacione as proteções da garrafa com o que elas bloqueiam.",
+            svg: `<svg viewBox="0 0 100 150" style="width: 80px; height: auto; display: block; margin: 0 auto;">
+                    <path d="M30,20 L30,40 L20,50 L20,130 Q20,140 50,140 Q80,140 80,130 L80,50 L70,40 L70,20 Z" fill="none" stroke="#475569" stroke-width="4"/>
+                    <path d="M35,45 L25,55 L25,125 Q25,130 50,130 Q75,130 75,125 L75,55 L65,45 Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                    <!-- Espelho/Ampola de Vidro -->
+                    <path d="M28,58 L28,122 Q28,125 50,125 Q72,125 72,122 L72,58 Z" fill="#EF4444" opacity="0.8"/> <!-- Café -->
+                    <!-- Vácuo -->
+                    <text x="50" y="80" font-family="sans-serif" font-size="8" fill="#FFFFFF" text-anchor="middle">VÁCUO</text>
+                    <!-- Tampa -->
+                    <rect x="25" y="10" width="50" height="10" rx="3" fill="#0F172A"/>
+                  </svg>`,
+            options: ["Vácuo bloqueia radiação. Tampa de plástico bloqueia indução. Vidro bloqueia calor latente.", "A tampa bloqueia Convecção. O Vácuo duplo na parede bloqueia Condução e Convecção. As Paredes espelhadas por dentro bloqueiam a Irradiação, refletindo a energia de volta pro café.", "O espelho atrai as correntes de convecção. O vácuo congela as moléculas e a rolha evita a sublimação.", "Não existe vácuo na garrafa térmica, ela usa chumbo derretido para conduzir frio e manter o café gelado."],
+            correct: 1,
+            explanation: {
+                correct: "Tudo na garrafa tenta prender o calor: Rolha isolante evita que o ar quente suba e escape (convecção). A parede tem Vácuo no meio e impede o contato (adeus condução). A pintura espelhada age como rebatedor das ondas de luz infravermelhas (adeus irradiação).",
+                options: ["Erro: Vácuo não bloqueia radiação (a luz do Sol cruza o vácuo do espaço!).", "Certa: Rolha = antivecção. Vácuo = anticondução. Espelho = anti-irradiação.", "Erro: O espelho não mexe com correntes de ar.", "Erro: A garrafa clássica tem dupla camada de vidro com vácuo no recheio."]
+            }
+        },
+        {
+            id: 22, level: "Difícil",
+            text: "Um cubo de gelo de 100g a 0°C absorve energia do ambiente e derrete por completo, virando uma poça de água. Qual é a temperatura da poça de água EXATAMENTE no instante final em que o último pedacinho de gelo vira líquido?",
+            options: ["A água atinge 10°C imediatamente, pois absorveu o calor latente da sala.", "A poça de água está exatamente a 0°C. Toda a energia térmica gasta até aquele momento serviu APENAS para romper os laços sólidos (Calor Latente), sem aumentar 1 grau sequer a temperatura.", "A água esfria para -5°C por causa da reação endotérmica do hidrogênio.", "A água já estará a 25°C, igual à temperatura da sala (equilíbrio térmico imediato)."],
+            correct: 1,
+            explanation: {
+                correct: "Pegadinha de vestibular! Durante a mudança de estado (Fusão ou Ebulição) de substâncias PURAS (como a H2O), o termômetro TRAVA. O gelo 0ºC vira água 0ºC. Só DEPOIS que ele derreter 100%, é que a água líquida começará a esquentar para 1º, 2º... até a temperatura ambiente.",
+                options: ["Erro: A energia de fusão não aumenta graus Celsius.", "Certa: A fusão é isotérmica (temperatura fixada). Água fica a zero grau.", "Erro: Mudança de fase derretendo não resfria para negativo.", "Erro: O equilíbrio térmico com a sala demora horas para acontecer a partir dali."]
+            }
+        },
+        {
+            id: 23, level: "Difícil",
+            text: "Em laboratório, se você quiser misturar 100 g de água fervendo (a 100°C) com 100 g de óleo (a 20°C) num copo perfeito que não perde calor. Como o calor específico do óleo é a METADE do calor específico da água, a temperatura final de equilíbrio da mistura:",
+            options: ["Será de exatos 60°C, que é a média matemática perfeita entre 100 e 20.", "Será MAIOR que 60°C. Como a água é 'mais forte e teimosa' (maior calor específico), ela cede energia mas esfria pouco. O óleo, que é fraco, sobe a temperatura rapidinho.", "Será MENOR que 60°C, porque o óleo frio 'puxa' muito calor para conseguir ferver.", "A água e o óleo não trocarão calor porque são líquidos imiscíveis (não se misturam)."],
+            correct: 1,
+            explanation: {
+                correct: "Como a água tem um Calor Específico gigante (c = 1 cal/gºC), ela age como a 'chefe' da mistura térmica. Ela abaixa pouco a temperatura para conseguir esquentar o óleo (c = 0.5) brutalmente. A temperatura puxará mais perto dos 100 graus da água.",
+                options: ["Erro: A média simples só funciona se os líquidos forem idênticos (água + água).", "Certa: A água domina a troca de calor. A temperatura final será alta (como ~73ºC).", "Erro: O óleo não tem força para derrubar a temperatura da água tão drasticamente.", "Erro: Trocam calor por condução na fronteira de contato, sim."]
+            }
+        },
+        {
+            id: 24, level: "Difícil",
+            text: "Você encosta a mão em uma chapa de aço e depois em uma tábua de madeira na mesma sala. Sente a chapa de metal incrivelmente gélida, e a madeira agradável. Como a Lei de Fourier (Fluxo de Calor) prova matematicamente essa ilusão sensorial do nosso cérebro?",
+            options: ["A fórmula indica que a condutividade térmica (k) do metal é baixíssima, impedindo o calor de entrar no dedo.", "O metal atua com fluxo negativo no termostato biológico (k negativo), roubando oxigênio dos nervos.", "A Lei mostra que o fluxo de calor (Φ = k.A.ΔT / L) é diretamente proporcional à condutividade (k). Como o k do aço é gigantemente maior que o da madeira, a taxa em que seu dedo é 'roubado' de energia por segundo é muito maior, gerando o alarme neurológico de frio intenso.", "A Lei de Fourier lida apenas com líquidos, não há aplicação em chapas sólidas encostadas na mão."],
+            correct: 2,
+            explanation: {
+                correct: "Frio extremo na pele é apenas seu cérebro gritando: 'Estou perdendo energia vital muito rápido!'. O aço possui alta condutividade térmica (k alto). Ele rouba calor numa velocidade (Watts) brutal do seu dedo em comparação à madeira.",
+                options: ["Erro: Condutividade do metal é altíssima (boa).", "Erro: O k não é negativo e o processo não rouba oxigênio.", "Certa: O grande 'k' do aço gera um grande Fluxo Térmico saindo da pele.", "Erro: Fourier trata essencialmente de condução geométrica em sólidos."]
+            }
+        },
+        {
+            id: 25, level: "Difícil",
+            text: "Um tanque de aço (100 litros) é enchido até a boca exata com Gasolina. O motorista deixa o carro ao sol e a temperatura do tanque todo sobe 30°C. Logo após, 3 litros de gasolina transbordam pelo chão. O que é CORRETO afirmar fisicamente sobre esse 'derramamento'?",
+            options: ["Esses 3 litros são a Dilatação Aparente. Na verdade, a gasolina cresceu 3 litros mais uma quantidade extra que ocupou o tanque de aço, que também cresceu e se dilatou com o calor.", "Esses 3 litros representam absolutamente tudo o que a gasolina conseguiu crescer (Dilatação Real Exata do líquido).", "O tanque de aço sofreu contração com o sol, esmagando o líquido e forçando a expulsão de 3 litros de gasolina.", "A gasolina reagiu quimicamente gerando gases que espirraram a água do tanque para fora."],
+            correct: 0,
+            explanation: {
+                correct: "Os líquidos sempre dilatam MAIS que os recipientes sólidos que os seguram. O tanque de aço dilatou no sol (ex: cresceu de 100 para 102 L). A gasolina dilatou de 100 L para 105 L. Como o tanque cresceu, 2 L a mais cabiam, mas o excesso esborrou 3 L na rua. (O aparente é 3L, o real é 5L).",
+                options: ["Certa: O transbordo é a dilatação aparente, inferior à dilatação volumétrica real do líquido.", "Erro: A gasolina cresceu bem mais, mas parte do aumento foi 'escondido' no novo tamanho do tanque esticado.", "Erro: O tanque também dilatou no sol, não se contraiu.", "Erro: Evaporação é outra coisa. Houve transbordamento térmico volumétrico puro."]
+            }
+        },
+        {
+            id: 26, level: "Difícil",
+            text: "No fenômeno climático da Brisa Marítima, percebe-se que durante o dia bate um vento do mar refrescante em direção à areia. Durante a madrugada, a brisa inverte (sopra da areia da praia para dentro do mar). O que causa a física dessa inversão dos ventos (Convecção atmosférica)?",
+            options: ["A mudança das fases da lua que atrai as ondas de ar frio noturnas.", "A areia (baixo calor específico) esquenta super rápido de dia e seu ar sobe, puxando o ar do mar. À noite, a areia esfria num piscar de olhos, enquanto a água do mar, teimosa, continua morna da energia solar e puxa o ar para ela.", "O ar do mar é pesado de dia por causa do sal, empurrando o vento para a cidade.", "De dia a radiação solar vem de cima, forçando as correntes em 'X' para os continentes. À noite não há Sol, logo os polos magnéticos mandam o vento para o horizonte azul."],
+            correct: 1,
+            explanation: {
+                correct: "A areia perde todo o calor rapidamente à noite (fica fria). A água é muito resistente (alta capacidade térmica) e guarda o calor do dia. Logo, à noite, o mar vira o objeto mais quente; o ar sobre ele sobe, fazendo o ar frio da areia correr para o oceano para ocupar o espaço.",
+                options: ["Erro: As marés vêm da lua, os ventos térmicos vêm do aquecimento desigual do sol nas matérias.", "Certa: Aquecimento e esfriamento diferencial devido ao calor específico água vs areia dita o fluxo do ar (convecção).", "Erro: O vento ocorre pela diferença de pressão térmica (ar frio / ar quente).", "Erro: Explicação mística."]
+            }
+        },
+        {
+            id: 27, level: "Difícil",
+            text: "Quando calculamos a dilatação em três dimensões diferentes de um mesmo tipo de aço (comprimento, área da chapa ou volume de um bloco de motor), usamos os coeficientes Alfa (α - Linear), Beta (β - Superficial) e Gama (γ - Volumétrico). Qual é a relação realística entre eles?",
+            options: ["Eles não têm relação matemática. Um bloco usa alfa e chapas usam coeficiente nulo.", "O coeficiente Superficial é a metade do Linear, e o Volumétrico é o quadrado do Linear.", "O Beta é duas vezes o Alfa (β = 2α) e o Gama é três vezes o Alfa (γ = 3α). Se o fio de ferro cresce no eixo 'X', a chapa cresce no 'X' e no 'Y' multiplicando o impacto.", "Sempre vale zero para líquidos."],
+            correct: 2,
+            explanation: {
+                correct: "Como o material é o mesmo em todas as direções (isotrópico), se ele tem 2 dimensões de área (Superfície = x,y), a dilatação final ali dobra a taxa base do metal (β = 2α). Num objeto 3D (Volume = x,y,z), ele empurra para os 3 lados, então (γ = 3α).",
+                options: ["Erro: Eles são proporcionais pelas dimensões euclidianas do espaço.", "Erro: É o dobro e o triplo geométrico matemático, não o quadrado.", "Certa: A regra 1α, 2α, 3α.", "Erro: Líquidos não têm Alfa nem Beta (pois não têm formato linear ou chapa), apenas Gamma de volume."]
+            }
+        },
+        {
+            id: 28, level: "Difícil",
+            text: "Calor Latente de Fusão do Gelo é L = 80 cal/g. Isso é muito alto e tem impactos no nosso dia a dia. Isso quer dizer fisicamente que:",
+            options: ["O gelo precisa chegar a 80 graus Celsius para derreter.", "O gelo demora 80 minutos sob o sol ardente para perder uma grama de água.", "Eu preciso transferir/fornecer brutalmente 80 calorias de pura energia apenas para forçar UMA única grama de gelo 0ºC a amolecer e virar uma grama água 0ºC.", "Cada grama de gelo ingere 80 calorias para baixar a temperatura a -80°C."],
+            correct: 2,
+            explanation: {
+                correct: "A interpretação química de (cal/g) mostra o 'pedágio de energia' exigido por grama para se trocar a fase da matéria. É muita energia! Com essas 80 cal usadas apenas para derreter 1 grama de gelo em água 0ºC, eu poderia ter fervido 1 grama de água líquida em ebulição (c=1, logo eleva 80ºC).",
+                options: ["Erro: Gelo funde a 0ºC na pressão da Terra (ao nível do mar).", "Erro: O tempo depende da fonte de fogo (Potência Térmica), o L é estritamente energia/massa.", "Certa: Leitura crua do valor Latente da quebra de ligação H2O cristalina.", "Erro: Ele derrete e não abaixa a temperatura do zero."]
+            }
+        },
+        {
+            id: 29, level: "Difícil",
+            text: "Um pedaço de Ferro (C = 0,11 cal/gºC) a 300ºC é atirado repentinamente num balde de Água fria (C = 1,00 cal/gºC) a 20ºC. Ao ouvirmos o 'tssssss' de chiado e esperarmos estabilizar. Qual é a equação central, a lei mestra, para resolver matematicamente e encontrar a temperatura final de equilíbrio do balde?",
+            options: ["(Quantidade de Calor cedido pelo Ferro) + (Quantidade de Calor recebido pela Água) = 0. Toda energia que sai do metal entra na água e o sistema não perde energia.", "Temperaturas se anulam em módulo cruzado de vetor T1 / T2.", "Usa-se a Regra de Três Simples Inversa entre as pressões volumétricas da poça com a massa esférica de ferro fundido.", "Energia do ferro dividida pela gravidade igual à dilatação anômala dividida pela velocidade da luz (E = mc² / g)."],
+            correct: 0,
+            explanation: {
+                correct: "O 'Princípio da Igualdade das Trocas de Calor' dita as regras termodinâmicas no universo! Se eu somar as calolrias perdidas pelos corpos quentes (valor negativo) com a mesma caloria roubada pelos corpos frios para esquentarem (valor positivo) e o copo for ideal, a conta sempre zera: Qcedido + Qrecebido = 0.",
+                options: ["Certa: O princípio da conservação de energia térmica dita o Q1 + Q2 = 0.", "Erro: Vetores de temperatura e módulo não resolvem cálculos de misturas heterogêneas.", "Erro: Pressão aqui seria se houvesse vapor/gases confinados e compressão.", "Erro: Mistura louca de fórmulas sem lógica termológica."]
+            }
+        },
+        {
+            id: 30, level: "Difícil",
+            text: "Em países que sofrem de inverno extremo de nevascas (Rússia, Canadá), é um pesadelo gigantesco esquecer e deixar os canos residenciais cheios de água parada do lado de fora da casa ao invés de drená-los. Qual é o final fatal dessa história, baseado na dilatação térmica?",
+            options: ["O cano murcha no frio sugando todas as janelas pra si por contração bruta no aço metálico ou PVC.", "A água, ao descer de 4°C e congelar em gelo 0°C (e negativo), sofre aquela bizarra Dilatação Anômala. Ao invés de encolher como qualquer substância boa e obediente do planeta, ela se expande violentamente de volume por conta de cristais hexagonais, empurrando o plástico/metal duro de dentro pra fora até rachar/estourar o cano.", "Os canos ficam moles porque a energia do frio corrói as ligas de chumbo.", "A água no gelo fica menor; ela encolhe e entra no esgoto, deixando o tubo no vácuo fatal que racha sozinho com o grito dos ursos."],
+            correct: 1,
+            explanation: {
+                correct: "A água ganha massa extra de volume ao criar pontes de hidrogênio sólidas fixas do gelo (o copo de refri cheio de líquido estoura a garrafa de vidro se esquecer no freezer!). Nos países frios, o cano congela de madrugada; a água enche, trinca o aço das encanações. De dia com o Sol, o gelo rompe e derrete com buracos na parede lavando as ruas em alagamentos.",
+                options: ["Erro: PVC e tubos murchariam no frio, porém a quebra dramática no encanamento vem da pressão de volume de explosão do gelo que os forçam ao sentido inverso.", "Certa: Água congela com volume maior e rompe tudo no caminho confinado.", "Erro: Frio não derrete estruturas de chumbo em lamas.", "Erro: Água encolhendo formaria apenas mais sobra/vácuo em cima e não arrebentaria nada. Pior que a água não encolhe em congelamento e não reage a ursos..."]
+            }
+        }
+    ];
+
+    // --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+    const storageKey = 'promover_quiz_Fisica_8ano_Calorimetria';
+    let currentQuestion = 0;
+    let savedAnswers = localStorage.getItem(storageKey);
+    let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+    function setMode(mode) {
+        const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+        views.forEach(v => document.getElementById(v).style.display = 'none');
+        document.getElementById('quizFooter').style.display = 'none';
+
+        if(mode === 'explanation') {
+            document.getElementById('viewExplanation').style.display = 'flex';
+            document.getElementById('btnExp').classList.add('active');
+            document.getElementById('btnPrac').classList.remove('active');
+        } else if (mode === 'practice') {
+            document.getElementById('viewPractice').style.display = 'block';
+            document.getElementById('quizFooter').style.display = 'flex';
+            document.getElementById('btnExp').classList.remove('active');
+            document.getElementById('btnPrac').classList.add('active');
+            renderQuestion();
+            renderMap();
+        } else if (mode === 'result') {
+            document.getElementById('viewResult').style.display = 'block';
+            document.getElementById('quizFooter').style.display = 'none';
+            window.scrollTo(0,0);
+        }
+    }
+
+    function renderQuestion() {
+        if(questions.length === 0) return;
+        const q = questions[currentQuestion];
+        const container = document.getElementById('quizContainer');
+        const letters = ['A', 'B', 'C', 'D'];
+        const ans = userAnswers[currentQuestion];
+
+        let badgeClass = '';
+        if(q.level === 'Fácil') badgeClass = 'dif-facil';
+        else if(q.level === 'Médio') badgeClass = 'dif-medio';
+        else badgeClass = 'dif-dificil';
+
+        container.innerHTML = `
+            <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+                <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+                <div style="margin-bottom: 20px;">
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+                    <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+                </div>
+                ${q.svg ? `<div style="background: #FFF7ED; border: 2px dashed #FB923C; border-radius: 8px; padding: 15px; margin-bottom: 20px;">${q.svg}</div>` : ''}
+                <div class="options-list">
+                    ${q.options.map((opt, i) => {
+                        let cls = '';
+                        if (ans !== null) {
+                            if (i === q.correct) cls = 'correct';
+                            else if (i === ans) cls = 'wrong';
+                            else cls = 'disabled';
+                        }
+                        return `
+                        <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                            <div class="opt-circle">${letters[i]}</div>
+                            <div>${opt}</div>
+                        </button>`
+                    }).join('')}
+                </div>
+                ${ans !== null ? `
+                <div class="feedback-box">
+                    <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                        ${ans === q.correct ? '☑ Raciocínio Físico Aprovado!' : '☒ Ops! Falha Térmica Detectada!'}
+                    </div>
+                    <div class="feedback-item correct-opt"><strong>O Princípio Correto:</strong> ${q.options[q.correct]}</div>
+                    <div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                        ${q.explanation.correct}
+                    </div>
+                    <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                        <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+                        ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        updateNav();
+    }
+
+    function handleAnswer(idx) {
+        if (userAnswers[currentQuestion] !== null) return;
+        userAnswers[currentQuestion] = idx;
+        localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+
+        if (idx === questions[currentQuestion].correct) {
+            const duration = 1500;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6 }, colors: ['#F97316', '#EA580C', '#C2410C', '#FBBF24'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6}, colors: ['#F97316', '#EA580C', '#C2410C', '#FBBF24'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        } else {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.classList.remove('shake-effect');
+            void quizContainer.offsetWidth;
+            quizContainer.classList.add('shake-effect');
+            setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+        }
+        renderQuestion();
+        renderMap();
+    }
+
+    function renderMap() {
+        if(questions.length === 0) return;
+        const map = document.getElementById('qMap');
+        map.innerHTML = questions.map((q, i) => {
+            let cls = 'map-dot';
+            if (i === currentQuestion) cls += ' active';
+            if (userAnswers[i] !== null) {
+                cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+            }
+            return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+        }).join('');
+
+        setTimeout(() => {
+            const activeDot = map.querySelector('.map-dot.active');
+            if (activeDot) {
+                activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+            }
+        }, 50);
+    }
+
+    function goTo(i) {
+        if (window.confetti) confetti.reset();
+        currentQuestion = i;
+        renderQuestion();
+        renderMap();
+    }
+
+    function changeQuestion(d) {
+        let n = currentQuestion + d;
+        if (n >= 0 && n < questions.length) goTo(n);
+    }
+
+    function updateNav() {
+        document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+        const next = document.getElementById('btnNext');
+
+        if (currentQuestion === questions.length - 1) {
+            next.textContent = "Finalizar Diagnóstico Físico";
+            next.onclick = finish;
+        } else {
+            next.textContent = "Avançar";
+            next.onclick = () => changeQuestion(1);
+        }
+    }
+
+    function finish() {
+        let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+        let percent = Math.round((correct/questions.length) * 100);
+
+        if (window.confetti) confetti.reset();
+
+        document.getElementById('finalPercent').textContent = percent + "%";
+        document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+        document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+
+        let summary = '<div style="text-align:left; margin-top:20px;">';
+
+        if (percent < 80) {
+            summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+                <strong>⚠️ Domínio Físico Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Revise a teoria sobre propagação e dilatação térmica com rigor antes de tentar novamente.
+            </div>`;
+            document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Limpar Histórico e Refazer Prova</button>';
+        } else {
+            summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+                <strong>🏆 Excelente Desempenho Analítico!</strong> Você demonstrou uma base sólida nas leis da termologia. A sua aprovação técnica está garantida neste módulo!
+            </div>`;
+            document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Refazer Prova (Zerar Histórico)</button>';
+        }
+
+        if (correct < questions.length) {
+            summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+            questions.forEach((q, i) => {
+                if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                    summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                        <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                        <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+                        <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                    </div>`;
+                }
+            });
+        }
+        summary += '</div>';
+
+        document.getElementById('review-container').innerHTML = summary;
+        setMode('result');
+    }
+
+    function reset() {
+        localStorage.removeItem(storageKey);
+        userAnswers = new Array(questions.length).fill(null);
+        currentQuestion = 0;
+        setMode('practice');
+    }
+
+    // Inicialização da interface
+    setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
