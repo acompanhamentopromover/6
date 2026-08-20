@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Estudo da Biologia - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root {
+  --bg-color: #F8F9FA;
+  --text-color: #1F2937;
+  --border-color: #000000;
+  --white: #FFFFFF;
+  --theme-light: #D1FAE5;
+  --theme-medium: #10B981;
+  --theme-dark: #065F46;
+  --theme-contrast: #059669;
+  --theme-accent: #34D399;
+  --theme-text-active: #FFFFFF;
+  --correct-bg: #D1FAE5;
+  --correct-border: #059669;
+  --wrong-bg: #FFE4E6;
+  --wrong-border: #BE123C;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-bottom: 100px; background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px); background-size: 20px 20px; }
+
+@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-6px); } 100% { transform: translateX(0); } }
+.shake-effect { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from {transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; }}
+
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse { 0% { transform: scale(1); } 15% { transform: scale(1.15); color: var(--theme-contrast); } 30% { transform: scale(1); } 45% { transform: scale(1.15); color: var(--theme-contrast); } 100% { transform: scale(1); } }
+
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container { position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-flex; align-items: center; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.topic-number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: white; color: var(--theme-dark); border-radius: 6px; font-weight: 900; margin-right: 10px; border: 2px solid var(--border-color); font-size: 1rem; }
+
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 { font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+
+.analogy-box { background: #FFFBEB; border-left: 4px solid #F59E0B; padding: 15px; border-radius: 8px; margin: 10px 0; font-size: 0.95rem; color: #78350F; line-height: 1.6; }
+.analogy-title { font-weight: 900; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; color: #B45309; }
+.visual-ladder { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+.ladder-step { display: flex; align-items: center; gap: 15px; background: white; padding: 12px 15px; border: 2px solid var(--theme-light); border-radius: 12px; box-shadow: 3px 3px 0px var(--theme-light); transition: transform 0.2s;}
+.ladder-step:hover { transform: translateX(5px); border-color: var(--theme-accent); }
+.ladder-icon { font-size: 1.8rem; background: var(--bg-color); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--border-color); flex-shrink: 0; box-shadow: 2px 2px 0px var(--border-color); }
+.ladder-text { font-size: 0.9rem; color: #333; }
+.ladder-text strong { color: var(--theme-dark); display: block; font-size: 1.1rem; font-weight: 900; margin-bottom: 2px; }
+
+.grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+@media(max-width: 500px) { .grid-cards { grid-template-columns: 1fr; } }
+.mini-card { background: white; border: 2px solid var(--border-color); border-radius: 12px; padding: 15px; box-shadow: 4px 4px 0px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 8px; transition: transform 0.2s;}
+.mini-card:hover { transform: translateY(-3px); }
+.mini-card-icon { font-size: 2rem; margin-bottom: 5px; }
+.mini-card-title { font-weight: 900; color: var(--theme-dark); font-size: 1.1rem; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px;}
+.mini-card-text { font-size: 0.9rem; color: #444; line-height: 1.5; }
+
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid #0284C7; padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil { background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display: flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+.result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big { font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <header class="logo-header">
+    <div class="css-logo"><span class="pulse-effect">🔬</span> PROMOVER</div>
+    <h1>CIÊNCIAS / 6º ANO</h1>
+    <p class="subtitle">O ESTUDO DA BIOLOGIA</p>
+  </header>
+
+  <div class="toggle-container">
+    <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📘 Teoria</button>
+    <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🧠 Prática (30)</button>
+  </div>
+
+  <div id="viewExplanation" class="view-section" style="display: flex;">
+    
+    <div class="search-container">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+    </div>
+    <div id="no-results"><p>😕 Termo não encontrado.</p></div>
+
+    <!-- BLOCO 1: Níveis de Organização -->
+    <div class="content-group">
+      <span class="section-badge"><span class="topic-number">7.1</span> A Escala da Vida</span>
+      <div class="theory-box">
+        <h3>Níveis de Organização Biológica</h3>
+        <p>A biologia estuda os seres vivos analisando a sua estrutura em níveis de complexidade crescente, partindo das menores partículas químicas até chegar ao nível planetário.</p>
+        
+        <div class="visual-ladder">
+          <div class="ladder-step">
+            <div class="ladder-icon">🟡</div>
+            <div class="ladder-text"><strong>1. Átomo</strong> A unidade fundamental da matéria. Tudo no universo físico é feito de átomos (Ex: átomo de Carbono ou Oxigênio).</div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">🔗</div>
+            <div class="ladder-text"><strong>2. Molécula</strong> Estrutura química formada pela união de dois ou mais átomos (Ex: a união de hidrogênio e oxigênio forma a molécula de água - H2O).</div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">⚙️</div>
+            <div class="ladder-text"><strong>3. Organela</strong> Estruturas funcionais localizadas no interior das células, responsáveis por realizar processos vitais específicos (como respiração ou digestão).</div>
+          </div>
+          <div class="ladder-step" style="border-color: var(--theme-contrast); background: var(--correct-bg);">
+            <div class="ladder-icon">🦠</div>
+            <div class="ladder-text"><strong>4. Célula</strong> A unidade estrutural e funcional básica de todos os seres vivos. É a menor estrutura capaz de realizar processos vitais sozinha.</div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">🥩</div>
+            <div class="ladder-text"><strong>5. Tecido</strong> Conjunto de células com estrutura e funções semelhantes que trabalham agrupadas (Ex: Tecido muscular).</div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">🫀</div>
+            <div class="ladder-text"><strong>6. Órgão</strong> Estrutura anatômica composta pela união de diferentes tecidos que executam uma função biológica específica (Ex: Coração, Estômago).</div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">👤</div>
+            <div class="ladder-text"><strong>7. Sistema & Organismo</strong> O conjunto de órgãos que trabalham integrados forma um <strong>Sistema</strong> (Ex: Sistema Digestório). A união de todos os sistemas forma o indivíduo completo: o <strong>Organismo</strong>.</div>
+          </div>
+        </div>
+
+        <h4 style="margin-top: 15px; color: var(--theme-dark); border-bottom: 2px solid var(--theme-light); padding-bottom: 5px;">Níveis Ecológicos (Após o Organismo):</h4>
+        <div class="visual-ladder">
+          <div class="ladder-step">
+            <div class="ladder-icon">🐟</div>
+            <div class="ladder-text"><strong>8. População</strong> Conjunto de indivíduos da MESMA espécie habitando a mesma região geográfica no mesmo período. (Exemplo visual: Um grupo de peixes da mesma espécie).</div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">🐟🦀</div>
+            <div class="ladder-text"><strong>9. Comunidade</strong> Conjunto de populações de DIFERENTES espécies que habitam uma mesma área e interagem entre si. (Exemplo visual: Peixes, algas e caranguejos vivendo juntos).</div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">🐟☀️💧</div>
+            <div class="ladder-text"><strong>10. Ecossistema</strong> O conjunto formado pela Comunidade (fatores bióticos/vivos) interagindo com os fatores físicos e químicos do ambiente (fatores abióticos, como luz solar, água e solo).</div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">🌍</div>
+            <div class="ladder-text"><strong>11. Biosfera</strong> O conjunto de todos os ecossistemas do planeta Terra, ou seja, todas as regiões globais que são habitadas por seres vivos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCO 2: Ecologia -->
+    <div class="content-group">
+      <span class="section-badge"><span class="topic-number">7.2</span> Ecologia Básica</span>
+      <div class="theory-box">
+        <h3>Componentes do Meio Ambiente</h3>
+        <p>Os ecossistemas funcionam através da interação contínua entre componentes biológicos e físicos. Se houver desequilíbrio em um deles, as espécies podem entrar em extinção.</p>
+        
+        <div class="grid-cards">
+          <div class="mini-card" style="border-color: #10B981;">
+            <div class="mini-card-icon">🦁🌳</div>
+            <div class="mini-card-title" style="color: #065F46;">Fatores Bióticos</div>
+            <div class="mini-card-text">
+              São os seres vivos do ecossistema e as interações entre eles.<br><br>
+              <em>Exemplos: Plantas, animais, fungos, protozoários e bactérias.</em>
+            </div>
+          </div>
+          <div class="mini-card" style="border-color: #0284C7;">
+            <div class="mini-card-icon">☀️💧</div>
+            <div class="mini-card-title" style="color: #075985;">Fatores Abióticos</div>
+            <div class="mini-card-text">
+              São os componentes químicos e físicos do ambiente que influenciam a sobrevivência dos seres vivos.<br><br>
+              <em>Exemplos: Luz solar, água, temperatura, salinidade e composição do solo.</em>
+            </div>
+          </div>
+        </div>
+
+        <h4 style="margin-top: 15px; color: var(--theme-dark);">Terminologia Essencial:</h4>
+        <ul style="margin-left: 20px; line-height: 1.6;">
+          <li><strong>Habitat:</strong> O local físico onde uma determinada espécie vive (o seu "endereço" na natureza).</li>
+          <li><strong>Nicho Ecológico:</strong> O papel biológico e a rotina da espécie no ecossistema, incluindo seus hábitos alimentares, horário de reprodução e estratégias de sobrevivência.</li>
+        </ul>
+
+        <div class="highlight-box" style="margin-top: 10px;">
+          <strong>O que é um Bioma?</strong> São extensas regiões geográficas caracterizadas por um tipo específico de clima e por uma vegetação predominante (Exemplos: Caatinga, Cerrado, Floresta Amazônica).
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCO 3: Citologia (Básico) -->
+    <div class="content-group">
+      <span class="section-badge"><span class="topic-number">7.3</span> A Célula (Introdução)</span>
+      <div class="theory-box">
+        <h3>Tipos de Organização Celular</h3>
+        <p>A célula é considerada a unidade estrutural da vida. Organismos formados por apenas uma célula são chamados de <strong>Unicelulares</strong>, enquanto os formados por múltiplas células são <strong>Pluricelulares</strong>. Os <strong>Vírus</strong> são classificados como formas de vida acelulares (não possuem células) e só se reproduzem parasitando uma célula hospedeira.</p>
+
+        <p>As células são classificadas em dois grandes grupos morfológicos, de acordo com a organização do seu material genético (DNA):</p>
+
+        <div class="grid-cards">
+          <div class="mini-card" style="border-color: #EF4444;">
+            <div class="mini-card-icon">🦠</div>
+            <div class="mini-card-title" style="color: #B91C1C;">Célula Procariótica</div>
+            <div class="mini-card-text">
+              <strong>Estrutura Simples:</strong> Organização celular primitiva.<br><br>
+              <strong>Principal característica:</strong> Não possui membrana nuclear (carioteca). Portanto, o seu material genético fica livre e disperso no citoplasma. <em>Exemplo exclusivo: Bactérias.</em>
+            </div>
+          </div>
+          <div class="mini-card" style="border-color: #3B82F6;">
+            <div class="mini-card-icon">🧬</div>
+            <div class="mini-card-title" style="color: #1D4ED8;">Célula Eucariótica</div>
+            <div class="mini-card-text">
+              <strong>Estrutura Complexa:</strong> Organização celular avançada com divisão interna de compartimentos.<br><br>
+              <strong>Principal característica:</strong> Possui o material genético (DNA) organizado e protegido dentro de um <strong>Núcleo</strong> delimitado pela carioteca. <em>Exemplos: Animais, plantas, fungos.</em>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCO 4: Organelas e Diferenças -->
+    <div class="content-group">
+      <span class="section-badge"><span class="topic-number">7.4</span> Anatomia Celular</span>
+      <div class="theory-box">
+        <h3>As Organelas e suas Funções Literais</h3>
+        <p>No citoplasma das células eucarióticas existem diversas estruturas especializadas (organelas) encarregadas de realizar o metabolismo celular.</p>
+        
+        <ul style="margin-left: 20px; line-height: 1.8; margin-bottom: 15px;">
+          <li><strong>Núcleo:</strong> Estrutura que armazena as moléculas de DNA e controla e coordena todas as atividades da célula.</li>
+          <li><strong>Mitocôndria:</strong> Organela responsável por realizar a respiração celular, processo fisiológico que extrai a energia vital (ATP) necessária para o funcionamento da célula.</li>
+          <li><strong>Ribossomos:</strong> Pequenas estruturas (não membranosas) responsáveis por sintetizar (produzir) proteínas. <em>Atenção: Os ribossomos estão presentes tanto nas células eucarióticas quanto nas procarióticas (bactérias).</em></li>
+          <li><strong>Complexo Golgiense:</strong> Conjunto de sacos membranosos com a função de modificar, armazenar, empacotar e secretar (liberar para fora) substâncias químicas.</li>
+          <li><strong>Lisossomos:</strong> Vesículas que contêm enzimas destrutivas, responsáveis por realizar a digestão intracelular de partículas orgânicas ou de partes velhas da própria célula.</li>
+        </ul>
+
+        <div class="highlight-box" style="background: #ECFDF5; border-color: #10B981; color: #065F46;">
+          <strong style="color: #047857; display: block; margin-bottom: 5px;">Estruturas exclusivas da Célula Vegetal:</strong>
+          Ao contrário das células dos animais, as células das plantas possuem três estruturas adicionais:<br><br>
+          <strong>1. Parede Celular:</strong> Um envoltório externo rígido, formado principalmente pelo carboidrato celulose, que confere proteção mecânica e formato geométrico à célula.<br>
+          <strong>2. Cloroplasto:</strong> Organela que armazena a clorofila (pigmento verde), responsável por absorver a luz solar e realizar a Fotossíntese.<br>
+          <strong>3. Vacúolo de Suco Celular:</strong> Uma grande bolsa interna que armazena água, sais e outras substâncias, ajudando a manter a célula hidratada e rígida.
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCO 5: Histologia -->
+    <div class="content-group">
+      <span class="section-badge"><span class="topic-number">7.5</span> Histologia: Tecidos Animais</span>
+      <div class="theory-box">
+        <h3>Classificação dos Tecidos</h3>
+        <p>A união e organização de diferentes células forma os tecidos biológicos. O corpo dos animais vertebrados é constituído basicamente por quatro tipos fundamentais de tecido:</p>
+
+        <div class="visual-ladder">
+          <div class="ladder-step">
+            <div class="ladder-icon">🛡️</div>
+            <div class="ladder-text"><strong>Tecido Epitelial</strong><br>
+            Composto por células extremamente juntas (justapostas), com quase nenhuma substância entre elas. <strong>Função:</strong> Revestir superfícies do corpo (ex: epiderme) e formar glândulas secretoras. <strong>Característica crucial:</strong> É um tecido avascular (não possui vasos sanguíneos), sendo nutrido pela membrana basal que o conecta ao tecido inferior.
+            </div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">🩸</div>
+            <div class="ladder-text"><strong>Tecido Conectivo (Conjuntivo)</strong><br>
+            Apresenta células separadas por grande quantidade de material extracelular (matriz). <strong>Função:</strong> Unir, preencher, sustentar e transportar substâncias. Exemplos: O tecido ósseo, as cartilagens, a gordura e o <strong>sangue</strong> (que é um tecido conectivo líquido).
+            </div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">💪</div>
+            <div class="ladder-text"><strong>Tecido Muscular</strong><br>
+            Formado por células alongadas, denominadas fibras musculares, especializadas no processo de contração mecânica. <strong>Função:</strong> Gerar a movimentação do corpo, o batimento do coração e os movimentos dos órgãos internos (como o estômago).
+            </div>
+          </div>
+          <div class="ladder-step">
+            <div class="ladder-icon">⚡</div>
+            <div class="ladder-text"><strong>Tecido Nervoso</strong><br>
+            Formado principalmente pelos neurônios. <strong>Função:</strong> Captar estímulos externos e internos, interpretar informações e conduzir respostas de forma rápida através de impulsos nervosos (elétricos).
+            </div>
+          </div>
+        </div>
+
+        <div class="highlight-box warning">
+          <strong>A Fisiologia das Glândulas (Especialização do Tecido Epitelial):</strong><br>
+          🩸 <strong>Glândulas Endócrinas:</strong> Não possuem dutos excretores. Elas produzem hormônios e os liberam diretamente na corrente sanguínea.<br>
+          💦 <strong>Glândulas Exócrinas:</strong> Possuem dutos excretores estruturados. Liberam suas secreções para fora do corpo (ex: glândula sudorípara/suor) ou dentro de cavidades de órgãos (ex: glândula salivar).
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-action" onclick="setMode('practice')">
+      Iniciar Diagnóstico (30 Q) →
+    </button>
+  </div>
+
+  <div id="viewPractice" class="view-section">
+    <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+      <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+      <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">
+        30 questões rigorosas (IFCE). Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro!
+      </p>
+    </div>
+    
+    <div class="question-map" id="qMap"></div>
+    <div id="quizContainer" style="margin-bottom: 100px;"></div>
+  </div>
+
+  <div id="viewResult" class="view-section">
+    <div class="result-card">
+      <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+      <div class="stars-container" id="finalStars">★</div>
+      <div class="percentage-big" id="finalPercent">0%</div>
+      <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+      <div id="review-container"></div>
+    </div>
+    <div id="action-buttons"></div>
+  </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+  <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+  <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const contentGroups = document.querySelectorAll('.content-group');
+  const noResultsMsg = document.getElementById('no-results');
+
+  searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    
+    contentGroups.forEach(group => {
+      const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      if (textContent.includes(term)) {
+        group.style.display = 'flex';
+        totalVisible++;
+      } else {
+        group.style.display = 'none';
+      }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+  });
+
+  // Array compacto com as 30 Questões Rigorosas
+  const questions = [
+    { id: 1, level: "Fácil", text: "A biologia classifica a estrutura da vida do nível mais simples ao mais complexo. Qual alternativa representa a ordem correta inicial?", options: ["Átomo, Órgão, Célula, Tecido.", "Célula, Organela, Átomo, Tecido.", "Átomo, Molécula, Organela, Célula.", "Molécula, Átomo, Tecido, Célula."], correct: 2, explanation: { correct: "A organização começa do submicroscópico: átomos se unem formando moléculas, que estruturam as organelas, componentes internos da célula.", options: ["Incorreto. O órgão é mais complexo que a célula e o tecido.", "Incorreto. A organela e o átomo são menores e menos complexos que a célula.", "Certo.", "Incorreto. A base fundamental de toda a matéria é o átomo."] } },
+    { id: 2, level: "Fácil", text: "Um professor apresenta aos alunos a ilustração de uma paisagem natural contendo um rio, rochas, luz solar, capim, árvores e pássaros. Ele pede que os alunos dividam essa paisagem. Se o grupo A listar apenas os animais e plantas, e o grupo B listar apenas a água, o solo e a luz, o que a união dos grupos A e B formará biologicamente?", options: ["Uma comunidade isolada.", "Um ecossistema.", "Uma biosfera restrita.", "Uma população mista."], correct: 1, explanation: { correct: "A união dos fatores bióticos (vivos: animais e plantas do grupo A) com os fatores abióticos (não vivos: água, solo, luz do grupo B) interagindo entre si forma literalmente um Ecossistema.", options: ["Incorreto. A comunidade abrange apenas os seres vivos (fatores bióticos).", "Certo.", "Incorreto. A biosfera abrange todos os ecossistemas de todo o planeta Terra.", "Incorreto. População é o conjunto de uma única espécie."] } },
+    { id: 3, level: "Fácil", text: "Sobre as células e a classificação estrutural dos seres vivos, analise as opções e assinale a ÚNICA afirmação cientificamente correta:", options: ["A célula procariótica apresenta exatamente as mesmas organelas que a célula eucariótica.", "Como as células procarióticas não têm núcleo organizado, não podem ser consideradas células verdadeiras.", "Todos os seres vivos são formados por uma ou mais células, com exceção dos vírus, que são acelulares.", "Os organismos que apresentam o material genético disperso no citoplasma são chamados eucariontes."], correct: 2, explanation: { correct: "A biologia estabelece que a célula é a unidade básica da vida. Os vírus são a única exceção principal, pois não possuem estrutura celular e precisam parasitar uma célula hospedeira.", options: ["Incorreto. Células procarióticas não possuem organelas membranosas.", "Incorreto. Células procarióticas (como bactérias) são células verdadeiras e funcionais.", "Certo.", "Incorreto. Organismos com material genético disperso são os PROCARIONTES."] } },
+    { id: 4, level: "Fácil", text: "Tudo o que você faz, como estudar, nadar, correr, dançar e até dormir, são atividades que dependem da energia produzida nas células, que trabalham sem parar. O processo celular que produz essa energia de forma ininterrupta é denominado:", options: ["Multiplicação celular e é realizado pelo núcleo.", "Respiração celular e é realizado pelos ribossomos.", "Respiração celular e ocorre dentro das mitocôndrias.", "Digestão celular e é realizado pelos lisossomos."], correct: 2, explanation: { correct: "A mitocôndria é a organela responsável por realizar a respiração celular, o processo fisiológico literal que extrai e fornece energia para a sobrevivência da célula.", options: ["Incorreto. O núcleo coordena a célula e armazena DNA.", "Incorreto. Os ribossomos realizam a síntese de proteínas.", "Certo.", "Incorreto. A digestão celular é responsabilidade dos lisossomos."] } },
+    { id: 5, level: "Fácil", text: "As células animais e vegetais possuem muitas semelhanças, mas diferem em estruturas chave. Qual estrutura está PRESENTE na célula vegetal e AUSENTE na animal?", options: ["Membrana plasmática", "Mitocôndria", "Núcleo celular", "Parede celular"], correct: 3, explanation: { correct: "A parede celular (feita de celulose) é exclusiva das células vegetais, conferindo formato, sustentação e resistência estrutural externa.", options: ["Incorreto. Ambas as células possuem membrana plasmática.", "Incorreto. Ambas possuem mitocôndrias para gerar energia.", "Incorreto. Ambas são eucarióticas, logo, possuem núcleo.", "Certo."] } },
+    { id: 6, level: "Fácil", text: "A pele humana possui uma camada externa protetora fundamental. Na biologia, essa camada é classificada como:", options: ["Tecido Muscular", "Tecido Epitelial", "Tecido Nervoso", "Tecido Conectivo"], correct: 1, explanation: { correct: "O tecido epitelial (ex: epiderme) forma a camada externa do corpo e reveste internamente diversas cavidades, atuando na proteção e revestimento.", options: ["Incorreto. O tecido muscular atua na contração e movimento.", "Certo.", "Incorreto. O tecido nervoso conduz impulsos para percepção de sensações.", "Incorreto. O conectivo serve para preenchimento e transporte, ficando abaixo do epitelial."] } },
+    { id: 7, level: "Fácil", text: "Em ecologia, como é chamado o grupo de organismos da MESMA espécie que vive numa área geográfica em um dado intervalo de tempo?", options: ["Comunidade", "Ecossistema", "População", "Biosfera"], correct: 2, explanation: { correct: "População é o nível de organização formado especificamente pelo conjunto de organismos de uma mesma espécie (ex: um cardume de sargentinhos num recife).", options: ["Incorreto. A comunidade agrupa populações de espécies diferentes.", "Incorreto. O ecossistema envolve a comunidade somada aos fatores abióticos.", "Certo.", "Incorreto. A biosfera abrange todas as partes habitadas do planeta."] } },
+    { id: 8, level: "Fácil", text: "As células são as menores unidades vivas de um organismo e estão presentes em todos os seres, com exceção dos vírus. Elas podem ser classificadas como procarióticas e eucarióticas. As células procarióticas caracterizam-se literalmente pela:", options: ["Ausência total de material genético celular.", "Presença de organelas celulares envolvidas por membranas.", "Ausência de membrana envolvendo o material genético (núcleo).", "Ausência do citoplasma em sua estrutura interna."], correct: 2, explanation: { correct: "As células procarióticas (bactérias) possuem material genético (DNA), mas ele fica livre e disperso no citoplasma, pois não há uma membrana nuclear para envolvê-lo.", options: ["Incorreto. Elas possuem material genético (DNA) no citoplasma.", "Incorreto. Elas não possuem organelas membranosas.", "Certo.", "Incorreto. Elas possuem citoplasma preenchendo a célula."] } },
+    { id: 9, level: "Fácil", text: "As glândulas sudoríparas são responsáveis por liberar o suor para fora do corpo, atuando na regulação da temperatura. Elas são especializações do:", options: ["Tecido nervoso", "Tecido epitelial", "Tecido muscular", "Tecido conectivo"], correct: 1, explanation: { correct: "As glândulas, tanto endócrinas quanto exócrinas, são formadas por uma especialização do tecido epitelial focada na secreção celular.", options: ["Incorreto. O nervoso atua na recepção de estímulos.", "Certo.", "Incorreto. O muscular atua na capacidade de contração.", "Incorreto. O conectivo preenche e nutre, mas não forma a parede glandular."] } },
+    { id: 10, level: "Fácil", text: "Seres formados por um grande conjunto de células especializadas, como esponjas marinhas, plantas e seres humanos, são denominados:", options: ["Unicelulares", "Pluricelulares", "Acelulares", "Procariontes"], correct: 1, explanation: { correct: "Seres pluricelulares são aqueles cuja complexidade exige uma grande quantidade de células (muitas vezes organizadas em tecidos) para sobreviver.", options: ["Incorreto. Unicelulares são formados por apenas uma célula (ex: bactérias).", "Certo.", "Incorreto. Acelulares são organismos sem células (vírus).", "Incorreto. Procariontes podem ser seres unicelulares primitivos (bactérias)."] } },
+    
+    { id: 11, level: "Médio", text: "Uma samambaia (planta) e uma galinha (animal) são constituídas por células eucarióticas com grandes diferenças morfológicas, mas compartilham diversas estruturas celulares básicas. Assinale a alternativa que indica APENAS estruturas presentes nas células de AMBOS os organismos:", options: ["Parede celular, ribossomos e núcleo.", "Mitocôndrias, cloroplastos e membrana plasmática.", "Membrana plasmática, mitocôndrias e núcleo.", "Vacúolo de suco celular, lisossomos e retículo endoplasmático."], correct: 2, explanation: { correct: "Tanto a célula animal (galinha) quanto a vegetal (samambaia) são eucarióticas, portanto ambas possuem obrigatoriamente membrana plasmática, mitocôndrias e um núcleo definido.", options: ["Incorreto. A célula animal (galinha) não possui parede celular.", "Incorreto. A célula animal não possui cloroplastos para fotossíntese.", "Certo.", "Incorreto. O vacúolo de suco celular é característico e grande nas células vegetais."] } },
+    { id: 12, level: "Médio", text: "Identifique os três níveis de organização da Ecologia descritos abaixo, respectivamente:\nI. Regiões distintas do planeta Terra que são habitadas pelos seres vivos.\nII. O conjunto de populações de diferentes espécies de bactérias que vive no intestino humano.\nIII. Todos os jabutis de uma mesma espécie que vivem em uma região onde existe a possibilidade de se encontrarem.", options: ["I. Biosfera, II. População, III. Comunidade.", "I. Ecossistema, II. Comunidade, III. População.", "I. Biosfera, II. Comunidade, III. População.", "I. Comunidade, II. Ecossistema, III. Biosfera."], correct: 2, explanation: { correct: "I se refere a todas as partes habitadas da Terra (Biosfera). II descreve populações de espécies diferentes interagindo (Comunidade). III descreve indivíduos da mesma espécie no mesmo local (População).", options: ["Incorreto. A ordem de II e III está invertida.", "Incorreto. I é a Biosfera global, não apenas um ecossistema.", "Certo.", "Incorreto. As classificações estão totalmente trocadas em relação aos níveis."] } },
+    { id: 13, level: "Médio", text: "O pâncreas produz insulina, um hormônio liberado diretamente na corrente sanguínea. Já as glândulas salivares produzem saliva, liberada dentro da cavidade bucal através de um pequeno canal. Baseado nisso, podemos afirmar que:", options: ["O pâncreas atua como glândula endócrina, e as salivares como exócrinas.", "O pâncreas atua como glândula exócrina, e as salivares como endócrinas.", "Ambas são glândulas endócrinas, pois produzem substâncias líquidas.", "Ambas são glândulas exócrinas, pois não revestem o exterior do corpo."], correct: 0, explanation: { correct: "Glândulas endócrinas (endo = dentro) liberam hormônios no sangue. Glândulas exócrinas (exo = fora) liberam substâncias por ductos, seja na pele ou em cavidades (boca).", options: ["Certo.", "Incorreto. A insulina vai direto para o sangue, classificando o pâncreas (nesta ação) como endócrino.", "Incorreto. As salivares usam ductos (canais) e não liberam saliva no sangue.", "Incorreto. O pâncreas atua internamente direto na via sanguínea."] } },
+    { id: 14, level: "Médio", text: "Na estrutura interna de uma célula animal, qual organela é descrita como 'pequenas bolsas' responsáveis pela digestão de substâncias e partes mortas da própria célula?", options: ["Retículo endoplasmático", "Ribossomos", "Lisossomos", "Centríolos"], correct: 2, explanation: { correct: "Os lisossomos são organelas digestivas. Eles 'limpam' a célula digerindo partículas nutritivas capturadas ou estruturas antigas que já não funcionam.", options: ["Incorreto. O retículo atua no transporte e síntese de lipídios/proteínas.", "Incorreto. Ribossomos apenas fabricam proteínas.", "Certo.", "Incorreto. Centríolos organizam a divisão celular (tubos de proteína)."] } },
+    { id: 15, level: "Médio", text: "O estômago é um componente fundamental do processamento de alimentos. Ele possui uma camada de revestimento interno e uma camada que permite seus movimentos de esmagamento. Na biologia, o estômago é classificado como um(a):", options: ["Tecido", "Órgão", "Sistema", "Organismo"], correct: 1, explanation: { correct: "O estômago é um órgão, pois é formado por um conjunto de diferentes tecidos (epitelial para revestimento e muscular para o movimento) trabalhando por uma função.", options: ["Incorreto. Ele é formado pela união de vários tecidos.", "Certo.", "Incorreto. O sistema digestório é formado pelo estômago, fígado, intestinos, etc.", "Incorreto. Ele é apenas uma parte de um organismo pluricelular."] } },
+    { id: 16, level: "Médio", text: "Nas células procarióticas, como o núcleo não possui membrana limitante (carioteca), o material genético encontra-se:", options: ["Preso dentro do complexo golgiense.", "Embalado dentro de mitocôndrias.", "Misturado na parede celular rígida.", "Disperso livremente no citoplasma."], correct: 3, explanation: { correct: "Nas bactérias (procariontes), a ausência do núcleo faz com que o DNA fique numa região livre e espalhada pelo citoplasma, coordenada de forma mais rústica.", options: ["Incorreto. Procariontes não possuem complexo golgiense.", "Incorreto. Procariontes não possuem mitocôndrias membranosas.", "Incorreto. A parede celular fica externamente, protegendo a célula.", "Certo."] } },
+    { id: 17, level: "Médio", text: "As células animais possuem uma membrana plasmática delicada e flexível. Qual estrutura garante, nos vegetais, um formato mais geométrico, rígido e ângulos pronunciados?", options: ["Vacúolo de suco celular", "Membrana plasmática dupla", "Cloroplasto", "Parede celular"], correct: 3, explanation: { correct: "A parede celular, formada por celulose nos vegetais, é um invólucro grosso e duro externo à membrana plasmática, que garante estabilidade geométrica à planta.", options: ["Incorreto. O vacúolo guarda água internamente, atuando na pressão, não no invólucro rígido externo.", "Incorreto. O que gera rigidez não é a membrana, mas a parede externa.", "Incorreto. Cloroplasto é a organela de cor verde responsável pela fotossíntese.", "Certo."] } },
+    { id: 18, level: "Médio", text: "O sangue é um fluido vital, mas biologicamente ele se origina e se classifica dentro de um dos quatro tipos básicos de tecidos animais. Qual é esse tecido?", options: ["Tecido Nervoso", "Tecido Muscular", "Tecido Conectivo (Conjuntivo)", "Tecido Epitelial"], correct: 2, explanation: { correct: "O tecido conectivo (ou conjuntivo) une, preenche, sustenta e TRANSPORTA. O sangue é um tecido conectivo líquido que transporta gases e nutrientes pelo corpo.", options: ["Incorreto. Nervoso conduz sinais elétricos (estímulos).", "Incorreto. Muscular realiza contração física.", "Certo.", "Incorreto. Epitelial forma barreiras de revestimento coladas umas às outras."] } },
+    { id: 19, level: "Médio", text: "Ao ler que 'um bioma representa as grandes paisagens ou regiões geográficas da Terra', qual fator principal geralmente define e nomeia esse bioma?", options: ["A quantidade de animais predadores.", "O tipo de vegetação predominante.", "O número de rios subterrâneos.", "A presença exclusiva de fatores abióticos."], correct: 1, explanation: { correct: "Os biomas (ex: Caatinga, Floresta Amazônica, Tundra) são definidos primordialmente pela sua cobertura vegetal e pelas características climáticas gerais da paisagem.", options: ["Incorreto. Predadores existem em diversos biomas (onças, ursos) sem ser a régua definidora.", "Certo.", "Incorreto. Rios influenciam, mas o tipo de flora é o classificador visual central.", "Incorreto. Um bioma é a união de vida (biótica) adaptada aos fatores abióticos."] } },
+    { id: 20, level: "Médio", text: "O complexo golgiense age como os 'Correios' da célula eucariótica. Qual é a sua exata função descrita na fisiologia celular?", options: ["Destruir toxinas usando energia solar.", "Empacotar substâncias e liberá-las pela secreção celular.", "Fabricar a membrana basal dos tecidos animais.", "Digerir lipídios de células intrusas no sangue."], correct: 1, explanation: { correct: "O complexo golgiense é um conjunto de sacos membranosos que recebe, altera, empacota e despacha substâncias (secreção celular) para fora ou dentro da célula.", options: ["Incorreto. Quem metaboliza luz solar é o cloroplasto vegetal.", "Certo.", "Incorreto. A membrana basal fica fora da célula, dividindo tecidos.", "Incorreto. Quem faz a digestão intraceular é o lisossomo."] } },
+
+    { id: 21, level: "Difícil", text: "O tecido epitelial é caracterizado por células fortemente justapostas (grudadas) e pela AUSÊNCIA de vasos sanguíneos. Sabendo que toda célula precisa de nutrientes para não morrer, como a epiderme se mantém viva?", options: ["Através de seus próprios lisossomos, que geram comida de restos mortais.", "Produzindo glicose através da fotossíntese na luz do sol.", "Ela é nutrida pelo tecido conectivo localizado imediatamente abaixo dela.", "A epiderme capta nutrientes absorvidos diretamente da umidade do ar."], correct: 2, explanation: { correct: "Por ser avascular, o tecido epitelial recebe oxigênio e nutrientes do tecido conectivo adjacente (que é rico em vasos). Essa troca ocorre através da membrana basal.", options: ["Incorreto. Lisossomo não gera nutriente do nada, apenas faz quebra digestiva.", "Incorreto. Célula animal não possui cloroplastos para fazer fotossíntese.", "Certo.", "Incorreto. A pele humana não é capaz de se nutrir apenas pela umidade externa do ar."] } },
+    { id: 22, level: "Difícil", text: "Um espermatozoide possui um flagelo longo que bate vigorosamente para garantir seu trânsito veloz até o óvulo. Devido a essa atividade extenuante ininterrupta, qual organela celular DEVE estar presente em grande quantidade nessa célula?", options: ["Vacúolo de suco celular, para não desidratar na viagem.", "Mitocôndria, para gerar a vasta energia necessária à natação.", "Ribossomo, para solidificar o núcleo genético.", "Cloroplasto, para captar energia se houver iluminação externa."], correct: 1, explanation: { correct: "Movimento contínuo e exaustivo exige muita energia (ATP). Como a mitocôndria realiza a respiração celular (geração de energia), células musculares e espermatozoides possuem muitas delas.", options: ["Incorreto. Vacúolo de suco é exclusivo de plantas.", "Certo.", "Incorreto. Ribossomos sintetizam proteínas, não geram a energia bruta para o flagelo.", "Incorreto. Espermatozoide é célula animal, sem cloroplastos."] } },
+    { id: 23, level: "Difícil", text: "Muitos alunos confundem a simplicidade bacteriana com a total ausência de maquinário. Embora a bactéria (célula procariótica) não tenha um núcleo verdadeiro nem organelas membranosas, ela OBRIGATORIAMENTE possui uma 'organela' vital sem membrana. Qual?", options: ["Lisossomo, para digerir as toxinas.", "Complexo golgiense, para secretar lixo.", "Mitocôndria primária, para energia de sobrevivência.", "Ribossomo, necessário para a síntese de suas proteínas."], correct: 3, explanation: { correct: "Os ribossomos são pequenos grânulos que não possuem membrana envolvendo-os. Eles estão presentes no citoplasma das bactérias, sendo vitais para a produção de proteínas bacterianas.", options: ["Incorreto. Lisossomo é uma bolsa membranosa. (Exclusivo Eucarionte)", "Incorreto. Golgiense é um saco membranoso. (Exclusivo Eucarionte)", "Incorreto. Mitocôndria é organela com membrana. (Exclusivo Eucarionte)", "Certo."] } },
+    { id: 24, level: "Difícil", text: "Uma substância tóxica penetrou num organismo e destruiu completamente uma camada do tecido responsável pela 'percepção que temos do ambiente à nossa volta' (audição, dor, visão). Qual tecido sofreu morte celular massiva?", options: ["Tecido epitelial glandular.", "Tecido muscular liso.", "Tecido nervoso.", "Tecido conectivo ósseo."], correct: 2, explanation: { correct: "O tecido nervoso, através dos seus neurônios, é o encarregado direto pela recepção e condução rápida de estímulos, permitindo nossa percepção sensitiva do mundo.", options: ["Incorreto. O epitelial glandular libera secreções e hormônios.", "Incorreto. O muscular liso cuida dos movimentos involuntários internos (intestino).", "Certo.", "Incorreto. O conectivo ósseo garante sustentação estrutural mecânica."] } },
+    { id: 25, level: "Difícil", text: "Leia: 'As glândulas endócrinas não usam pequenos canais de saída'. Sabendo disso, se uma glândula no pescoço humano começar a produzir hormônios em excesso, qual é o caminho imediato dessa toxidade?", options: ["Vazará para o exterior da pele (suor excessivo).", "Será lançada em dutos que vão direto para o estômago.", "Cairá imediatamente no tecido muscular adjacente.", "Irá diretamente para o sangue (tecido conectivo líquido)."], correct: 3, explanation: { correct: "A marca definitiva das glândulas ENDÓCRINAS é produzir e liberar seus hormônios diretamente na corrente sanguínea, que depois os transporta para os órgãos alvos.", options: ["Incorreto. Isso seria ação de glândula exócrina (sudorípara).", "Incorreto. Lançar em cavidades por ductos é ação exócrina.", "Incorreto. Endócrinas miram os capilares sanguíneos.", "Certo."] } },
+    { id: 26, level: "Difícil", text: "Uma folha de mangueira cai na terra. Fungos microscópicos pluricelulares começam a decompô-la. Na hierarquia biológica, a folha e os fungos pluricelulares pertencem, RESPECTIVAMENTE, a quais níveis anatômicos?", options: ["Sistema e Tecido.", "Órgão e Organismo.", "Célula e População.", "Organela e Ecossistema."], correct: 1, explanation: { correct: "A folha é um ÓRGÃO vegetal (formada por tecidos, como os da epiderme vegetal). O fungo pluricelular decompondo ela é um ORGANISMO independente vivo.", options: ["Incorreto. A folha não é um sistema completo, e o fungo inteiro não é só um tecido.", "Certo.", "Incorreto. A folha tem milhões de células. O fungo em si é o organismo, não a população.", "Incorreto. O fungo não é um ecossistema, pois é um fator unicamente biótico."] } },
+    { id: 27, level: "Difícil", text: "No estudo dos biomas, sabe-se que as bactérias formam as formas de vida mais primitivas (procariontes unicelulares). Se uma bactéria sofrer mutação que apague sua parede celular biológica natural, o que ocorrerá?", options: ["Ela se tornará eucariótica.", "Ela continuará intacta, pois bactérias não têm parede celular.", "Ela perderá rigidez e proteção externa, pois bactérias POSSUEM parede celular.", "Ela criará cloroplastos emergenciais para sobreviver."], correct: 2, explanation: { correct: "Atenção: Assim como as plantas, a MAIORIA ABSOLUTA das bactérias possui sim parede celular (feita de peptidoglicano, diferente da vegetal). Sem ela, a bactéria estoura/perde rigidez.", options: ["Incorreto. Evoluir para eucarionte exigiria criar um núcleo envolto por carioteca.", "Incorreto. As bactérias procariontes são envolvidas sim por cápsula e parede celular.", "Certo.", "Incorreto. Bactérias não formam organelas membranosas (cloroplasto)."] } },
+    { id: 28, level: "Difícil", text: "Se um ecossistema marinho perder de forma súbita TODOS os seus crustáceos, pequenos peixes e predadores grandes, mas mantiver sua água salgada, rochas e luz solar. A classificação técnica que resta nessa região vazia é apenas:", options: ["Uma comunidade isolada.", "Uma população extinta.", "Um conjunto exclusivo de fatores abióticos.", "Uma biosfera microscópica."], correct: 2, explanation: { correct: "Ao remover toda a vida (fatores bióticos), o local deixa de ser um ecossistema ativo e resta apenas o ambiente geoquímico físico: água, rocha, luz e temperatura (fatores abióticos).", options: ["Incorreto. Comunidade só existe se houver interação de espécies vivas.", "Incorreto. População pressupõe vida atual.", "Certo.", "Incorreto. A Biosfera exige existência de vida habitando o local."] } },
+    { id: 29, level: "Difícil", text: "Um cientista quer isolar exclusivamente células do 'tecido conectivo' de um gato. Qual material do corpo do gato ele DEVE extrair para ter sucesso imediato em sua amostra?", options: ["Um naco de tecido do cérebro rico em impulsos elétricos.", "Uma amostra de sangue do animal circulante nas veias.", "A camada epitelial superior das orelhas.", "Fibras do estômago que contraem durante a digestão."], correct: 1, explanation: { correct: "O tecido conectivo (ou conjuntivo) pode se apresentar em diferentes formas físicas, sendo o SANGUE um exemplo líquido de tecido conectivo (transporte).", options: ["Incorreto. O cérebro é tecido nervoso.", "Certo.", "Incorreto. Epiderme superficial é tecido epitelial.", "Incorreto. Fibras contráteis são tecido muscular."] } },
+    { id: 30, level: "Difícil", text: "A 'Equilibração Biológica' num ambiente natural garante a sua estabilidade biótica e abiótica. Quando ocorre uma perturbação profunda (como um vazamento de óleo tóxico letal), o ambiente natural provará ser resiliente (em equilíbrio) apenas se:", options: ["A comunidade de peixes mutar geneticamente em 24h para respirar o óleo.", "Ele retornar ao seu estado anterior após cessar o impacto da perturbação.", "A biosfera extinguir os fatores abióticos permanentemente.", "A água alterar sua temperatura química para queimar o ecossistema."], correct: 1, explanation: { correct: "Na ecologia, dizemos que um ambiente natural está em real equilíbrio se, após sofrer uma alteração imposta, ele conseguir se autorregular e retornar estruturalmente ao estado anterior.", options: ["Incorreto. Mutações macroscópicas instantâneas não ocorrem como defesa na natureza.", "Certo.", "Incorreto. Sem fatores abióticos (luz, água, solo), nenhuma biosfera existe.", "Incorreto. Fatores abióticos não têm 'consciência' para queimar o sistema local."] } }
+  ];
+
+  const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g,'_');
+  let currentQuestion = 0;
+  let savedAnswers = localStorage.getItem(storageKey);
+  let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+  function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+    
+    if(mode === 'explanation') {
+      document.getElementById('viewExplanation').style.display = 'flex';
+      document.getElementById('btnExp').classList.add('active');
+      document.getElementById('btnPrac').classList.remove('active');
+    } else if(mode === 'practice') {
+      document.getElementById('viewPractice').style.display = 'block';
+      document.getElementById('quizFooter').style.display = 'flex';
+      document.getElementById('btnExp').classList.remove('active');
+      document.getElementById('btnPrac').classList.add('active');
+      renderQuestion();
+      renderMap();
+    } else if(mode === 'result') {
+      document.getElementById('viewResult').style.display = 'block';
+      document.getElementById('quizFooter').style.display = 'none';
+      window.scrollTo(0,0);
+    }
+  }
+
+  function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    
+    let badgeClass = '';
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+      <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+          <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+          <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+        </div>
+        
+        <div class="options-list">
+          ${q.options.map((opt, i) => {
+            let cls = '';
+            if(ans !== null) {
+              if(i === q.correct) cls = 'correct';
+              else if(i === ans) cls = 'wrong';
+              else cls = 'disabled';
+            }
+            return `
+              <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                <div class="opt-circle">${letters[i]}</div>
+                <div>${opt}</div>
+              </button>
+            `;
+          }).join('')}
+        </div>
+
+        ${ans !== null ? `
+          <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+              ${ans === q.correct ? '☑ Raciocínio Aprovado!' : '⚠️ Ops! Falha Detectada:'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top: 10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+              ${q.explanation.correct}
+            </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+              <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+              ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+    updateNav();
+  }
+
+  function handleAnswer(idx) {
+    if(userAnswers[currentQuestion] !== null) return;
+    
+    userAnswers[currentQuestion] = idx;
+    localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+    
+    if(idx === questions[currentQuestion].correct) {
+      const duration = 1500;
+      const end = Date.now() + duration;
+      (function frame() {
+        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+        if (Date.now() < end) { requestAnimationFrame(frame); }
+      }());
+    } else {
+      const quizContainer = document.getElementById('quizContainer');
+      quizContainer.classList.remove('shake-effect');
+      void quizContainer.offsetWidth; 
+      quizContainer.classList.add('shake-effect');
+      setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    
+    renderQuestion();
+    renderMap();
+  }
+
+  function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+      let cls = 'map-dot';
+      if(i === currentQuestion) cls += ' active';
+      if(userAnswers[i] !== null) {
+        cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+      }
+      return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+    }).join('');
+    
+    setTimeout(() => {
+      const activeDot = map.querySelector('.map-dot.active');
+      if(activeDot) activeDot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }, 50);
+  }
+
+  function goTo(i) {
+    if(window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+  }
+
+  function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if(n >= 0 && n < questions.length) goTo(n);
+  }
+
+  function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if(currentQuestion === questions.length - 1) {
+      next.textContent = "Finalizar Diagnóstico";
+      next.onclick = finish;
+    } else {
+      next.textContent = "Avançar";
+      next.onclick = () => changeQuestion(1);
+    }
+  }
+
+  function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    if(window.confetti) confetti.reset();
+    
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+    
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    
+    if(percent < 80) {
+      summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+        <strong>⚠️ Domínio Insuficiente!</strong> Seu desempenho não atingiu a nota de corte (80%). Revise a teoria com rigor antes de tentar novamente.
+      </div>`;
+      document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">Limpar Histórico e Refazer Prova</button>`;
+    } else {
+      summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+        <strong>🏆 Excelente Desempenho!</strong> Você demonstrou uma base sólida sobre os conceitos avaliados. A sua aprovação técnica está garantida.
+      </div>`;
+      document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">Refazer Prova (Zerar Histórico)</button>`;
+    }
+
+    if(correct < questions.length) {
+      summary += `<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas:</h4>`;
+      questions.forEach((q, i) => {
+        if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+          summary += `
+            <div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+              <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+              <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+              <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+            </div>
+          `;
+        }
+      });
+    }
+    
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+  }
+
+  function reset() {
+    localStorage.removeItem(storageKey);
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+  }
+
+  setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
