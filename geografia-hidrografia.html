@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geografia 6º Ano - Hidrografia - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    /* Paleta Aquática e Terrosa para Geografia/Hidrografia */
+    --bg-color: #F0F9FF;
+    --text-color: #0F172A;
+    --border-color: #0369A1;
+    --white: #FFFFFF;
+    --theme-light: #E0F2FE;
+    --theme-medium: #38BDF8;
+    --theme-dark: #0284C7;
+    --theme-contrast: #EA580C;
+    --theme-accent: #0EA5E9;
+    --theme-text-active: #FFFFFF;
+
+    /* NÃO ALTERAR AS CORES ABAIXO */
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #BE123C;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 20px; 
+    padding-bottom: 100px;
+    background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+
+@keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from {transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; }}
+
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.15); color: var(--theme-contrast); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container {position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon {position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 {font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil {background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot {min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct {background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle {background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle {background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled {pointer-events: none; opacity: 0.7; }
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display: flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt {border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+.result-card {background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big {font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">💧</span> PROMOVER</div>
+        <h1>GEOGRAFIA / 6º ANO</h1>
+        <p class="subtitle">Hidrografia: Água e Sociedade</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>Termo não encontrado.</p></div>
+
+        <div class="content-group">
+            <span class="section-badge">1. Distribuição</span>
+            <div class="theory-box">
+                <h3>A Água na Terra</h3>
+                <p>Aproximadamente <strong>70%</strong> de todo o planeta é coberto por água. Mas a distribuição dessa água não é igual:</p>
+                <div class="visual-area">
+                    <div>97,5%<br><span style="font-size:0.8rem; color:var(--text-color);">Água Salgada (Oceanos)</span></div>
+                    <div>2,5%<br><span style="font-size:0.8rem; color:var(--text-color);">Água Doce</span></div>
+                </div>
+                <p>Dessa quantidade muito pequena de água doce (2,5%), a maior parte (<strong>69%</strong>) está na forma de gelo nas geleiras, 30% está debaixo da terra (subsolo) e apenas <strong>1%</strong> está na superfície em rios e lagos, pronta para o nosso uso. A atividade humana que mais gasta água doce é a <strong>Agropecuária (70%)</strong>, usada para plantar e criar animais. Depois vem a indústria (19%) e o uso nas casas (11%).</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">2. O Ciclo da Água</span>
+            <div class="theory-box">
+                <h3>Como a água se movimenta</h3>
+                <p>A água muda de lugar e de estado físico o tempo todo. As etapas são:</p>
+                <ul>
+                    <li><strong>Evaporação:</strong> O calor do Sol esquenta a água líquida dos rios e oceanos. Essa água líquida vira vapor (gás) e sobe para o céu.</li>
+                    <li><strong>Transpiração:</strong> As plantas também liberam água na forma de vapor (gás) pelas folhas. A união de ambos é a <em>Evapotranspiração</em>.</li>
+                    <li><strong>Condensação:</strong> O vapor de água sobe, encontra o ar frio do céu e volta a ser água líquida em formato de pequenas gotas. Isso é o que forma as nuvens.</li>
+                    <li><strong>Precipitação:</strong> A água acumulada nas nuvens cai de volta na terra. Ela pode cair como chuva, neve ou pedras de gelo (granizo).</li>
+                    <li><strong>Infiltração:</strong> A água da chuva cai no chão de terra e entra (penetra) para dentro do solo, indo parar em grandes reservas de água debaixo da terra.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">3. Dinâmicas Fluviais</span>
+            <div class="theory-box">
+                <h3>Bacias e Rios</h3>
+                <p>O local onde a água sai da terra e forma um rio é chamado de <strong>Nascente</strong>. O local onde o rio termina e joga a sua água no mar ou em outro rio é a <strong>Foz</strong> (que pode ser em Estuário, um único canal, ou Delta, vários canais). Quando um rio menor joga sua água dentro de um rio maior, o rio menor é chamado de <strong>Afluente</strong>.</p>
+                <div class="highlight-box">
+                    <strong>Direções do Rio:</strong><br>
+                    - Subir a <em>Montante</em>: É viajar no sentido contrário da água. Você está indo em direção ao lugar onde o rio nasce.<br>
+                    - Descer a <em>Jusante</em>: É viajar seguindo o sentido da água. Você está indo em direção ao lugar onde o rio termina (foz).
+                </div>
+                <p><strong>Bacia Hidrográfica:</strong> É todo o pedaço de terra onde a água das chuvas escorre para um único rio principal e seus afluentes. As montanhas e áreas mais altas em volta separam a água e são chamadas de "divisores de água". Se um rio tem água o ano inteiro, ele é um rio <strong>Perene</strong>. Se o rio seca totalmente na época que não chove, ele é um rio <strong>Intermitente (ou Temporário)</strong>.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">4. Águas Subterrâneas</span>
+            <div class="theory-box">
+                <h3>Água debaixo da terra</h3>
+                <p>A água da chuva entra na terra. O solo e as rochas têm espaços vazios dentro deles (<strong>porosidade</strong>). Se esses espaços forem conectados para a água conseguir passar de um lado para o outro (<strong>permeabilidade</strong>), a água vai descendo. Ela desce até encontrar uma rocha que não deixa a água passar. Ali, ela acumula e forma os <strong>Aquíferos</strong>. A altura exata onde a terra está completamente cheia de água é chamada de <strong>nível freático</strong>.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">5. Impactos Antrópicos</span>
+            <div class="theory-box">
+                <h3>Poluição e Destruição humana</h3>
+                <div class="highlight-box warning">
+                    <strong>Impermeabilização do solo:</strong> Cidades cobrem o chão de terra com asfalto e cimento. O asfalto não tem espaços vazios. A chuva cai no asfalto e não consegue entrar na terra. Como a água não tem para onde entrar, ela escorre toda pela rua e causa as enchentes.
+                </div>
+                <p>As plantas que ficam na beira do rio protegem a margem (mata ciliar). Se as pessoas cortam essas plantas, a chuva arrasta a terra da margem para o fundo do rio. Esse processo se chama <strong>assoreamento</strong>, e deixa o rio muito raso, podendo fazê-lo secar. Quando as pessoas precisam usar mais água do que o rio ou o lugar pode oferecer, ocorre o <strong>estresse hídrico</strong> (falta de água).</p>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">Iniciar Diagnóstico (30 Q) →</button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">30 questões rigorosas. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro para aprender!</p>
+        </div>
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars"></div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText"></p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+const questions = [
+    {
+        id: 1, level: "Fácil",
+        text: "Embora a Terra seja conhecida como o 'Planeta Água', a disponibilidade de água doce para beber é muito pequena. De toda a água existente no planeta, qual é a porcentagem aproximada de água doce?",
+        options: ["97,5%", "70,0%", "30,0%", "2,5%"],
+        correct: 3,
+        explanation: { correct: "A água doce total corresponde a apenas 2,5% da água do planeta.", options: ["97,5% é o total de água salgada, que não serve para consumo direto.", "70% é a área da superfície do planeta que está coberta por água.", "30% é a quantidade de água doce que está escondida no subsolo.", "Resposta correta."] }
+    },
+    {
+        id: 2, level: "Fácil",
+        text: "Da pequena quantidade de água doce existente no mundo (2,5%), a maior parte não está disponível para usarmos agora. Onde está guardada a maior parte (cerca de 69%) da água doce do planeta?",
+        options: ["De forma líquida em aquíferos no subsolo", "Na forma sólida (gelo) em geleiras", "Nos oceanos Índico e Pacífico", "Na superfície, em rios e lagos"],
+        correct: 1,
+        explanation: { correct: "Exatos 69% da água doce do mundo está congelada nas regiões muito frias.", options: ["A água no subsolo representa 30%, não a maior parte.", "Resposta correta.", "Os oceanos contêm água salgada, não doce.", "Os rios e lagos têm apenas 1% do total da água doce."] }
+    },
+    {
+        id: 3, level: "Fácil",
+        text: "As pessoas usam água para muitas coisas diferentes. De acordo com o livro, qual é o tipo de trabalho humano que consome a MAIOR quantidade de água doce no mundo (cerca de 70%)?",
+        options: ["A indústria e as fábricas", "A agropecuária (plantar alimentos e criar animais)", "O uso doméstico nas casas (limpeza e higiene)", "A geração de energia hidrelétrica"],
+        correct: 1,
+        explanation: { correct: "A agropecuária usa a maior parte da água para molhar (irrigar) as plantações e dar de beber aos animais.", options: ["As fábricas gastam 19% da água.", "Resposta correta.", "O uso nas nossas casas gasta apenas 11% da água do mundo.", "As usinas usam a força da água para gerar luz, mas não consomem a água para sempre."] }
+    },
+    {
+        id: 4, level: "Fácil",
+        text: "O calor do Sol faz a água mudar de estado físico. Qual é o nome do processo em que a água no estado líquido (água normal dos rios) vira gás e sobe para o céu?",
+        options: ["Precipitação", "Evaporação", "Infiltração", "Condensação"],
+        correct: 1,
+        explanation: { correct: "A evaporação acontece quando o calor transforma a água líquida em vapor de água (estado gasoso).", options: ["Precipitação é quando a água cai do céu na forma de chuva.", "Resposta correta.", "Infiltração é a água entrar na terra.", "Condensação é quando o vapor de gás vira água líquida de novo."] }
+    },
+    {
+        id: 5, level: "Fácil",
+        text: "As plantas também participam do ciclo da água. Elas perdem água na forma de vapor. Qual o nome desse processo que acontece nas plantas?",
+        options: ["Condensação", "Transpiração", "Impermeabilização", "Assoreamento"],
+        correct: 1,
+        explanation: { correct: "A transpiração é a liberação de água na forma de vapor (gás) que as plantas realizam através de suas folhas.", options: ["Condensação é o que forma as nuvens no céu.", "Resposta correta.", "Impermeabilização é colocar asfalto no chão de terra.", "Assoreamento é a terra caindo e enchendo o fundo do rio."] }
+    },
+    {
+        id: 6, level: "Fácil",
+        text: "Existem rios que têm água corrente durante todos os meses do ano e rios que secam em alguns meses. Qual é o nome dado aos rios que possuem água o ano inteiro e nunca secam?",
+        options: ["Intermitentes", "Subterrâneos", "Temporários", "Perenes"],
+        correct: 3,
+        explanation: { correct: "Os rios perenes são aqueles que nunca secam, mesmo nos meses em que não chove. Eles mantêm a água correndo o ano todo.", options: ["Rios intermitentes secam nos meses sem chuva.", "Rios subterrâneos ficam debaixo da terra.", "Rios temporários é outro nome para os rios que secam.", "Resposta correta."] }
+    },
+    {
+        id: 7, level: "Fácil",
+        text: "Todo rio tem um local de início e um local de fim. O local exato onde a água brota do chão ou do derretimento de gelo, dando início ao rio, é chamado de:",
+        options: ["Foz", "Nascente", "Afluente", "Estuário"],
+        correct: 1,
+        explanation: { correct: "A nascente é o lugar geográfico onde a água sai para a superfície e cria o começo do rio.", options: ["Foz é o final do rio, onde ele despeja a água no mar.", "Resposta correta.", "Afluente é um rio que joga água dentro de outro rio.", "Estuário é um dos formatos que a foz pode ter no final do rio."] }
+    },
+    {
+        id: 8, level: "Fácil",
+        text: "A área de terra em que a água da chuva cai e corre na mesma direção, indo em direção a um único rio principal e seus rios menores (afluentes), recebe um nome específico. Qual é esse nome?",
+        options: ["Bacia hidrográfica", "Nível freático", "Mata ciliar", "Corrente marítima"],
+        correct: 0,
+        explanation: { correct: "A bacia hidrográfica é o pedaço de terra que reúne as águas e as direciona para formar o rio principal daquela região.", options: ["Resposta correta.", "Nível freático é a altura da água debaixo da terra.", "Mata ciliar são as árvores que crescem na beira do rio.", "Correntes marítimas são as águas que se movem nos oceanos."] }
+    },
+    {
+        id: 9, level: "Fácil",
+        text: "Quando chove, parte da água não fica na superfície, mas desce para dentro do chão de terra. O processo da água penetrando no solo para chegar nas reservas debaixo da terra é chamado de:",
+        options: ["Evapotranspiração", "Infiltração", "Condensação", "Retificação"],
+        correct: 1,
+        explanation: { correct: "A infiltração é o processo da água líquida entrar e descer pelos espaços de terra e rocha do chão.", options: ["Evapotranspiração é a água líquida subindo para o céu em forma de gás.", "Resposta correta.", "Condensação é o processo de formar a nuvem no céu.", "Retificação é uma obra humana para tirar as curvas do rio."] }
+    },
+    {
+        id: 10, level: "Fácil",
+        text: "Quase toda a água do planeta (97,5%) está nos oceanos e não serve para o consumo humano direto. Por que não podemos beber a água do oceano diretamente?",
+        options: ["Porque ela é feita de água doce com poluição urbana", "Porque ela tem uma grande quantidade de sal natural (salgada)", "Porque ela está totalmente congelada", "Porque ela fica no estado gasoso"],
+        correct: 1,
+        explanation: { correct: "A água dos oceanos é água salgada. O corpo humano não suporta beber grandes quantidades de sal.", options: ["A água do oceano é naturalmente salgada, não doce.", "Resposta correta.", "A água que está congelada no mundo é água doce (nas geleiras).", "A água do oceano está no estado líquido."] }
+    },
+    
+    {
+        id: 11, level: "Médio",
+        text: "No ciclo da água, o ar que está quente na superfície sobe para a parte alta do céu. Lá em cima é mais frio. Quando o vapor de água atinge esse frio, ele vira pequenas gotas líquidas que formam as nuvens. O nome dessa mudança é:",
+        options: ["O vapor congela e forma o granizo sólido", "O vapor de água sofre transpiração reversa", "A água passa do estado de gás (vapor) para o estado líquido (condensação)", "A água da nuvem faz a infiltração no ar"],
+        correct: 2,
+        explanation: { correct: "A condensação acontece unicamente porque o ar frio faz o gás (vapor) voltar a ser água líquida em gotas finas (nuvem).", options: ["Granizo é precipitação sólida, acontece depois da nuvem estar pronta.", "Não existe transpiração reversa.", "Resposta correta.", "Infiltração acontece somente no solo de terra."] }
+    },
+    {
+        id: 12, level: "Médio",
+        text: "O livro descreve que para ter muita água debaixo da terra (aquífero), o chão e as pedras precisam ter duas características físicas. Quais são essas características que deixam a água entrar e descer no chão?",
+        options: ["Não ter buracos e ter uma descida inclinada", "Ter espaços vazios dentro (porosidade) e esses buracos serem conectados (permeabilidade)", "Estar coberto de cimento para a chuva não evaporar", "Ser feito de rochas sem nenhum espaço entre os grãos de terra"],
+        correct: 1,
+        explanation: { correct: "As rochas com buracos (porosidade) guardam a água. Se os buracos se ligam (permeabilidade), a água consegue descer até o fundo do aquífero.", options: ["Se não tem buracos, a água não consegue entrar.", "Resposta correta.", "Cimento bloqueia a água de entrar na terra.", "Rocha sem espaço (impermeável) barra a água."] }
+    },
+    {
+        id: 13, level: "Médio",
+        text: "Se você estiver navegando em um barco em um rio e o professor de Geografia disser que você deve 'ir a montante', qual caminho você deve seguir no rio?",
+        options: ["O caminho indo na direção do mar", "O caminho fácil, indo a favor da correnteza do rio", "O caminho mais difícil, indo contra a correnteza do rio, na direção em que ele nasce", "O caminho em que a água sai do rio e entra no oceano (a foz)"],
+        correct: 2,
+        explanation: { correct: "Ir a montante significa viajar para a parte alta (onde o rio nasce). Isso obriga você a subir o rio, indo contra a direção da água.", options: ["Ir na direção do mar e descer o rio é ir a jusante.", "Ir a favor da correnteza é ir a jusante.", "Resposta correta.", "Ir para a foz é a direção final do rio, a jusante."] }
+    },
+    {
+        id: 14, level: "Médio",
+        text: "As cidades costumam sofrer com muitas inundações e enchentes quando chove forte. Qual é a ação que as pessoas fazem no solo das cidades que causa as enchentes?",
+        options: ["O plantio de árvores nas calçadas", "A colocação de asfalto e calçamento que impedem a água de entrar na terra", "A evaporação muito rápida da água do chão", "A criação de espaços com buracos no chão de terra"],
+        correct: 1,
+        explanation: { correct: "O asfalto é sólido e não tem buracos. A água bate no asfalto e não consegue descer (infiltrar). Ela fica presa em cima do asfalto, subindo de nível e invadindo casas.", options: ["Árvores ajudam a água a entrar na terra, elas diminuem as enchentes.", "Resposta correta.", "A evaporação é um gás subindo, isso não causa enchente de água líquida.", "Espaços de terra fariam a água sumir da rua e descer para o solo."] }
+    },
+    {
+        id: 15, level: "Médio",
+        text: "Os rios temporários (ou intermitentes) do Nordeste do Brasil perdem toda a água de seu leito e secam completamente durante vários meses. Qual é o motivo direto para esses rios secarem?",
+        options: ["Eles despejam toda a água no mar de uma vez só", "A água deles congela por causa do clima muito frio", "Eles recebem água apenas das chuvas e secam quando não chove durante meses", "Eles estão em locais muito planos, então a água não se movimenta"],
+        correct: 2,
+        explanation: { correct: "Rios intermitentes não têm reservas de água debaixo da terra abastecendo o fundo deles. Eles dependem apenas da chuva caindo. Se não chove, eles secam.", options: ["Rios não esvaziam para o mar de uma vez.", "O Nordeste do Brasil tem clima quente, a água não congela lá.", "Resposta correta.", "Ser plano faz o rio correr devagar, não faz a água secar e desaparecer."] }
+    },
+    {
+        id: 16, level: "Médio",
+        text: "A água dos oceanos é muito importante para a temperatura de toda a Terra. Os oceanos ajudam a evitar que o planeta fique muito gelado ou pegando fogo. Como os oceanos fazem isso?",
+        options: ["Os oceanos armazenam o calor do sol e soltam esse calor bem devagar", "Os oceanos jogam vento quente de água doce para as montanhas geladas", "O sal da água do oceano reflete e rebate a luz do Sol para fora do planeta", "Os oceanos impedem totalmente a evaporação da água de acontecer"],
+        correct: 0,
+        explanation: { correct: "A grande quantidade de água líquida do oceano absorve a luz e o calor do Sol, mantendo a temperatura global equilibrada durante o dia e a noite.", options: ["Resposta correta.", "Os oceanos não criam ventos de água doce.", "O sal dissolve na água, ele não funciona como um espelho contra o Sol.", "Os oceanos são o principal local de evaporação de água da Terra."] }
+    },
+    {
+        id: 17, level: "Médio",
+        text: "Quando a chuva cai na terra, ela precisa escorrer para algum rio. As áreas de montanha alta e morros definem para que lado a água da chuva vai escorrer, dividindo a bacia de um rio da bacia de outro rio. Qual o nome geográfico correto para essas áreas altas?",
+        options: ["Lençóis freáticos", "Divisores de água", "Rios afluentes", "Foz em estuário"],
+        correct: 1,
+        explanation: { correct: "As partes mais altas do relevo são chamadas de divisores de água. Quando a chuva cai no pico da montanha, a água se divide. Parte desce para o lado esquerdo (uma bacia) e parte desce para o lado direito (outra bacia).", options: ["Lençol freático é o estoque de água debaixo da terra.", "Resposta correta.", "Rio afluente é um rio pequeno que alimenta o rio grande, fica na parte mais baixa.", "Foz é a parte onde a água termina, na parte mais baixa e plana possível."] }
+    },
+    {
+        id: 18, level: "Médio",
+        text: "O lugar onde o rio deságua e termina se chama foz. O livro ensina que a foz pode ser do tipo 'estuário' ou do tipo 'delta'. O que é uma foz em formato de estuário?",
+        options: ["É quando a água do rio deságua pelo meio de muitas ilhas de terra (vários canais)", "É quando a água do rio deságua no mar passando por um canal só, direto e sem obstáculos", "É quando a água do rio seca totalmente na areia antes de encontrar o mar", "É quando o rio deságua a sua água doce dentro de um lago doce, e não no oceano salgado"],
+        correct: 1,
+        explanation: { correct: "A foz em estuário é um caminho livre. A água flui pelo seu canal único diretamente e sem divisão até chegar e se misturar com a água do mar.", options: ["Quando o rio se divide em vários caminhos de água em volta de ilhotas, o nome correto é Foz em Delta.", "Resposta correta.", "Quando o rio seca no continente, chamamos isso de drenagem endorreica.", "Estuários normais são a parte onde a água do rio chega no oceano marítimo."] }
+    },
+    {
+        id: 19, level: "Médio",
+        text: "O texto fala que regiões do Oriente Médio e do Norte da África sofrem com um problema chamado 'Estresse Hídrico'. O que significa geograficamente o termo 'Estresse Hídrico'?",
+        options: ["Significa que as pessoas têm tanta água que a água acaba sobrando", "Significa que a pressão da água debaixo da terra está muito forte", "Significa que a quantidade de água que as pessoas precisam usar é maior do que a água que existe no lugar", "Significa que o calor excessivo do local faz a água secar nos copos"],
+        correct: 2,
+        explanation: { correct: "Existe estresse hídrico quando a demanda (necessidade de água das pessoas e fazendas) ultrapassa o que a natureza da região tem disponível na superfície e nos aquíferos.", options: ["Estresse hídrico é a falta, e não a sobra de água.", "Pressão da água subterrânea não é chamada de estresse hídrico.", "Resposta correta.", "Secar nos copos é evaporação normal, o estresse hídrico afeta o consumo das cidades inteiras."] }
+    },
+    {
+        id: 20, level: "Médio",
+        text: "As pessoas descartam esgoto de banheiros, lixo urbano e líquidos podres de lixões (chorume) diretamente na terra pura. O que acontece fisicamente quando o solo recebe esses elementos?",
+        options: ["A terra se transforma em asfalto impermeável na mesma hora", "As pessoas são obrigadas a retificar (deixar reto) o traçado dos rios mais próximos", "Os elementos tóxicos entram na terra junto com a chuva e contaminam a água pura do aquífero lá no fundo", "As rochas e a terra automaticamente retiram a sujeira e devolvem a água limpa"],
+        correct: 2,
+        explanation: { correct: "A sujeira derramada em cima da terra se infiltra (desce pelos poros do solo) da mesma forma que a água da chuva desce, atingindo e estragando a água boa do aquífero.", options: ["Lixo não se transforma em cimento ou asfalto.", "Retificar rios é uma obra de engenharia para evitar enchentes, não para resolver lixo no chão.", "Resposta correta.", "A terra tem limite. Se jogar muito lixo químico e chorume, a terra não consegue limpar."] }
+    },
+
+    {
+        id: 21, level: "Difícil",
+        text: "Um grupo de pescadores saiu do estado do Pará, onde o rio Amazonas joga sua água no Oceano, e navegou de barco por dias pelo meio do rio, em direção à Cordilheira dos Andes (montanhas onde a nascente do rio fica localizada). O barco navegou:",
+        options: ["A jusante, indo em direção à foz (término do rio)", "A montante, indo contra a força da correnteza da água do rio", "No estuário do rio intermitente, navegando a favor do escoamento da água", "No divisor de água exato, onde o mar encontra o rio Amazonas"],
+        correct: 1,
+        explanation: { correct: "A água nasce na parte alta e corre até a parte baixa (mar). Se o barco saiu do mar rumo à montanha onde o rio nasce, ele está viajando no sentido oposto ao movimento natural da água. A regra de navegação correta para isso é ir a montante.", options: ["Viajar rumo ao final do rio é viajar a jusante.", "Resposta correta.", "Navegar a favor da água e chegar no rio intermitente seria ir para outro caminho.", "O barco navegou pelo rio principal, os divisores de água estão no alto dos morros que formam a bacia."] }
+    },
+    {
+        id: 22, level: "Difícil",
+        text: "O texto sobre poluição alerta que as espécies marinhas de peixes no oceano estão sofrendo pela ação humana. Qual frase explica corretamente por que jogar agrotóxico (veneno contra insetos) em uma plantação em uma fazenda longe do mar acaba afetando os peixes no oceano?",
+        options: ["O agrotóxico jogado na terra da fazenda evapora totalmente para as nuvens, vira granizo e cai exclusivamente em cima da água do mar", "A chuva lava a fazenda, arrastando o agrotóxico da terra para o rio mais próximo. A água do rio viaja por toda a bacia hidrográfica até despejar a sujeira direto no oceano", "O veneno da fazenda entra em um processo de transpiração e se transforma em plástico dentro dos navios no meio do mar", "A poluição do oceano não vem da terra firme, ela só existe quando os barcos derramam produtos químicos na água do mar aberto"],
+        correct: 1,
+        explanation: { correct: "A bacia hidrográfica conecta o continente com o mar. A chuva lava as fazendas e ruas das cidades. Toda sujeira do solo é levada pelos rios, e a água dos rios deságua direto no oceano.", options: ["Agrotóxico é líquido, evapora muito pouco e a chuva cai em qualquer lugar, não só no mar.", "Resposta correta.", "A transpiração é feita pelas plantas, a planta não transforma veneno em plástico.", "Todo lixo leve ou resíduo químico jogado no rio do interior chegará ao mar. Os barcos não são a única causa da poluição."] }
+    },
+    {
+        id: 23, level: "Difícil",
+        text: "A água circula o tempo todo no ciclo da água. Toda a quantidade de água da Terra não aumenta nem diminui, ela apenas muda de lugar. Se a quantidade de água é a mesma, por que o livro alerta que a água potável (boa para consumo humano) está ameaçada e em risco de acabar nas cidades?",
+        options: ["Porque o calor do aquecimento global fez o ciclo hidrológico parar completamente em todas as etapas", "Porque quando a água evapora nos rios doces das cidades, a chuva cai de volta com muito sal nela", "Porque apesar da água existir na natureza, os seres humanos poluem e estragam as reservas, reduzindo a água que as pessoas podem beber de forma segura", "Porque a água dos rios e oceanos de todo o mundo está entrando dentro das geleiras, desaparecendo do continente"],
+        correct: 2,
+        explanation: { correct: "O processo da natureza continua igual. A diferença é que a água líquida que a natureza nos dá nos rios sofre com o descarte de lixo e venenos feitos pelo ser humano, ficando suja e tóxica para bebermos.", options: ["O ciclo continua ocorrendo e a chuva não parou.", "A evaporação faz a água subir pura. A chuva não tem sal nela.", "Resposta correta.", "As geleiras estão derretendo por causa do calor, elas não estão congelando e roubando a água líquida agora."] }
+    },
+    {
+        id: 24, level: "Difícil",
+        text: "As plantas que crescem presas no chão das margens dos rios (mata ciliar) protegem o canal por onde a água do rio passa. Se as pessoas cortarem todas as plantas que ficam nas margens, qual consequência física acontece de forma direta no corpo do rio?",
+        options: ["Sem raízes na terra para segurar as margens, a chuva empurra todo o barro e terra da margem para dentro do rio. Esse processo se chama assoreamento e deixa o rio muito raso, enchendo o fundo de terra", "Sem a umidade das plantas perto da água, o rio inteiro começará a evaporar em algumas horas, deixando um buraco seco e sem terra no local", "Sem o peso das árvores no chão, a água do rio vai conseguir entrar rapidamente para o aquífero no nível freático, aumentando o estoque das reservas", "Com o desmatamento ao lado do rio, o espaço que sobra no chão de terra nua ajudará a correnteza da água do rio a ficar mais lenta nas cheias"],
+        correct: 0,
+        explanation: { correct: "A raiz da planta funciona como uma rede de barbantes segurando a terra do chão unida. Se você tira a planta e a raiz, a terra fica solta e desmorona para dentro do fundo do rio, fazendo ele entupir de terra (assoreamento).", options: ["Resposta correta.", "A evaporação de todo um rio não ocorre em algumas horas apenas porque árvores sumiram.", "Tirar árvore faz a terra ficar dura e menos propensa a deixar a água entrar no aquífero.", "Sem a árvore para fazer barreira e sem as curvas protegedoras, a água não fica mais lenta, ela fica muito rápida e destrutiva."] }
+    },
+    {
+        id: 25, level: "Difícil",
+        text: "O livro exibe um homem colocando lixo na beira do rio e reclamando sobre quem polui a água. Se, além de jogar lixo no rio, o lugar perto do rio estiver todo coberto de asfalto liso, qual será a principal consequência dessa cobertura sólida sobre o ciclo da água urbana?",
+        options: ["A água da chuva vai conseguir infiltrar melhor porque o asfalto empurra o nível freático para a superfície terrestre", "O asfalto criará um bloqueio rígido impedindo 100% da chuva de se infiltrar. A água vai ficar totalmente na superfície do asfalto, escorrer rapidamente na direção das casas e causar grandes enchentes", "A chuva atingindo rapidamente as estradas asfaltadas fará o rio formar uma área plana no modelo foz em delta no interior do continente", "As poças d'água em cima do asfalto não vão entrar na etapa da condensação no céu porque estão poluídas pelo piche"],
+        correct: 1,
+        explanation: { correct: "O solo natural (terra fofa) suga e infiltra a chuva. O asfalto não suga água nenhuma. Toda a chuva que cair formará correntezas violentas pelas ruas do bairro, alagando casas e arrastando lixo para os bueiros.", options: ["Como a água não consegue entrar pelo asfalto para descer, a recarga da água nas reservas freáticas piora.", "Resposta correta.", "A velocidade da água no asfalto não cria foz em delta, apenas enchente nas partes baixas.", "A condensação ocorre no ar frio do céu para formar nuvem e independe de asfalto poluído."] }
+    },
+    {
+        id: 26, level: "Difícil",
+        text: "Já que o planeta Terra possui a maior parte de sua água salgada em oceanos, a retirada do sal das águas marinhas (dessalinização) traria água doce infinita. Qual o principal obstáculo que impede as cidades do mundo todo de retirarem imediatamente o sal do mar todos os dias?",
+        options: ["O sal retirado nessa operação vira um lixo que solta luz e calor intenso, proibindo sua retirada contínua", "A ação para separar a água e o sal nas grandes máquinas gasta muita energia elétrica para operar. O procedimento é muito caro e produz um caldo líquido ainda mais salgado que tem que ser devolvido de forma perigosa ao mar", "As leis mundiais de defesa à natureza limitaram o processo porque o ciclo hidrológico mundial iria parar se tirássemos mais água pura do oceano", "A água marinha tratada na usina não remove a salinidade com eficiência total, sendo impossível regar qualquer lavoura do campo e causando desastres em cidades agrícolas"],
+        correct: 1,
+        explanation: { correct: "O maquinário pesado necessita ser muito forte para limpar milhões de litros de água oceânica. Gasta-se muita eletricidade e dinheiro nas bombas das usinas. Além disso, no processo sobra muita água grossa e excessivamente salgada (salmoura) que prejudica a área onde ela volta no mar.", options: ["O sal das águas (cloreto de sódio) continua sendo sal de cozinha, ele não emite radiações ou altas luzes após sair da fábrica.", "Resposta correta.", "Nenhuma lei das nações proíbe a captação e o oceano não secaria, já que o próprio ciclo repõe as perdas com novas chuvas vindas dos rios.", "A água das usinas, sendo muito bem processada, se torna extremamente doce e pura (podendo ser usada em lavouras sim, o problema é pagar pela energia da usina)."] }
+    },
+    {
+        id: 27, level: "Difícil",
+        text: "A imagem sobre reservas subterrâneas do livro demonstra o local chamado Nível Freático no subsolo. O processo natural do ciclo d'água relata o que ocorre exato caso a altura dessa reserva atinja a superfície do relevo do terreno onde as pessoas moram:",
+        options: ["A água retida no subsolo entrará em vaporização forçada na atmosfera antes de montar os aquíferos superiores", "A água presa exposta à luz sairá das rochas e do subsolo, derramando para fora da terra no próprio limite do terreno e dando existência a rios, nascentes e lagoas para uso animal", "O alagamento interior criará imediatamente um duto natural reto que se chama foz do tipo delta canalizado em estuário em qualquer bacia", "O contato com as chuvas e ar da parte de fora faz todas as antigas rochas porosas passarem a formar rochas maciças e trancadas impossibilitando que a água suba a superfície terrestre"],
+        correct: 1,
+        explanation: { correct: "O solo possui espaços e furos com um armazenamento gigante, enchendo cada vez mais conforme ocorre a infiltração. No ponto em que o nível subaquático ultrapassar e chegar na superfície da mesma altura do terreno onde você pisa, a água vazará para fora da terra limpa, formando corpos hídricos comuns.", options: ["Não entra em estado vapor forçado, é um armazenamento normal na camada saturada.", "Resposta correta.", "O afloramento produz apenas lagos ou origens, o estuário não surge magicamente sem ser do formato oceânico.", "O armazenamento não provoca a troca do tipo de rocha subterrânea (permanecendo com poros normais para passagens)."] }
+    },
+    {
+        id: 28, level: "Difícil",
+        text: "Estudos descobriram que as águas que moram nos fundos aquíferos a dezenas de metros dentro de terra profunda se contaminaram com grandes dosagens de inseticidas industriais agrícolas usados na plantação lá de cima da terra. Fisicamente falando, como as substâncias desceram até lá embaixo?",
+        options: ["Os compostos dos venenos nas plantas e tratores sofreram uma ação evaporativa de 100% que viajou aos céus virando gotas puras com alta velocidade até furar em linhas retas os poços perfurados e guardando toxinas em rochas impermeabilizadas", "As dosagens tóxicas industriais sofreram mistura direta nas chuvas do relevo e os espaços ocos da areia não deram proteção. As soluções passaram infiltrações consecutivas passando por poros de terra fina no solo chegando até se encontrar mergulhada na parte estagnada d'água", "Houve trocas correntes vindas com força do próprio oceano marítimo transportando materiais orgânicos da Europa que causaram entupimentos por fendas rasas ligando águas marítimas sujas até bater de encontro com reservas limpas das fazendas em meio a áreas de planície", "Não ocorreu descidas de material. Pela extrema alta pressão gravitacional abaixo da Terra as pedras e sedimentos minerais do nível inferior de águas forjaram substâncias idênticas em composições físicas do veneno criado pelos tratores lá no mundo de cima na sociedade exterior"],
+        correct: 1,
+        explanation: { correct: "As propriedades do terreno e do arenito permitem as gotas de chuvas ou poças se moverem por dentro do solo (infiltrações na porosidade). Uma água manchada de veneno que desce nos mesmos furos carrega os elementos e suja toda a grande reserva pura da profundidade local antes intocada.", options: ["Venenos sofrem pouquíssima evaporação real, muito menos com força o suficiente de penetrar solos concretados profundos por conta própria sem lavar na chuva primeiro para descer os líquidos aos fundos e alcançar reservatórios subterrâneos.", "Resposta correta.", "Fluidos do mar nas áreas marítimas continentais não passam correntes enormes para o relevo interior subterrâneo na América contra direções contrárias até encher grandes aquíferos agrícolas de sal no meio exato do continente sem rios condutores.", "Não se trata de minérios formadores sob alta pressão forjarem do nada materiais iguais às químicas modernas (agrotóxicos ou resíduos fabris feitos pelas pessoas de forma manual) o lixo escoado e depositado é inteiramente artificial, vindo lá do começo (chuvas e escoamentos)."] }
+    },
+    {
+        id: 29, level: "Difícil",
+        text: "As bacias dos rios mais extensos do mundo, o rio Amazonas no Norte do Brasil e o rio Nilo no meio do país do Egito não têm o mesmo clima à sua volta. Onde fica o deserto quase nunca ocorre a etapa da precipitação das chuvas. Como o rio Nilo possui muita água o ano todo (ele é sempre perene), mesmo com a areia quente em volta de seu meio no deserto onde raramente vê alguma água caindo do alto?",
+        options: ["Porque, diferentemente da água amazônica, as chuvas em direção a bacia fluvial egípcia no deserto encontram nuvens que, sob alta insolação quente do céu da areia fina, criam grandes bolsões de umidade forçada e chovem ali antes do clima evaporar no final de dia", "Porque as dunas espessas de relevos planos não possuem nenhuma etapa evaporativa possível ao escoar. Conservam totalmente 100% do estado líquido que desce nas partes de calhas do Saara durante milhares de dias garantidos pelas barreiras sem umidades que sugam água das pedras", "Porque nos rios egípcios a terra onde a água repousa é totalmente concretada de sedimentação impermeável na forma das argilas. Sem perda em espaço nulos nos poros do deserto toda chuva se torna acúmulos na planície rasa retendo todas as correntes das chuvas diretas do mar quente", "Porque a sua origem, o lugar da nascente onde a vida e o rio se forma, está situado lá fora da fronteira quente daquela poeira (são climas cheios d'água das florestas úmidas que causam enchentes gigantes lá no início), então, recebem um volume d'água forte o bastante para sobreviver descendo percurso gigante de areia sem terminar a água por conta seca na passagem"],
+        correct: 3,
+        explanation: { correct: "O processo da bacia fluvial é simples. Como seu volume de nascentes exóticas recebe chuvas enormes em florestas da África nas origens de montante muito chuvoso ele acumula velocidade e volume da água. Esses galões viajam empurrando tudo até o estuário norte perpassando, atravessando de passagem o lugar do Deserto do Saara antes das águas poderem se acabar pelas evaporativas, mesmo sem chover nada localmente de forma constante no meio ambiente quente em seu meio jusante perto e abaixo nas areias escaldantes de poeira até o Mar lá no término.", options: ["Alta insolação de dia do deserto impede diretamente e dificulta massivamente nuvens grandes choverem por forçarem calor excessivo na atmosfera.", "As areias do Saara recebem o vento mais seco da evaporação acelerando as etapas das transformações.", "Ele transborda anualmente sim pelas bordas por ter permeabilidade em vales e lamas (solo que enche os fundos do deserto, não calhas trancadas lisas e perfeitas).", "Resposta correta."] }
+    },
+    {
+        id: 30, level: "Difícil",
+        text: "Cidades densas tendem a alterar os espaços na bacia hidrográfica construída. Quando a água pluvial atinge estradas cheias de carros os engenheiros planejam canalizar os riachos, que são retificados, recebendo paredes lisinhas sem árvores e ficando completamente retos. Analise este cenário mecânico e assinale a ação física correta e direta na água urbana desse traçado fluvial humano:",
+        options: ["O rio sem curvas formará as barreiras de evaporação que protegerão totalmente o centro do estado sólido", "Como a água ganha velocidade nessas paredes artificiais lisas e não tem as curvas de barro para frear sua força, ela corre mais rápido e violenta em dias de chuvas e transborda rapidamente nas partes mais baixas de planície e centro da cidade em forma de grandes inundações relâmpago de enchentes que afundam bairros com piche ou calçamentos cimentados ao seu arredor e jusantes ao lado das margens sem infiltração da água da chuva local e do escoamento dos asfaltos", "A corrente linear em linhas cimentadas faz os sedimentos finos depositados (assoreamentos) serem limpos e eliminados do mar e transportados ao subsolo nas grandes caixas freáticas plásticas feitas sem barreiras artificiais por conta própria e de forma mecânica sem poluição na calha plana", "Transformado num grande túnel exato, reduz a água do meio líquido pelo aumento drástico pluvial nas passagens atmosféricas causando que enchentes parem imediatamente até encontrarem o delta"],
+        correct: 1,
+        explanation: { correct: "Ao tirar a terra cheia de plantas das encostas naturais dos canais os urbanistas as cimentam fazendo de valetas longas (tipo calhas duras e perfeitas) nas suas ruas de cidades grandes cheias da chuva sem poros e sem furos por estarem cimentadas e asfaltadas pela região, empurrando as correntes de forma rápida (pois sem as curvas dos caminhos de areia originais do solo a água perde atrito). Não contendo atritos e espaços vazios no interior onde moram grandes fluxos hídricos sem controle de freagem, em um dia cheio de nuvens grandes toda água correrá forte e perigosa até sair da área na calha inferior (estouro e enchentes do sistema linear).", options: ["O rio linear retificado continua ocorrendo grandes evaporações sob céu aberto do centro na capital local e nas áreas metropolitanas da atmosfera do município de chuvas pluviais", "Resposta correta.", "Os sedimentos arrastados pelo canal não são inseridos mecanicamente no Aquífero sem um local natural com ranhuras em formato de poros da rocha natural pura (que não possuem fendas na estrutura construída do cimento maciço).", "Retificações das hidrovias nos bairros aceleram violentamente o líquido para o término inferior nas margens baixas e na estrutura (enchentes maiores pelo acumulo brusco) sendo inviável criar o desparecimento atmosférico milagroso sem reações nas enchentes em canais diretos pela gravidade na capital de escoamento local da água hídrica doce."] }
+    }
+];
+
+const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g,'_');
+let currentQuestion = 0;
+let savedAnswers = localStorage.getItem(storageKey);
+let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+
+    if(mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        renderQuestion();
+        renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+    }
+    window.scrollTo(0,0);
+}
+
+function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+
+    let badgeClass = '';
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+        </div>
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `
+                <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `
+            }).join('')}
+        </div>
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '☑ Resposta Correta!' : '☒ Resposta Incorreta!'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>A Resposta Certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top: 10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                ${q.explanation.correct}
+            </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                <small style="color:var(--theme-dark);"><strong>Por que as outras estão erradas:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>(${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>
+    `;
+    updateNav();
+}
+
+function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+
+    if (idx === questions[currentQuestion].correct) {
+        const duration = 1500;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6 }, colors: ['#0284C7', '#0EA5E9', '#38BDF8', '#E0F2FE'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6 }, colors: ['#0284C7', '#0EA5E9', '#38BDF8', '#E0F2FE'] });
+            if (Date.now() < end) { requestAnimationFrame(frame); }
+        }());
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+}
+
+function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+    }).join('');
+
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }, 50);
+}
+
+function goTo(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+}
+
+function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar Diagnóstico";
+        next.onclick = finish;
+    } else {
+        next.textContent = "Avançar";
+        next.onclick = () => changeQuestion(1);
+    }
+}
+
+function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct/questions.length) * 100);
+    if (window.confetti) confetti.reset();
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    if (percent < 80) {
+        summary += '<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);"><strong>⚠ Domínio Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Atingir a pontuação mínima é obrigatório nesta prova. Revise a teoria com rigor antes de tentar novamente.</div>';
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()"> Limpar Histórico e Refazer Prova</button>';
+    } else {
+        summary += '<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);"><strong>🏆 Excelente Desempenho!</strong> Você demonstrou uma base sólida, clínica e exata sobre os conceitos avaliados. A sua aprovação técnica está garantida neste módulo.</div>';
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()"> Refazer Prova (Zerar Histórico)</button>';
+    }
+
+    if (correct < questions.length) {
+        summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+        questions.forEach((q, i) => {
+            if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+                <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+}
+
+function reset() {
+    localStorage.removeItem(storageKey);
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+}
+
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
