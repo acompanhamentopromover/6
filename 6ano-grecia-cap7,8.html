@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>História 6º Ano - Grécia Antiga - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    /* Paleta Clássica/Terracota para História (Grécia Antiga) */
+    --bg-color: #FAFAF9; /* Fundo cor de pergaminho/mármore claro */
+    --text-color: #292524;
+    --border-color: #78350F; /* Marrom escuro terracota */
+    --white: #FFFFFF;
+    --theme-light: #FEF3C7; /* Amarelo ouro claro */
+    --theme-medium: #D97706; /* Ouro envelhecido */
+    --theme-dark: #92400E; /* Terracota principal */
+    --theme-contrast: #991B1B; /* Vermelho Espartano */
+    --theme-accent: #B45309;
+    --theme-text-active: #FFFFFF;
+
+    /* NÃO ALTERAR AS CORES DE FEEDBACK ABAIXO */
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #BE123C;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 20px; 
+    padding-bottom: 100px;
+    background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+
+@keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from {transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; }}
+
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.15); color: var(--theme-contrast); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container {position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon {position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 {font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.1rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: var(--theme-light); border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #78350F; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil {background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot {min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct {background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle {background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle {background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled {pointer-events: none; opacity: 0.7; }
+
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display: flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt {border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+.result-card {background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big {font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🏛️</span> PROMOVER</div>
+        <h1>HISTÓRIA / 6º ANO</h1>
+        <p class="subtitle">Grécia Antiga: Pólis, Cultura e Sociedade</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>Termo não encontrado.</p></div>
+
+        <div class="content-group">
+            <span class="section-badge">1. A Cidade-Estado (Pólis)</span>
+            <div class="theory-box">
+                <h3>O que era a Pólis?</h3>
+                <p>A Grécia Antiga não era um país unificado com um único rei. O território grego, cheio de montanhas e ilhas, dificultava a comunicação. Por isso, os gregos se organizaram em <strong>Cidades-Estado</strong> (chamadas de <strong>Pólis</strong> em grego).</p>
+                <div class="highlight-box">
+                    <strong>Independência Total:</strong> Cada pólis era um "mini-país" independente. Elas possuíam suas próprias leis, seu próprio governo, sua própria moeda e seu próprio exército.
+                </div>
+                <p>As duas pólis mais famosas e poderosas da Grécia Antiga foram <strong>Atenas</strong> e <strong>Esparta</strong>, que possuíam estilos de vida completamente diferentes.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">2. Educação: Atenas x Esparta</span>
+            <div class="theory-box">
+                <h3>Mentes vs. Músculos</h3>
+                <div class="visual-area">
+                    <div style="flex:1;">🏛️ <strong>Atenas</strong><br><span style="font-size:0.8rem; color:var(--text-color); font-weight:normal;">Foco: Intelecto, Arte, Filosofia e Política. O objetivo era formar bons cidadãos para falar em público e governar.</span></div>
+                    <div style="flex:1;">⚔️ <strong>Esparta</strong><br><span style="font-size:0.8rem; color:var(--text-color); font-weight:normal;">Foco: Militar. Meninos iam para treinamento do Estado aos 7 anos. Foco em força, obediência e resistência à dor.</span></div>
+                </div>
+                <p>Em <strong>Atenas</strong>, as mulheres ficavam restritas ao ambiente doméstico (Gineceu). Em <strong>Esparta</strong>, as mulheres recebiam treinamento físico (para gerar filhos fortes) e tinham mais liberdade e poder de administrar as fazendas enquanto os maridos guerreavam.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">3. Democracia Ateniense</span>
+            <div class="theory-box">
+                <h3>Uma Cidadania Limitada</h3>
+                <p>Atenas inventou a Democracia (<em>Demos</em> = povo, <em>Kratos</em> = poder). Lá, a democracia era <strong>direta</strong>: os próprios cidadãos iam à praça pública (Ágora) para debater e votar as leis. No entanto, ela era altamente <strong>excludente (limitada)</strong>.</p>
+                <div class="highlight-box warning">
+                    <strong>Quem NÃO era cidadão (NÃO podia votar):</strong><br>
+                    ❌ Mulheres<br>
+                    ❌ Escravizados<br>
+                    ❌ Metecos (Estrangeiros)
+                </div>
+                <p>Para ser considerado um "cidadão" e ter direito ao voto, era obrigatório ser: <strong>Homem, livre, adulto e filho de pai e mãe atenienses</strong>. Ou seja, a minoria da população de Atenas realmente participava da política.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">4. Religião e Mitologia</span>
+            <div class="theory-box">
+                <h3>Deuses e Heróis Gregos</h3>
+                <p>A religião grega era <strong>Politeísta</strong> (acreditavam em vários deuses) e <strong>Antropomórfica</strong> (os deuses tinham forma, qualidades e defeitos de seres humanos, como raiva e ciúmes).</p>
+                <ul>
+                    <li><strong>Deuses:</strong> Eram imortais e superpoderosos. Habitavam o Monte Olimpo (ex: Zeus, Atena, Poseidon, Afrodite).</li>
+                    <li><strong>Heróis (Semideuses):</strong> Eram mortais. Filhos de um deus com uma pessoa mortal (humana). Realizavam feitos extraordinários (ex: Hércules, Aquiles, Perseu).</li>
+                </ul>
+                <p>Os gregos usavam os mitos (Mitologia) para explicar a origem do mundo, os fenômenos da natureza e os sentimentos humanos.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">5. A Escravidão</span>
+            <div class="theory-box">
+                <h3>A base da economia</h3>
+                <p>A sociedade grega (inclusive a democrática Atenas) dependia do trabalho escravo. Como os cidadãos precisavam de tempo livre para ir à praça debater política e fazer filosofia, eram os escravizados que faziam todo o trabalho pesado (agricultura, minas, artesanato).</p>
+                <p>Na Grécia Antiga, uma pessoa se tornava escravizada de duas formas principais:</p>
+                <ol style="margin-left: 20px;">
+                    <li><strong>Prisioneiro de Guerra:</strong> O povo derrotado em uma batalha virava escravo.</li>
+                    <li><strong>Por Dívidas:</strong> Pessoas pobres que não conseguiam pagar o que deviam viravam propriedades do credor (em Atenas, a escravidão por dívida foi proibida depois, pelo legislador Sólon).</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">6. Guerra do Peloponeso</span>
+            <div class="theory-box">
+                <h3>A Guerra Civil Grega e suas Consequências</h3>
+                <p>Após derrotarem os Persas, Atenas ficou muito poderosa (liderando a Liga de Delos). Esparta, com medo do poder ateniense, criou a Liga do Peloponeso. O resultado foi a <strong>Guerra do Peloponeso</strong>, uma guerra civil (gregos contra gregos) que durou quase 30 anos.</p>
+                <div class="highlight-box warning">
+                    <strong>Consequências:</strong> Esparta venceu a guerra, mas o longo conflito gerou uma grande crise. As cidades-estado gregas ficaram fracas, destruídas e sem dinheiro. Esse enfraquecimento permitiu que a Grécia fosse invadida e dominada por um povo vizinho: os <strong>Macedônios</strong> (liderados por Filipe II e Alexandre, o Grande).
+                </div>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">7. Heranças Gregas</span>
+            <div class="theory-box">
+                <h3>O Legado na Nossa Sociedade</h3>
+                <p>Muito do que vivemos hoje nasceu na Grécia Antiga. As principais heranças (legados) são:</p>
+                <ul>
+                    <li><strong>Política:</strong> A ideia de Democracia e o debate de ideias.</li>
+                    <li><strong>Olimpíadas:</strong> Jogos criados na cidade de Olímpia para homenagear Zeus.</li>
+                    <li><strong>Filosofia:</strong> O uso da razão e do questionamento para entender o mundo (Sócrates, Platão, Aristóteles).</li>
+                    <li><strong>Teatro:</strong> Inventaram os gêneros da <em>Tragédia</em> (sofrimento e lições de moral) e da <em>Comédia</em> (crítica política com humor).</li>
+                    <li><strong>Arquitetura e Matemática:</strong> Colunas clássicas, geometria (Pitágoras), história e medicina ocidental.</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">Iniciar Diagnóstico (30 Q) →</button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">30 questões rigorosas sobre os tópicos da Grécia Antiga. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro para aprender!</p>
+        </div>
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars"></div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText"></p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+// Array exato de 30 questões (Fáceis, Médias, Difíceis) seguindo o manuscrito.
+const questions = [
+    {
+        id: 1, level: "Fácil",
+        text: "Na Grécia Antiga, o território era dividido em várias 'Pólis'. O que significa a palavra Pólis?",
+        options: ["Um grande império governado por um único Faraó.", "Um grupo de tribos que viviam no deserto.", "Cidades-Estado independentes, com suas próprias leis e governo.", "O nome dado aos templos religiosos onde os deuses moravam."],
+        correct: 2,
+        explanation: { correct: "Pólis é o termo grego para Cidade-Estado, que significa uma cidade independente que funciona como se fosse um país inteiro.", options: ["A Grécia não tinha um imperador ou Faraó único.", "Eles não eram tribos do deserto, e sim cidades avançadas no Mar Mediterrâneo.", "Resposta correta.", "O local religioso se chamava Templo, não Pólis."] }
+    },
+    {
+        id: 2, level: "Fácil",
+        text: "Sobre as Cidades-Estado (Pólis) gregas, é correto afirmar que:",
+        options: ["Todas usavam a mesma moeda e obedeciam ao mesmo rei.", "Eram independentes entre si, possuindo leis, governos e moedas próprias.", "Foram criadas apenas para proteger as plantações contra os romanos.", "Atenas era a dona de todas as outras cidades da Grécia."],
+        correct: 1,
+        explanation: { correct: "A independência (autonomia) total de cada cidade é a principal característica da Pólis grega.", options: ["Não havia um rei único para toda a Grécia.", "Resposta correta.", "Não foram criadas contra romanos (que surgiram muito depois) e não eram apenas para plantações.", "Atenas era poderosa, mas não era a 'dona' ou capital de toda a Grécia."] }
+    },
+    {
+        id: 3, level: "Fácil",
+        text: "Esparta e Atenas tinham modelos de educação muito diferentes. Qual era o foco principal da educação recebida pelos meninos na cidade de Esparta?",
+        options: ["O estudo profundo de matemática, teatro e filosofia.", "O aprendizado do comércio marítimo e construção de navios.", "O treinamento físico militar rigoroso para formar guerreiros fortes.", "A memorização de poemas religiosos e regras de etiqueta."],
+        correct: 2,
+        explanation: { correct: "A educação espartana era puramente militar (agoge), focada em formar os melhores soldados da Grécia.", options: ["Filosofia e teatro eram focos da educação de Atenas.", "Comércio e navegação eram mais fortes em Atenas.", "Resposta correta.", "Eles não focavam em etiqueta, mas sim em obediência militar e sobrevivência."] }
+    },
+    {
+        id: 4, level: "Fácil",
+        text: "Enquanto Esparta focava na guerra, a cidade de Atenas tinha um foco diferente. O que a educação em Atenas valorizava mais nos jovens do sexo masculino?",
+        options: ["A resistência ao frio extremo e a habilidade com a espada.", "O desenvolvimento do intelecto, da fala, da filosofia e das artes.", "A capacidade de cozinhar, tecer roupas e cuidar do lar.", "O aprendizado de técnicas de caça em florestas densas."],
+        correct: 1,
+        explanation: { correct: "Atenas queria formar cidadãos completos, que soubessem pensar e falar bem para poder debater as leis na política.", options: ["Resistência ao frio e habilidades de guerra bruta eram foco de Esparta.", "Resposta correta.", "Cuidar do lar e tecer (Gineceu) era o destino forçado às mulheres atenienses, não aos meninos.", "Caça na floresta não era a base principal da educação das escolas atenienses."] }
+    },
+    {
+        id: 5, level: "Fácil",
+        text: "Atenas é considerada o berço (lugar de invenção) de qual importante sistema político usado no mundo até hoje?",
+        options: ["Monarquia (Rei absoluto).", "Democracia (Poder do povo).", "Ditadura (Poder pela força militar).", "Teocracia (Governo dos sacerdotes religiosos)."],
+        correct: 1,
+        explanation: { correct: "A Democracia (Demos = Povo, Kratos = Poder) foi inventada em Atenas para permitir que os cidadãos decidissem os rumos da cidade.", options: ["Monarquia tem rei, e a principal invenção de Atenas foi a democracia.", "Resposta correta.", "Ditadura militar era mais próxima de algumas fases de Esparta (Diarquia militar).", "Teocracia era usada no Egito com o Faraó-deus."] }
+    },
+    {
+        id: 6, level: "Fácil",
+        text: "A religião na Grécia Antiga era politeísta. O que a palavra 'politeísta' significa?",
+        options: ["Crença em um único deus todo poderoso.", "Não acreditar na existência de nenhum deus.", "Acreditar e adorar vários deuses ao mesmo tempo.", "Acreditar apenas no deus do sol e na deusa da lua."],
+        correct: 2,
+        explanation: { correct: "A palavra 'Poli' significa muitos, e 'Teo' significa deus. Politeísta é a religião com vários deuses diferentes.", options: ["Acreditar em um único deus se chama Monoteísmo.", "Não acreditar em deus é o Ateísmo.", "Resposta correta.", "Os gregos tinham dezenas de deuses para várias coisas (mar, guerra, sabedoria), não apenas sol e lua."] }
+    },
+    {
+        id: 7, level: "Fácil",
+        text: "Os deuses gregos eram imortais e muito poderosos, mas na mitologia também existiam os 'Heróis' ou semideuses (como Hércules). Qual a diferença principal entre um deus e um herói?",
+        options: ["Heróis são filhos de dois deuses, e deuses são criados do nada.", "Heróis não têm forma física, apenas os deuses têm corpos.", "Deuses são animais sagrados, e heróis são humanos comuns.", "Heróis são mortais (podem morrer) e geralmente nascem da união entre um deus e um ser humano."],
+        correct: 3,
+        explanation: { correct: "Os heróis (semideuses) tinham a parte mortal herdada do pai/mãe humano e os poderes/habilidades herdados do pai/mãe divino. Como tinham parte humana, eles envelheciam e podiam morrer.", options: ["Filho de dois deuses nasce sendo um deus completo e imortal.", "Heróis tinham forma física e realizavam tarefas com as próprias mãos.", "Na Grécia, deuses tinham forma humana (antropomorfismo), não eram animais.", "Resposta correta."] }
+    },
+    {
+        id: 8, level: "Fácil",
+        text: "A sociedade de Atenas e outras cidades gregas só funcionava porque uma parte da população fazia todo o trabalho pesado nas minas, fazendas e oficinas. Quem eram essas pessoas?",
+        options: ["Os grandes filósofos.", "Os escravizados.", "Os estrangeiros milionários (metecos).", "Os reis da cidade."],
+        correct: 1,
+        explanation: { correct: "Os escravizados eram a base de toda a economia grega. Sem o trabalho braçal deles, a cidade parava.", options: ["Filósofos apenas pensavam e debatiam nas praças.", "Resposta correta.", "Estrangeiros ricos geralmente cuidavam do comércio, mas não do trabalho pesado das minas.", "Atenas na época da democracia não tinha reis fazendo trabalho pesado."] }
+    },
+    {
+        id: 9, level: "Fácil",
+        text: "Muitos eventos que praticamos hoje vieram da Grécia. Qual grande evento esportivo foi criado pelos gregos para homenagear Zeus e reunia atletas de várias pólis?",
+        options: ["Copa do Mundo.", "Jogos Pan-Americanos.", "Jogos Olímpicos (Olimpíadas).", "O Coliseu Romano."],
+        correct: 2,
+        explanation: { correct: "As Olimpíadas (ou Jogos Olímpicos) surgiram na cidade grega de Olímpia como uma festa esportiva em homenagem ao deus Zeus.", options: ["A Copa do Mundo é uma invenção moderna de futebol.", "Jogos Pan-Americanos são exclusivos da América moderna.", "Resposta correta.", "Coliseu Romano é uma invenção de Roma, não da Grécia."] }
+    },
+    {
+        id: 10, level: "Fácil",
+        text: "Qual destas opções é uma herança (legado) que os gregos deixaram para a sociedade atual?",
+        options: ["A criação do papel moderno feito de celulose de árvore.", "O Teatro, com as peças de Tragédia e Comédia.", "A invenção do motor a vapor.", "A escrita com letras do alfabeto chinês."],
+        correct: 1,
+        explanation: { correct: "O Teatro, com seus formatos de comédia e tragédia usando máscaras, foi criado pelos gregos.", options: ["O papel moderno surgiu na China.", "Resposta correta.", "O motor a vapor surgiu na Revolução Industrial, na Inglaterra.", "A escrita chinesa (ideogramas) não foi invenção grega."] }
+    },
+
+    {
+        id: 11, level: "Médio",
+        text: "A democracia em Atenas era considerada 'direta', o que é diferente da democracia de hoje, que é 'representativa'. Como funcionava essa democracia direta na Grécia Antiga?",
+        options: ["O povo votava em um único imperador a cada 10 anos, e ele fazia as leis sozinho.", "Os cidadãos não elegiam políticos; eles mesmos iam até a praça pública (Ágora) para debater e votar pessoalmente as leis.", "Cada cidadão escrevia seu voto em um pedaço de barro e mandava pelos escravos para o rei contar.", "As mulheres tomavam todas as decisões políticas diretamente dentro de suas casas."],
+        correct: 1,
+        explanation: { correct: "Democracia direta significa que não há 'deputados'. O próprio cidadão levanta a mão na praça (Ágora ou Eclésia) para aprovar ou rejeitar uma lei e declarar guerra.", options: ["Votar em alguém para ele fazer a lei se chama democracia representativa/indireta.", "Resposta correta.", "O voto com argila (ostracismo) existia, mas para expulsar políticos ruins, não era a base da aprovação de leis normais.", "Mulheres não tinham permissão para participar da política em Atenas."] }
+    },
+    {
+        id: 12, level: "Médio",
+        text: "Apesar de ter inventado a democracia, a cidadania em Atenas era muito LIMITADA (excludente). Assinale a alternativa que mostra quem eram os ÚNICOS considerados cidadãos com direito a voto:",
+        options: ["Todos os moradores de Atenas que fossem ricos, incluindo mulheres.", "Apenas os estrangeiros que pagassem impostos altos.", "Qualquer pessoa que fosse livre, não importando a idade ou o gênero.", "Apenas homens, adultos, livres e nascidos em Atenas de pai e mãe atenienses."],
+        correct: 3,
+        explanation: { correct: "As regras eram estritas. Somente cerca de 10% a 15% da população se encaixava em todos esses requisitos: Homem + Adulto + Livre + Nascido em Atenas (pais atenienses).", options: ["Mulheres eram proibidas de votar, mesmo sendo ricas.", "Estrangeiros (Metecos) nunca podiam votar ou participar da política.", "Não importava apenas ser livre; mulheres e estrangeiros livres não votavam.", "Resposta correta."] }
+    },
+    {
+        id: 13, level: "Médio",
+        text: "Na democracia ateniense, havia um grande grupo de pessoas fundamentais para a economia, mas que não possuíam direitos políticos, não podiam votar e eram tratados como propriedade. Quem era esse grupo excluído?",
+        options: ["Os filósofos e professores de matemática.", "Os escravizados, que faziam os trabalhos pesados.", "Os soldados espartanos que moravam em Atenas.", "Os governantes e magistrados da cidade."],
+        correct: 1,
+        explanation: { correct: "A democracia só era possível porque os escravizados faziam o trabalho braçal em casa e no campo, liberando tempo para o cidadão ir à praça pública debater política.", options: ["Filósofos que nasciam em Atenas eram cidadãos e podiam votar.", "Resposta correta.", "Soldados espartanos eram inimigos e viviam em Esparta, não em Atenas.", "Governantes eram cidadãos e participavam da democracia."] }
+    },
+    {
+        id: 14, level: "Médio",
+        text: "Uma pessoa livre na Grécia Antiga poderia se tornar um escravizado de duas formas principais. Quais eram essas duas formas?",
+        options: ["Ganhando pouco dinheiro no teatro ou roubando os templos de Zeus.", "Por punição dos deuses e por doença.", "Sendo feito prisioneiro durante uma guerra ou não pagando suas dívidas.", "Nascendo fora da Grécia ou recusando-se a participar das Olimpíadas."],
+        correct: 2,
+        explanation: { correct: "Na Antiguidade, perder a guerra significava perder a liberdade (escravidão por guerra). E dever dinheiro e não pagar significava que o devedor virava propriedade de quem emprestou o dinheiro (escravidão por dívida).", options: ["A escravidão era uma condição legal/econômica, não apenas uma pena religiosa.", "Doenças não tornavam cidadãos em propriedades escravizadas.", "Resposta correta.", "Nem todo estrangeiro era escravo (existiam os metecos, estrangeiros livres), e não competir nas Olimpíadas não escravizava ninguém."] }
+    },
+    {
+        id: 15, level: "Médio",
+        text: "O modo de tratar as mulheres era diferente entre as duas principais cidades gregas. Em Esparta, as mulheres recebiam treinamento físico. Qual era o objetivo militar desse treinamento feminino em Esparta?",
+        options: ["Para que elas liderassem o exército espartano nas linhas de frente em todas as guerras do Peloponeso.", "Porque o Estado acreditava que mulheres fortes e saudáveis dariam à luz a meninos guerreiros ainda mais fortes.", "Para entreter os soldados espartanos com danças ginásticas após a guerra.", "Porque havia uma lei que obrigava as mulheres a caçarem animais perigosos no inverno."],
+        correct: 1,
+        explanation: { correct: "O pensamento de Esparta era a eugenia (busca pela perfeição física). Mães fortes e bem nutridas gerariam bebês perfeitamente adequados para se tornarem soldados no futuro.", options: ["As mulheres treinavam, mas não iam combater com lanças no lugar do exército.", "Resposta correta.", "O treinamento não era para entreter, era coisa séria do Estado para a saúde da mulher.", "Não existia lei sobre caça no inverno para mulheres."] }
+    },
+    {
+        id: 16, level: "Médio",
+        text: "Como era o papel das mulheres atenienses na sociedade? Elas tinham liberdade como em Esparta?",
+        options: ["Sim, elas podiam votar e até serem eleitas governantes da cidade.", "Não, elas viviam reclusas em uma área da casa chamada gineceu, cuidando dos filhos e tecendo roupas, sem direitos políticos.", "Sim, elas eram as principais comerciantes marítimas e compravam barcos.", "Não, elas eram todas vendidas como escravas assim que chegavam aos 15 anos."],
+        correct: 1,
+        explanation: { correct: "Em Atenas, a mulher livre vivia numa sociedade patriarcal. Sua vida acontecia quase totalmente dentro de casa, longe dos olhares públicos e sem nenhum poder político.", options: ["Mulheres eram expressamente proibidas de votar em Atenas.", "Resposta correta.", "O comércio e negócios fora de casa eram atividades de homens ou estrangeiros.", "Mulheres livres não eram vendidas, elas casavam em acordos feitos pelos pais."] }
+    },
+    {
+        id: 17, level: "Médio",
+        text: "Os gregos explicavam que seus deuses eram 'Antropomórficos'. Na história da religião grega, o que significa dizer que uma divindade é antropomórfica?",
+        options: ["Significa que os deuses tinham formato físico, sentimentos e paixões idênticas às dos seres humanos, embora fossem imortais.", "Significa que os deuses eram espíritos invisíveis que moravam dentro das árvores e do mar.", "Significa que os deuses eram estátuas de ouro sem vida própria.", "Significa que os deuses eram animais sagrados gigantes."],
+        correct: 0,
+        explanation: { correct: "Antropo = Ser humano; Morfo = Forma. Os deuses gregos amavam, odiavam, sentiam ciúmes, tinham filhos e a aparência exata de um homem ou de uma mulher perfeita.", options: ["Resposta correta.", "Eles não eram apenas espíritos sem forma.", "A estátua era apenas uma representação, eles acreditavam que o deus vivo estava no Monte Olimpo.", "O formato animal é o zoomorfismo (como no Egito antigo), os gregos focavam na forma humana."] }
+    },
+    {
+        id: 18, level: "Médio",
+        text: "A Guerra do Peloponeso foi um grande conflito armado. Quem lutou contra quem nessa guerra?",
+        options: ["Gregos unidos lutaram contra o enorme Império Persa.", "Gregos lutaram contra o Império Romano do Ocidente.", "A cidade de Atenas e seus aliados lutaram contra a cidade de Esparta e seus aliados.", "Guerreiros gregos lutaram contra exércitos de escravos rebelados no Egito."],
+        correct: 2,
+        explanation: { correct: "Foi uma terrível guerra civil dentro do território grego. A Liga de Delos (liderada por Atenas e sua força naval) lutou contra a Liga do Peloponeso (liderada por Esparta e seu exército de terra).", options: ["A guerra dos gregos unidos contra os persas se chama Guerras Médicas.", "O Império Romano não participou desse conflito, eles dominaram a Grécia séculos depois.", "Resposta correta.", "Não foi uma guerra de escravos no Egito."] }
+    },
+    {
+        id: 19, level: "Médio",
+        text: "Qual foi a principal e mais trágica consequência da Guerra do Peloponeso para a Grécia Antiga?",
+        options: ["A Grécia ficou extremamente rica com o ouro que roubaram durante a guerra civil.", "As cidades-estado se enfraqueceram tanto se matando que perderam seu poder, facilitando a invasão e domínio do Império Macedônio.", "Atenas e Esparta esqueceram suas diferenças e formaram o primeiro país da Europa chamado 'União Grega'.", "A guerra fez com que todos os escravos fossem libertados permanentemente na Grécia."],
+        correct: 1,
+        explanation: { correct: "O conflito de quase 30 anos gerou mortes, fome e destruiu as fazendas. Cansados e sem soldados suficientes, os gregos não conseguiram se defender quando o Rei Filipe II da Macedônia os invadiu.", options: ["A guerra civil consumiu o ouro, não gerou riqueza.", "Resposta correta.", "Eles nunca se uniram como um país moderno (União Grega). Esparta venceu a guerra pela força.", "A guerra não libertou escravos, muitas vezes piorou a situação deles e de cidadãos capturados."] }
+    },
+    {
+        id: 20, level: "Médio",
+        text: "Os gregos usavam histórias com deuses, monstros e heróis (Mitologia) no seu dia a dia. Qual era a principal função social da Mitologia para o povo grego?",
+        options: ["Era apenas um livro de piadas escrito para ensinar as crianças a lerem na escola.", "Explicar a criação do mundo, os fenômenos da natureza que a ciência não explicava e ensinar lições de moral.", "Era uma lei secreta que dizia que apenas heróis poderiam votar em Atenas.", "Assustar os soldados espartanos para que eles não fugissem da batalha."],
+        correct: 1,
+        explanation: { correct: "Como não existia ciência moderna para explicar tempestades, vulcões ou de onde o mundo veio, a religião/mitologia explicava a realidade e guiava o comportamento da sociedade (a moralidade).", options: ["Mitos não eram livros de piadas, eram a base da religião oficial, tratados com imenso respeito.", "Resposta correta.", "A cidadania e as leis de voto não se baseavam em exigir ser um herói divino.", "Soldados não ficavam na batalha por medo de monstros mitológicos, e sim por honra e dever à Pólis."] }
+    },
+
+    {
+        id: 21, level: "Difícil",
+        text: "Em Atenas, no período de maior força da democracia, os cidadãos valorizavam muito o poder da 'oratória' e da 'retórica'. Por que falar bem em público era algo fundamental para um cidadão ateniense?",
+        options: ["Porque os cidadãos eram obrigados a fazer discursos diários elogiando apenas o rei absoluto de Atenas.", "Porque a única profissão que dava dinheiro em Atenas era atuar em teatros de comédia usando máscaras.", "Porque as leis e punições eram debatidas e decididas diretamente pelos cidadãos na Ágora. Quem argumentasse melhor, convencia a maioria a votar ao seu favor.", "Porque o exército inimigo persa se comunicava na mesma língua e os cidadãos queriam convencer os inimigos a desistirem da guerra apenas conversando."],
+        correct: 2,
+        explanation: { correct: "Numa democracia direta onde todos os cidadãos formam a assembleia política, não havia 'político de profissão'. Você tinha que subir no palanque e convencer milhares de vizinhos a votar nas suas propostas, por isso, falar de forma clara e persuasiva era uma questão de poder.", options: ["Atenas era uma democracia, não tinha rei absoluto na época clássica.", "Falar bem era política de sobrevivência, não só pra ganhar dinheiro atuando.", "Resposta correta.", "A oratória era para a política interna da pólis, não para convencer persas invasores durante a guerra."] }
+    },
+    {
+        id: 22, level: "Difícil",
+        text: "Sobre o modelo de governo oligárquico militar implementado em Esparta (geralmente comparado à Diarquia), podemos afirmar que, ao contrário da democracia ateniense:",
+        options: ["Em Esparta, todo estrangeiro podia governar a cidade após 5 anos de moradia.", "O poder de Esparta estava concentrado nas mãos de dois reis (guerra e religião) e de um pequeno conselho de anciãos guerreiros, sem participação do povo comum nas grandes decisões.", "Esparta realizava votações eletrônicas anuais, onde a população feminina e escrava votava obrigatoriamente.", "O rei espartano era escolhido através de sorteios na praça envolvendo filósofos pacifistas."],
+        correct: 1,
+        explanation: { correct: "Esparta funcionava com uma Diarquia (dois reis) misturada com Oligarquia (governo de poucos). Um conselho de velhos guerreiros (Gerúsia) ditava as leis, e o cidadão soldado comum apenas obedecia (sem debate, sem filosofia política).", options: ["Estrangeiros também não tinham direito político em Esparta.", "Resposta correta.", "Não existia votação geral, muito menos para mulheres e escravos em Esparta.", "Esparta odiava filosofia pacifista; reis nasciam na realeza e eram os generais máximos da guerra."] }
+    },
+    {
+        id: 23, level: "Difícil",
+        text: "A cidadania na Democracia Ateniense era limitada. Uma classe da sociedade de Atenas, chamada de 'Metecos', não podia votar nem comprar terras na cidade. Quem formava o grupo dos metecos?",
+        options: ["Eram estrangeiros que moravam em Atenas; homens livres atraídos pelo comércio e pela cultura, mas que não nasceram na pólis.", "Eram generais atenienses que tinham perdido guerras e, como punição, perdiam seus direitos políticos.", "Eram ex-escravizados que ganharam a liberdade, mas que a lei os impedia de votar.", "Eram os filhos de mães atenienses nascidos com deficiência física e expulsos do exército."],
+        correct: 0,
+        explanation: { correct: "Atenas era muito fechada sobre quem pertencia a ela. Pessoas de outras pólis ou de outros países (Metecos) iam morar lá para ganhar dinheiro com comércio, e embora fossem livres e pagassem impostos, nunca podiam ser cidadãos atenienses (não votavam, nem podiam ter casas próprias).", options: ["Resposta correta.", "Generais perdedores sofriam ostracismo (expulsão), mas metecos não eram ex-generais atenienses.", "Ex-escravizados tinham um status diferente (libertos), mas não eram chamados primariamente de metecos, termo voltado a quem vinha de fora.", "Crianças com deficiência era uma questão de infanticídio espartano, não a definição dos metecos de Atenas."] }
+    },
+    {
+        id: 24, level: "Difícil",
+        text: "A escravidão grega era diferente da escravidão africana que ocorreria no Brasil milhares de anos depois. Qual dessas afirmações explica uma característica da escravidão na Grécia Antiga?",
+        options: ["A escravidão era justificada principalmente pela cor da pele e origem continental (só escravizavam pessoas da África).", "Os cidadãos gregos não podiam ter escravos que fossem do mesmo país que eles, a lei exigia a compra de prisioneiros asiáticos.", "A escravidão não era ligada à raça ou cor da pele. Um cidadão de Atenas, da mesma cor e religião, poderia virar escravo por dívidas ou se perdesse uma guerra civil contra outra pólis.", "Escravizados na Grécia Antiga tinham os mesmos direitos que as mulheres atenienses e votavam em eleições secretas."],
+        correct: 2,
+        explanation: { correct: "Na Idade Antiga (Grécia e Roma), a escravidão era por condição social (prisioneiro de guerra ou devedor), e não pelo tom de pele. Gregos frequentemente escravizavam outros gregos brancos capturados em cidades vizinhas, como ocorreu na Guerra do Peloponeso.", options: ["O racismo ligado à cor da pele escravizada é um fenômeno construído séculos depois, na colonização moderna.", "Eles podiam e frequentemente escravizavam gregos.", "Resposta correta.", "Escravos não votavam, eles eram considerados 'ferramentas de trabalho que falam' perante a lei."] }
+    },
+    {
+        id: 25, level: "Difícil",
+        text: "A rivalidade das pólis resultou em Ligas (alianças militares) na Grécia. A Liga de Delos enriqueceu muito Atenas, o que causou o ódio de Esparta e gerou a Guerra do Peloponeso. O que foi a Liga de Delos inicialmente?",
+        options: ["Um campeonato de filosofia entre sábios que pagava enormes salários em ouro a Atenas.", "Uma confederação militar marítima criada por várias pólis para se defenderem dos Persas; Atenas cobrava o 'imposto' em ouro para proteger os aliados, mas usou o dinheiro para embelezar sua própria cidade.", "Um acordo comercial secreto entre Atenas e Roma para escravizar o povo macedônio.", "Uma união pacífica das pólis para abolir a escravidão e distribuir terras igualmente aos camponeses ricos e pobres do Peloponeso."],
+        correct: 1,
+        explanation: { correct: "A Liga de Delos foi um tesouro criado para caso os persas atacassem a Grécia de novo. As pólis menores pagavam uma taxa para o poderoso exército de barcos de Atenas. Atenas pegou esse tesouro e construiu o Partenon e monumentos para si mesma, virando um império opressor que irritou Esparta.", options: ["Não tinha nada a ver com torneio de filosofia, era aliança de guerra.", "Resposta correta.", "Roma e Macedônia não faziam parte dessa Liga; a aliança era contra a Pérsia.", "Não foi pacífica e não teve absolutamente nenhuma abolição de escravatura."] }
+    },
+    {
+        id: 26, level: "Difícil",
+        text: "Os gregos antigos deixaram como herança um tipo especial de conhecimento: a Filosofia. O que, essencialmente, a Filosofia grega propunha de diferente em relação ao que as pessoas da época pensavam?",
+        options: ["Propôs que a matemática e a geometria deveriam ser proibidas nas escolas para agradar os deuses da guerra.", "Incentivou a aceitação total da mitologia. A filosofia grega defendia que não devemos questionar a vontade de Zeus e de Atena sobre a natureza humana.", "Propôs o uso da razão (lógica e pensamento humano) para buscar explicações e verdades sobre o universo e o homem, em vez de aceitar apenas as explicações mágicas ou mitológicas dos deuses.", "Surgiu como uma técnica militar secreta em Esparta, onde os pensadores criavam novas formas cruéis de vencer a Guerra do Peloponeso."],
+        correct: 2,
+        explanation: { correct: "A Filosofia (filo = amor, sofia = sabedoria) marca a mudança do pensamento mitológico para o pensamento racional. Pensadores como Sócrates, Platão e Aristóteles começaram a questionar as coisas da natureza e da moral humana usando o cérebro humano e perguntas lógicas, desapegando das respostas sobrenaturais.", options: ["A filosofia ajudou no avanço da matemática, nunca a proibiu (veja Pitágoras).", "A filosofia fazia o contrário, ela tirava a exclusividade da explicação mitológica para usar a razão.", "Resposta correta.", "Filosofia floresceu em Atenas (intelectual) não na militarizada Esparta."] }
+    },
+    {
+        id: 27, level: "Difícil",
+        text: "Analise a seguinte afirmação sobre a Cultura e Religião Grega: 'Os Jogos Olímpicos na Antiguidade tinham um caráter puramente de entretenimento civil e geração de riquezas entre as pólis rivais que nunca cessavam as guerras durante as competições.' Esta frase está geograficamente/historicamente correta ou incorreta?",
+        options: ["Correta. As Olimpíadas ocorriam no meio de grandes carnificinas, sendo uma forma de humilhar publicamente generais perdedores sem fins divinos.", "Incorreta. As Olimpíadas possuíam um caráter profundamente religioso em homenagem a Zeus. Além disso, as cidades em guerra paravam suas batalhas e assinavam uma 'Trégua Sagrada' para poderem competir em Olímpia pacificamente.", "Correta. Eles criaram o esporte moderno sem nenhuma conexão religiosa ou adoração de deuses, provando a superioridade da filosofia racional olímpica sobre os deuses e suspendendo a religião para competir na arena sangrenta grega.", "Incorreta. A guerra civil parava apenas porque as mulheres gregas subiam no Monte Olimpo exigindo que Esparta construísse o Partenon de Ouro."],
+        correct: 1,
+        explanation: { correct: "Os Jogos Olímpicos Antigos eram primeiramente um grande festival religioso em honra a Zeus. E existia a Trégua Sagrada (Ekecheiria): durante o mês dos jogos, todas as pólis gregas proibiam exércitos de entrarem em guerra ou executarem pessoas, garantindo a passagem segura dos atletas até o templo em Olímpia.", options: ["Incorreta pela falta de religião na descrição e pela ausência de trégua no texto.", "Resposta correta.", "Incorreta por afirmar ausência de divindade na fundação dos jogos gregos e arena sangrenta não era Roma de gladiadores.", "Incorreta por introduzir fábulas (mulheres obrigando Esparta a construir maravilhas atenienses) onde a verdadeira razão foi um pacto entre as cidades por reverência a Zeus e ao lugar sagrado de Olímpia."] }
+    },
+    {
+        id: 28, level: "Difícil",
+        text: "O texto sobre 'Heranças Gregas' cita a arquitetura. As famosas colunas gregas (que sustentavam o teto dos templos) podem ser divididas em três estilos ou ordens clássicas presentes na História da Arte e usadas até hoje em tribunais de justiça. Quais são os três principais estilos de colunas da Grécia Antiga?",
+        options: ["Pirâmide, Obelisco e Esfinge.", "Românica, Gótica e Bizantina.", "Dórica (simples e forte), Jônica (fina com volutas de pergaminho) e Coríntia (muito enfeitada com folhas no topo).", "Macedônica, Espartana e Babilônica com formato cônico."],
+        correct: 2,
+        explanation: { correct: "A arquitetura grega baseava-se em muita matemática e beleza. Os três modelos formadores dos seus pilares (colunas) são a Ordem Dórica (pesada e reta sem base, ex: Partenon), a Jônica (mais fina, tendo capitel parecido com pergaminho desenrolado) e a Coríntia (cheia de ornamentos baseados na folha de acanto).", options: ["Egípcios usaram Pirâmides e Obeliscos na sua arquitetura de pedras.", "Gótica e Românica são estilos que apareceram apenas na Idade Média cristã (Idade das Trevas).", "Resposta correta.", "Estes não são os nomes das normas e proporções arquitetônicas clássicas."] }
+    },
+    {
+        id: 29, level: "Difícil",
+        text: "Uma característica central da Democracia Ateniense é o conceito de 'Isonomia', que significa:",
+        options: ["O direito que os cidadãos mais ricos tinham de votar duas vezes na Eclésia.", "A garantia de igualdade de todos os cidadãos atenienses (homens, adultos, livres, nativos) perante a lei, tendo eles o mesmo peso nas votações públicas e punições criminais, independentemente de serem ricos ou pobres.", "O nome da lei que permitia os Metecos (estrangeiros) subornarem os juízes para aprovarem a abolição da escravidão em todo o porto ateniense de Pireu.", "A permissão legal de o povo ateniense idolatrar deuses que não fossem provenientes do Panteão do Monte Olimpo (liberdade religiosa)."],
+        correct: 1,
+        explanation: { correct: "Isonomia (Iso = igual, Nomia = Lei). É a premissa fundamental inventada em Atenas onde todos que possuíam o status de cidadão perante o Estado eram juridicamente iguais e seus votos tinham exatamente a mesma força, não importando a classe social, o tamanho da casa que tinham, caso cometessem crimes em tribunais eles seriam nivelados pelo poder do mesmo código de lei da Pólis.", options: ["Isonomia é justamente contra o poder que diz que dinheiro vale mais votos na política (Plutocracia), em Atenas valia 1 homem = 1 voto igual.", "Resposta correta.", "Isonomia não envolvia corrupção e Metecos sequer participavam disso para abolir coisas dentro da democracia fechada ateniense.", "Isso não aborda leis da religião e do politeísmo, mas a esfera judicial e política entre cidadãos da cidade estado nas ações civis comuns."] }
+    },
+    {
+        id: 30, level: "Difícil",
+        text: "A Pólis de Esparta foi moldada de maneira militarista e fechada, em grande parte, pelo medo interno e geográfico de onde ela ficava e a quem ela comandava. Por que os espartanos precisaram criar um exército profissional tão severo e a educação violenta, mantendo os cidadãos a vida inteira dedicados apenas à guerra desde muito cedo?",
+        options: ["Por conta da imensa população de escravos submetidos do Estado (os Hilotas). Havia muito mais escravos prisioneiros camponeses do que cidadãos espartanos livres. Sem um exército terrorífico e altamente treinado focado na guerra, os escravos fariam uma revolução sangrenta e destruiriam as elites facilmente.", "Eles criaram essa tática para conseguirem vencer todas as provas criadas a cada 4 anos nas competições musicais atléticas de Olímpia sendo essa sua maior atividade comercial nas moedas estaduais de subsistência.", "Porque no fundo do território rochoso não havia água potável doce (falta do rio Nilo), forçando as crianças espartanas a saírem todos os dias de lança atacarem as muralhas do Estado de Atenas em busca das fontes minerais da bacia e só sobreviver na Pólis.", "Foi uma herança cultural divina implantada pela deusa da inteligência Atena que obrigou, em castigo do Olimpo, toda a dinastia diárquica de Licurgo do Peloponeso a fazer o serviço social armado na capital grega antiga espalhando guerras para defender a cultura helênica democrática das Ilhas Marítimas gregas"],
+        correct: 0,
+        explanation: { correct: "O medo constante dos espartanos (conhecidos como Esparciatas) era a rebelião dos 'Hilotas' (descendentes de povos vizinhos conquistados por Esparta e reduzidos à servidão coletiva de propriedade do Estado para plantar a comida que os militares comiam). Para uma minoria governar e oprimir uma gigantesca maioria oprimida trabalhando no campo, a força física dos filhos da elite precisava ser absoluta e assustadora. Um passo em falso e as rebeliões do povo cativo (hilotas) destruiriam a sociedade, por isso treinos cruéis, castigos rigorosos a ponto da educação de um menino espartano ser a garantia da existência da cidade não sucumbir em ruínas de sangue por dentro das próprias fazendas do Peloponeso.", options: ["Resposta correta.", "Eles valorizavam ser fortes, mas não para o mercado de jogos ou vencer nas músicas que eles detestavam (preferiam as lutas corporais). Era de proteção de vida dentro da própria casa (contra hilotas).", "Na verdade eles viviam onde existia o Rio Eurotas, no fértil Peloponeso e não ficavam atacando Atenas por água por sede e seca grega de bacia, foi o sistema de propriedade camponesa quem definiu as regras cruéis.", "Isso confunde religião divindades mitológicas misturando política e não responde a dinâmica de classes materiais da cidade com os oprimidos, deusa Atena era focada em estratégia e protetora de Atenas e os Espartanos veneravam e adoravam profundamente o papel guerreiro do deus Ares, também espartanos e atenienses eram ferozes inimigos a época política civil grega antiga que moldou a educação militar de medo não de alianças e defesa mútua na democracia a que o Rei detestava."] }
+    }
+];
+
+const storageKey = 'promover_historia_' + document.title.replace(/\s+/g,'_');
+let currentQuestion = 0;
+let savedAnswers = localStorage.getItem(storageKey);
+let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+
+    if(mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        renderQuestion();
+        renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+    }
+    window.scrollTo(0,0);
+}
+
+function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+
+    let badgeClass = '';
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+        </div>
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `
+                <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `
+            }).join('')}
+        </div>
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '☑ Resposta Correta!' : '☒ Resposta Incorreta!'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>A Resposta Certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top: 10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                ${q.explanation.correct}
+            </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                <small style="color:var(--theme-dark);"><strong>Por que as outras estão erradas:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>(${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>
+    `;
+    updateNav();
+}
+
+function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+
+    if (idx === questions[currentQuestion].correct) {
+        const duration = 1500;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6 }, colors: ['#D97706', '#92400E', '#FEF3C7', '#B45309'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6 }, colors: ['#D97706', '#92400E', '#FEF3C7', '#B45309'] });
+            if (Date.now() < end) { requestAnimationFrame(frame); }
+        }());
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+}
+
+function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+    }).join('');
+
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }, 50);
+}
+
+function goTo(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+}
+
+function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar Diagnóstico";
+        next.onclick = finish;
+    } else {
+        next.textContent = "Avançar";
+        next.onclick = () => changeQuestion(1);
+    }
+}
+
+function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct/questions.length) * 100);
+    if (window.confetti) confetti.reset();
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões de História.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    if (percent < 80) {
+        summary += '<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);"><strong>⚠ Domínio Histórico Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Atingir a pontuação mínima é obrigatório nesta prova. Revise a teoria clássica antes de tentar novamente.</div>';
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()"> Limpar Histórico e Refazer Prova</button>';
+    } else {
+        summary += '<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);"><strong>🏆 Excelente Desempenho!</strong> Você demonstrou uma base sólida, clínica e exata sobre a Grécia Antiga. A sua aprovação técnica está garantida neste módulo.</div>';
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()"> Refazer Prova (Zerar Histórico)</button>';
+    }
+
+    if (correct < questions.length) {
+        summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+        questions.forEach((q, i) => {
+            if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+                <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade Histórica: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+}
+
+function reset() {
+    localStorage.removeItem(storageKey);
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+}
+
+// Inicializando no modo correto
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>

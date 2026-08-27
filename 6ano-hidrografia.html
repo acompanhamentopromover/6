@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geografia 6º Ano - Atmosfera e Água - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    /* Paleta Natureza/Atmosfera para Geografia */
+    --bg-color: #F0FDF4; /* Fundo verde muito claro */
+    --text-color: #064E3B;
+    --border-color: #14532D; /* Verde escuro */
+    --white: #FFFFFF;
+    --theme-light: #DCFCE7; /* Verde claro */
+    --theme-medium: #4ADE80; /* Verde vibrante */
+    --theme-dark: #15803D; /* Verde principal */
+    --theme-contrast: #0369A1; /* Azul celeste (água/céu) */
+    --theme-accent: #10B981;
+    --theme-text-active: #FFFFFF;
+
+    /* NÃO ALTERAR AS CORES DE FEEDBACK ABAIXO */
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #BE123C;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: 'Poppins', sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--text-color);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 20px; 
+    padding-bottom: 100px;
+    background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+
+@keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from {transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; }}
+
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.15); color: var(--theme-contrast); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+
+.search-container {position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon {position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 {font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.1rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: var(--theme-light); border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #064E3B; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil {background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot {min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct {background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle {background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle {background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled {pointer-events: none; opacity: 0.7; }
+
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display: flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt {border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+.result-card {background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big {font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🌍</span> PROMOVER</div>
+        <h1>GEOGRAFIA / 6º ANO</h1>
+        <p class="subtitle">Atmosfera, Clima e Ciclo Hidrológico</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>Termo não encontrado.</p></div>
+
+        <!-- Cap 7: Ciclo Hidrológico -->
+        <div class="content-group">
+            <span class="section-badge">1. Cap 7: Ciclo Hidrológico</span>
+            <div class="theory-box">
+                <h3>O Movimento Contínuo da Água</h3>
+                <p>A água do nosso planeta está sempre em movimento, passando por diferentes estados físicos (sólido, líquido e gasoso) num processo chamado <strong>Ciclo Hidrológico</strong>. Esse ciclo é movido pela energia do Sol.</p>
+                <ul>
+                    <li><strong>Evaporação:</strong> O calor do sol transforma a água dos oceanos e rios em vapor (gás).</li>
+                    <li><strong>Transpiração:</strong> As plantas e animais também liberam vapor de água na atmosfera (junto com a evaporação, chamamos de <em>Evapotranspiração</em>).</li>
+                    <li><strong>Condensação:</strong> O vapor sobe, encontra ar frio, vira gotículas líquidas e forma as nuvens.</li>
+                    <li><strong>Precipitação:</strong> A água cai de volta na terra como chuva, neve ou granizo.</li>
+                    <li><strong>Infiltração:</strong> A chuva penetra no solo alimentando os lençóis freáticos (águas subterrâneas).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Cap 8: Composição Gasosa -->
+        <div class="content-group">
+            <span class="section-badge">2. Cap 8: Composição Gasosa</span>
+            <div class="theory-box">
+                <h3>Do que o ar é feito?</h3>
+                <p>A <strong>atmosfera</strong> é a camada de gases que envolve a Terra, presa ao planeta pela força da gravidade. Ela é fundamental para proteger a vida contra raios solares perigosos e meteoros.</p>
+                <div class="visual-area">
+                    <div style="flex:1;">💨 <strong>78% Nitrogênio</strong><br><span style="font-size:0.8rem; color:var(--text-color); font-weight:normal;">O gás mais abundante. Fundamental para o solo e as plantas.</span></div>
+                    <div style="flex:1;">🌬️ <strong>21% Oxigênio</strong><br><span style="font-size:0.8rem; color:var(--text-color); font-weight:normal;">Usado na respiração dos seres vivos.</span></div>
+                    <div style="flex:1; width:100%;">☁️ <strong>1% Outros Gases</strong><br><span style="font-size:0.8rem; color:var(--text-color); font-weight:normal;">Gás Carbônico (CO2), Argônio e vapor de água.</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camadas da atmosfera -->
+        <div class="content-group">
+            <span class="section-badge">3. Camadas da Atmosfera</span>
+            <div class="theory-box">
+                <h3>As 5 Camadas do Planeta</h3>
+                <p>Conforme subimos, a atmosfera muda. Ela é dividida em 5 camadas principais, começando do chão para o espaço:</p>
+                <ol style="margin-left: 20px;">
+                    <li><strong>Troposfera:</strong> É onde nós vivemos. Tem a maior quantidade de oxigênio. <strong>É aqui que ocorrem os fenômenos meteorológicos</strong> (chuva, ventos, nuvens, neve).</li>
+                    <li><strong>Estratosfera:</strong> É onde os aviões voam porque não tem nuvens. Aqui fica a importante <strong>Camada de Ozônio (O3)</strong>, que filtra os raios ultravioleta (UV) do sol.</li>
+                    <li><strong>Mesosfera:</strong> A camada mais fria. É aqui que os meteoros pegam fogo e viram "estrelas cadentes".</li>
+                    <li><strong>Termosfera:</strong> Uma camada muito quente. Onde ocorrem as Auroras Boreais e orbitam os ônibus espaciais.</li>
+                    <li><strong>Exosfera:</strong> O limite final, onde a atmosfera se mistura com o espaço sideral. Onde ficam os satélites de comunicação.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Tempo Atmosférico x Clima -->
+        <div class="content-group">
+            <span class="section-badge">4. Tempo Atmosférico x Clima</span>
+            <div class="theory-box">
+                <h3>Qual a diferença?</h3>
+                <p>As pessoas costumam confundir Tempo e Clima, mas na Geografia eles têm significados bem diferentes.</p>
+                <div class="highlight-box">
+                    <strong>Tempo Atmosférico:</strong> É o estado <strong>momentâneo</strong> (passageiro) da atmosfera em um local.<br>
+                    <em>Exemplo:</em> "Hoje está chovendo em São Paulo" ou "Amanhã fará muito calor". O tempo muda de uma hora para outra.
+                </div>
+                <div class="highlight-box">
+                    <strong>Clima:</strong> É o comportamento <strong>duradouro</strong> (padrão) da atmosfera. O clima de um lugar é definido após analisar o tempo diariamente por, no mínimo, 30 anos.<br>
+                    <em>Exemplo:</em> "O clima da região Nordeste é Semiárido (seco)" ou "A Europa tem clima Temperado". O clima não muda do dia para a noite.
+                </div>
+            </div>
+        </div>
+
+        <!-- Efeito Estufa -->
+        <div class="content-group">
+            <span class="section-badge">5. Efeito Estufa (Natural x Artificial)</span>
+            <div class="theory-box">
+                <h3>O cobertor da Terra</h3>
+                <p>O <strong>Efeito Estufa</strong> é o processo em que alguns gases (como o CO2 e o Metano) prendem o calor do Sol dentro da atmosfera terrestre.</p>
+                <div class="highlight-box">
+                    🌿 <strong>Efeito Estufa NATURAL (Bom):</strong> É vital para a vida. Sem ele, o calor do sol escaparia todo para o espaço e a Terra seria um bloco de gelo (-18ºC), impossibilitando a vida humana.
+                </div>
+                <div class="highlight-box warning">
+                    🏭 <strong>Efeito Estufa ARTIFICIAL / Agravado (Ruim):</strong> A humanidade queima muito combustível fóssil (gasolina, carvão) e desmata florestas. Isso lança gases em excesso no ar. Com muitos gases, o "cobertor" fica grosso demais, prendendo muito calor e causando o <strong>Aquecimento Global</strong>.
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">Iniciar Diagnóstico (30 Q) →</button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova (Roteiro Completo)</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">30 questões rigorosas sobre Hidrologia, Atmosfera, Tempo, Clima e Efeito Estufa. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro para aprender!</p>
+        </div>
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars"></div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText"></p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+// 30 questões divididas equilibradamente entre os 5 tópicos do manuscrito.
+const questions = [
+    // FÁCEIS
+    {
+        id: 1, level: "Fácil",
+        text: "O calor do Sol é o 'motor' que faz a água do planeta se movimentar no Ciclo Hidrológico. Qual o nome do processo em que a água dos oceanos e rios se transforma em vapor e sobe para o céu?",
+        options: ["Precipitação.", "Condensação.", "Evaporação.", "Infiltração."],
+        correct: 2,
+        explanation: { correct: "A evaporação ocorre quando o sol aquece a água no estado líquido, transformando-a em vapor (gás).", options: ["Precipitação é a chuva caindo.", "Condensação é o vapor virando líquido nas nuvens.", "Resposta correta.", "Infiltração é a água entrando na terra."] }
+    },
+    {
+        id: 2, level: "Fácil",
+        text: "A atmosfera é a camada invisível que envolve a Terra. Ela é composta por uma mistura de gases vitais. Qual é o gás que existe em MAIOR quantidade (78%) na nossa atmosfera?",
+        options: ["Gás Carbônico (CO2).", "Oxigênio (O2).", "Nitrogênio (N2).", "Hidrogênio."],
+        correct: 2,
+        explanation: { correct: "O Nitrogênio é o gás mais abundante na atmosfera (78%), muito importante para o ciclo de nutrientes no solo.", options: ["O Gás Carbônico representa menos de 1%.", "O Oxigênio representa 21%.", "Resposta correta.", "O Hidrogênio não é o gás principal da nossa atmosfera baixa."] }
+    },
+    {
+        id: 3, level: "Fácil",
+        text: "Conforme o roteiro, a atmosfera tem várias camadas. Qual é o nome da primeira camada, a mais próxima do chão, onde nós vivemos, respiramos e onde acontecem as chuvas e ventos?",
+        options: ["Estratosfera.", "Troposfera.", "Mesosfera.", "Exosfera."],
+        correct: 1,
+        explanation: { correct: "A Troposfera é a camada inferior da atmosfera, grudada na superfície da Terra, onde ocorrem todos os fenômenos meteorológicos (o 'tempo').", options: ["Estratosfera é a segunda camada, onde ficam os aviões e o ozônio.", "Resposta correta.", "Mesosfera é a terceira, muito fria.", "Exosfera é a última, misturada ao espaço."] }
+    },
+    {
+        id: 4, level: "Fácil",
+        text: "Leia a frase: 'Hoje choveu muito de manhã, mas de tarde o sol apareceu e fez muito calor'. Essa frase descreve uma característica do:",
+        options: ["Tempo atmosférico, pois descreve uma condição passageira (de hoje).", "Clima, pois descreve uma condição duradoura da Terra.", "Efeito estufa, pois fala do sol no céu.", "Aquecimento global, pois choveu e esquentou."],
+        correct: 0,
+        explanation: { correct: "O 'Tempo' refere-se ao estado momentâneo, ao dia de hoje ou amanhã, que pode mudar rapidamente em poucas horas.", options: ["Resposta correta.", "O clima não muda em um dia (ex: clima tropical).", "Não é efeito estufa, é apenas uma descrição comum meteorológica.", "Chuva de manhã e sol de tarde não é evidência de aquecimento global em si, mas da dinâmica do tempo."] }
+    },
+    {
+        id: 5, level: "Fácil",
+        text: "Na aula sobre o Efeito Estufa, aprendemos que ele pode ser natural ou artificial (agravado). Qual a função do Efeito Estufa NATURAL para a Terra?",
+        options: ["Ele serve para poluir o céu e destruir a camada de ozônio.", "Ele retém (prende) parte do calor do sol na atmosfera, mantendo a Terra aquecida e possibilitando a vida.", "Ele congela os oceanos para que os animais marinhos não morram de calor.", "Ele transforma a água doce em água salgada artificialmente."],
+        correct: 1,
+        explanation: { correct: "O Efeito Estufa Natural funciona como um cobertor. Sem ele, o planeta seria congelado (-18ºC) e não existiria vida.", options: ["Quem polui é o ser humano, o processo natural não é poluição.", "Resposta correta.", "Ele não congela nada, pelo contrário, ele aquece.", "Não tem relação com transformar sal da água."] }
+    },
+    {
+        id: 6, level: "Fácil",
+        text: "Durante o Ciclo Hidrológico, as árvores e plantas também liberam umidade (vapor) para o ar através das suas folhas. Como se chama a junção da água que evapora do chão mais a água liberada pelas plantas?",
+        options: ["Condensação.", "Infiltração profunda.", "Evapotranspiração.", "Nevasca."],
+        correct: 2,
+        explanation: { correct: "Evapotranspiração é a palavra que junta a evaporação (da água líquida no solo/rios) com a transpiração (suor/vapor) feita pelas plantas e árvores da floresta.", options: ["Condensação forma a nuvem.", "Infiltração é a água entrando na terra.", "Resposta correta.", "Nevasca é precipitação sólida e gelada."] }
+    },
+    {
+        id: 7, level: "Fácil",
+        text: "O oxigênio (O2) é o gás que nós usamos para respirar. Qual é a porcentagem aproximada de oxigênio existente na nossa atmosfera?",
+        options: ["78%", "50%", "21%", "1%"],
+        correct: 2,
+        explanation: { correct: "O Oxigênio representa aproximadamente 21% do ar que compõe a atmosfera da Terra.", options: ["78% é o Nitrogênio.", "Não existe gás com 50% na nossa atmosfera.", "Resposta correta.", "1% é a junção dos outros gases menores (Argônio, CO2, etc)."] }
+    },
+    {
+        id: 8, level: "Fácil",
+        text: "Por que os aviões comerciais preferem voar muito alto, na camada da atmosfera chamada 'Estratosfera', em vez de voar baixo na 'Troposfera'?",
+        options: ["Porque na Estratosfera os aviões podem reabastecer com a água das nuvens.", "Porque a Estratosfera tem menos nuvens, menos ventos fortes e tempestades, permitindo um voo mais calmo (sem turbulências fortes).", "Porque na Estratosfera a força da gravidade não existe e os aviões flutuam desligados.", "Porque lá eles encontram os astronautas e os ônibus espaciais para pedir informações."],
+        correct: 1,
+        explanation: { correct: "Como os fenômenos meteorológicos (chuvas e tempestades) acontecem na Troposfera, ao voar na camada de cima (Estratosfera), o avião foge do 'tempo ruim' e não balança tanto.", options: ["Avião não reabastece voando com água.", "Resposta correta.", "A gravidade ainda existe muito forte na Estratosfera.", "Ônibus espacial e astronautas ficam na Termosfera ou no espaço fora dali."] }
+    },
+    {
+        id: 9, level: "Fácil",
+        text: "Para o clima de uma cidade ser classificado (por exemplo, como Clima Equatorial ou Clima Tropical), os cientistas não podem olhar apenas para um dia. Quantos anos de observação diária são necessários, no mínimo, para definir o CLIMA de um lugar?",
+        options: ["Apenas 1 dia.", "Exatamente 1 ano (365 dias).", "Cerca de 30 anos observando os padrões daquele lugar.", "Nunca é possível definir o clima."],
+        correct: 2,
+        explanation: { correct: "A regra da climatologia (Organização Meteorológica Mundial) exige um estudo rigoroso diário por, no mínimo, 30 anos seguidos para calcular uma média e afirmar qual é o tipo de Clima permanente de um local.", options: ["1 dia descreve apenas o Tempo.", "1 ano é muito pouco para notar o padrão de décadas.", "Resposta correta.", "É possível sim definir, temos um mapa climático mundial."] }
+    },
+    {
+        id: 10, level: "Fácil",
+        text: "Quando ouvimos na TV que o Aquecimento Global está derretendo o gelo dos polos, de qual fenômeno a reportagem está falando?",
+        options: ["Do Efeito Estufa Natural.", "Do Efeito Estufa Artificial (agravado pela poluição das indústrias humanas).", "Do buraco na Camada de Ozônio que congela o planeta.", "Da diminuição drástica do Oxigênio no espaço."],
+        correct: 1,
+        explanation: { correct: "O Aquecimento Global é consequência do Efeito Estufa Artificial, causado quando o homem queima gasolina e desmata árvores, jogando gases em excesso no céu que não deixam o calor normal sair.", options: ["O natural mantém a terra quentinha na medida certa, sem ferver e derreter tudo anormalmente.", "Resposta correta.", "A Camada de Ozônio lida com raio UV de queimadura, não diretamente com a retenção do calor das estufas.", "A quantidade de oxigênio não mudou o suficiente para o aquecimento virar notícia por conta disso."] }
+    },
+
+    // MÉDIAS
+    {
+        id: 11, level: "Médio",
+        text: "No Ciclo Hidrológico, qual etapa é essencial e responsável direta por encher (recarregar) as reservas de água que ficam debaixo da terra (Lençóis freáticos e Aquíferos)?",
+        options: ["A evaporação imediata ao cair no chão.", "A condensação nas montanhas de pedra.", "A infiltração da água no solo.", "A transpiração excessiva das raízes secas."],
+        correct: 2,
+        explanation: { correct: "As águas subterrâneas só se formam porque, após chover, a água líquida se infiltra (entra pelos buraquinhos) no solo de terra e vai descendo até se acumular nas pedras profundas.", options: ["Se a água evaporar, ela sobe para o céu em vez de ir pro aquífero.", "Condensação forma a nuvem lá em cima.", "Resposta correta.", "A raiz das plantas puxa a água, não empurra para o fundo da terra (infiltração é ação da gravidade e da água)."] }
+    },
+    {
+        id: 12, level: "Médio",
+        text: "Um dos gases presentes em pequena quantidade na nossa atmosfera é o Gás Carbônico (CO2). Mesmo sendo menos de 1% do ar, ele é importantíssimo para duas coisas fundamentais no planeta. Quais são?",
+        options: ["Ele é usado pelos humanos para respirar e pelos aviões para gerar oxigênio.", "Ele é o alimento principal da fotossíntese das plantas e um dos gases principais que fazem o Efeito Estufa natural (aquecendo a Terra).", "Ele cria o vento frio do oceano e congela a água das nuvens na Mesosfera.", "Ele bloqueia os raios UV do sol evitando o câncer de pele nas pessoas."],
+        correct: 1,
+        explanation: { correct: "O CO2 é o ingrediente que as plantas 'respiram' (absorvem) para fazer a fotossíntese e crescer. Além disso, a molécula de CO2 prende o calor, sendo vital para o Efeito Estufa natural.", options: ["Humanos não respiram CO2 para sobreviver (pelo contrário, nós expulsamos CO2).", "Resposta correta.", "Ele não cria ventos.", "Quem bloqueia raios UV perigosos é o gás Ozônio (O3), não o CO2."] }
+    },
+    {
+        id: 13, level: "Médio",
+        text: "O que é e onde se localiza a Camada de Ozônio (O3), que funciona como o 'protetor solar' do Planeta Terra?",
+        options: ["Fica localizada na Troposfera e é feita do vapor condensado de água limpa.", "Fica localizada na Estratosfera e tem a função de impedir que a maioria dos perigosos raios Ultravioleta (UV) do sol cheguem à superfície e prejudiquem a vida.", "Fica na Termosfera e é responsável por reter o calor do Aquecimento Global causado pela queima de carvão.", "É uma camada de ferro magnético subterrâneo embaixo dos rios."],
+        correct: 1,
+        explanation: { correct: "A Camada de Ozônio se encontra na Estratosfera (a segunda camada subindo). O gás ozônio age como um grande filtro solar bloqueando a radiação ultravioleta do Sol, protegendo-nos do câncer de pele e queimaduras fatais.", options: ["O vapor de água está na Troposfera, o ozônio fica na Estratosfera.", "Resposta correta.", "Não fica na termosfera, nem está ligado à queima direta de carvão fóssil.", "Não é uma barra de metal embaixo da terra, é um escudo gasoso no céu."] }
+    },
+    {
+        id: 14, level: "Médio",
+        text: "Observe a frase a seguir: 'No Nordeste do Brasil o ambiente é seco e chove pouco a maior parte do ano; porém, hoje, excepcionalmente, caiu uma tempestade fortíssima e repentina no Ceará'. Quais conceitos foram usados nessa frase em ordem correta?",
+        options: ["As duas partes da frase descrevem exclusivamente o Clima.", "A primeira parte descreve o Clima (seco quase todo o ano) e a segunda descreve o Tempo atmosférico (tempestade hoje).", "A primeira parte descreve o Tempo (seco) e a segunda descreve o Clima (tempestade).", "A frase fala sobre as 5 camadas da atmosfera simultaneamente e ignora a chuva."],
+        correct: 1,
+        explanation: { correct: "Quando diz que é seco a maior parte do ano (o padrão longo), estamos falando do Clima. Quando diz que excepcionalmente 'hoje' caiu tempestade, é o Tempo momentâneo daquele dia furando a regra.", options: ["A chuva de um único dia não define um clima.", "Resposta correta.", "A ordem é inversa, o Clima é a primeira característica perene, o tempo é o evento surpresa de 'hoje'.", "Não menciona as 5 camadas geográficas de ar."] }
+    },
+    {
+        id: 15, level: "Médio",
+        text: "O Efeito Estufa Artificial (Aquecimento Global) ocorre por culpa das ações das sociedades modernas. Qual é a ação humana (antrópica) que MAIS lança gases estufa artificiais e perigosos no céu todos os dias?",
+        options: ["A queima de combustíveis fósseis (como gasolina nos carros, diesel, indústrias queimando carvão e petróleo).", "O processo de reflorestamento com árvores no interior dos países.", "O uso de painéis de energia solar em casas grandes.", "O ato de reciclar o lixo em garrafas plásticas."],
+        correct: 0,
+        explanation: { correct: "O motor das sociedades industriais e dos carros queima combustíveis originários de fósseis (petróleo, carvão, gás natural). Essa queima violenta injeta montanhas de CO2 pesado que engrossa o Efeito Estufa rapidamente.", options: ["Resposta correta.", "Plantar árvores AJUDA a reduzir o aquecimento (elas sequestram o carbono do ar).", "Energia solar é limpa, não emite gases estufa.", "Reciclar ajuda a diminuir os poluentes e a extração industrial, portanto é bom, não ruim."] }
+    },
+    {
+        id: 16, level: "Médio",
+        text: "Nas aulas sobre atmosfera, vemos que a Mesosfera, a Termosfera e a Exosfera são as três camadas mais altas. Qual alternativa descreve o que acontece na Mesosfera?",
+        options: ["É a camada onde moram os seres humanos e os pássaros.", "É nela que ficam armazenados os lençóis freáticos e poços artesianos do planeta.", "É a camada mais fria e é onde os asteroides/meteoros que caem na Terra pegam fogo por atrito antes de baterem no nosso chão, gerando as 'estrelas cadentes'.", "É a camada limite exata de onde os rios da Terra nascem nas montanhas para evaporação."],
+        correct: 2,
+        explanation: { correct: "A Mesosfera (meso = meio) fica na zona superior fria. Quando fragmentos de rocha do espaço (meteoros) entram no planeta com enorme velocidade, o gás dessa camada cria atrito (raspagem), fazendo a pedra pegar fogo, brilhar e virar pó (estrela cadente).", options: ["Nós moramos na Troposfera.", "Aquífero fica dentro do solo, debaixo de terra, não no céu.", "Resposta correta.", "Os rios nascem no chão do planeta Terra e sua evaporação inicial ocorre ali (Troposfera)."] }
+    },
+    {
+        id: 17, level: "Médio",
+        text: "Você aprendeu no Ciclo Hidrológico sobre a etapa de 'Condensação'. Em um dia comum, como conseguimos ver o resultado visível da condensação no céu?",
+        options: ["Não podemos ver, pois o gás continua invisível eternamente.", "Nós enxergamos o resultado na forma das nuvens brancas, que nada mais são do que minúsculas gotas d'água líquida flutuando no ar.", "Nós vemos na forma do relâmpago amarelo que solta oxigênio puro.", "Nós vemos na forma das árvores realizando o suor da evapotranspiração."],
+        correct: 1,
+        explanation: { correct: "A condensação ocorre quando o ar úmido sobe e esfria. O vapor invisível se agrupa (condensa) e vira bilhões de microgotas de água líquida (ou pequenos cristais de gelo) que, de tão leves, flutuam. Essa aglomeração visível é a nuvem.", options: ["Quando condensa, o gás vira líquido e deixa de ser invisível.", "Resposta correta.", "Relâmpago é eletricidade, não tem a ver com a condensação em si formar a eletricidade física no clarão.", "O suor nas árvores é transpiração, não a condensação ocorrida acima no céu aberto."] }
+    },
+    {
+        id: 18, level: "Médio",
+        text: "Uma reportagem sobre o clima de uma região equatorial alertou: 'Se o aquecimento global continuar descontrolado, o Clima dessa floresta mudará para sempre nas próximas décadas'. Essa afirmação está geograficamente correta ou incorreta?",
+        options: ["Incorreta. Climas são eternos e imutáveis; a floresta jamais mudará seu clima mesmo com a intervenção humana nos gases do efeito estufa.", "Correta. Embora o clima seja o padrão duradouro de 30 anos, as emissões do efeito estufa artificial estão forçando aumentos de temperatura tão severos (aquecimento global) que alterarão os padrões das temperaturas e chuvas futuras permanentemente em várias partes do mundo.", "Incorreta. O aquecimento artificial do homem atinge apenas a camada da Exosfera longe das matas.", "Correta. O efeito estufa natural é o responsável exclusivo por destruir a floresta equatorial todos os meses por evaporação térmica."],
+        correct: 1,
+        explanation: { correct: "O Clima é fixo, mas não é eterno. Mudanças Climáticas, impulsionadas pelo aumento antropogênico (humano) do calor via efeito estufa estourado, mudam drasticamente a temperatura dos oceanos e os ventos atmosféricos, fazendo um Clima chuvoso e tropical poder virar árido no futuro (desmatamento e desertificação).", options: ["O clima pode mudar se fatores astronômicos ou intervenções massivas ocorrerem no balanço da atmosfera.", "Resposta correta.", "O aquecimento prende o ar quente na Troposfera, o local exato da floresta.", "O efeito estufa natural é bom. Quem destrói o clima futuro de modo acelerado e letal é o uso artificial descontrolado dele."] }
+    },
+    {
+        id: 19, level: "Médio",
+        text: "Das afirmativas abaixo, assinale a opção que liga corretamente o conceito ao seu fenômeno correto da atmosfera terrestre:",
+        options: ["Tempo = Medição realizada em uma década inteira de sol / Clima = Chuva fraca que cai no fim da tarde.", "Troposfera = Camada cheia de foguetes / Exosfera = Onde respiramos o nitrogênio.", "Evaporação = A água do rio transformando-se em granizo gelado e duro.", "Efeito Estufa Natural = Um cobertor gasoso da atmosfera que segura a irradiação de calor do Sol na Terra e sem ele tudo ficaria a temperaturas negativas vitais."],
+        correct: 3,
+        explanation: { correct: "A opção correta é a que define o mecanismo vital do Efeito Estufa, atuando como barreira contra o escape rápido de todo calor para o espaço sideral gélido.", options: ["Tempo e Clima estão invertidos.", "Troposfera (respiramos) e Exosfera (foguetes espaciais/satélites) estão invertidas.", "Evaporação não gera gelo duro e sim gás.", "Resposta correta."] }
+    },
+    {
+        id: 20, level: "Médio",
+        text: "Durante uma forte chuva no meio do asfalto impermeável na cidade, os bueiros ficaram entupidos e houve uma grande enchente. No ciclo hidrológico normal, como o solo deveria ter se comportado para diminuir essa enchente caso houvesse terra fofa em vez de asfalto?",
+        options: ["A terra formaria imediatamente um Efeito Estufa para evaporar toda a chuva de 100 litros de água instantaneamente.", "O solo faria grande parte da água descer e passar pelo processo de Infiltração para recarregar o subsolo, não deixando grandes bolsões de água na superfície da rua.", "A terra jogaria o excesso de chuva de volta ao céu pelas fendas da Mesosfera.", "O asfalto é natural e sempre formará evapotranspiração mais eficiente que os jardins pluviais."],
+        correct: 1,
+        explanation: { correct: "Solos nus (terra, gramados) possuem porosidade. A água é sugada pelo chão e penetra até lençóis profundos (Infiltração), retirando as perigosas correntezas de água solta da rua e impedindo alagamentos nas cidades.", options: ["O solo não faz evaporações instantâneas na chuva para secar água corrente forte.", "Resposta correta.", "O solo não empurra chuvas aos céus mágicos nas camadas frias com gravidade invertida.", "Asfaltos causam escoamento rápido artificial impeditivo; terra é muito mais eficiente em infiltrações."] }
+    },
+
+    // DIFÍCEIS
+    {
+        id: 21, level: "Difícil",
+        text: "Na estrutura da nossa atmosfera, existe uma relação direta entre a altitude e os gases para humanos respirarem. Por que os alpinistas experientes que escalam o topo do Monte Everest (a maior montanha do mundo com cerca de 8.800 metros, localizada na Troposfera) precisam carregar pesados tubos de ar na mochila se a montanha ainda está dentro da mesma camada onde vivemos e onde o O2 existe?",
+        options: ["Porque no alto da montanha o Nitrogênio ocupa 100% dos espaços vitais tirando o lugar do metano e as pessoas desmaiam pela ausência total de poluição atmosférica limpa dos vales.", "Porque, mesmo ainda estando na Troposfera, a força da gravidade puxa as partículas da maioria dos gases (incluindo o oxigênio) para o chão mais baixo do nível do mar (planícies). Nas altitudes altíssimas o ar fica rarefeito, ou seja, 'fino' e com muito poucas moléculas de oxigênio disponíveis por inspiração para os pulmões absorverem.", "Porque o Efeito Estufa Artificial criou uma nuvem que queima todo o ozônio das montanhas acima de 5.000 metros de altitude e o alpinista usará ar falso de O2 nas cavernas.", "Porque no topo das cadeias geológicas do Everest, os gases sofrem o estresse hídrico e a evaporação da montanha não produzirá tempestades climáticas com hidrogênio puro em fusão solar."],
+        correct: 1,
+        explanation: { correct: "A Troposfera concentra mais de 75% da massa de todos os gases e pesos do nosso ar e isso se dá na beira do nível do mar (onde o peso gravitacional nos empurra). Ao subir, o ar se 'expande' (fica ralo). Fica mais rarefeito. Um pulmão enchendo lá em cima quase não acha oxigênio no volume do ar aspirado para conseguir alimentar o cérebro (hipóxia) sem um tubo artificial.", options: ["A proporção dos gases é quase constante, o nitrogênio continua na faixa dos 78% em altitudes assim, não vai aos 100% sumindo os outros.", "Resposta correta.", "O aquecimento não foca a queima de ozônio de forma que incinere oxigênio puro montanhês isoladamente em topos de neve das escalas.", "Estresse hídrico é consumo humano exaurindo aquífero; isso não explica a ausência do ar respirável de alpinista."] }
+    },
+    {
+        id: 22, level: "Difícil",
+        text: "As camadas Atmosféricas também filtram diferentes tipos de raios nocivos provenientes do espaço. Imagine um raio da energia Ultravioleta (UV-B) do Sol vindo em direção à superfície. Qual é o papel EXATO da Camada de Ozônio (na Estratosfera) ao interagir fisicamente com esse raio, evitando um problema sério no ecossistema e na pele humana?",
+        options: ["As moléculas do gás Ozônio (O3) deixam o raio passar livremente, contanto que o buraco da camada esfrie os ventos das chuvas meteorológicas do ciclo fechado.", "O gás Oxigênio comum (O2) reflete como um espelho de luz todo o calor para fora do universo sem esquentar o planeta num isolante estufa sem reter nada de nada térmico.", "As moléculas de Ozônio absorvem fortemente os comprimentos de ondas da radiação ultravioleta prejudicial. A energia é filtrada, impedindo mutações nos corais, cegueira, morte de colheitas e alto índice de câncer de pele grave na humanidade ao nível do mar.", "Ele converte raios magnéticos em evapotranspiração de algas, o que aumenta o oxigênio nas grandes selvas boreais rasteiras pelo efeito estufa verde condensado de energia mecânica."],
+        correct: 2,
+        explanation: { correct: "O Gás Ozônio (O3) tem uma particularidade atômica que reage destruindo-se momentaneamente ao receber carga UV-B solar. Isso gasta a energia do raio maligno e impede que os raios atravessem letais à nossa pele (que causaria o melanoma) e às colheitas do mundo e seres minúsculos (fitoplânctons) nas águas costeiras.", options: ["Não há passagem livre de raios perigosos sob condições naturais normais; e o buraco piora esse perigo não contendo filtros contra raios quentes e nocivos.", "O ozônio atua nesse filtro UV protetor biológico, enquanto os gases do Efeito Estufa interagem diferente (na faixa do infravermelho de calor natural com o solo, e não no O2 comum que reflete puro calor externo espacial de espelhos).", "Resposta correta.", "Não há conversão magnética. Trata-se de radiação do espectro da luz interceptada gasosamente em filtração química vital da natureza."] }
+    },
+    {
+        id: 23, level: "Difícil",
+        text: "Uma região possui uma grande floresta com milhares de km² de copas de árvores densas. O desmatamento criminoso corta todas elas, deixando apenas pastagem amarela no lugar. De acordo com o Ciclo Hidrológico, qual será o IMPACTO DIRETO que a morte das árvores trará para as chuvas locais de grande porte no decorrer dos anos climatológicos?",
+        options: ["Nenhum. A chuva depende unicamente das nuvens da Termosfera caírem, e a floresta tem importância na mineração de raízes rasas e secas de solo livre nas bacias litorâneas.", "A ausência total do processo da Infiltração freática rápida, forçando lençóis do interior geológico a expelirem seus estoques aquáticos acima das montanhas vizinhas fazendo chuva reversa em picos isolados com riachos.", "Sem as bilhões de árvores para realizarem a 'Transpiração', a região não enviará o enorme volume de vapor (umidade) necessário para cima. Faltará umidade, o que reduzirá fatalmente a condensação, resultando em quedas fortes na frequência das chuvas com grandes secas.", "Com o pasto amarelo aquecendo velozmente pelo Sol aberto, as evaporações de poças se multiplicarão por dez bilhões de vezes, ocasionando enchentes perenes superiores a qualquer tempestade já vista no clima global florestal chuvoso antigo."],
+        correct: 2,
+        explanation: { correct: "Árvores bombeiam, via suas imensas folhas, os enormes montantes das águas retidas (lençóis e rios nas bacias amazônicas e equatoriais) aos ares diariamente num suor térmico conhecido como 'Rios Voadores' por conta da Evapotranspiração volumétrica violenta. Destruindo a 'mangueira/bomba florestal verde', o chão ralo (sem evapotranspirar) deixará os céus secos sem carga em umidade pra chover; a região e países vizinhos ao redor caminharão rápido à desertificação duradoura (secas).", options: ["As nuvens situam-se em altitudes de vida na Troposfera inferior, e dependem da floresta sim.", "Desmatar seca as infiltrações, mas não faz os bolsões das cavernas cuspirem água de baixo por magias.", "Resposta correta.", "O pasto esquenta, contudo ele é muito ressecado sem água nos solos fofos e sem árvores que sugam fundos úmidos; evaporação de pocinha de lama em campo não faz rios voadores suficientes (choverá bem menos, e não dez vezes de chuvas excessivas piores sem a selva transpirando vapor volumoso)."] }
+    },
+    {
+        id: 24, level: "Difícil",
+        text: "Sobre as diferenças de 'Tempo' e 'Clima', analise o trecho jornalístico de uma previsão oficial apresentada por um estudioso do INPE (Instituto Nacional de Pesquisas Espaciais): 'As frentes frias vindas do polo sul e a massa de ar quente se encontrarão, e isso gerará ventos no fim de semana para o estado inteiro do Paraná. É fundamental saber disso para planejar casamentos e jogos esportivos'. Este cientista usou o equipamento do satélite meteorológico para verificar qual fenômeno especificamente:",
+        options: ["A mudança estrutural irreversível de um Clima Temperado nas 5 camadas da estratosfera polar do Efeito Estufa e seu declínio e aquecimento global regional futuro com chuvas.", "As instabilidades físicas de ar curto do Clima que é definido aos finais das semanas e a temperatura constante local dos casamentos com a condensação isolada diurna de massas do tipo estufa de curto prazo atmosférico", "As variações fugazes e repentinas do Tempo Atmosférico. Ele monitorou dinâmicas de curto prazo na troposfera inferior para prever algo que se altera de um dia pra noite nos estados climáticos.", "Para detectar um Ciclo Hidrológico de massas frias da Exosfera, onde a gravidade nula faria as chuvas dos esportes esportivos se fixarem em forma climática eterna polarizada em geadas geográficas temporais locais do Paraná"],
+        correct: 2,
+        explanation: { correct: "Uma frente fria avançando, a massa de ar subindo quente e previsão do final de semana (chuvas ou vendavais surpresas) constituem dados do chamado Tempo (e a famosa Previsão do Tempo do jornal focada nisso). Isso envolve a leitura imediata das imagens de satélite do céu no dia, e não o longo rastreio de 30 anos do clima fixo (ele avaliou a Troposfera ativa de agora).", options: ["O aquecimento e declínios mudam clima no longo prazo (em décadas), uma previsão foca dias (que é apenas Tempo) sem envolver a longa quebra e o Efeito Estufa nos fins de semanas comuns com frentes frias polares curtas vindas de massas e deslocamento polar.", "Clima não é o evento dos 'finais de semana com tempestade de verão pontuais'; esse é o tempo volátil da Troposfera na meteorologia do telejornal de ontem à noite e amanhã cedo nos termômetros.", "Resposta correta.", "Massas frias não residem em Exosferas (e sim na parte inferior), e as chuvas de esportes nos chãos seguem gravidade (aqui descrita como nula erradamente) por ser em nuvens tropopausadas não climáticas eternas congeladas num Paraná gelado falso em geadas eternas infundadas."] }
+    },
+    {
+        id: 25, level: "Difícil",
+        text: "O efeito estufa é um termo comumente usado com conotação negativa na sociedade. Entretanto, seu mecanismo natural envolve gases atmosféricos da Terra interceptando raios da energia. Como FUNCIONA fisicamente a diferença dos raios de Sol (ondas curtas de luz visível descendo) com o papel dos gases de Efeito Estufa (que seguram calor - radiação infravermelha saindo da crosta da terra) para barrar um congelamento mundial no planeta em seu estado NATURAL?",
+        options: ["O Sol joga luz nas nuvens densas. Essa luz rebate do chão de asfalto num raio Ultravioleta super gelado e tenta se dissipar; todavia o oxigênio atua como parede maciça de vidro térmico derretendo rochas no subsolo com infiltrações do mar absorvendo no mar os poluentes vulcânicos antigos na troposfera limpa superior sem perder seu Efeito estufa frio noturno artificial humano natural", "O Sol envia radiação de luz e energia ao nosso chão, onde a Terra absorve. Depois a Terra esquenta, e envia e irradia esse aquecimento pro ar invisível como raios em formato de calor (radiação Infravermelha longas vindas do piso que subiria rápido). O CO2 intercepta (engole essa radiação) em sua molécula no céu da Troposfera e rebate o aquecimento de volta nos confins do planeta para reter e espalhar ar quentinho em dias escuros", "Nenhuma das energias tem interações com infravermelho de baixo porque a estratosfera atua bloqueando a gravidade térmica da Exosfera em um Efeito estufa global da fotossíntese de plantas em que o gás natural do Metano esfria todas moléculas absorvidas pelas chuvas contínuas e geadas", "O calor solar é sugado nos pólos terrestres via ventos e a radiação artificial presa vaza livre de qualquer barreira atmosférica do ciclo estufa em direção aos céus frios de Júpiter perdendo o gás Estufa inteiro diariamente pra o vácuo gelado espacial exterior nas chuvas e evaporando a terra inteira"],
+        correct: 1,
+        explanation: { correct: "A Terra é atingida pela luz visível do Sol no formato limpo e transparente e os gases as deixam penetrar. Quando o chão de pedras e água da superfície terrestre e os oceanos absorvem energia eles se aquecem. Chão quente solta ondas de radiação do tipo Infravermelhas invisíveis pra cima no resfriamento pós banho do sol de praia. Quando essa onda de calor (infravermelha fraca) debaixo chega subindo pra ir embora no espaço profundo (vazamento estelar noturno e gélido) ela bate numa parede formidável de gases Estufa naturais vitais (tipo Vapor e Metano e CO2). As moléculas trepidam de choque no encontro e barram o calorzinho, jogando-o de volta aos ares rasteiros inferiores do planeta e a Terra não se transforma subitamente numa Era do Gelo em algumas noites apenas.", options: ["Asfalto tem pouca reflexividade (e absorve no calor urbano forte) porém radiação infravermelha (calor do resfriamento inferior do subsolo) não é o Ultravioleta e oxigênio (O2) da vida terrestre não possui característica de ser um gás aprisionador e emissor de efeito estufa efetivo térmico nas retenções do cobertor estufa quente no solo geográfico denso atmosférico inferior.", "Resposta correta.", "O Efeito de fotossíntese não tem nada a ver em engolir gases pra congelar radiação das mesosferas; nem anula absorção solar quente no ambiente troposférico inferior do ciclo termal em nosso clima biológico natural de CO2 da terra quente em estufas vitais terrestres nas superfícies baixas mundiais.", "O Efeito natural serve exatamente o oposto disso; o planeta tem e deve manter a capacidade das moléculas interceptarem e segurar e irradiar grande parte deste vento/onda infravermelho ao solo local retendo vida com equilíbrio delicado de não evaporar pra Júpiter perdendo nosso valioso ar respirável termal e de ciclos hídricos fluidos quentinhos do dia no vácuo fatal exoesférico noturno da Terra."] }
+    },
+    {
+        id: 26, level: "Difícil",
+        text: "No contexto da evolução da Humanidade o homem intensificou o descarte fóssil para as fábricas (Aumentando o Efeito Estufa Artificial). Dentre os fenômenos das Mudanças Climáticas globais advindos da retenção térmica anômala em excesso no manto da Troposfera, o que a sociedade já colhe de modo gravíssimo com o derretimento generalizado das vastas placas geológicas glaciais formadoras de neve no mundo das calotas polares?",
+        options: ["A invasão química intensa do CO2 nas bacias desérticas arenosas do equador mudando precipitações secas e chuvosas em congelamentos polares diretos na linha central vulcânica terrestre submersa causando novas barreiras polares do frio intenso", "A mudança abrupta e elevação brutal da camada da Termosfera do céu para o chão esmagando o ar rarefeito das nuvens de condensações em pressão atmosférica pesada que suga o carbono do aquífero mineral com efeito meteorológico neutro e inofensivo nas altitudes tropicais e na agricultura costeira dos estados frios", "O excesso de volume gerado de forma derretida e aquecida jorrará líquidos maciços para o oceano interligado subindo e expandindo gravemente a maré do Nível do Mar costeiro engolindo cidades humanas das beiradas baixas das praias, ilhotas litorâneas turísticas e matando rios de deltas doces salgados de maneira drástica na maré alta contínua ao nível geográfico global litorâneo do tempo histórico", "Nada de perigoso ao Efeito local acontecerá já que esse tipo exato de ciclo da água não atinge a zona natural salgada costeira dos países temperados e glaciais porque o derretimento do granizo nas nuvens fica perfeitamente contido retido voando por dentro de grandes rios nas fozes fechadas em aquíferos polares continentais internos e ilhados isolados da civilização inteira mundial marinha de pescas."],
+        correct: 2,
+        explanation: { correct: "Com muito Efeito Estufa artificial criado de chaminés queimando carbono, a região do polo e das geleiras da Groenlândia derrete de seu modo duro sólido com a piora global do efeito cobertor planetário; e no ciclo hidrológico final não se pode esquecer: toda a chuva excedente das lamas ou água gelada liquefeita dos pólos termina obrigatoriamente correndo para os canais oceânicos abertos do nível global e aumentando com volume em decilitros salgados o fundo oceânico expansível aquecido até invadir mangues costeiros habitáveis nos países mundiais pelo aumento catastrófico na costa onde milhares moram do Mar.", options: ["Não muda barreira por frio numa Terra sob ebulição do aquecimento humano (é calor generalizado; frentes não congelam vulcanismo submerso do CO2 nas faixas equatoriais vulcânicas ou desertos locais estagnados artificiais de modo direto assim polar num aquecimento de gás retido excessivo estufa global da terra em desertificação central quente).", "A atmosfera com calor contínuo agita e não puxa ou esmaga chãos neutros para forçar ventos; o perigo das geleiras não foca a queda fatal do espaço vazio termosférico (e estufa em si está e moram os efeitos cruéis das neves perdidas escoadas no oceano na crosta).", "Resposta correta.", "Os gelos pesados que rompem nos alpes glaciais afetam inteiramente a planície do país costeiro vizinho ao desaguar de vales nos mares gerais que tudo engole subindo litorais, é totalmente perigoso e mundial afetando praias e rios (pois fozes perdem áreas salinizadas também nas misturas e invasões sem defesa de diques artificiais humanos na zona pesqueira biológica litorânea marinha costeira nas nações interligadas)."] }
+    },
+    {
+        id: 27, level: "Difícil",
+        text: "Uma nuvem formou-se pesada após uma condensação severa na Troposfera acima da floresta e da cidade e se desloca com correntes fortes do vento numidade elevada. Há 3 caminhos e estados possíveis da água líquida das gotas da 'Precipitação' cair na cidade abaixo, dependendo crucialmente da força das moléculas térmicas locais do céu e massas frias da atmosfera baixa em interações nas gotículas de formação nas nuvens escuras das baixas pressões no momento meteorológico tempestivo do 'Tempo Atmosférico' e do Clima. Que opções verdadeiras das precipitações formadas caem em nosso relevo geográfico urbano pelas alturas celestes instáveis e ruidosas?",
+        options: ["Pelo processo natural pluvial hidrológico ela precipitará ou de forma gasosa com fortes massas e tufões invisíveis do oxigênio puro sem contato biológico, ou então em formas líquidas nos tsunamis diretos sem chuvas pluviais.", "Em seu formato exclusivo e universal ela cairá só no modo de estado gasoso quente chamado e nomeado na ciência da Transpiração (suando) pelas massas frias no aquecimento da chuva contínua das plantas polares ou nos efeitos estufas marinhos retidos e aprisionados do deserto polar urbano na troposfera.", "O estado da nuvem precipitando cederá em chuva natural abundante (líquida nas gotículas soltas em pingos), granizo geológico severo (bolas de pedras duras perigosas das massas em agitação com ventos verticais intensos) ou cristais na neve de gelos minúsculos suaves (quando cai lentamente numa temperatura extrema fria da estratosfera e da troposfera gelada sem choque veloz em pedras duras glaciais artificiais).", "A água da represa de vento forte jorra, do clima estratosférico artificial polar com infiltrações nas massas geológicas aéreas vulcânicas de tempestades contendo metano salino (chuvas azedas com pó e enchentes sólidas em grandes evaporações nos poros)."],
+        correct: 2,
+        explanation: { correct: "A etapa final visível nos fenômenos temporais do 'Tempo' atmosférico (quando a nuvens saturadas com pesada umidade relativa da Condensação desabam para devolver aos ciclos da água nos rios e riachos os seus volumes retirados para subir na insolação de dia). Essa água e massa chove no Brasil predominantemente no estado Pluvial regular d'água Líquida. Mas quando o Tempo possui instabilidades em massas ou invernos (frio severo e ventos puxando com brutalidades a nuvem gélida na crosta com massas térmicas polares intensas) essa massa chove as pedras de Granizos fortes destrutivos em lavouras caindo nos chãos geográficos rapidamente do céu escuro num processo temporal e tempestuoso ou (em climas mais elevados altitudinais gélidos na temperatura suave) flutua congelando e condensando vagaroso precipitando no meio do solo suavemente branca de gelos caindo como Neves polares nas estações gélidas geográficas de países no mundo habitado pelas montanhas sem atritos de ventanias duras das pedras redondas de granizo das tempestades de verão perigoso.", options: ["Não chove fumaça (gás) nem ar de oxigênio de tsunami na cidade terrestre; precipitações sempre recaem nas esferas minerais sólidas ou da umidade líquida pura das hidrosferas.", "Transpiração ocorre nas florestas ou peles (vivas biológicas nas superfícies) subindo pra compor na base atmosférica em Evaporações lentas e não despencam jorrando na precipitação geológica final descendente caindo nas tempestades violentas nos prédios pesados chuvosos da gravidade das grandes cidades abaixo de céu limpo frio fechado e nebuloso em nuvem branca suada nas chuvas gasosas.", "Resposta correta.", "Evaporações poros vulcânicas não criam temporais nas nuvens chuvosas nas estratosferas de águas limpas artificiais (e metano das nuvens salgadas seria perigoso ácido artificial; hidrologias chuvas naturais não possuem sal do fundo costeiro na sua nascente das nuvens que evaporam por calor na Troposfera no céu, sal fica todo embaixo)."] }
+    },
+    {
+        id: 28, level: "Difícil",
+        text: "Relacionando todo o roteiro aprendido (Ciclo da Água, Poluição Artificial Estufa e Gases Troposféricos) avalie qual é a maior crise desencadeadora interligada geográfica resultante no meio do desequilíbrio e agravamento estufa pelas empresas ao ciclo da evaporação com chuva no ambiente terrestre das superfícies e atmosfera se nada parar nos níveis das grandes poluições mundiais do futuro?",
+        options: ["A umidade gerada pelas empresas evapora o Nitrogênio purificando o céu do Metano da Eclésia solar estagnado e criando no topo estratosférico bolhas sem gravidade congeladas ao redor do mundo oceânico livre do lixo artificial sem chuva e aquecimento humano na natureza do relevo pluvial com geadas constantes nos climas desérticos equatoriais polares.", "Com uma grossa camada artificial poluída absorvendo o raio quente, a crosta esquenta com mais vigor térmico, a superfície de lagos evapora acelerada violentamente sem recarregar e chuvas fortes de tempos meteorológicos malucos extremos destruirão ecossistemas em tufões brutais do mar e, em rios que não chove onde o clima estressado virou seco, desertos mortais em rios antigos intermitentes no interior matarão a flora e aquíferos com o estresse hidrológico total geográfico irreparável irreversível (secas absolutas ou tempestades mortais ininterruptas variando o ciclo total mundial sem a vida verde transpirar).", "Os aviões voarão de forma permanente nos fundos dos aquíferos para evitar o ar rarefeito e o sol gerará condensações vulcânicas na Troposfera limpa absorvendo os desmatamentos e devolvendo 21% do vapor de metano do mar no filtro sem problemas à atmosfera ou ciclo sem clima temporal agressivo ou secas nas regiões polares intermitentes temporais calmas fluviais oceânicas glaciais temperadas quentes nos dias e geladas em foz da bacia.", "A chuva cessará por causa biológica pois a atmosfera baixa Troposfera virará de cabeça para baixo sugando os lençóis da Terra sem chuva sem a água do polo sul por conta de absorção fria das geleiras em rios de delta pluviais esgotando no espaço geográfico a camada de ozônio até fechar seus vazamentos estufa com massas quentes polares em massas gasosas nos buracos polares limpos quimicamente neutros puros e sadios do Efeito Estufa Verde de Júpiter termonuclear estelar limpo puro original nas florestas marinhas vulcânicas subaquáticas de nuvens evaporadas em desertos glaciais do Sol evaporado frio aquático gelado."],
+        correct: 1,
+        explanation: { correct: "A Geografia é uma união total nos fenômenos mundiais biológicos climáticos planetários. O agravamento dos poluentes Estufa pesados das fábricas quentes eleva termômetros sem paradas térmicas mundiais com calor forçado, as dinâmicas atmosféricas temporais (tempo e clima em si nas massas dos ares globais úmidos da Troposfera sensível baixa no planeta) perdem a ordem. Assim, tempestades desproporcionais ocorrem no litoral marinho enquanto ilhas se afundam e as evaporações velozes no interior desértico com calor contínuo no solo criam um solo rígido das secas duras. Com desmatamento, não haverá transpiração nos ciclos, sem nuvem não chove em rios perenes (que virarão rasos de estresse hidrológico crônico das bacias mortas por assoreamentos nos canais lodosos), aniquilando lençóis subterrâneos sem a infiltração chuvosa e as vidas ao redor na hidrografia do campo terrestre com graves danos mundiais na humanidade urbana.", options: ["Evaporação limpa metano mágico é uma fantasia, poluentes não param na eclésia nem formam domos curativos gelados sem os raios solares intensos em terras tropicais.", "Resposta correta.", "Voos aquáticos e a troca atmosférica pacífica são dados errados sem sentido nas dinâmicas da física poluidora global dos ecossistemas em alerta real nos continentes vivos rasteiros das cidades pluviais litorâneas fluviais biológicas florestais vivas do clima em colapso aquecido perigoso.", "Isso mistura ficção confusa com buracos sem conexão. O Efeito do ar na camada Troposférica das chuvas não inverte de cabeça pra base planetária espacial de Júpiter sugadora mágica nos oceanos, as alterações atmosféricas do clima seguem uma cruel realidade do balanço energético solar na biosfera humana estufada nos oceanos pluviais reais e continentais sem estufas jupiterianas na terra com vulcões de desertos de metano submarinos com evaporação espacial em nuvens verdes polares gasosas doces intermitentes celestes marinhas falsas inventadas confusas irreais."] }
+    },
+    {
+        id: 29, level: "Difícil",
+        text: "Uma metrópole gigantesca que desmata seus arredores para produzir rodovias betuminosas extensas no ciclo de urbanização descontrolado terá uma interferência letal e marcante na balança do seu clima regional geográfico nas temperaturas do ar e na dinâmica da chuva de tempo. Das ações na Hidrosfera local de um bairro poluído asfáltico, quais as ligações físicas mecânicas corretas geram enchentes, ausências de umidade térmica natural quente, aquecimento no chão e problemas no próprio aquífero natural sem a chuva pura infiltada natural profunda geológica na subsuperfície do meio rochoso local geográfico?",
+        options: ["As calçadas e asfalto são totalmente impermeáveis no chão de terra duro impedindo a Infiltração freática subterrânea da água chuvosa do céu (matando poços artesianos no subsolo raso) com bueiros lotados estourando, enquanto na falta da mata desmatada do chão sem árvores transpirantes haverá falta da evapotranspiração do verde local das umidades e por absorção preta violenta quente das radiações das estradas artificiais de ruas do bairro liso as temperaturas atmosféricas estufa do Tempo microclimático se agravarão nas chamadas dolorosas quentes Ilhas de Calor urbano da capital metropolitana sem ventos naturais refrescantes verdes florestais com estufas quentes asfálticas agressivas de ar nos bairros impermeabilizados.", "Por haver rodovia plana as cidades ficam livres nas inundações já que os dutos retos das margens cimentadas e asfaltadas geram a bacia endorreica que limpa e hidrata artificialmente os estoques cristalinos aquíferos potáveis poros profundos quimicamente via fumaça natural condensada artificial evaporativa pluvial por gravidade inversa atmosférica nos tubos polares frios de fumaça das poluições nos rios mortos retificados secos poluídos doces sem vida nas grandes tempestades dos climas intermitentes com calhas fluviais cimentadas nas fozes deltas retificados.", "Um efeito de absorção de raios O2 na camada asfáltica limpa que, com resfriamento polar verde sem as árvores estressadas no calor global de massas climáticas de chuva ácida sem gás carbônico quente industrial absorvido por fábricas extintas do mundo em paz climática perene total, produz enchentes limpas doces vitais nas casas férteis submersas pluviais costeiras interligadas aos lagos de maré polar nas evaporações oceânicas calmas vulcânicas do tempo estufa calmo natural perene calmo marinho sem estresse chuvoso hidrológico nas grandes cidades pacíficas geladas.", "O asfalto suga a chuva para os poros com mais intensidade violenta que uma fazenda, gerando rios no fundo das placas do asfalto com correntes de esgoto puro tratado na Mesosfera inferior estufa retificada por foz evaporativa com nascentes temporárias que nascem nas pontas altas de arranha-céus nublados caindo granizo térmico aquecido do clima artificial temporal frio artificial da ilha de calores verdes florestais nos túneis polares fluviais das águas dos poços cristalinos marinhos rasos salgados tropicais doces do mar metropolitano gelado estufado."],
+        correct: 0,
+        explanation: { correct: "Uma área de floresta derrubada pra ser cidade cheia de estradas sofre em múltiplas áreas geográficas ambientais de Geografia combinadas: Sem árvores, você elimina 'Transpiração' (cairá baixa a umidade, tempo fica ruim e seco). Asfaltando tudo você extingue a absorção de chão natural poros de terra e zera a 'Infiltração' da água na rocha (a água superficial das chuvas no pico não desce ao Aquífero profundo o que o seca nos poços de moradores e no excesso jorra e afunda tudo de água estragada e cheia nas casas em fortes Enchentes na parte baixa por conta de enxurradas agressivas velozes da pista que não chupa a água rasteira superficial dura das avenidas retificadas planas, sendo levado pro bueiro e entupindo a rua central sem drenos florestais naturais e o escoamento rápido artificial veloz do meio urbano destrói infraestruturas da planície baixa alagada suja das poças d'água das ruas e calçadas alagadiças com impermeabilização antrópica violenta sem infiltrações, criando forte problema microclimático urbano estufa com a Ilha de Calor severa regional).", options: ["Resposta correta.", "O asfalto não hidrata aquíferos por magias ou bacias endorreicas invertidas; ele seca os fundos rochosos naturais por barreiras lisas nas fumaças frias sem lógicas e rios cimentados agravam chuvas de inundações em cheias em foz intermitentes polares em deltas das massas costeiras.", "Não há arrefecimento polar com a cidade sem matas de asfalto quente numa selva de pedras de enchentes que gera lixo estufa poluído; o cenário urbano trágico pluvial é quente, severo nas marés subindo perigosas, chuvoso letal ou de estresse sem gás amigável e paz duradoura eterna sem árvores desmatadas doces costeiras das bacias férteis oceânicas.", "Asfalto detesta líquidos, não possuindo porosidade ou furos de captação maciços profundos absorventes rurais vivos geológicos agrários que infiltram rios ou nascentes nos arranha-céus que soltam gelo vulcânico granizo falso no solo chuvoso estufado frio congelante metropolitano sem a estufa térmica real que ocorre da ação do calor das frotas industriais na geografia capital e dos calçamentos betuminosos térmicos letais rasteiros."] }
+    },
+    {
+        id: 30, level: "Difícil",
+        text: "Uma professora aplicou um desafio unindo Climatologia e os Ciclos da Hidrografia das nuvens e rios nas bacias pluviais numa afirmação para marcar a única avaliação conclusiva geográfica e cientificamente Correta em todas bases físicas da Geografia: Analise as afirmações nas alternativas referentes a Troposfera nos seus tempos climáticos diários contínuos globais fluviais e escolha a lei correta biológica térmica gasosa final:",
+        options: ["O ozônio, O3 (um dos elementos primordiais da nossa base Troposfera inferior quente), possui Efeito condensativo artificial nas neves polares estufa com escoamento em 78% na transpiração marinha dos lençóis retificados do subsolo rochoso asfáltico urbano chuvoso calmo com o hidrogênio biológico puro sem O2 temporal do ciclo limpo natural exoesférico de calor das bacias do rio com mar perene frio glaciar vulcânico sem vida orgânica marinha vegetal na Termosfera glacial verde oceânica do ciclo temporal fluvial com massas glaciais de verão seco quente sem chuva pluvial.", "O Clima só muda se a evaporação marinha se fundir com os rios a montante gerando foz de granizo artificial da Estratosfera, em contrapartida, caso a poluição da mesosfera abaixar, o aquífero impermeável polar derreterá sem os raios nocivos das árvores secas transpirarem na condensação estufa das chuvas ácidas de metano do ar atmosférico das cidades de gelo de Efeito artificial temperado de maré alta fluvial das encostas no mar sem gravidade do nível zero oceânico pluvial desértico chuvoso glacial com florestas equatoriais glaciais eternas em poços secos sem lixo fóssil na costa oceânica temperada chuvosa das praias polares sem clima e estresse limpos marinhos do relevo sem bacias hidro climáticas da vida global urbana limpa.", "Nenhuma variação ocorre porque rios intermitentes possuem estoques gigantes na Exosfera protegendo contra secas e a fotossíntese humana absorve 78% do nitrogênio em chuvas evapotranspiradas nos rios de foz estuários marinhos em bacias endorreicas frias secas estufadas por calores vulcânicos do ciclo estufa em camadas polares das águas congeladas artificiais desmatadas sem oxigênio nas grandes e profundas camadas geladas das frentes climáticas estufa nas tempestades térmicas de nuvem polar de Júpiter estelar da galáxia térmica chuvosa gasosa marinha quente pluvial nas planícies polares desertas da geografia limpa.", "Toda a vida das biotas humanas depende integralmente da frágil faixa climática viva rasteira unida e instável atmosférica da Troposfera baixa retendo seu Efeito Estufa bom, protetor gasoso e natural do dia na Terra sem excessos do calor destrutivos de fumaça, e das bacias hidrográficas naturais rurais que infiltram e evaporam, condensam chovendo umidade doce em ciclos, regando campos em águas líquidas, sem escoamentos mortais asfálticos violentos num tempo chuvoso de clima severo global artificialmente esquentado por queima humana intensa de lixos fósseis e desmatamentos que destroem todas as matas das fontes ricas de rios correntes contínuos naturais transpirantes perenes voadores na grande e contínua precipitação limpa vital das nascentes nos topos das divisões de rochas úmidas vitais da bacia doce terrestre geográfica geológica e continental marinha original do oceano limpo chuvoso com nuvens puras e saudáveis na atmosfera natural global climática original biológica temperada tropical preservada em águas saudáveis sem estresses hídricos poluidos fatais venenosos tóxicos pluviais profundos quentes artificiais secos poluentes venenosos lodosos no fim climático letal global biológico fatal."],
+        correct: 3,
+        explanation: { correct: "A Geografia nos ensina que: Camada da vida e do tempo/chuva: Troposfera. Estufa limpa e Natural: vital ao calor de vida bom contido na Terra pela insolação frágil, as bacias (conjuntos do rio com chuvas) possuem fluxos vivos interdependentes puros pela hidrologia que as chuvas penetram asfalto zero para encher estoques (sem asfalto impermeável para entupir com rios assoreados retificados escoados letais cheios da chuva na várzea). E que a interferência extrema na queima suja fóssil polui a fina faixa e a engrossa demais gerando calor extremo destruidor (climas doentes, enchentes duras ou desertos severos secos sem evapotranspiração do desmatamento criminoso humano mundial no fim biológico se não houver o freio estufa antrópico verde biológico nas cidades rurais vivas limpas orgânicas ricas preservadas da bacia limpa hidro climática do ciclo verde vivo geológico geográfico vital puro da vida global de atmosfera limpa).", options: ["O ozônio (O3) filtra UV e vive morando nos ares de 2º andar na camada Estratosfera isolado e não vive na primeira área misturando 78% d'água congelada em rios rasteiros sem ares respiráveis limpos de vulcão no gelo quente verde marinho biológico temporal glacial urbano das massas sem tempo geológico.", "Climas longos não focam a subida invertida dos mares doces nos aquíferos de concreto estufa com chuvas polares quentes de matas sem o oceano vivo; as matas não expelem raios perigosos venenosos nocivos nas transições glaciais de verão seco e chuvoso desérticos praianos nas praias rurais rasteiras sem águas vivas secas doces marinhas com poluições limpas e marés glaciais limpas secas doces quentes na natureza irreal glacial.", "Humanos respiram (e absorvem por raízes) 78% no O2 vital da biologia humana? Falso (é de Nitrogênio a 78%, focado ao solo nas bactérias puras, oxigênio tem 21%), Rios secos na Exosfera sem gravidade? Falso. Vulcões marinhos de massas estufadas por Júpiter gasoso glacial nas costas sem bacia geológica e sem tempo biológico limpo na terra geológica? Confusão e fábula falsa absurda total termal geológica climática irreal espacial cósmica falsa marinha pluvial biológica temporal irreal térmica fria quente da Terra irreal de estufas doces de nuvem marinha seca da ficção científica de fantasia geológica física.", "Resposta correta."] }
+    }
+];
+
+const storageKey = 'promover_geografia_atmosfera';
+let currentQuestion = 0;
+let savedAnswers = localStorage.getItem(storageKey);
+let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+
+    if(mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        renderQuestion();
+        renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+    }
+    window.scrollTo(0,0);
+}
+
+function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+
+    let badgeClass = '';
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+        </div>
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `
+                <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `
+            }).join('')}
+        </div>
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '☑ Resposta Correta!' : '☒ Resposta Incorreta!'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>A Resposta Certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top: 10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                ${q.explanation.correct}
+            </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                <small style="color:var(--theme-dark);"><strong>Por que as outras estão erradas:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>(${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>
+    `;
+    updateNav();
+}
+
+function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+
+    if (idx === questions[currentQuestion].correct) {
+        const duration = 1500;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: {x: 0, y: 0.6 }, colors: ['#4ADE80', '#15803D', '#DCFCE7', '#0369A1'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: {x: 1, y: 0.6 }, colors: ['#4ADE80', '#15803D', '#DCFCE7', '#0369A1'] });
+            if (Date.now() < end) { requestAnimationFrame(frame); }
+        }());
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+}
+
+function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+    }).join('');
+
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }, 50);
+}
+
+function goTo(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+}
+
+function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar Diagnóstico";
+        next.onclick = finish;
+    } else {
+        next.textContent = "Avançar";
+        next.onclick = () => changeQuestion(1);
+    }
+}
+
+function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct/questions.length) * 100);
+    if (window.confetti) confetti.reset();
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões de Geografia.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    if (percent < 80) {
+        summary += '<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);"><strong>⚠ Domínio Geográfico Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Atingir a pontuação mínima é obrigatório nesta prova. Revise a teoria atmosférica antes de tentar novamente.</div>';
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()"> Limpar Histórico e Refazer Prova</button>';
+    } else {
+        summary += '<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);"><strong>🏆 Excelente Desempenho!</strong> Você demonstrou uma base sólida, clínica e exata sobre Atmosfera e o Ciclo da Água. A sua aprovação técnica está garantida neste módulo.</div>';
+        document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()"> Refazer Prova (Zerar Histórico)</button>';
+    }
+
+    if (correct < questions.length) {
+        summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+        questions.forEach((q, i) => {
+            if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+                <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade Científica: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+}
+
+function reset() {
+    localStorage.removeItem(storageKey);
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+}
+
+// Inicializando no modo correto
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
