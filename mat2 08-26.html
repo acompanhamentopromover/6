@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometria 6º Ano - Promover</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      /* Tema Geometria 6º Ano (Roxo, Ciano e Amarelo Neobrutalista) */
+      --bg-color: #F5F3FF; 
+      --text-color: #2E1065; 
+      --border-color: #000000; 
+      --white: #FFFFFF;
+      --theme-light: #DDD6FE; 
+      --theme-medium: #8B5CF6; 
+      --theme-dark: #4C1D95; 
+      --theme-contrast: #F59E0B; /* Amarelo para destaque */
+      --theme-accent: #06B6D4; /* Ciano para detalhes */
+      --theme-text-active: #FFFFFF;
+
+      /* Cores de Feedback */
+      --correct-bg: #D1FAE5;
+      --correct-border: #059669;
+      --wrong-bg: #FFE4E6;
+      --wrong-border: #BE123C;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif; 
+      background-color: var(--bg-color); 
+      color: var(--text-color);
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      min-height: 100vh; 
+      padding: 20px; 
+      padding-bottom: 100px;
+      background-image: linear-gradient(var(--theme-light) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      50% { transform: translateX(6px); }
+      75% { transform: translateX(-6px); }
+      100% { transform: translateX(0); }
+    }
+    .shake-effect { animation: shake 0.4s ease-in-out; }
+    
+    @keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from {transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; }}
+    
+    .pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      15% { transform: scale(1.15); color: var(--theme-contrast); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.15); color: var(--theme-contrast); }
+      100% { transform: scale(1); }
+    }
+
+    .logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+    .css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+    
+    h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+    .subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; background: var(--theme-light); padding: 5px 15px; border-radius: 8px; border: 2px solid var(--border-color); margin-top: 5px; }
+    
+    .container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+    
+    .toggle-container { background-color: var(--white); border: 3px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 4px 4px 0px var(--border-color); }
+    .toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.2s ease; text-transform: uppercase;}
+    .toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); }
+    
+    .view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+    
+    .search-container {position: relative; width: 100%; }
+    .search-input { width: 100%; padding: 15px 20px 15px 50px; border: 3px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+    .search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+    .search-icon {position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+    #no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+    
+    .content-group { display: flex; flex-direction: column; gap: 12px; }
+    .section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 800; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,1); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+    
+    .theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 3px solid var(--border-color); box-shadow: 5px 5px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+    .theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-accent); border-right: 2px solid var(--border-color); }
+    .theory-box h3 {font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 3px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+    
+    .visual-area { background: #FAFAFA; border: 3px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1rem; color: var(--theme-dark); text-align: center; width: 100%;}
+    .svg-illustration { max-width: 100%; height: auto; border: 2px solid var(--border-color); border-radius: 8px; background: white; box-shadow: 3px 3px 0px var(--border-color); margin-bottom: 10px; }
+    
+    .highlight-box { background-color: #FFFBEB; border-left: 5px solid var(--theme-contrast); border-top: 2px solid var(--border-color); border-right: 2px solid var(--border-color); border-bottom: 2px solid var(--border-color); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #92400E; font-weight: 600; }
+    
+    .example-box { background-color: #F0FDF4; border-left: 5px solid #16A34A; border-top: 2px solid var(--border-color); border-right: 2px solid var(--border-color); border-bottom: 2px solid var(--border-color); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #14532D; margin-top: 10px; box-shadow: 3px 3px 0px rgba(0,0,0,0.05);}
+    .example-box h4 { font-weight: 900; margin-bottom: 8px; color: #16A34A; text-transform: uppercase; font-size: 0.95rem; display: flex; align-items: center; gap: 5px;}
+    
+    .difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+    .dif-facil {background: #D1FAE5; color: #065F46; }
+    .dif-medio { background: #FEF08A; color: #713F12; }
+    .dif-dificil { background: #FECACA; color: #7F1D1D; }
+    
+    .question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+    .question-map::-webkit-scrollbar { display: none; }
+    .map-dot {min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+    .map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+    .map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+    .map-dot.answered-wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+    
+    .option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 3px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 4px 4px 0px var(--border-color); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 700; text-align: left; color: var(--text-color); }
+    .option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--theme-accent); border-color: var(--theme-dark); }
+    .opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 3px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+    
+    .option-btn.correct {background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 3px 3px 0px var(--correct-border); }
+    .option-btn.correct .opt-circle {background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+    .option-btn.wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+    .option-btn.wrong .opt-circle {background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+    .option-btn.disabled {pointer-events: none; opacity: 0.7; }
+    
+    .feedback-box { display: block; margin-top: 20px; background-color: var(--white); border: 3px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+    .feedback-title { font-weight: 900; text-transform: uppercase; font-size: 1rem; margin-bottom: 10px; display: flex; align-items:center; gap:8px; color: var(--theme-dark); }
+    .feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+    .feedback-item.correct-opt {border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; border: 2px solid var(--correct-border);}
+    .feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; font-weight: 600;}
+    
+    .result-card {background: white; border: 4px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 8px 8px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+    .stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+    .percentage-big {font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 4px 4px 0px var(--theme-contrast); }
+    
+    .btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 5px 5px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+    .btn-action:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+    
+    .quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 4px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+    .nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 900; border: 3px solid var(--border-color); cursor: pointer; box-shadow: 3px 3px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase; transition: all 0.1s;}
+    .nav-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border-color); }
+    .btn-next { background-color: var(--theme-accent); color: var(--text-color); }
+    .btn-prev { background-color: white; color: var(--text-color); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header class="logo-header">
+    <div class="css-logo"><span class="pulse-effect">📐</span> PROMOVER</div>
+    <h1>MATEMÁTICA / 6º ANO</h1>
+    <p class="subtitle">Roteiro II: Polígonos, Triângulos e Perímetro</p>
+  </header>
+
+  <div class="toggle-container">
+    <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">Teoria</button>
+    <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">Prática (30)</button>
+  </div>
+
+  <div id="viewExplanation" class="view-section" style="display: flex;">
+    <div class="search-container">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito (ex: Perímetro, Vértice)...">
+    </div>
+    <div id="no-results"><p>Termo não encontrado.</p></div>
+
+    <div class="content-group">
+      <div class="section-badge">Os Elementos dos Polígonos</div>
+      <div class="theory-box">
+        <h3>1. O que forma a figura?</h3>
+        <p>Um polígono é uma figura geométrica plana e fechada, formada por segmentos de reta. Ele possui elementos muito importantes:</p>
+        
+        <div class="visual-area">
+          <svg class="svg-illustration" viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="180" fill="#f8fafc" rx="8" />
+            <!-- Polígono (Quadrilátero) -->
+            <polygon points="60,140 100,40 220,60 250,150" fill="#E0E7FF" stroke="#000" stroke-width="3"/>
+            <!-- Diagonal pontilhada -->
+            <line x1="60" y1="140" x2="220" y2="60" stroke="#EF4444" stroke-width="3" stroke-dasharray="6,6"/>
+            <text x="140" y="90" font-size="12" font-weight="bold" fill="#EF4444" transform="rotate(-28 140,90)">DIAGONAL</text>
+            <!-- Ângulo -->
+            <path d="M 80,143 A 20,20 0 0,0 72,118" fill="none" stroke="#F59E0B" stroke-width="3"/>
+            <text x="85" y="130" font-size="14" font-weight="bold" fill="#F59E0B">Â</text>
+            <!-- Lado -->
+            <text x="160" y="45" font-size="12" font-weight="bold" fill="#000">LADO (BC)</text>
+            <!-- Vértices -->
+            <circle cx="60" cy="140" r="5" fill="#000"/><text x="45" y="155" font-size="16" font-weight="bold">A</text>
+            <circle cx="100" cy="40" r="5" fill="#000"/><text x="85" y="35" font-size="16" font-weight="bold">B</text>
+            <circle cx="220" cy="60" r="5" fill="#000"/><text x="230" y="55" font-size="16" font-weight="bold">C</text>
+            <circle cx="250" cy="150" r="5" fill="#000"/><text x="260" y="165" font-weight="bold">D</text>
+          </svg>
+          <p style="text-align:left; width:100%; font-size:0.9rem;">
+            <strong>Vértices:</strong> "Quinas" da figura (A, B, C).<br>
+            <strong>Ângulos:</strong> Abertura interna (Â, B̂).<br>
+            <strong>Lados:</strong> Linhas de contorno (AB, BC).<br>
+            <strong>Diagonais:</strong> Cruzam por dentro (AC).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-group">
+      <div class="section-badge">Perímetro e Tipos de Triângulos</div>
+      <div class="theory-box">
+        <h3>2. O Perímetro (Contorno)</h3>
+        <p><strong>PERÍMETRO</strong> é a soma da medida de <strong>TODOS</strong> os lados de um polígono. É o tamanho da "cerca" em volta da figura.</p>
+        <div class="visual-area">
+          <svg class="svg-illustration" viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
+            <rect x="40" y="20" width="160" height="60" fill="#D1FAE5" stroke="#000" stroke-width="2"/>
+            <text x="110" y="15" font-weight="bold" font-size="12">10 m</text>
+            <text x="110" y="95" font-weight="bold" font-size="12">10 m</text>
+            <text x="15" y="55" font-weight="bold" font-size="12">5 m</text>
+            <text x="205" y="55" font-weight="bold" font-size="12">5 m</text>
+          </svg>
+          <p style="font-size:0.9rem;">Perímetro = 10 + 10 + 5 + 5 = <strong>30 m</strong></p>
+        </div>
+
+        <div class="example-box">
+          <h4>📝 Exemplo Resolvido</h4>
+          <p><strong>Pergunta:</strong> Qual é o perímetro de um triângulo cujos lados medem <strong>4 cm, 5 cm e 6 cm</strong>?</p>
+          <div style="margin-top: 8px; background: white; padding: 10px; border-radius: 6px; border: 1px dashed #16A34A;">
+            <strong>Cálculo:</strong> Basta somar a medida dos 3 lados.<br>
+            Perímetro = 4 + 5 + 6 = <strong>15 cm</strong>.
+          </div>
+        </div>
+
+        <h3 style="margin-top:15px;">3. Tipos de Triângulos (Lados)</h3>
+        <div class="visual-area">
+          <svg class="svg-illustration" viewBox="0 0 300 130" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="130" fill="#f8fafc" rx="8" />
+            <!-- Equilátero -->
+            <polygon points="50,20 20,90 80,90" fill="#D1FAE5" stroke="#000" stroke-width="2"/>
+            <line x1="32" y1="55" x2="40" y2="52" stroke="#000" stroke-width="2"/> 
+            <line x1="68" y1="55" x2="60" y2="52" stroke="#000" stroke-width="2"/> 
+            <line x1="48" y1="90" x2="52" y2="84" stroke="#000" stroke-width="2"/> 
+            <text x="50" y="115" font-size="11" font-weight="bold" text-anchor="middle">EQUILÁTERO</text>
+            <text x="50" y="127" font-size="9" fill="#059669" text-anchor="middle">3 Lados (=)</text>
+            
+            <!-- Isósceles -->
+            <polygon points="150,20 120,90 180,90" fill="#FEF08A" stroke="#000" stroke-width="2"/>
+            <line x1="132" y1="55" x2="140" y2="52" stroke="#000" stroke-width="2"/> 
+            <line x1="168" y1="55" x2="160" y2="52" stroke="#000" stroke-width="2"/> 
+            <text x="150" y="115" font-size="11" font-weight="bold" text-anchor="middle">ISÓSCELES</text>
+            <text x="150" y="127" font-size="9" fill="#B45309" text-anchor="middle">2 Lados (=)</text>
+            
+            <!-- Escaleno -->
+            <polygon points="260,20 210,90 280,90" fill="#FECACA" stroke="#000" stroke-width="2"/>
+            <text x="250" y="115" font-size="11" font-weight="bold" text-anchor="middle">ESCALENO</text>
+            <text x="250" y="127" font-size="9" fill="#DC2626" text-anchor="middle">Tudo Diferente (≠)</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-group">
+      <div class="section-badge">O Segredo dos Ângulos</div>
+      <div class="theory-box">
+        <h3>4. A Soma Mágica (180º)</h3>
+        <p>Em <strong>QUALQUER</strong> triângulo (não importa se é equilátero, isósceles, grande ou pequeno), a soma dos seus três ângulos internos será <strong>SEMPRE igual a 180º</strong>.</p>
+        
+        <div class="visual-area">
+          <svg class="svg-illustration" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+            <!-- Triângulo -->
+            <polygon points="50,120 150,30 250,120" fill="#E0E7FF" stroke="#000" stroke-width="3"/>
+            <!-- Ângulo 1 -->
+            <path d="M 80,120 A 30,30 0 0,0 72,100" fill="none" stroke="#F59E0B" stroke-width="4"/>
+            <text x="85" y="115" font-weight="bold" fill="#B45309">50°</text>
+            <!-- Ângulo 2 -->
+            <path d="M 130,48 A 30,30 0 0,0 170,48" fill="none" stroke="#EF4444" stroke-width="4"/>
+            <text x="138" y="70" font-weight="bold" fill="#B91C1C">70°</text>
+            <!-- Ângulo 3 -->
+            <path d="M 228,100 A 30,30 0 0,0 220,120" fill="none" stroke="#06B6D4" stroke-width="4"/>
+            <text x="185" y="115" font-weight="bold" fill="#0369A1">60°</text>
+            
+            <text x="150" y="150" font-size="14" font-weight="900" text-anchor="middle">50° + 70° + 60° = 180°</text>
+          </svg>
+        </div>
+        <div class="highlight-box">
+          <strong>COMO DESCOBRIR UM ÂNGULO ESCONDIDO?</strong><br>
+          Some os dois ângulos que você já conhece e veja quanto falta para chegar em 180º!
+        </div>
+
+        <div class="example-box">
+          <h4>📝 Exemplo Resolvido</h4>
+          <p><strong>Pergunta:</strong> Um triângulo tem dois ângulos conhecidos medindo <strong>45° e 65°</strong>. Quanto mede o terceiro ângulo (vamos chamar de X)?</p>
+          <div style="margin-top: 8px; background: white; padding: 10px; border-radius: 6px; border: 1px dashed #16A34A;">
+            <ul style="margin-left: 15px; margin-bottom: 5px;">
+              <li><strong>Passo 1:</strong> Some os ângulos que você já tem.<br><span style="color:#16A34A; font-weight:bold;">45° + 65° = 110°</span></li>
+              <li style="margin-top:5px;"><strong>Passo 2:</strong> Subtraia esse valor de 180° para ver o que falta.<br><span style="color:#16A34A; font-weight:bold;">180° - 110° = 70°</span></li>
+            </ul>
+            <strong>Resposta:</strong> O terceiro ângulo (X) mede <strong>70°</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-action" onclick="setMode('practice')">
+      Iniciar Diagnóstico (30 Q) →
+    </button>
+  </div>
+
+  <div id="viewPractice" class="view-section">
+    <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+      <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+      <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">
+        30 questões rigorosas cobrindo Perímetro, Classificação e Soma dos Ângulos. Suas respostas são <strong>salvas automaticamente</strong> no seu dispositivo.
+      </p>
+    </div>
+    <div class="question-map" id="qMap"></div>
+    <div id="quizContainer" style="margin-bottom: 100px;"></div>
+  </div>
+
+  <div id="viewResult" class="view-section">
+    <div class="result-card">
+      <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+      <div class="stars-container" id="finalStars">★</div>
+      <div class="percentage-big" id="finalPercent">0%</div>
+      <p style="font-size:1.2rem; font-weight:800; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+      <div id="review-container"></div>
+    </div>
+    <div id="action-buttons"></div>
+  </div>
+
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+  <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+  <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const contentGroups = document.querySelectorAll('.content-group');
+  const noResultsMsg = document.getElementById('no-results');
+
+  searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    
+    contentGroups.forEach(group => {
+      const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      if (textContent.includes(term)) {
+        group.style.display = 'flex';
+        totalVisible++;
+      } else {
+        group.style.display = 'none';
+      }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+  });
+
+  const questions = [
+    {
+      id: 1, level: "Fácil",
+      text: "Na geometria, o que significa calcular o 'Perímetro' de um polígono?",
+      options: ["Multiplicar os lados.", "Somar a medida de todos os seus lados.", "Medir o tamanho da diagonal.", "Descobrir quantos ângulos a figura tem."],
+      correct: 1,
+      explanation: { correct: "O perímetro é sempre a soma de todos os lados (o contorno) da figura.", options: ["Isso seria para calcular a área de algumas figuras.", "Certa", "A diagonal é interna, não contorno.", "Isso não calcula medidas."] }
+    },
+    {
+      id: 2, level: "Fácil",
+      text: "Os 'pontos' ou as 'quinas' onde os lados de um polígono se encontram recebem o nome de:",
+      options: ["Vértices", "Diagonais", "Ângulos", "Áreas"],
+      correct: 0,
+      explanation: { correct: "Os vértices são exatamente as pontas da figura, representados por letras maiúsculas (A, B, C...).", options: ["Certa", "Diagonais cruzam a figura.", "Ângulo é a abertura.", "Área é o espaço de dentro."] }
+    },
+    {
+      id: 3, level: "Fácil",
+      text: "Um triângulo que possui todos os três lados iguais (=) é classificado como:",
+      options: ["Escaleno", "Isósceles", "Equilátero", "Quadrilátero"],
+      correct: 2,
+      explanation: { correct: "Equi = igual, látero = lado. Logo, Equilátero = lados iguais.", options: ["Escaleno tem 3 lados diferentes.", "Isósceles tem apenas 2 iguais.", "Certa", "Quadrilátero tem 4 lados."] }
+    },
+    {
+      id: 4, level: "Fácil",
+      text: "O triângulo ESCALENO é aquele que se destaca por ter:",
+      options: ["Apenas dois lados iguais.", "Três lados diferentes (≠).", "Quatro lados iguais.", "Uma diagonal no meio."],
+      correct: 1,
+      explanation: { correct: "No escaleno, nenhuma medida se repete. Todos os lados são diferentes.", options: ["Esse é o Isósceles.", "Certa", "Isso seria um quadrado.", "Triângulos não têm diagonais."] }
+    },
+    {
+      id: 5, level: "Fácil",
+      text: "Se uma figura geométrica fechada possui exatamente 4 lados, ela é chamada genericamente de:",
+      options: ["Pentágono", "Triângulo", "Hexágono", "Quadrilátero"],
+      correct: 3,
+      explanation: { correct: "Qualquer polígono formado por 4 lados é um Quadrilátero.", options: ["5 lados.", "3 lados.", "6 lados.", "Certa"] }
+    },
+    {
+      id: 6, level: "Fácil",
+      text: "O que é uma 'Diagonal' num polígono?",
+      options: ["Uma linha que liga dois vértices por fora da figura.", "A soma de todos os lados.", "Uma linha que passa por dentro da figura, ligando dois vértices não vizinhos.", "O ponto onde os lados se tocam."],
+      correct: 2,
+      explanation: { correct: "A diagonal 'cruza' o interior, ligando pontas (vértices) que não estão lado a lado.", options: ["Diagonais ficam no interior.", "Isso é perímetro.", "Certa", "Esse ponto é o Vértice."] }
+    },
+    {
+      id: 7, level: "Fácil",
+      text: "Segundo a notação da geometria, como representamos o 'Lado' de um polígono que liga o vértice A ao vértice B?",
+      options: ["ÂB", "AB", "A+B", "Diagonal AB"],
+      correct: 1,
+      explanation: { correct: "Os lados são representados por duas letras juntas, como AB ou BC.", options: ["Circunflexo indica ângulo.", "Certa", "Soma matemática.", "Linha de vizinhos é lado."] }
+    },
+    {
+      id: 8, level: "Fácil",
+      text: "Qual é a REGRA DE OURO sobre a soma dos ângulos internos de QUALQUER triângulo?",
+      options: ["Sempre soma 100°", "Sempre soma 180°", "Sempre soma 360°", "Depende do tamanho do triângulo"],
+      correct: 1,
+      explanation: { correct: "É uma lei da geometria: não importa o formato do triângulo, a soma dos 3 ângulos internos SEMPRE resultará em 180°.", options: ["Regra inválida.", "Certa", "Isso vale para quadriláteros.", "A soma é igual para qualquer tamanho."] }
+    },
+    {
+      id: 9, level: "Fácil",
+      text: "Um triângulo possui as medidas: 5 cm, 5 cm e 8 cm. Como ele é classificado?",
+      image: `<svg class="svg-illustration" viewBox="0 0 200 120"><polygon points="100,20 40,100 160,100" fill="#FEF08A" stroke="#000" stroke-width="2"/><text x="50" y="55" font-weight="bold">5 cm</text><text x="120" y="55" font-weight="bold">5 cm</text><text x="90" y="115" font-weight="bold">8 cm</text></svg>`,
+      options: ["Equilátero", "Escaleno", "Isósceles", "Quadrilátero"],
+      correct: 2,
+      explanation: { correct: "Tendo exatamente 2 lados com a mesma medida (5 e 5), ele é Isósceles.", options: ["Precisava de 3 lados iguais.", "Precisava de 3 diferentes.", "Certa", "Ele tem 3 lados, não 4."] }
+    },
+    {
+      id: 10, level: "Fácil",
+      text: "Observe o triângulo. Dois de seus ângulos medem 40° e 60°. Qual é o valor do ângulo X?",
+      image: `<svg class="svg-illustration" viewBox="0 0 200 120">
+        <polygon points="20,100 100,20 180,100" fill="#FFFBEB" stroke="#000" stroke-width="2"/>
+        <text x="40" y="90" font-weight="bold">40°</text>
+        <text x="140" y="90" font-weight="bold">60°</text>
+        <text x="95" y="45" font-weight="bold" fill="#DC2626">X?</text>
+      </svg>`,
+      options: ["80°", "90°", "100°", "60°"],
+      correct: 0,
+      explanation: { correct: "A soma deve ser 180°. Você já tem 40 + 60 = 100°. Faltam 180 - 100 = 80°.", options: ["Certa", "A soma passaria de 180°.", "A soma daria 200°.", "A soma daria 160°."] }
+    },
+
+    {
+      id: 11, level: "Médio",
+      text: "Um triângulo Equilátero tem um dos seus lados medindo 6 cm. Qual é o perímetro desse triângulo?",
+      options: ["12 cm", "24 cm", "18 cm", "6 cm"],
+      correct: 2,
+      explanation: { correct: "Equilátero tem 3 lados iguais. Perímetro = 6 + 6 + 6 = 18 cm.", options: ["Soma de apenas dois lados.", "Soma de 4 lados.", "Certa", "Medida de apenas um lado."] }
+    },
+    {
+      id: 12, level: "Médio",
+      text: "Um aluno desenhou um triângulo com lados medindo 3 cm, 4 cm e 5 cm. Qual o nome correto desse triângulo?",
+      options: ["Isósceles", "Escaleno", "Equilátero", "Retângulo Isósceles"],
+      correct: 1,
+      explanation: { correct: "As medidas 3, 4 e 5 são todas diferentes (≠). Logo, é Escaleno.", options: ["Precisaria de 2 iguais.", "Certa", "Precisaria de 3 iguais.", "Lados diferentes anulam Isósceles."] }
+    },
+    {
+      id: 13, level: "Médio",
+      text: "Um terreno tem a forma de um retângulo. Ele possui dois lados medindo 10 m e dois lados medindo 5 m. Qual é o seu perímetro?",
+      image: `<svg class="svg-illustration" viewBox="0 0 240 120"><rect x="40" y="30" width="160" height="60" fill="#D1FAE5" stroke="#000" stroke-width="2"/><text x="110" y="22" font-weight="bold">10 m</text><text x="5" y="65" font-weight="bold">5 m</text></svg>`,
+      options: ["15 metros", "20 metros", "30 metros", "50 metros"],
+      correct: 2,
+      explanation: { correct: "O perímetro soma os 4 lados: 10 + 10 + 5 + 5 = 30 metros.", options: ["Soma de apenas 2 lados.", "Soma apenas dos lados maiores.", "Certa", "Área (10x5)."] }
+    },
+    {
+      id: 14, level: "Médio",
+      text: "Um esquadro escolar tem formato de um triângulo retângulo. Sabendo que um ângulo mede 90° e outro mede 30°, quanto mede o terceiro ângulo?",
+      image: `<svg class="svg-illustration" viewBox="0 0 150 150">
+        <polygon points="30,120 30,30 120,120" fill="#E0E7FF" stroke="#000" stroke-width="2"/>
+        <rect x="30" y="110" width="10" height="10" fill="none" stroke="#000" stroke-width="2"/>
+        <text x="45" y="115" font-weight="bold">90°</text>
+        <text x="35" y="60" font-weight="bold">30°</text>
+        <text x="95" y="110" font-weight="bold" fill="#DC2626">X?</text>
+      </svg>`,
+      options: ["45°", "60°", "90°", "180°"],
+      correct: 1,
+      explanation: { correct: "A soma tem que dar 180°. Você já tem 90 + 30 = 120°. Faltam 180 - 120 = 60°.", options: ["Erro na subtração.", "Certa", "Passaria de 180° no total.", "Total sozinho."] }
+    },
+    {
+      id: 15, level: "Médio",
+      text: "Qual é a principal diferença visual entre um Lado (como AB) e uma Diagonal (como BE)?",
+      options: ["Lados ligam vértices vizinhos; Diagonais ligam vértices não-vizinhos cruzando o interior.", "Diagonais são sempre maiores.", "Lados cruzam o meio.", "São a mesma coisa."],
+      correct: 0,
+      explanation: { correct: "O lado forma a 'cerca' (pontos vizinhos). A diagonal 'corta caminho' pelo interior.", options: ["Certa", "Não é regra.", "Lados formam o contorno.", "Totalmente diferentes."] }
+    },
+    {
+      id: 16, level: "Médio",
+      text: "Um triângulo Equilátero possui um perímetro total de 15 cm. Sabendo da regra desse triângulo, quanto mede cada lado?",
+      options: ["15 cm", "3 cm", "5 cm", "10 cm"],
+      correct: 2,
+      explanation: { correct: "Equilátero = 3 lados iguais. Basta dividir o total por 3: 15 ÷ 3 = 5 cm cada.", options: ["Esse é o total.", "Perímetro daria 9.", "Certa", "Perímetro daria 30."] }
+    },
+    {
+      id: 17, level: "Médio",
+      text: "Um triângulo Isósceles possui dois lados iguais medindo 7 cm cada um. Se o perímetro total desse triângulo é 20 cm, qual é a medida do terceiro lado?",
+      image: `<svg class="svg-illustration" viewBox="0 0 200 120">
+        <polygon points="100,20 40,100 160,100" fill="#FEF08A" stroke="#000" stroke-width="2"/>
+        <line x1="65" y1="60" x2="75" y2="55" stroke="#000" stroke-width="2"/><text x="40" y="50" font-weight="bold">7</text>
+        <line x1="135" y1="60" x2="125" y2="55" stroke="#000" stroke-width="2"/><text x="150" y="50" font-weight="bold">7</text>
+        <text x="95" y="115" font-weight="bold" fill="#DC2626">?</text>
+        <text x="10" y="20" font-weight="bold" font-size="12">Perímetro = 20</text>
+      </svg>`,
+      options: ["7 cm", "13 cm", "6 cm", "10 cm"],
+      correct: 2,
+      explanation: { correct: "Lados iguais = 7 + 7 = 14 cm. Como o total é 20, o terceiro lado é: 20 - 14 = 6 cm.", options: ["Seria equilátero e perímetro daria 21.", "Daria perímetro 27.", "Certa", "Daria perímetro 24."] }
+    },
+    {
+      id: 18, level: "Médio",
+      text: "Observe um quadrilátero (4 lados). Quantos vértices (pontas) e quantos ângulos internos ele possui?",
+      options: ["3 vértices e 3 ângulos.", "4 vértices e 4 ângulos.", "2 vértices e 4 ângulos.", "4 vértices e 2 ângulos."],
+      correct: 1,
+      explanation: { correct: "Número de lados = Número de vértices = Número de ângulos. 4 lados = 4 vértices = 4 ângulos.", options: ["Esse é o Triângulo.", "Certa", "Impossível.", "Polígono fechado tem números iguais."] }
+    },
+    {
+      id: 19, level: "Médio",
+      text: "Qual destas notações do seu roteiro representa CORRETAMENTE um ângulo?",
+      options: ["ABC", "Â", "AB", "Diagonal BE"],
+      correct: 1,
+      explanation: { correct: "O acento circunflexo indica exatamente onde fica o ângulo (abertura) na letra do vértice.", options: ["Falta o acento.", "Certa", "Representa Lado.", "Representa diagonal."] }
+    },
+    {
+      id: 20, level: "Médio",
+      text: "Um quadrado possui um lado de 8 metros. O dono quer cercá-lo com duas voltas de arame. Quantos metros de arame ele precisa?",
+      options: ["32 metros", "64 metros", "16 metros", "8 metros"],
+      correct: 1,
+      explanation: { correct: "1 volta (perímetro) = 4 x 8 = 32m. Duas voltas = 32 + 32 = 64 metros.", options: ["Isso é 1 volta.", "Certa", "Soma de 2 lados.", "Um lado só."] }
+    },
+
+    {
+      id: 21, level: "Difícil",
+      text: "Em um triângulo Isósceles, os dois lados iguais também formam ângulos iguais na base. Se o ângulo diferente (do topo) mede 50°, quanto mede CADA UM dos ângulos da base?",
+      image: `<svg class="svg-illustration" viewBox="0 0 200 130">
+        <polygon points="100,20 40,110 160,110" fill="#FEF08A" stroke="#000" stroke-width="2"/>
+        <text x="85" y="45" font-weight="bold">50°</text>
+        <text x="50" y="100" font-weight="bold" fill="#DC2626">X</text>
+        <text x="140" y="100" font-weight="bold" fill="#DC2626">X</text>
+      </svg>`,
+      options: ["65° e 65°", "50° e 50°", "130° e 130°", "60° e 70°"],
+      correct: 0,
+      explanation: { correct: "Total = 180°. Se tirarmos os 50° do topo, sobram 130°. Como os dois ângulos da base são IGUAIS, dividimos: 130 ÷ 2 = 65° para cada um.", options: ["Certa", "Somaria 150° no total (faltou 30).", "Somaria 310°.", "Eles têm que ser iguais."] }
+    },
+    {
+      id: 22, level: "Difícil",
+      text: "Dois triângulos equiláteros idênticos, com lado medindo 5 cm, foram colados formando um Losango. Qual é o perímetro da nova figura?",
+      image: `<svg class="svg-illustration" viewBox="0 0 200 150"><polygon points="100,20 160,75 100,130 40,75" fill="#E0E7FF" stroke="#000" stroke-width="2"/><line x1="100" y1="20" x2="100" y2="130" stroke="#000" stroke-width="2" stroke-dasharray="5,5"/><text x="45" y="45" font-weight="bold">5</text><text x="145" y="45" font-weight="bold">5</text><text x="45" y="115" font-weight="bold">5</text><text x="145" y="115" font-weight="bold">5</text></svg>`,
+      options: ["30 cm", "15 cm", "25 cm", "20 cm"],
+      correct: 3,
+      explanation: { correct: "Ao colar, os lados do meio somem do contorno. Sobram 4 lados de 5cm. 4 x 5 = 20 cm.", options: ["Soma dos perímetros isolados.", "Perímetro de um só.", "Erro de soma.", "Certa"] }
+    },
+    {
+      id: 23, level: "Difícil",
+      text: "Se dobrarmos (multiplicar por 2) a medida do lado de um triângulo equilátero, o que acontece com o seu perímetro?",
+      options: ["Fica igual.", "Triplica.", "Também dobra.", "É dividido por dois."],
+      correct: 2,
+      explanation: { correct: "O perímetro é uma soma linear. Se todos os lados ficam 2x maiores, o perímetro total também fica 2x maior.", options: ["Falso.", "Falso.", "Certa", "Falso."] }
+    },
+    {
+      id: 24, level: "Difícil",
+      text: "Um Hexágono regular (6 lados iguais) tem perímetro de 42 cm. Se pegarmos a medida do lado desse hexágono para construir um Quadrado, qual será o perímetro do quadrado?",
+      options: ["42 cm", "7 cm", "28 cm", "24 cm"],
+      correct: 2,
+      explanation: { correct: "Lado do hexágono: 42 ÷ 6 = 7cm. O quadrado terá lados de 7cm. Perímetro do quadrado = 7 x 4 = 28 cm.", options: ["Hexágono.", "Medida de 1 lado.", "Certa", "Erro matemático."] }
+    },
+    {
+      id: 25, level: "Difícil",
+      text: "Por que a definição geométrica afirma que o Triângulo não tem diagonais?",
+      options: ["Porque ele é pequeno.", "Vértices arredondados.", "A diagonal liga vértices distantes, e no triângulo todos já são vizinhos, formando os próprios lados.", "Ele tem apenas 2 lados."],
+      correct: 2,
+      explanation: { correct: "Diagonal liga pontos não-vizinhos. No triângulo, as 3 pontas são todas vizinhas entre si.", options: ["Tamanho não importa.", "Vértices são pontos.", "Certa", "Ele tem 3 lados."] }
+    },
+    {
+      id: 26, level: "Difícil",
+      text: "Uma formiga andou o perímetro de um triângulo Escaleno, totalizando 40 cm. O primeiro lado tinha 12 cm e o segundo 15 cm. Qual o tamanho do terceiro lado?",
+      image: `<svg class="svg-illustration" viewBox="0 0 200 130">
+        <polygon points="50,110 150,110 80,30" fill="none" stroke="#059669" stroke-width="3" stroke-dasharray="4,4"/>
+        <text x="30" y="70" font-weight="bold">12</text>
+        <text x="125" y="70" font-weight="bold">15</text>
+        <text x="95" y="125" font-weight="bold" fill="#DC2626">X</text>
+        <text x="5" y="20" font-size="12" font-weight="bold">TOTAL ANDADO: 40 cm</text>
+      </svg>`,
+      options: ["27 cm", "13 cm", "40 cm", "10 cm"],
+      correct: 1,
+      explanation: { correct: "A 'volta' é 40. Ela já andou 12 + 15 = 27 cm. Faltam: 40 - 27 = 13 cm.", options: ["Isso é o que ela já andou.", "Certa", "Perímetro total.", "Erro de subtração."] }
+    },
+    {
+      id: 27, level: "Difícil",
+      text: "Analise: 'Isósceles tem pelo menos 2 lados iguais. Equilátero tem 3 iguais.' Podemos afirmar rigorosamente que o Equilátero também é um Isósceles?",
+      options: ["Não, são opostos.", "Sim, se tem 3 iguais, cumpre a regra de ter 'pelo menos 2' (Isósceles).", "Não, a regra exige APENAS 2 iguais.", "Sim, pois todo triângulo tem 4 lados."],
+      correct: 1,
+      explanation: { correct: "A regra oficial do Isósceles é 'no mínimo dois'. O Equilátero tem três, logo atende à regra!", options: ["Falso.", "Certa", "Na matemática oficial é 'pelo menos'.", "Falso."] }
+    },
+    {
+      id: 28, level: "Difícil",
+      text: "Se M, N, O e P são vértices sequenciais de um Quadrilátero, quais opções representam todas as Diagonais possíveis?",
+      options: ["MN, NO, OP, PM", "Apenas MN", "MO e NP", "MO, NP e MN"],
+      correct: 2,
+      explanation: { correct: "MO e NP cruzam o interior (não-vizinhos). MN, NO, OP e PM são os lados do contorno.", options: ["São os lados.", "É um lado.", "Certa", "MN é lado."] }
+    },
+    {
+      id: 29, level: "Difícil",
+      text: "Um retângulo tem lados de 3 cm e 7 cm. Qual triângulo abaixo possui EXATAMENTE o mesmo perímetro desse retângulo?",
+      image: `<svg class="svg-illustration" viewBox="0 0 240 100"><rect x="50" y="20" width="140" height="60" fill="#FFFBEB" stroke="#000" stroke-width="2"/><text x="110" y="15" font-weight="bold">7 cm</text><text x="15" y="55" font-weight="bold">3 cm</text></svg>`,
+      options: ["Equilátero de lado 10.", "Isósceles com lados 7, 7 e 6.", "Escaleno com lados 5, 5 e 10.", "Equilátero de lado 20."],
+      correct: 1,
+      explanation: { correct: "Perímetro do retângulo: 3+3+7+7 = 20. O triângulo B tem perímetro: 7+7+6 = 20.", options: ["Daria 30.", "Certa", "Além de dar 20, 5+5=10 não forma triângulo real (regra da existência).", "Daria 60."] }
+    },
+    {
+      id: 30, level: "Difícil",
+      text: "A soma dos ângulos internos de um quadrilátero (como um quadrado) pode ser descoberta dividindo ele em 2 triângulos. Sabendo que cada triângulo tem 180°, qual é a soma dos ângulos de um quadrilátero?",
+      options: ["180°", "200°", "360°", "90°"],
+      correct: 2,
+      explanation: { correct: "Se cortarmos um quadrilátero na diagonal, temos 2 triângulos. 2 x 180° = 360°.", options: ["Soma de 1 triângulo.", "Errado.", "Certa", "Ângulo de 1 ponta do quadrado."] }
+    }
+  ];
+
+  const storageKey = 'promover_geo6ano_' + document.title.replace(/\s+/g,'_');
+  let currentQuestion = 0;
+  
+  // Resgata progresso do usuário no navegador (funciona no Github Pages)
+  let savedAnswers = localStorage.getItem(storageKey);
+  let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+  function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+    
+    if(mode === 'explanation') {
+      document.getElementById('viewExplanation').style.display = 'flex';
+      document.getElementById('btnExp').classList.add('active');
+      document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+      document.getElementById('viewPractice').style.display = 'flex';
+      document.getElementById('quizFooter').style.display = 'flex';
+      document.getElementById('btnExp').classList.remove('active');
+      document.getElementById('btnPrac').classList.add('active');
+      renderQuestion();
+      renderMap();
+    } else if (mode === 'result') {
+      document.getElementById('viewResult').style.display = 'flex';
+      document.getElementById('quizFooter').style.display = 'none';
+    }
+    window.scrollTo(0,0);
+  }
+
+  function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    let badgeClass = '';
+    
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+    
+    container.innerHTML = `
+      <div class="card-content" style="border: 4px solid var(--border-color); box-shadow: 6px 6px 0px var(--border-color); padding: 25px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+          <span style="font-size: 0.9rem; font-weight: 900; color: var(--theme-accent); text-transform: uppercase;">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+          <h2 style="font-size: 1.25rem; margin-top: 5px; color: var(--text-color); font-weight: 900; line-height: 1.4;">${q.text}</h2>
+        </div>
+        
+        ${q.image ? `<div style="text-align: center; margin-bottom: 15px;">${q.image}</div>` : ''}
+
+        <div class="options-list">
+          ${q.options.map((opt, i) => {
+            let cls = '';
+            if (ans !== null) {
+              if (i === q.correct) cls = 'correct';
+              else if (i === ans) cls = 'wrong';
+              else cls = 'disabled';
+            }
+            return `
+            <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+              <div class="opt-circle">${letters[i]}</div>
+              <div>${opt}</div>
+            </button>`;
+          }).join('')}
+        </div>
+        
+        ${ans !== null ? `
+        <div class="feedback-box">
+          <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+            ${ans === q.correct ? '✅ Mandou bem!' : '⚠️ Atenção na pegadinha:'}
+          </div>
+          <div class="feedback-item correct-opt"><strong>A Resposta Certa é:</strong> ${q.options[q.correct]}</div>
+          <div style="margin-top: 15px; font-size:1rem; color:var(--text-color); margin-bottom:15px; font-weight:600; background: #F8FAFC; padding: 15px; border-radius: 8px; border: 2px solid #E2E8F0;">
+            ${q.explanation.correct}
+          </div>
+          <div style="margin-top:15px; border-top:2px dashed var(--theme-light); padding-top:15px;">
+            <small style="color:var(--theme-dark); font-size: 0.9rem; text-transform: uppercase;"><strong>Por que as outras estão erradas?</strong></small>
+            ${q.explanation.options.map((exp, i) => i !== q.correct ? `
+              <div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]} - </strong>${exp}</div>
+            ` : '').join('')}
+          </div>
+        </div>
+        ` : ''}
+      </div>
+    `;
+    updateNav();
+  }
+
+  function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    
+    // Salva no LocalStorage em tempo real
+    localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+    
+    if (idx === questions[currentQuestion].correct) {
+      if (typeof confetti === 'function') {
+          const duration = 1500;
+          const end = Date.now() + duration;
+          (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#8B5CF6', '#F59E0B', '#06B6D4', '#000000'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#8B5CF6', '#F59E0B', '#06B6D4', '#000000'] });
+            if (Date.now() < end) { requestAnimationFrame(frame); }
+          }());
+      }
+    } else {
+      const quizContainer = document.getElementById('quizContainer');
+      quizContainer.classList.remove('shake-effect');
+      void quizContainer.offsetWidth;
+      quizContainer.classList.add('shake-effect');
+      setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+  }
+
+  function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+      let cls = 'map-dot';
+      if (i === currentQuestion) cls += ' active';
+      if (userAnswers[i] !== null) {
+        cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+      }
+      return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+    }).join('');
+    
+    setTimeout(() => {
+      const activeDot = map.querySelector('.map-dot.active');
+      if (activeDot) {
+        activeDot.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }, 50);
+  }
+
+  function goTo(i) {
+    if (typeof confetti === 'function') confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+  }
+
+  function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+  }
+
+  function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+      next.textContent = "Finalizar Diagnóstico";
+      next.onclick = finish;
+    } else {
+      next.textContent = "Avançar";
+      next.onclick = () => changeQuestion(1);
+    }
+  }
+
+  function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    
+    if (typeof confetti === 'function') confetti.reset();
+    
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+    
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    
+    if (percent < 80) {
+      summary += `<div style="background:var(--wrong-bg); padding:20px; border-radius:8px; margin-bottom:20px; border:3px solid var(--wrong-border); color:var(--wrong-border);">
+      <strong style="font-size:1.1rem;">⚠️ Foco nos Estudos!</strong> O seu desempenho não atingiu a nota de corte (80%). A Geometria exige atenção aos detalhes. Revise a aba "Teoria" e tente novamente!
+      </div>`;
+      document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Limpar Histórico e Refazer Prova</button>';
+    } else {
+      summary += `<div style="background:var(--correct-bg); padding:20px; border-radius:8px; margin-bottom:20px; border:3px solid var(--correct-border); color:var(--correct-border);">
+      <strong style="font-size:1.1rem;">🏆 Excelente Desempenho!</strong> Você demonstrou que entende tudo de vértices, triângulos e perímetro. Parabéns pelo foco!
+      </div>`;
+      document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Refazer Prova (Zerar Histórico)</button>';
+    }
+    
+    if (correct < questions.length) {
+      summary += '<h4 style="margin-bottom:15px; color:var(--text-color); font-weight: 900; text-transform: uppercase;">Relatório de Erros:</h4>';
+      questions.forEach((q, i) => {
+        if (userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+          summary += `<div style="margin-bottom:15px; padding:20px; background:var(--white); border-radius:12px; border:3px dashed var(--theme-dark);">
+            <strong style="color:var(--theme-dark); font-size:1.1rem;">Q${i+1}:</strong> <span style="font-weight: 600;">${q.text}</span><br><br>
+            <span style="color:var(--wrong-border); font-size:0.95rem; font-weight:700; display:block; margin-top:5px; background: var(--wrong-bg); padding: 8px; border-radius: 6px;">❌ Seu Erro: ${q.options[userAnswers[i]]}</span>
+            <span style="color:var(--correct-border); font-size:0.95rem; font-weight:700; display:block; margin-top:5px; background: var(--correct-bg); padding: 8px; border-radius: 6px;">✅ A Verdade: ${q.options[q.correct]}</span>
+          </div>`;
+        }
+      });
+    }
+    
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+  }
+
+  function reset() {
+    localStorage.removeItem(storageKey);
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+  }
+
+  // Inicializa a página baseado no salvamento local
+  setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
