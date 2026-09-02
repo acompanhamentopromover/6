@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Routines & Simple Present - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root {
+  --bg-color: #F0F9FF; /* Azul bem claro e relaxante */
+  --text-color: #0F172A; /* Escuro profundo para boa legibilidade */
+  --border-color: #0F172A; 
+  --white: #FFFFFF;
+  --theme-light: #E0F2FE; /* Tom leve para destaques */
+  --theme-medium: #7DD3FC; /* Azul médio */
+  --theme-dark: #1E3A8A; /* Azul marinho profundo "Navy" */
+  --theme-contrast: #E11D48; /* Vermelho carmesim para chamar atenção (botões) */
+  --theme-accent: #3B82F6; /* Azul vibrante */
+  --theme-text-active: #FFFFFF;
+
+  /* NÃO ALTERAR AS CORES ABAIXO (Conforme regra do Mega Prompt) */
+  --correct-bg: #D1FAE5;
+  --correct-border: #059669;
+  --wrong-bg: #FFE4E6;
+  --wrong-border: #BE123C;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color);
+  display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-bottom: 100px;
+  background-image: linear-gradient(var(--theme-light) 1px, transparent 1px),
+  linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from {opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from {transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; }}
+
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.15); color: var(--theme-contrast); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.15); color: var(--theme-contrast); }
+  100% { transform: scale(1); }
+}
+
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container {position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon {position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 {font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil {background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot {min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct {background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle {background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong {background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle {background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled {pointer-events: none; opacity: 0.7; }
+
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display: flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt {border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+.result-card {background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big {font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header class="logo-header">
+    <div class="css-logo"><span class="pulse-effect">🧠</span> PROMOVER</div>
+    <h1>INGLÊS / 6º ANO</h1>
+    <p class="subtitle">DAILY ROUTINES & SIMPLE PRESENT</p>
+  </header>
+
+  <div class="toggle-container">
+    <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">Teoria</button>
+    <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">Prática (30)</button>
+  </div>
+
+  <div id="viewExplanation" class="view-section" style="display: flex;">
+    <div class="search-container">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+    </div>
+    <div id="no-results"><p>Termo não encontrado.</p></div>
+
+    <div class="content-group">
+      <span class="section-badge">Vocabulário</span>
+      <div class="theory-box">
+        <h3>1. Daily Routines (Rotinas Diárias)</h3>
+        <p>Usamos o inglês no dia a dia para descrever hábitos, ou seja, coisas que fazemos todos os dias. Para perguntar a rotina de alguém usamos:</p>
+        <div class="highlight-box">
+          <strong>"What do you do in the morning?"</strong> (O que você faz de manhã?)<br><br>
+          <strong>"Do you go to school in the morning?"</strong> (Você vai para a escola de manhã?)
+        </div>
+        <p>Frases famosas para sua rotina:</p>
+        <ul style="padding-left: 20px;">
+          <li><strong>I get up</strong> at 7 a.m. (Eu levanto às 7 da manhã).</li>
+          <li><strong>I go to school</strong> at 7:30 a.m. (Vou à escola 7:30).</li>
+          <li><strong>I do my homework</strong> in the afternoon (Faço dever de casa à tarde).</li>
+          <li><strong>I watch TV</strong> at night (Eu assisto TV à noite).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-group">
+      <span class="section-badge">Regras do Relógio</span>
+      <div class="theory-box">
+        <h3>2. Telling the Time (As Horas)</h3>
+        <p>A pergunta clássica em inglês para saber a hora é: <strong>What time is it?</strong> (Que horas são?).</p>
+        <div class="visual-area">
+          ⌚ 7:00 ➔ It's seven o'clock<br>
+          ⌚ 8:15 ➔ It's eight fifteen
+        </div>
+        <div class="highlight-box">
+          <strong>Regras Importantes:</strong><br>
+          • <strong>o'clock</strong>: Usado APENAS para horas exatas (em ponto).<br>
+          • <strong>a.m.</strong>: Refere-se à <i>morning</i> (manhã/madrugada).<br>
+          • <strong>p.m.</strong>: Engloba <i>afternoon</i> (tarde) e <i>night</i> (noite).
+        </div>
+      </div>
+    </div>
+
+    <div class="content-group">
+      <span class="section-badge">Gramática Clínica</span>
+      <div class="theory-box">
+        <h3>3. O Segredo do Simple Present (DO/DOES)</h3>
+        <p>No inglês, para perguntar e negar no presente, usamos "verbos auxiliares" que não têm tradução, mas provam que a frase é uma rotina.</p>
+        <div class="highlight-box warning">
+          <strong>O GRANDE SEGREDO:</strong><br>
+          • <strong>DO:</strong> I, You, We, They.<br>
+          • <strong>DOES:</strong> He, She, It (3ª pessoa do singular). Exclusivo!
+        </div>
+        <p><strong>Exemplos Estruturais:</strong></p>
+        <ul style="padding-left: 20px;">
+          <li><strong>Afirmativa:</strong> You watch TV in the morning.</li>
+          <li><strong>Interrogativa:</strong> <u>Do</u> you watch TV in the morning?</li>
+          <li><strong>Negativa:</strong> You <u>do not (don't)</u> watch TV.</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="btn-action" onclick="setMode('practice')">Iniciar Diagnóstico (30 Q) →</button>
+  </div>
+
+  <div id="viewPractice" class="view-section">
+    <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+      <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+      <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">
+        30 questões rigorosas baseadas no seu material. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção cirúrgica de cada erro!
+      </p>
+    </div>
+    <div class="question-map" id="qMap"></div>
+    <div id="quizContainer" style="margin-bottom: 100px;"></div>
+  </div>
+
+  <div id="viewResult" class="view-section">
+    <div class="result-card">
+      <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+      <div class="stars-container" id="finalStars">⭐⭐⭐</div>
+      <div class="percentage-big" id="finalPercent">0%</div>
+      <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+      <div id="review-container"></div>
+    </div>
+    <div id="action-buttons"></div>
+  </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+  <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+  <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+  const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  let totalVisible = 0;
+  contentGroups.forEach(group => {
+    const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (textContent.includes(term)) {
+      group.style.display = 'flex';
+      totalVisible++;
+    } else {
+      group.style.display = 'none';
+    }
+  });
+  noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+const questions = [
+  // 1-10: NÍVEL FÁCIL (Mistura de PDF + Inéditas para fechar 10 Fáceis)
+  {
+    id: 1, level: "Fácil",
+    text: "Qual é o significado da pergunta 'What time is it?' em português?",
+    options: ["O que você faz de manhã?", "Que horas são?", "A que horas você vai para a escola?", "Você assiste TV à noite?"],
+    correct: 1,
+    explanation: {
+      correct: "É a pergunta clássica e padrão usada na língua inglesa para solicitar a hora.",
+      options: ["Isso seria 'What do you do in the morning?'.", "Correta. Tradução literal de 'Que horas são?'.", "Isso seria 'What time do you go to school?'.", "Isso seria 'Do you watch TV at night?'.'"]
+    }
+  },
+  {
+    id: 2, level: "Fácil",
+    text: "Como se diz corretamente 'Eu levanto às 7 da manhã' em inglês, conforme o conteúdo estudado?",
+    options: ["I get up at 7 a.m.", "I go to school at 7 a.m.", "I do my homework at 7 a.m.", "I watch TV at 7 a.m."],
+    correct: 0,
+    explanation: {
+      correct: "'I get up' expressa o ato de levantar da cama (acordar), e 'a.m.' indica o turno matutino.",
+      options: ["Correta. A estrutura indica 'Eu levanto'.", "Refere-se a 'Ir para a escola'.", "Refere-se a 'Fazer o dever de casa'.", "Refere-se a 'Assistir TV'."]
+    }
+  },
+  {
+    id: 3, level: "Fácil",
+    text: "Qual é o verbo auxiliar correto que usamos para fazer perguntas com os sujeitos I, You, We e They?",
+    options: ["Does", "Not", "Do", "Is"],
+    correct: 2,
+    explanation: {
+      correct: "A tabela do Simple Present indica que o auxiliar 'DO' é exclusivo para os pronomes I, You, We e They.",
+      options: ["Usado APENAS com He, She, It.", "Isso é um advérbio de negação, não o auxiliar.", "Correta. O auxiliar padrão para I/You/We/They.", "Usado com o verbo 'To Be', não com rotinas simples."]
+    }
+  },
+  {
+    id: 4, level: "Fácil",
+    text: "Quando um horário vem acompanhado da sigla a.m., a qual período do dia ele se refere?",
+    options: ["Night (Noite)", "Afternoon (Tarde)", "Morning (Manhã)", "Evening (Início da noite)"],
+    correct: 2,
+    explanation: {
+      correct: "A sigla 'a.m.' designa o período matutino (morning), englobando da meia-noite até antes do meio-dia.",
+      options: ["A noite exige o uso de 'p.m.'.", "A tarde exige o uso de 'p.m.'.", "Correta. Refere-se especificamente ao turno da manhã.", "O início da noite também exige o 'p.m.'."]
+    }
+  },
+  {
+    id: 5, level: "Fácil",
+    text: "O horário exato '12:00' deve ser lido ou escrito em inglês utilizando qual expressão obrigatória?",
+    options: ["Twelve fifteen", "Twelve o'clock", "Twelve a.m.", "Twelve forty-five"],
+    correct: 1,
+    explanation: {
+      correct: "A expressão 'o'clock' é obrigatória para informar horas completas (zeradas nos minutos).",
+      options: ["Isso seria 12:15.", "Correta. Indica uma hora em ponto.", "Embora exista 12 a.m., a teoria ensina a usar 'o'clock' para horas exatas.", "Isso seria 12:45."]
+    }
+  },
+  {
+    id: 6, level: "Fácil",
+    text: "Como dizemos 'Eu faço meu dever de casa' em inglês?",
+    options: ["I go to school", "I get up", "I do my homework", "I watch TV"],
+    correct: 2,
+    explanation: {
+      correct: "A expressão fixa de vocabulário para 'fazer dever de casa' é 'do my homework'.",
+      options: ["Significa ir para a escola.", "Significa levantar-se.", "Correta. Tradução exata da rotina de estudos.", "Significa assistir televisão."]
+    }
+  },
+  {
+    id: 7, level: "Fácil",
+    text: "Qual destas palavras se refere especificamente ao período da 'Tarde' em inglês?",
+    options: ["Morning", "Afternoon", "Evening", "Night"],
+    correct: 1,
+    explanation: {
+      correct: "No inglês, o período entre o meio-dia (12:00) e o fim de tarde é chamado de 'Afternoon'.",
+      options: ["Significa manhã.", "Correta.", "Significa início/meio da noite (saudação).", "Significa noite (despedida ou horário noturno)."]
+    }
+  },
+  {
+    id: 8, level: "Fácil",
+    text: "Se o relógio marca exatas 9 horas da manhã em ponto, como dizemos isso usando a regra estudada?",
+    options: ["Nine fifteen", "Nine thirty", "Nine o'clock", "Nine p.m."],
+    correct: 2,
+    explanation: {
+      correct: "Para horas inteiras, sem frações de minutos, utilizamos obrigatoriamente a expressão 'o'clock'.",
+      options: ["Lê-se 9:15.", "Lê-se 9:30.", "Correta. Indica 9 horas em ponto.", "Indicaria 9 horas da noite, não da manhã."]
+    }
+  },
+  {
+    id: 9, level: "Fácil",
+    text: "Qual pronome pessoal significa 'Eu' na língua inglesa?",
+    options: ["You", "We", "I", "They"],
+    correct: 2,
+    explanation: {
+      correct: "O pronome de primeira pessoa do singular é a letra 'I' (sempre escrita em maiúsculo).",
+      options: ["Significa Você/Vocês.", "Significa Nós.", "Correta. 'I' = Eu.", "Significa Eles/Elas."]
+    }
+  },
+  {
+    id: 10, level: "Fácil",
+    text: "O que a frase afirmativa 'I watch TV at night' significa?",
+    options: ["Eu assisto TV de manhã.", "Eu levanto à noite.", "Eu vou para a escola à tarde.", "Eu assisto TV à noite."],
+    correct: 3,
+    explanation: {
+      correct: "'Watch TV' significa assistir televisão e 'at night' demarca o horário noturno.",
+      options: ["De manhã seria 'in the morning'.", "Levantar seria 'get up'.", "Ir para a escola seria 'go to school'.", "Correta."]
+    }
+  },
+
+  {
+    id: 11, level: "Médio",
+    text: "Complete a pergunta corretamente: '_______ you watch TV at night?'",
+    options: ["Do", "Does", "Are", "Is"],
+    correct: 0,
+    explanation: {
+      correct: "Para o sujeito 'You', o auxiliar obrigatório na interrogativa do Simple Present é o 'Do'.",
+      options: ["Correta. Usado para I, You, We, They.", "Usado exclusivamente com He, She, It.", "Verbo To Be não se mistura com verbos de rotina aqui.", "Verbo To Be (3ª pessoa). Incorreto."]
+    }
+  },
+  {
+    id: 12, level: "Médio",
+    text: "Seu amigo perguntou: 'What time do you go to school?'. Como você inicia a resposta indicando o horário de 7:30 da manhã?",
+    options: ["I go to school at seven o'clock.", "I go to school at seven fifteen.", "I go to school at seven thirty a.m.", "I do my homework at seven thirty."],
+    correct: 2,
+    explanation: {
+      correct: "O horário 7:30 lê-se 'seven' (7) e 'thirty' (30). O 'a.m.' ratifica ser no turno da manhã.",
+      options: ["'o'clock' só é usado para horas exatas (7:00).", "Isso indica 7:15.", "Correta.", "A pergunta foi sobre ir à escola, não sobre o dever de casa."]
+    }
+  },
+  {
+    id: 13, level: "Médio",
+    text: "Qual pronome pessoal abaixo exige o uso do auxiliar DOES no Simple Present?",
+    options: ["You", "They", "I", "She"],
+    correct: 3,
+    explanation: {
+      correct: "O pronome 'She' pertence à 3ª pessoa do singular (He, She, It), exigindo obrigatoriamente a variação 'DOES'.",
+      options: ["You usa 'Do'.", "They usa 'Do'.", "I usa 'Do'.", "Correta. 'She' (ela) exige 'Does'."]
+    }
+  },
+  {
+    id: 14, level: "Médio",
+    text: "Selecione a opção que traduz corretamente o horário '3:45':",
+    options: ["Three fifteen", "Three o'clock", "Three forty-five", "Twelve forty-five"],
+    correct: 2,
+    explanation: {
+      correct: "Lemos a hora separada dos minutos. 'Three' (3) e 'Forty-five' (45).",
+      options: ["Isso seria 3:15.", "Isso seria 3:00 exatas.", "Correta. 3 (Three) e 45 (forty-five).", "Isso seria 12:45."]
+    }
+  },
+  {
+    id: 15, level: "Médio",
+    text: "Na forma negativa, o auxiliar DO junta-se com NOT. Qual é a forma abreviada correta?",
+    options: ["Doesn't", "Don't", "Do'not", "Notdo"],
+    correct: 1,
+    explanation: {
+      correct: "A contração (forma curta) de 'DO + NOT' no inglês resulta sempre em 'DON'T'.",
+      options: ["Esta é a contração de 'DOES + NOT'.", "Correta. Do + Not = Don't.", "Apóstrofo no lugar errado.", "Ordem incorreta e sem sentido gramatical."]
+    }
+  },
+  {
+    id: 16, level: "Médio",
+    text: "Como dizemos o horário '10:15' em inglês?",
+    options: ["Ten o'clock", "Ten fifteen", "Ten thirty", "Twelve fifteen"],
+    correct: 1,
+    explanation: {
+      correct: "A estrutura de horas exige que você leia o '10' (Ten) e os '15' minutos (Fifteen).",
+      options: ["Refere-se a 10:00 (em ponto).", "Correta. 10 (Ten) e 15 (Fifteen).", "Refere-se a 10:30.", "Refere-se a 12:15."]
+    }
+  },
+  {
+    id: 17, level: "Médio",
+    text: "Complete a frase na forma negativa: 'They _______ play soccer in the morning.'",
+    options: ["doesn't", "don't", "not", "isn't"],
+    correct: 1,
+    explanation: {
+      correct: "O sujeito 'They' exige o auxiliar 'Do'. Na negativa, usamos a contração 'don't' (do not).",
+      options: ["'Doesn't' é exclusivo para He, She e It.", "Correta. 'They don't' = Eles não...", "Não se pode usar 'not' sozinho antes de um verbo de ação.", "Auxiliar do Verbo To Be. Inadequado."]
+    }
+  },
+  {
+    id: 18, level: "Médio",
+    text: "A sigla 'p.m.' deve ser usada para descrever horários de quais períodos do dia?",
+    options: ["Apenas Manhã", "Tarde, início da noite e noite", "Apenas Madrugada", "Manhã e Tarde"],
+    correct: 1,
+    explanation: {
+      correct: "Segundo a regra clínica, 'p.m.' (Post Meridiem) engloba os turnos de afternoon (tarde) e night (noite).",
+      options: ["Manhã exige 'a.m.'.", "Correta. Engloba tudo que vem após as 12:00 até 23:59.", "Madrugada exige 'a.m.'.", "Manhã não aceita 'p.m.'."]
+    }
+  },
+  {
+    id: 19, level: "Médio",
+    text: "Seu amigo pergunta sobre a rotina de estudos do seu irmão (He). Qual auxiliar ele deve usar na pergunta?",
+    options: ["Do", "Are", "Is", "Does"],
+    correct: 3,
+    explanation: {
+      correct: "Como 'Irmão' substitui o pronome 'He' (3ª pessoa do singular), o auxiliar interrogativo obrigatório é 'Does'.",
+      options: ["Usado apenas para I, You, We, They.", "Verbo To Be. Inadequado para rotina comum.", "Verbo To Be. Inadequado para rotina comum.", "Correta. 'Does' é para He, She, It."]
+    }
+  },
+  {
+    id: 20, level: "Médio",
+    text: "O que a frase 'I do my homework in the afternoon' quer dizer?",
+    options: ["Eu faço meu dever de casa à tarde.", "Eu vou para a escola de manhã.", "Eu levanto às 7 da manhã.", "Eu estudo à noite."],
+    correct: 0,
+    explanation: {
+      correct: "'Do my homework' significa fazer o dever de casa, e 'afternoon' especifica que a ação ocorre no período da tarde.",
+      options: ["Correta.", "Seria 'go to school in the morning'.", "Seria 'get up at 7 a.m.'.", "Seria 'study at night'."]
+    }
+  },
+
+  {
+    id: 21, level: "Difícil",
+    text: "Analise a frase afirmativa: 'You watch TV in the morning'. Como fica a transformação correta para a forma Negativa?",
+    options: ["You watch not TV in the morning.", "You do not watch TV in the morning.", "You does not watch TV in the morning.", "Do you watch TV in the morning?"],
+    correct: 1,
+    explanation: {
+      correct: "Na forma negativa do presente, o auxiliar (DO) deve assumir a posição anterior ao verbo principal (watch) junto ao 'not'.",
+      options: ["O inglês não aceita o 'not' solto após o verbo (erro de tradução literal).", "Correta. Usa o 'do not' antes do verbo.", "O auxiliar 'Does' não se aplica ao pronome 'You'.", "Essa é a estrutura Interrogativa (pergunta)."]
+    }
+  },
+  {
+    id: 22, level: "Difícil",
+    text: "Um aluno faz seu dever de casa à tarde e o relógio marca 8:15 p.m. (turno noturno). Como ele deve dizer esse horário?",
+    options: ["It's eight fifteen p.m.", "It's eight o'clock p.m.", "It's eight forty-five a.m.", "It's eight fifteen a.m."],
+    correct: 0,
+    explanation: {
+      correct: "Lemos a hora (eight) seguida dos minutos (fifteen). O turno noturno exige o 'p.m.'.",
+      options: ["Correta.", "'o'clock' não pode ser usado porque há minutos (15).", "Isso seria 8:45 da manhã.", "O 'a.m.' indica o período da manhã (madrugada), o que anula a questão."]
+    }
+  },
+  {
+    id: 23, level: "Difícil",
+    text: "Complete a estrutura Interrogativa de forma apropriada para o sujeito 'He': '_______ he go to school in the morning?'",
+    options: ["Do", "Does", "Don't", "Doesn't"],
+    correct: 1,
+    explanation: {
+      correct: "Em frases interrogativas, o auxiliar vem em primeiro lugar. Para 'He', usamos exclusivamente 'Does'.",
+      options: ["Usar 'Do' para 'He' é um erro grosseiro.", "Correta. (Auxiliar + Sujeito + Verbo).", "É contração negativa, não usada para perguntas comuns.", "Geralmente usado para perguntas retóricas negativas, não para indagações neutras."]
+    }
+  },
+  {
+    id: 24, level: "Difícil",
+    text: "Marque a frase que apresenta um ERRO gramatical grave de acordo com as regras do Simple Present:",
+    options: ["Do you get up at 7 a.m.?", "I do not watch TV at night.", "Does you do your homework?", "I go to school at 7:30 a.m."],
+    correct: 2,
+    explanation: {
+      correct: "O erro crasso está em misturar o auxiliar de 3ª pessoa ('Does') com o pronome 'You', que exige 'Do'.",
+      options: ["Frase gramaticalmente perfeita.", "Frase gramaticalmente perfeita (Negativa do I).", "Correta (Essa é a alternativa que contém o ERRO).", "Frase gramaticalmente perfeita."]
+    }
+  },
+  {
+    id: 25, level: "Difícil",
+    text: "Se 'p.m.' refere-se à tarde/noite, qual das rotinas abaixo é a ÚNICA que faz sentido ser descrita utilizando 'a.m.'?",
+    options: ["I watch TV at night.", "I get up in the morning.", "I do my homework in the afternoon.", "I go to bed at night."],
+    correct: 1,
+    explanation: {
+      correct: "A sigla 'a.m.' significa morning (manhã). Dentre as rotinas, a única tipicamente matutina é levantar (get up).",
+      options: ["Ação noturna. Exigiria 'p.m.'.", "Correta. Acordar/levantar ocorre no 'a.m.'.", "Ação de tarde (afternoon). Exigiria 'p.m.'.", "Ação noturna. Exigiria 'p.m.'."]
+    }
+  },
+  {
+    id: 26, level: "Difícil",
+    text: "Transforme a frase afirmativa 'They do their homework' em uma pergunta de forma perfeitamente gramatical:",
+    options: ["Does they do their homework?", "Do they do their homework?", "They do their homework?", "Do they their homework?"],
+    correct: 1,
+    explanation: {
+      correct: "A pergunta exige o auxiliar 'Do' no início. O verbo principal ('do' = fazer) continua na frase: Do they do...?",
+      options: ["'Does' não pode ser usado com 'They'.", "Correta. O primeiro 'Do' é auxiliar, o segundo é o verbo fazer.", "Faltou o auxiliar interrogativo no início.", "Omitiu o verbo principal ('fazer')."]
+    }
+  },
+  {
+    id: 27, level: "Difícil",
+    text: "Qual é a rasteira escondida (erro) na frase: 'Does you get up at 6 a.m.'?",
+    options: ["Falta o 'not' na frase.", "O 'a.m.' está no lugar errado.", "O verbo 'get' deve ser modificado.", "O auxiliar 'Does' não pode ser usado com 'you'."],
+    correct: 3,
+    explanation: {
+      correct: "A regra de ouro da gramática impede o uso do auxiliar 'Does' com o sujeito 'You'. O correto seria 'Do you'.",
+      options: ["Não é necessário ter 'not' para formular perguntas.", "O 'a.m.' está posicionado corretamente após a hora.", "O verbo principal ('get') não se altera nas perguntas.", "Correta. Uso inadequado de auxiliar."]
+    }
+  },
+  {
+    id: 28, level: "Difícil",
+    text: "Um evento ocorre às '4:45 p.m.'. Como você escreve isso por extenso em inglês e a qual turno pertence?",
+    options: ["Four forty-five (Tarde)", "Four fifteen (Manhã)", "Four forty-five (Manhã)", "Four o'clock (Noite)"],
+    correct: 0,
+    explanation: {
+      correct: "O número 4 é 'Four' e 45 é 'Forty-five'. O sufixo 'p.m.' aponta para o turno da tarde/noite.",
+      options: ["Correta. Lida perfeitamente.", "Fifteen significa 15. a.m. significa manhã.", "a.m. seria manhã. A questão diz p.m.", "o'clock só se usa para a hora cheia (4:00)."]
+    }
+  },
+  {
+    id: 29, level: "Difícil",
+    text: "Qual destas frases está na forma Negativa CORRETA para a 3ª pessoa do singular (She)?",
+    options: ["She don't watch TV.", "She doesn't watch TV.", "She watch not TV.", "She does watch not TV."],
+    correct: 1,
+    explanation: {
+      correct: "Para o pronome 'She' (ela), a forma contraída da negação de 'does not' é obrigatoriamente 'doesn't'.",
+      options: ["'Don't' só é usado com I, You, We e They.", "Correta. Estrutura exata da terceira pessoa.", "Erro de tradução literal (esqueceram o auxiliar).", "A negação 'not' precisa estar fundida ao auxiliar 'does'."]
+    }
+  },
+  {
+    id: 30, level: "Difícil",
+    text: "Analise a resposta: 'She goes to bed at 11 p.m.'. Qual verbo auxiliar completa a pergunta: 'What time _____ she go to bed?'",
+    options: ["do", "is", "does", "don't"],
+    correct: 2,
+    explanation: {
+      correct: "A pergunta questiona o hábito de 'ela' (She). Na interrogativa, 'She' exige o auxiliar inicial 'does'.",
+      options: ["Errado para terceira pessoa do singular.", "'is' não interage com o verbo de ação 'go'.", "Correta. Combinação perfeita com 'She'.", "Auxiliar de negação para primeira pessoa. Incoerente na pergunta."]
+    }
+  }
+];
+
+const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g,'_');
+let currentQuestion = 0;
+let savedAnswers = localStorage.getItem(storageKey);
+let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+function setMode(mode) {
+  const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+  views.forEach(v => document.getElementById(v).style.display = 'none');
+  document.getElementById('quizFooter').style.display = 'none';
+
+  if(mode === 'explanation') {
+    document.getElementById('viewExplanation').style.display = 'flex';
+    document.getElementById('btnExp').classList.add('active');
+    document.getElementById('btnPrac').classList.remove('active');
+  } else if (mode === 'practice') {
+    document.getElementById('viewPractice').style.display = 'block';
+    document.getElementById('quizFooter').style.display = 'flex';
+    document.getElementById('btnExp').classList.remove('active');
+    document.getElementById('btnPrac').classList.add('active');
+    renderQuestion();
+    renderMap();
+  } else if (mode === 'result') {
+    document.getElementById('viewResult').style.display = 'block';
+    document.getElementById('quizFooter').style.display = 'none';
+    window.scrollTo(0,0);
+  }
+}
+
+function renderQuestion() {
+  if(questions.length === 0) return;
+  const q = questions[currentQuestion];
+  const container = document.getElementById('quizContainer');
+  const letters = ['A', 'B', 'C', 'D'];
+  const ans = userAnswers[currentQuestion];
+  let badgeClass = '';
+  
+  if(q.level === 'Fácil') badgeClass = 'dif-facil';
+  else if(q.level === 'Médio') badgeClass = 'dif-medio';
+  else badgeClass = 'dif-dificil';
+
+  container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+      <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+        <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+      </div>
+      <div class="options-list">
+        ${q.options.map((opt, i) => {
+          let cls = '';
+          if (ans !== null) {
+            if (i === q.correct) cls = 'correct';
+            else if (i === ans) cls = 'wrong';
+            else cls = 'disabled';
+          }
+          return `
+            <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+              <div class="opt-circle">${letters[i]}</div>
+              <div>${opt}</div>
+            </button>
+          `;
+        }).join('')}
+      </div>
+      ${ans !== null ? `
+        <div class="feedback-box">
+          <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+            ${ans === q.correct ? '✅ Raciocínio Aprovado!' : '⚠️ Ops! Falha Detectada!'}
+          </div>
+          <div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+          <div style="margin-top: 10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+            ${q.explanation.correct}
+          </div>
+          <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+            <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+            ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+          </div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+  updateNav();
+}
+
+function handleAnswer(idx) {
+  if (userAnswers[currentQuestion] !== null) return;
+  userAnswers[currentQuestion] = idx;
+  localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+  
+  if (idx === questions[currentQuestion].correct) {
+    const duration = 1500;
+    const end = Date.now() + duration;
+    (function frame() {
+      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+      if (Date.now() < end) { requestAnimationFrame(frame); }
+    }());
+  } else {
+    const quizContainer = document.getElementById('quizContainer');
+    quizContainer.classList.remove('shake-effect');
+    void quizContainer.offsetWidth; 
+    quizContainer.classList.add('shake-effect');
+    setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+  }
+  renderQuestion();
+  renderMap();
+}
+
+function renderMap() {
+  if(questions.length === 0) return;
+  const map = document.getElementById('qMap');
+  map.innerHTML = questions.map((q, i) => {
+    let cls = 'map-dot';
+    if (i === currentQuestion) cls += ' active';
+    if (userAnswers[i] !== null) {
+      cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+    }
+    return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+  }).join('');
+  
+  setTimeout(() => {
+    const activeDot = map.querySelector('.map-dot.active');
+    if (activeDot) {
+      activeDot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  }, 50);
+}
+
+function goTo(i) {
+  if (window.confetti) confetti.reset();
+  currentQuestion = i;
+  renderQuestion();
+  renderMap();
+}
+
+function changeQuestion(d) {
+  let n = currentQuestion + d;
+  if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+  document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+  const next = document.getElementById('btnNext');
+  if (currentQuestion === questions.length - 1) {
+    next.textContent = "Finalizar Diagnóstico";
+    next.onclick = finish;
+  } else {
+    next.textContent = "Avançar";
+    next.onclick = () => changeQuestion(1);
+  }
+}
+
+function finish() {
+  let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+  let percent = Math.round((correct / questions.length) * 100);
+  
+  if (window.confetti) confetti.reset();
+  
+  document.getElementById('finalPercent').textContent = percent + "%";
+  document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+  document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+  
+  let summary = '<div style="text-align:left; margin-top:20px;">';
+  
+  if (percent < 80) {
+    summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+      <strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Atingir a pontuação mínima é obrigatório nesta prova. Revise a teoria com rigor antes de tentar novamente.
+    </div>`;
+    document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">Limpar Histórico e Refazer Prova</button>`;
+  } else {
+    summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+      <strong>✅ Excelente Desempenho!</strong> Você demonstrou uma base sólida, clínica e exata sobre os conceitos avaliados. A sua aprovação técnica está garantida neste módulo.
+    </div>`;
+    document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">Refazer Prova (Zerar Histórico)</button>`;
+  }
+
+  if (correct < questions.length) {
+    summary += `<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>`;
+    questions.forEach((q, i) => {
+      if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+        summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+          <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+          <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+          <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+        </div>`;
+      }
+    });
+  }
+  summary += '</div>';
+  document.getElementById('review-container').innerHTML = summary;
+  setMode('result');
+}
+
+function reset() {
+  localStorage.removeItem(storageKey);
+  userAnswers = new Array(questions.length).fill(null);
+  currentQuestion = 0;
+  setMode('practice');
+}
+
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
