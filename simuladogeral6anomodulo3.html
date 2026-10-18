@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Geral Escolar - 6º Ano</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            /* Tema Escolar - Cores Vibrantes e Focadas */
+            --bg-color: #F8FAFC;
+            --text-color: #0F172A;
+            --border-color: #1E293B;
+            --white: #FFFFFF;
+            --theme-light: #E0E7FF;
+            --theme-medium: #818CF8;
+            --theme-dark: #4F46E5; /* Indigo forte */
+            --theme-contrast: #F59E0B; /* Âmbar para chamar atenção */
+            --theme-accent: #10B981;
+            --theme-text-active: #FFFFFF;
+
+            /* NÃO ALTERAR AS CORES ABAIXO */
+            --correct-bg: #D1FAE5;
+            --correct-border: #059669;
+            --wrong-bg: #FFE4E6;
+            --wrong-border: #BE123C;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; padding: 20px; padding-bottom: 100px;
+            background-image: linear-gradient(var(--theme-light) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+            100% { transform: translateX(0); }
+        }
+        .shake-effect { animation: shake 0.4s ease-in-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.15); color: var(--theme-contrast); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); color: var(--theme-contrast); }
+            100% { transform: scale(1); }
+        }
+
+        .logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+        .css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+        h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+        .subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center; }
+
+        .container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+        .toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+        .toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+        .toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+
+        .search-container { position: relative; width: 100%; }
+        .search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+        .search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+        #no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+
+        .content-group { display: flex; flex-direction: column; gap: 12px; }
+        .section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+        
+        .theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+        .theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+        .theory-box h3 { font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+
+        .visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+        .highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+        .highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+
+        .difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+        .dif-facil { background: #D1FAE5; color: #065F46; }
+        .dif-medio { background: #FEF08A; color: #713F12; }
+        .dif-dificil { background: #FECACA; color: #7F1D1D; }
+
+        .question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+        .question-map::-webkit-scrollbar { display: none; }
+        .map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+        .map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+        .map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+        .map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+
+        .option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+        .option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+        .opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+        
+        .option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+        .option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+        .option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+        .option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+        .option-btn.disabled { pointer-events: none; opacity: 0.7; }
+
+        .feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+        .feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display: flex; align-items:center; gap:8px; color: var(--theme-dark); }
+        .feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+        .feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+        .feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+
+        .result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+        .stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+        .percentage-big { font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+        
+        .btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+        .btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+        
+        .quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+        .nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase; }
+        .btn-next { background-color: var(--theme-dark); color: white; }
+        .btn-prev { background-color: white; color: var(--text-color); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">📚</span> ESCOLA PROMOVER</div>
+        <h1>SIMULADO GERAL - 6º ANO</h1>
+        <p class="subtitle">Matemática, Português, Ciências e Humanas</p>
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito (ex: MMC, Lua, Rimas, Escala)...">
+        </div>
+        <div id="no-results"><p>Termo não encontrado. Tente outra palavra-chave!</p></div>
+
+        <!-- TEORIA 1: MATEMÁTICA -->
+        <div class="content-group">
+            <span class="section-badge">📐 1. Matemática Fundamental</span>
+            
+            <!-- Divisibilidade e Sequências -->
+            <div class="theory-box">
+                <h3>🔢 Critérios de Divisibilidade e Sequências</h3>
+                <p>Um número natural é divisível por outro quando a divisão é exata (resto zero):</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 5px;">
+                    <div style="background: #F1F5F9; padding: 10px; border-radius: 8px; border-left: 4px solid var(--theme-dark);">
+                        <strong>• Por 2:</strong> Deve ser par (terminar em 0, 2, 4, 6 ou 8).<br>
+                        <strong>• Por 3:</strong> Soma dos algarismos é múltiplo de 3.<br>
+                        <small><em>Ex: 3.120 → 3+1+2+0 = 6 (divisível!).</em></small>
+                    </div>
+                    <div style="background: #F1F5F9; padding: 10px; border-radius: 8px; border-left: 4px solid var(--theme-dark);">
+                        <strong>• Por 4:</strong> Últimos 2 dígitos múltiplos de 4 ou "00".<br>
+                        <strong>• Por 5:</strong> Termina obrigatoriamente em 0 ou 5.<br>
+                        <strong>• Por 6:</strong> Divisível por 2 e por 3 <em>ao mesmo tempo</em>.
+                    </div>
+                    <div style="background: #F1F5F9; padding: 10px; border-radius: 8px; border-left: 4px solid var(--theme-dark);">
+                        <strong>• Por 9:</strong> Soma dos dígitos é múltiplo de 9.<br>
+                        <small><em>Ex: 738 → 7+3+8 = 18 (divisível!).</em></small><br>
+                        <strong>• Por 10:</strong> Termina obrigatoriamente em 0.
+                    </div>
+                </div>
+
+                <div class="visual-area" style="flex-direction: column; gap: 8px; font-size: 1rem; color: var(--text-color);">
+                    <div style="font-size: 0.85rem; text-transform: uppercase; color: var(--theme-dark); font-weight: 900;">Exemplo Ilustrado de Sequência Aditiva (Razão +7)</div>
+                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center;">
+                        <span style="background: var(--theme-dark); color: white; padding: 6px 12px; border-radius: 8px;">5</span>
+                        <span style="color: var(--theme-contrast); font-size: 0.9rem;">+7 ➔</span>
+                        <span style="background: var(--theme-dark); color: white; padding: 6px 12px; border-radius: 8px;">12</span>
+                        <span style="color: var(--theme-contrast); font-size: 0.9rem;">+7 ➔</span>
+                        <span style="background: var(--theme-dark); color: white; padding: 6px 12px; border-radius: 8px;">19</span>
+                        <span style="color: var(--theme-contrast); font-size: 0.9rem;">+7 ➔</span>
+                        <span style="background: var(--theme-dark); color: white; padding: 6px 12px; border-radius: 8px;">26</span>
+                        <span style="color: var(--theme-contrast); font-size: 0.9rem;">+7 ➔</span>
+                        <span style="background: var(--theme-accent); color: white; padding: 6px 12px; border-radius: 8px; border: 2px solid #000;">33</span>
+                    </div>
+                    <small style="font-weight: 500; color: #475569;">Em múltiplos de 6 (6, 12, 18...), o termo de posição <strong>n</strong> vale <strong>6 × n</strong> (Ex: 15º termo = 6 × 15 = 90).</small>
+                </div>
+            </div>
+
+            <!-- MMC e MDC Ilustrados -->
+            <div class="theory-box">
+                <h3>⚙️ MMC vs. MDC (Com Exemplos Ilustrados)</h3>
+                <div class="highlight-box">
+                    <strong>💡 Dica de Ouro para não confundir na prova:</strong><br>
+                    • <strong>MMC (Mínimo Múltiplo Comum):</strong> Ideia de <em>tempo futuro, encontro simultâneo, ciclos repetitivos</em> ("Quando vão se encontrar de novo?").<br>
+                    • <strong>MDC (Máximo Divisor Comum):</strong> Ideia de <em>dividir/cortar em partes iguais do MAIOR tamanho possível sem sobras</em> ("Qual o maior tamanho de cada pedaço?").
+                </div>
+
+                <!-- Ilustração Lado a Lado de Fatoração MMC e MDC -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
+                    <!-- Caixa Ilustrada MMC -->
+                    <div style="background: #FAFAFA; border: 2px solid var(--border-color); border-radius: 10px; padding: 12px;">
+                        <div style="font-weight: 900; color: var(--theme-dark); text-align: center; margin-bottom: 8px; border-bottom: 2px solid var(--theme-light); padding-bottom: 4px;">
+                            ⏱️ Exemplo MMC (6 e 8 min)
+                        </div>
+                        <div style="font-family: monospace; font-size: 1rem; line-height: 1.4; display: flex; justify-content: center; background: white; padding: 10px; border-radius: 6px; border: 1px solid #CBD5E1;">
+                            <div style="text-align: right; padding-right: 10px; border-right: 2px solid #0F172A;">
+                                6, &nbsp;8<br>
+                                3, &nbsp;4<br>
+                                3, &nbsp;2<br>
+                                3, &nbsp;1<br>
+                                1, &nbsp;1
+                            </div>
+                            <div style="text-align: left; padding-left: 10px; color: var(--theme-dark); font-weight: bold;">
+                                2<br>
+                                2<br>
+                                2<br>
+                                3<br>
+                                <span style="color: var(--correct-border);">2³ × 3 = 24</span>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.8rem; margin-top: 8px; color: #334155;">
+                            <strong>Regra:</strong> Multiplica <u>TODOS</u> os fatores primos da direita (2 × 2 × 2 × 3 = <strong>24 min</strong>).
+                        </p>
+                    </div>
+
+                    <!-- Caixa Ilustrada MDC -->
+                    <div style="background: #FAFAFA; border: 2px solid var(--border-color); border-radius: 10px; padding: 12px;">
+                        <div style="font-weight: 900; color: #059669; text-align: center; margin-bottom: 8px; border-bottom: 2px solid #D1FAE5; padding-bottom: 4px;">
+                            🪚 Exemplo MDC (120 e 180 cm)
+                        </div>
+                        <div style="font-family: monospace; font-size: 1rem; line-height: 1.4; display: flex; justify-content: center; background: white; padding: 10px; border-radius: 6px; border: 1px solid #CBD5E1;">
+                            <div style="text-align: right; padding-right: 10px; border-right: 2px solid #0F172A;">
+                                120, 180<br>
+                                60, &nbsp;90<br>
+                                30, &nbsp;45<br>
+                                10, &nbsp;15<br>
+                                2, &nbsp;&nbsp;3
+                            </div>
+                            <div style="text-align: left; padding-left: 10px; font-weight: bold;">
+                                <span style="color: #059669;">2 ⭐ (ambos)</span><br>
+                                <span style="color: #059669;">2 ⭐ (ambos)</span><br>
+                                <span style="color: #94A3B8;">2 (só o 30)</span><br>
+                                <span style="color: #059669;">3 ⭐ (ambos)</span><br>
+                                <span style="color: #059669;">5 ⭐ (ambos)</span>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.8rem; margin-top: 8px; color: #334155;">
+                            <strong>Regra:</strong> Multiplica <u>APENAS</u> os que dividiram a linha toda: 2 × 2 × 3 × 5 = <strong>60 cm</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Porcentagem e Escala -->
+            <div class="theory-box">
+                <h3>🏷️ Porcentagem Rápida e Escala Cartográfica</h3>
+                <p><strong>Frações Notáveis para Cálculo Mental:</strong></p>
+                <div class="visual-area" style="gap: 10px; padding: 12px; font-size: 0.95rem;">
+                    <span style="background: #E0E7FF; color: #3730A3; padding: 6px 12px; border-radius: 6px; border: 1px solid #4F46E5;"><strong>10%</strong> = ÷ 10</span>
+                    <span style="background: #FEF3C7; color: #92400E; padding: 6px 12px; border-radius: 6px; border: 1px solid #F59E0B;"><strong>25%</strong> = ÷ 4 (1/4)</span>
+                    <span style="background: #D1FAE5; color: #065F46; padding: 6px 12px; border-radius: 6px; border: 1px solid #10B981;"><strong>50%</strong> = ÷ 2 (Metade)</span>
+                    <span style="background: #FCE7F3; color: #9D174D; padding: 6px 12px; border-radius: 6px; border: 1px solid #EC4899;"><strong>75%</strong> = 3/4 (50% + 25%)</span>
+                </div>
+
+                <div class="highlight-box warning">
+                    <strong>⚠️ Pegadinha Clássica (Mudança de Base):</strong> Se uma mochila de R$ 60 sobe 30% (+R$ 18 ➔ R$ 78) e depois ganha 10% de desconto, os 10% são calculados sobre <strong>R$ 78</strong> (desconto de R$ 7,80 ➔ R$ 70,20). <u>Nunca</u> faça 30% - 10% = 20% direto!
+                </div>
+
+                <p><strong>Escala Numérica (E = Desenho ÷ Realidade):</strong> Na escala <strong>1 : 50</strong>, cada 1 cm no papel vale 50 cm na vida real.</p>
+                <div style="background: #F8FAFC; border: 2px solid #CBD5E1; border-radius: 8px; padding: 10px; font-size: 0.9rem; text-align: center;">
+                    📏 <strong>Conversão Obrigatória:</strong> <strong>1 m = 100 cm</strong> (para virar metros, divida cm por 100) &nbsp;|&nbsp; <strong>1 km = 100.000 cm</strong> (para virar km, corte 5 zeros!).
+                </div>
+            </div>
+        </div>
+
+        <!-- TEORIA 2: LÍNGUA PORTUGUESA -->
+        <div class="content-group">
+            <span class="section-badge">📖 2. Língua Portuguesa</span>
+            <div class="theory-box">
+                <h3>🎭 Gêneros Textuais, Rimas e Substantivos</h3>
+                <p><strong>1. Gêneros em Foco:</strong><br>
+                • <strong>Lenda:</strong> Narrativa popular de tradição oral que mistura fatos reais com fantasia/magia para explicar a natureza (Ex: Iara, Curupira).<br>
+                • <strong>Requerimento:</strong> Pedido formal a uma autoridade. Exige: <em>Vocativo com cargo, Qualificação do requerente, Pedido claro, "Pede deferimento", Data e Assinatura</em>.<br>
+                • <strong>Resenha Crítica:</strong> Une o <em>resumo</em> de uma obra cultural (livro, filme) com a <em>opinião/avaliação crítica</em> de quem escreve.</p>
+
+                <!-- Ilustração Esquema de Rimas -->
+                <div class="visual-area" style="flex-direction: column; gap: 10px; font-size: 0.9rem; color: var(--text-color);">
+                    <div style="font-weight: 900; color: var(--theme-dark); text-transform: uppercase;">Esquemas Visuais de Rimas Poéticas</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%;">
+                        <div style="background: white; padding: 10px; border-radius: 8px; border: 2px solid var(--border-color);">
+                            <strong style="color: var(--theme-dark);">Emparelhadas</strong><br>
+                            <span style="font-family: monospace; font-size: 1.1rem; font-weight: 900; color: #D97706;">A - A - B - B</span><br>
+                            <small>Rima em pares seguidos</small>
+                        </div>
+                        <div style="background: white; padding: 10px; border-radius: 8px; border: 2px solid var(--border-color);">
+                            <strong style="color: var(--theme-dark);">Alternadas / Cruzadas</strong><br>
+                            <span style="font-family: monospace; font-size: 1.1rem; font-weight: 900; color: #059669;">A - B - A - B</span><br>
+                            <small>Rimas se intercalam</small>
+                        </div>
+                        <div style="background: white; padding: 10px; border-radius: 8px; border: 2px solid var(--border-color);">
+                            <strong style="color: var(--theme-dark);">Interpoladas / Opostas</strong><br>
+                            <span style="font-family: monospace; font-size: 1.1rem; font-weight: 900; color: #BE123C;">A - B - B - A</span><br>
+                            <small>1º rima com 4º; 2º com 3º</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>🧠 Classificação dos Substantivos (Sem cair em pegadinhas!):</strong><br>
+                    • <strong>Comum vs. Próprio:</strong> Genérico em minúscula (<em>cidade, rio</em>) vs. Específico em maiúscula (<em>Ceará, Roma</em>).<br>
+                    • <strong>Concreto vs. Abstrato:</strong> Concreto tem existência própria, real ou imaginária (<em>escola, autor, árvore, fada</em>). Abstrato <u>depende de alguém</u> para existir: sentimentos, ações ou qualidades (<em>coragem, beleza, amor, corrida</em>).
+                </div>
+            </div>
+        </div>
+
+        <!-- TEORIA 3: CIÊNCIAS DA NATUREZA -->
+        <div class="content-group">
+            <span class="section-badge">🔬 3. Ciências da Natureza</span>
+            <div class="theory-box">
+                <h3>🌍 Camadas da Atmosfera e Fases da Lua (Ilustrado)</h3>
+                
+                <!-- Diagrama Visual das Camadas da Atmosfera -->
+                <div style="display: flex; flex-direction: column; gap: 4px; background: #0F172A; padding: 14px; border-radius: 12px; color: white; font-size: 0.85rem;">
+                    <div style="text-align: center; font-weight: 900; color: #38BDF8; margin-bottom: 4px; text-transform: uppercase;">🌌 Esquema Vertical da Atmosfera Terrestre</div>
+                    <div style="background: #1E293B; padding: 6px 10px; border-radius: 6px; border-left: 4px solid #94A3B8;"><strong>5. Exosfera e 4. Termosfera:</strong> Satélites, auroras polares e transição para o espaço.</div>
+                    <div style="background: #334155; padding: 6px 10px; border-radius: 6px; border-left: 4px solid #38BDF8;"><strong>3. Mesosfera:</strong> Camada muito fria onde meteoroides se desintegram (estrelas cadentes).</div>
+                    <div style="background: #0369A1; padding: 8px 10px; border-radius: 6px; border-left: 4px solid #FACC15;"><strong>2. Estratosfera:</strong> Abriga a <strong>Camada de Ozônio (O₃)</strong> 🛡️ que filtra os raios UV do Sol.</div>
+                    <div style="background: #0284C7; padding: 8px 10px; border-radius: 6px; border-left: 4px solid #4ADE80;"><strong>1. Troposfera (0 a 12 km):</strong> Onde vivemos, respiramos e ocorrem <strong>chuvas, ventos e nuvens</strong> 🌧️🌪️.</div>
+                </div>
+
+                <!-- Ilustração das Fases da Lua -->
+                <div class="visual-area" style="flex-direction: column; gap: 12px; background: #1E1B4B; color: white; border-color: #818CF8;">
+                    <div style="font-size: 0.9rem; font-weight: 900; color: #FDE047; text-transform: uppercase;">Ciclo Lunar (~29,5 dias) Ilustrado</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; width: 100%; font-size: 0.85rem;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 2.2rem;">🌑</div>
+                            <strong style="color: #FDE047;">Lua Nova</strong><br>
+                            <small style="color: #E2E8F0; font-weight: 400;">Entre a Terra e o Sol. Face voltada p/ nós fica <strong>escura</strong>.</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 2.2rem;">🌓</div>
+                            <strong style="color: #FDE047;">Crescente</strong><br>
+                            <small style="color: #E2E8F0; font-weight: 400;">Metade iluminada aumentando gradualmente.</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 2.2rem;">🌕</div>
+                            <strong style="color: #FDE047;">Lua Cheia</strong><br>
+                            <small style="color: #E2E8F0; font-weight: 400;">Oposta ao Sol. Face <strong>100% iluminada</strong> no céu.</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 2.2rem;">🌗</div>
+                            <strong style="color: #FDE047;">Minguante</strong><br>
+                            <small style="color: #E2E8F0; font-weight: 400;">Iluminação diminuindo rumo à Nova.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <p><strong>Transformações da Matéria e Fósseis:</strong><br>
+                • 🧊 <strong>Transformação Física:</strong> Muda apenas o estado ou formato, sem criar nova substância (<em>derreter gelo, rasgar papel, evaporar água</em>).<br>
+                • 🔥 <strong>Transformação Química:</strong> Cria novas substâncias com propriedades diferentes (<em>queimar papel gerando cinzas/fumaça, azedar leite, enferrujar ferro</em>).<br>
+                • 🦖 <strong>Fósseis:</strong> Restos petrificados ou vestígios (pegadas) preservados exclusivamente em <strong>rochas sedimentares</strong>.</p>
+            </div>
+        </div>
+
+        <!-- TEORIA 4: CIÊNCIAS HUMANAS -->
+        <div class="content-group">
+            <span class="section-badge">🏛️ 4. História e Geografia</span>
+            <div class="theory-box">
+                <h3>⚔️ Grécia, Roma, Relevo e Hidrografia</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px;">
+                    <div style="background: #EFF6FF; padding: 12px; border-radius: 8px; border: 2px solid #93C5FD;">
+                        <strong style="color: #1E40AF;">🦉 Atenas (Democracia Direta)</strong>
+                        <p style="font-size: 0.85rem; margin-top: 4px;">Cidadãos votavam leis diretamente na praça pública (<strong>Ágora</strong>). Porém, era <u>excludente</u>: só votavam homens livres, adultos e filhos de pais atenienses. Mulheres, escravos e estrangeiros estavam excluídos!</p>
+                    </div>
+                    <div style="background: #FEF2F2; padding: 12px; border-radius: 8px; border: 2px solid #FCA5A5;">
+                        <strong style="color: #991B1B;">🛡️ Esparta (Oligarquia Militar)</strong>
+                        <p style="font-size: 0.85rem; margin-top: 4px;">Foco na disciplina rígida e formação de soldados (educação militar desde os 7 anos).<br>
+                        <strong>Roma Antiga:</strong> Na luta contra os Patrícios (elite), os Plebeus conquistaram o <strong>Tribuno da Plebe</strong> (com poder de veto no Senado).</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>⛰️ Dinâmica do Relevo e Bacias Hidrográficas:</strong><br>
+                    • <strong>Agentes Internos (Endógenos):</strong> Criam o relevo de dentro para fora (placas tectônicas, terremotos, vulcões).<br>
+                    • <strong>Agentes Externos (Exógenos):</strong> Esculpem e desgastam o relevo na superfície (chuvas, rios, ventos).<br>
+                    • <strong>Planícies:</strong> Terrenos baixos e planos onde o acúmulo de sedimentos (deposição) supera a erosão.<br>
+                    • <strong>Hidrografia:</strong> O rio brota na <strong>Nascente</strong>, corre pelo leito e deságua na <strong>Foz</strong>. Toda a região banhada pelo rio principal e seus afluentes, cercada pelos pontos mais altos (divisores de água), forma a <strong>Bacia Hidrográfica</strong>.
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="setMode('practice')">
+            Iniciar Diagnóstico (30 Q) →
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">
+                30 questões rigorosas do Colégio Promover. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro!
+            </p>
+        </div>
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars">⭐</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const contentGroups = document.querySelectorAll('.content-group');
+    const noResultsMsg = document.getElementById('no-results');
+
+    searchInput.addEventListener('input', function(e) {
+        const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let totalVisible = 0;
+        contentGroups.forEach(group => {
+            const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            if (textContent.includes(term)) {
+                group.style.display = 'flex';
+                totalVisible++;
+            } else {
+                group.style.display = 'none';
+            }
+        });
+        noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+    });
+
+    // INSERIR: Gere as 30 questões neste array exato (10 Fáceis, 10 Médias, 10 Difíceis)
+    const questions = [
+        // === FÁCEIS (10) ===
+        {
+            id: 1, level: "Fácil",
+            text: "Um número natural é divisível por 2 e por 5 ao mesmo tempo quando termina em zero. Para que também seja divisível por 3, a soma de seus algarismos deve ser múltiplo de 3. Qual número atende a essas TRÊS condições?",
+            options: ["1.235", "2.450", "3.120", "4.005"],
+            correct: 2,
+            explanation: {
+                correct: "3.120 termina em 0 (divide por 2 e 5) e a soma de seus algarismos é 3+1+2+0 = 6, que é múltiplo de 3!",
+                options: ["Termina em 5 (não é par, logo não divide por 2).", "Termina em 0, mas a soma é 2+4+5+0 = 11 (não divide por 3).", "Certa", "Termina em 5 (não é par, logo não divide por 2)."]
+            }
+        },
+        {
+            id: 2, level: "Fácil",
+            text: "Observe os cinco primeiros termos de uma sequência numérica construída segundo um padrão regular de adição: 5, 12, 19, 26, 33... Seguindo essa mesma regra, o próximo termo será:",
+            options: ["38", "39", "40", "42"],
+            correct: 2,
+            explanation: {
+                correct: "O padrão aditivo consiste em somar +7 a cada termo (33 + 7 = 40).",
+                options: ["Somou apenas 5 unidades.", "Erro de contagem por 1 unidade.", "Certa", "Somou 9 unidades em vez de 7."]
+            }
+        },
+        {
+            id: 3, level: "Fácil",
+            text: "Uma loja de artigos esportivos concedeu um desconto promocional de 25% sobre uma bola que custava R$ 80,00. O valor em reais correspondente a ESSE DESCONTO é:",
+            options: ["R$ 15,00", "R$ 20,00", "R$ 25,00", "R$ 40,00"],
+            correct: 1,
+            explanation: {
+                correct: "Calcular 25% equivale a um quarto (dividir por 4). Logo, 80 ÷ 4 = R$ 20,00 de desconto.",
+                options: ["Confundiu o cálculo percentual.", "Certa", "Confundiu a taxa de 25% com R$ 25,00.", "R$ 40,00 seria metade (50% de desconto)."]
+            }
+        },
+        {
+            id: 4, level: "Fácil",
+            text: "Leia: 'Diz a tradição dos povos ribeirinhos que a Iara, metade mulher e metade peixe, encanta pescadores nas noites enluaradas.' Esse texto pertence ao gênero lenda porque:",
+            options: ["Ensina o leitor a confeccionar uma rede de pesca.", "É uma narrativa popular de tradição oral com elementos fantásticos.", "Traz dados biológicos e estatísticos comprovados pela ciência.", "Apresenta um pedido formal destinado a uma autoridade."],
+            correct: 1,
+            explanation: {
+                correct: "Lendas são narrativas da cultura popular transmitidas oralmente que misturam fatos com elementos mágicos para explicar a natureza.",
+                options: ["Isso seria um texto instrucional.", "Certa", "Lendas não têm comprovação científica.", "Isso é a função de um requerimento."]
+            }
+        },
+        {
+            id: 5, level: "Fácil",
+            text: "O gênero textual requerimento circula no ambiente escolar e jurídico com um objetivo específico. Assinale o elemento que faz parte de sua estrutura padrão obrigatória:",
+            options: ["Estrofes com rimas alternadas e personagens de ficção.", "Opinião crítica sobre uma obra literária com nota de avaliação.", "Vocativo à autoridade, qualificação do requerente, pedido claro e assinatura.", "Receita instrucional com modo de preparo passo a passo."],
+            correct: 2,
+            explanation: {
+                correct: "Por ser um documento oficial de solicitação, o requerimento exige vocativo formal, identificação, pedido fundamentado, data e assinatura.",
+                options: ["Isso pertence ao gênero poema.", "Isso define uma resenha crítica.", "Certa", "Isso define uma receita culinária."]
+            }
+        },
+        {
+            id: 6, level: "Fácil",
+            text: "A camada da atmosfera que fica em contato direto com a superfície terrestre, onde encontramos o ar que respiramos e onde ocorrem chuvas, nuvens e ventos, é a:",
+            options: ["Termosfera", "Troposfera", "Mesosfera", "Exosfera"],
+            correct: 1,
+            explanation: {
+                correct: "A Troposfera vai do solo até cerca de 12 km e concentra o ar que respiramos e quase todos os fenômenos meteorológicos.",
+                options: ["Camada muito elevada onde ocorrem auroras.", "Certa", "Camada onde meteoros se desintegram.", "Última camada, limite com o espaço."]
+            }
+        },
+        {
+            id: 7, level: "Fácil",
+            text: "A camada de ozônio (O₃) funciona como um escudo natural indispensável à vida, filtrando grande parte dos raios ultravioleta do Sol. Ela se localiza na:",
+            options: ["Troposfera", "Estratosfera", "Hidrosfera", "Litosfera"],
+            correct: 1,
+            explanation: {
+                correct: "A Estratosfera é a segunda camada atmosférica e abriga a Camada de Ozônio (entre 15 e 35 km de altitude).",
+                options: ["A troposfera fica abaixo da estratosfera.", "Certa", "Hidrosfera é o conjunto das águas do planeta.", "Litosfera é a camada sólida de rochas e solo."]
+            }
+        },
+        {
+            id: 8, level: "Fácil",
+            text: "Na Grécia Antiga, a pólis de Atenas ficou famosa pela criação de um sistema político em que os cidadãos debatiam e votavam leis diretamente na praça pública (Ágora). Esse regime chamava-se:",
+            options: ["Monarquia absolutista", "Democracia direta", "Ditadura militar", "Teocracia dos faraós"],
+            correct: 1,
+            explanation: {
+                correct: "Atenas foi o berço da democracia direta, na qual os próprios cidadãos votavam as leis na Ágora.",
+                options: ["Monarquia é o governo concentrado em um rei.", "Certa", "Ditadura impõe leis sem participação popular.", "Teocracia era típica do Egito Antigo."]
+            }
+        },
+        {
+            id: 9, level: "Fácil",
+            text: "Diferente de Atenas, a pólis grega de Esparta valorizava como pilar principal de sua organização social:",
+            options: ["A dedicação exclusiva à poesia teatral e à pintura.", "A disciplina rígida e a formação militar dos guerreiros.", "O voto político garantido a todas as mulheres e escravos.", "O comércio marítimo como única atividade permitida."],
+            correct: 1,
+            explanation: {
+                correct: "Esparta era uma oligarquia guerreira que educava os jovens desde os 7 anos (agogê) para a guerra.",
+                options: ["Artes e filosofia eram mais valorizadas em Atenas.", "Certa", "Mulheres e escravos não votavam em Esparta.", "Esparta era voltada à guerra terrestre e agricultura."]
+            }
+        },
+        {
+            id: 10, level: "Fácil",
+            text: "O relevo terrestre é continuamente esculpido e desgastado por forças que atuam na superfície, como a água das chuvas, os rios e o vento. Essas forças são chamadas de:",
+            options: ["Agentes internos (endógenos)", "Agentes externos (exógenos)", "Placas tectônicas profundas", "Vulcanismo magmático"],
+            correct: 1,
+            explanation: {
+                correct: "Chuvas, rios e ventos atuam na superfície modelando o relevo de fora para dentro, sendo agentes externos ou exógenos.",
+                options: ["Agentes internos atuam no interior da Terra.", "Certa", "Placas tectônicas são agentes internos.", "Vulcanismo é um agente interno."]
+            }
+        },
+
+        // === MÉDIAS (10) ===
+        {
+            id: 11, level: "Médio",
+            text: "Dois ciclistas treinam em uma pista circular. O ciclista A completa uma volta a cada 6 minutos e o B a cada 8 minutos. Partindo juntos às 14h00, após quantos minutos se encontrarão novamente na largada?",
+            options: ["14 minutos", "24 minutos", "36 minutos", "48 minutos"],
+            correct: 1,
+            explanation: {
+                correct: "Problemas de encontros periódicos futuros exigem MMC. O MMC(6, 8) = 2³ × 3 = 24 minutos.",
+                options: ["Pegadinha: somou 6 + 8 = 14.", "Certa", "36 é múltiplo de 6, mas não divide por 8.", "Multiplicou 6 × 8 = 48, que não é o MENOR múltiplo comum."]
+            }
+        },
+        {
+            id: 12, level: "Médio",
+            text: "Um par de calçados custa R$ 240,00 na etiqueta. Comprando à vista, a loja concede um desconto de 15%. O valor final a ser pago pelo cliente é:",
+            options: ["R$ 204,00", "R$ 214,00", "R$ 225,00", "R$ 196,00"],
+            correct: 0,
+            explanation: {
+                correct: "10% de 240 = R$ 24; 5% de 240 = R$ 12. Desconto total = 24 + 12 = R$ 36. Preço final: 240 - 36 = R$ 204,00.",
+                options: ["Certa", "Erro na subtração (descontou apenas R$ 26).", "Subtraiu o número 15 (240 - 15) em vez de 15%.", "Descontou R$ 44 por erro de multiplicação."]
+            }
+        },
+        {
+            id: 13, level: "Médio",
+            text: "Considere o número de quatro algarismos 5.4A2. Para que esse número seja divisível por 6 (divisível por 2 e por 3 ao mesmo tempo), o MENOR valor natural para o algarismo A é:",
+            options: ["0", "1", "2", "3"],
+            correct: 1,
+            explanation: {
+                correct: "Já é par (termina em 2). Para dividir por 3, a soma (5+4+A+2 = 11+A) deve ser múltiplo de 3. Para A = 1, temos 11+1 = 12 (múltiplo de 3!).",
+                options: ["Para A=0, a soma dá 11 (não divide por 3).", "Certa", "Para A=2, a soma dá 13 (não divide por 3).", "Para A=3, a soma dá 14 (não divide por 3)."]
+            }
+        },
+        {
+            id: 14, level: "Médio",
+            text: "Em um mapa geográfico construído na escala 1 : 2.500.000, a distância em linha reta entre duas capitais mede 4 cm. Qual é a distância real entre elas em quilômetros?",
+            options: ["10 km", "25 km", "100 km", "1.000 km"],
+            correct: 2,
+            explanation: {
+                correct: "Distância real = 4 × 2.500.000 = 10.000.000 cm. Como 1 km = 100.000 cm, cortamos 5 zeros: 100 km!",
+                options: ["Cortou 6 zeros em vez de 5.", "Multiplicou apenas o 25 sem considerar a casa decimal.", "Certa", "Cortou apenas 4 zeros na conversão de cm para km."]
+            }
+        },
+        {
+            id: 15, level: "Médio",
+            text: "Analise a estrofe: 'Vagueio pelos campos sem destino (A) / Escuto o som suave do riacho (B) / Na relva verde onde me abaixo (B) / Recordo o meu tempo de menino (A)'. Esse esquema de rimas é:",
+            options: ["Rimas emparelhadas (AABB)", "Rimas alternadas ou cruzadas (ABAB)", "Rimas interpoladas ou opostas (ABBA)", "Versos brancos ou livres (sem rima)"],
+            correct: 2,
+            explanation: {
+                correct: "Quando o 1º verso rima com o 4º (destino/menino) e o 2º rima com o 3º (riacho/abaixo), formamos o padrão ABBA (interpoladas ou opostas).",
+                options: ["Emparelhadas seguem a ordem AABB.", "Cruzadas seguem a ordem ABAB.", "Certa", "Os versos apresentam rimas perfeitas."]
+            }
+        },
+        {
+            id: 16, level: "Médio",
+            text: "No terminal rodoviário, a linha de ônibus A parte a cada 15 minutos e a linha B a cada 20 minutos. Se dois ônibus partiram juntos às 07h00min, a que horas partirão juntos novamente?",
+            options: ["07h35min", "07h45min", "08h00min", "08h30min"],
+            correct: 2,
+            explanation: {
+                correct: "Calculando o MMC(15, 20), obtemos 60 minutos (1 hora exata). Logo, 07h00min + 1h = 08h00min.",
+                options: ["Somou 15 + 20 = 35 minutos.", "45 é múltiplo de 15, mas não de 20.", "Certa", "Somou 90 minutos sem usar o MMC."]
+            }
+        },
+        {
+            id: 17, level: "Médio",
+            text: "Durante o ciclo lunar, quando a Lua se posiciona exatamente entre a Terra e o Sol, sua face voltada para nós não recebe luz solar, ficando escura no céu. Essa fase é a:",
+            options: ["Lua Cheia", "Lua Nova", "Quarto Crescente", "Quarto Minguante"],
+            correct: 1,
+            explanation: {
+                correct: "Na Lua Nova, a face iluminada está virada para o Sol e a face escura fica voltada para a Terra.",
+                options: ["Na Lua Cheia a face voltada para a Terra está 100% iluminada.", "Certa", "Na Crescente vemos metade da face iluminada.", "Na Minguante a iluminação está diminuindo."]
+            }
+        },
+        {
+            id: 18, level: "Médio",
+            text: "Apesar de ser pioneira, a democracia ateniense antiga não era para todos. Eram considerados cidadãos com direito à participação política APENAS:",
+            options: ["Todos os moradores que trabalhassem na cidade.", "Homens livres, adultos e filhos de pais atenienses.", "Mulheres chefes de família e mercadores estrangeiros.", "Soldados libertos vindos de outras cidades gregas."],
+            correct: 1,
+            explanation: {
+                correct: "A cidadania em Atenas era restrita e excludente: mulheres, escravos e estrangeiros (metecos) não podiam votar.",
+                options: ["Escravos e estrangeiros trabalhavam mas não tinham cidadania.", "Certa", "Mulheres e estrangeiros eram excluídos da política.", "Estrangeiros nunca tinham direitos políticos em Atenas."]
+            }
+        },
+        {
+            id: 19, level: "Médio",
+            text: "O local onde as águas de um rio brotam inicialmente na superfície e o local onde ele encerra seu curso, desaguando em outro rio ou no mar, chamam-se, respectivamente:",
+            options: ["Leito e afluente", "Margem direita e margem esquerda", "Nascente e foz", "Foz e nascente"],
+            correct: 2,
+            explanation: {
+                correct: "O rio nasce na nascente e termina seu curso desaguando na foz.",
+                options: ["Leito é o canal por onde o rio corre; afluente é um rio secundário.", "Margens são as laterais do rio.", "Certa", "Pegadinha: inverteu a ordem pedida pelo comando."]
+            }
+        },
+        {
+            id: 20, level: "Médio",
+            text: "Superfícies do relevo com altitudes baixas e formato plano, formadas pelo contínuo acúmulo e deposição de sedimentos trazidos pelas águas, são chamadas de:",
+            options: ["Montanhas", "Planaltos", "Planícies", "Depressões absolutas"],
+            correct: 2,
+            explanation: {
+                correct: "Planícies são terrenos baixos e planos onde o processo de sedimentação (deposição) supera o de erosão.",
+                options: ["Montanhas são grandes elevações de altitude.", "Nos planaltos predomina o desgaste (erosão).", "Certa", "Depressões são áreas rebaixadas em relação ao relevo vizinho."]
+            }
+        },
+
+        // === DIFÍCEIS (10) ===
+        {
+            id: 21, level: "Difícil",
+            text: "Na maquete de um condomínio na escala 1 : 50, um muro mede 8 cm. Além disso, um carpinteiro precisa cortar duas tábuas de 120 cm e 180 cm no MAIOR tamanho igual possível sem sobras. O muro real (em metros) e cada pedaço de tábua (em cm) medem, respectivamente:",
+            options: ["4 metros e 60 cm", "40 metros e 30 cm", "4 metros e 30 cm", "400 metros e 60 cm"],
+            correct: 0,
+            explanation: {
+                correct: "Muro: 8 cm × 50 = 400 cm = 4 metros. Tábuas: MDC(120, 180) = 60 cm cada pedaço!",
+                options: ["Certa", "Errou a conversão para metros e não usou o maior divisor comum.", "30 cm divide ambos, mas não é o MÁXIMO divisor comum (que é 60).", "Esqueceu de converter 400 cm para 4 metros."]
+            }
+        },
+        {
+            id: 22, level: "Difícil",
+            text: "Um número de cinco algarismos é escrito como 4A32B. Sabe-se que ele é divisível por 5 e por 9, mas NÃO é divisível por 10. Qual é o algarismo representado pela letra A?",
+            options: ["2", "4", "5", "7"],
+            correct: 1,
+            explanation: {
+                correct: "Se divide por 5 mas não por 10, não pode terminar em 0; logo B = 5 (4A325). Para dividir por 9, a soma (4+A+3+2+5 = 14+A) deve ser múltiplo de 9. Logo, A = 4 (14+4 = 18).",
+                options: ["Para A=2, a soma daria 16 (não divide por 9).", "Certa", "Para A=5, a soma daria 19 (não divide por 9).", "Considerou B=0 por engano (o que o tornaria divisível por 10)."]
+            }
+        },
+        {
+            id: 23, level: "Difícil",
+            text: "A maquete retangular de uma praça foi feita na escala 1 : 200. No papel, o retângulo tem 15 cm de comprimento e 8 cm de largura. O PERÍMETRO real dessa praça, em metros, é:",
+            options: ["46 metros", "92 metros", "184 metros", "480 metros"],
+            correct: 1,
+            explanation: {
+                correct: "Comprimento real: 15 × 200 = 3.000 cm = 30 m. Largura real: 8 × 200 = 1.600 cm = 16 m. Perímetro (soma dos 4 lados) = 30 + 30 + 16 + 16 = 92 metros.",
+                options: ["Casca de banana: somou apenas dois lados (30 + 16 = 46 m).", "Certa", "Dobrou o perímetro sem necessidade.", "Calculou a área (30 × 16 = 480 m²) em vez do perímetro."]
+            }
+        },
+        {
+            id: 24, level: "Difícil",
+            text: "Um lojista comprou mochilas por R$ 60,00 cada. Aplicou um aumento de 30% sobre o custo para fixar o preço de venda. No saldão, deu 10% de desconto sobre o preço anunciado. Qual foi o preço final?",
+            options: ["R$ 72,00", "R$ 70,20", "R$ 68,00", "R$ 64,80"],
+            correct: 1,
+            explanation: {
+                correct: "Aumento de 30% sobre 60 = +R$ 18 (preço anunciado = R$ 78). Desconto de 10% sobre R$ 78 = -R$ 7,80. Preço final: 78 - 7,80 = R$ 70,20.",
+                options: ["Pegadinha clássica: fez 30% - 10% = 20% direto sobre R$ 60.", "Certa", "Subtraiu R$ 10 fixos em vez de 10%.", "Calculou os percentuais na ordem incorreta."]
+            }
+        },
+        {
+            id: 25, level: "Difícil",
+            text: "Em uma gincana, há 84 alunos do 6º ano e 72 do 7º ano. Eles serão divididos em grupos com a mesma quantidade MÁXIMA possível de alunos, sem misturar as séries e sem sobrar ninguém. O total de grupos formados será:",
+            options: ["12 grupos", "13 grupos", "14 grupos", "15 grupos"],
+            correct: 1,
+            explanation: {
+                correct: "MDC(84, 72) = 12 alunos por grupo. No 6º ano: 84 ÷ 12 = 7 grupos. No 7º ano: 72 ÷ 12 = 6 grupos. Total = 7 + 6 = 13 grupos!",
+                options: ["Pegadinha: 12 é o número de alunos em cada grupo, não o total de grupos!", "Certa", "Erro ao dividir 72 por 12.", "Erro na soma final dos grupos."]
+            }
+        },
+        {
+            id: 26, level: "Difícil",
+            text: "Considere a sequência dos múltiplos positivos de 6: (6, 12, 18, 24, 30...), onde o termo de posição n vale 6 × n. Qual é o valor da SOMA entre o 15º termo e o 25º termo dessa sequência?",
+            options: ["210", "240", "260", "300"],
+            correct: 1,
+            explanation: {
+                correct: "15º termo = 6 × 15 = 90. 25º termo = 6 × 25 = 150. Somando ambos: 90 + 150 = 240.",
+                options: ["Erro de multiplicação no 15º termo.", "Certa", "Erro ao somar as dezenas.", "Multiplicou 6 × 50 por engano."]
+            }
+        },
+        {
+            id: 27, level: "Difícil",
+            text: "Na frase extraída de uma resenha crítica: 'A CORAGEM deste jovem AUTOR surpreendeu os leitores da ESCOLA', os três substantivos em destaque classificam-se, respectivamente, como:",
+            options: ["Próprio, comum e concreto.", "Abstrato (coragem), concreto (autor) e concreto (escola).", "Concreto, abstrato e próprio.", "Todos abstratos e derivados."],
+            correct: 1,
+            explanation: {
+                correct: "'Coragem' é um sentimento/qualidade que depende de alguém para se manifestar (abstrato). 'Autor' e 'escola' têm existência independente (concretos).",
+                options: ["Nenhum deles está em letra maiúscula para ser próprio.", "Certa", "Coragem não é concreto e escola não é próprio.", "Autor e escola são substantivos concretos."]
+            }
+        },
+        {
+            id: 28, level: "Difícil",
+            text: "Analise: I. Queima de papel na fogueira; II. Derretimento de gelo no copo; III. Preservação de pegadas pré-históricas em rochas sedimentares. É correto afirmar que:",
+            options: ["I e II são fenômenos puramente químicos.", "I é transformação química, II é transformação física e III é a formação de um fóssil.", "I e II são transformações físicas reversíveis.", "Apenas o acontecimento III envolve reação química."],
+            correct: 1,
+            explanation: {
+                correct: "Queimar papel gera cinzas e fumaça (química); derreter gelo só muda o estado da água H₂O (física); vestígios preservados em rochas sedimentares são fósseis.",
+                options: ["Derreter gelo não altera a molécula da água (é físico).", "Certa", "A queima do papel é química e irreversível.", "O item I é uma reação química clássica de combustão."]
+            }
+        },
+        {
+            id: 29, level: "Difícil",
+            text: "Na República Romana, a luta dos plebeus contra a dominação política dos patrícios resultou em uma conquista fundamental para proteger a plebe contra leis injustas. Tratava-se do cargo de:",
+            options: ["Imperador perpétuo", "Tribuno da Plebe (com direito de veto)", "Ditador vitalício", "Pretor militar exclusivo do Senado"],
+            correct: 1,
+            explanation: {
+                correct: "Os Tribunos da Plebe eram magistrados representantes dos plebeus que possuíam o poder sagrado de vetar leis do Senado que prejudicassem o povo.",
+                options: ["O cargo de Imperador só surgiu séculos depois, no Império Romano.", "Certa", "Ditador era um cargo de emergência militar temporário.", "Pretores administravam a justiça, inicialmente dominada por patrícios."]
+            }
+        },
+        {
+            id: 30, level: "Difícil",
+            text: "A porção de terra banhada por um rio principal e toda a sua rede de afluentes, delimitada naturalmente pelos pontos mais elevados do relevo (divisores de água), recebe o nome de:",
+            options: ["Bacia hidrográfica", "Lençol freático", "Planalto cristalino", "Depressão fóssil"],
+            correct: 0,
+            explanation: {
+                correct: "Bacia hidrográfica é toda a área de captação de água da chuva que escoa pelos declives do relevo até alimentar um rio principal e seus afluentes.",
+                options: ["Certa", "Lençol freático é o reservatório de água subterrânea.", "Planalto cristalino é uma estrutura geológica de relevo.", "Termo inexistente na geografia física."]
+            }
+        }
+    ];
+
+    // --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+    const storageKey = 'promover_quiz_colegio_' + document.title.replace(/\s+/g, '_');
+    let currentQuestion = 0;
+    
+    let savedAnswers = localStorage.getItem(storageKey);
+    let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+
+    function setMode(mode) {
+        const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+        views.forEach(v => document.getElementById(v).style.display = 'none');
+        document.getElementById('quizFooter').style.display = 'none';
+
+        if(mode === 'explanation') {
+            document.getElementById('viewExplanation').style.display = 'flex';
+            document.getElementById('btnExp').classList.add('active');
+            document.getElementById('btnPrac').classList.remove('active');
+        } else if (mode === 'practice') {
+            document.getElementById('viewPractice').style.display = 'block';
+            document.getElementById('quizFooter').style.display = 'flex';
+            document.getElementById('btnExp').classList.remove('active');
+            document.getElementById('btnPrac').classList.add('active');
+            renderQuestion();
+            renderMap();
+        } else if (mode === 'result') {
+            document.getElementById('viewResult').style.display = 'block';
+            document.getElementById('quizFooter').style.display = 'none';
+        }
+        window.scrollTo(0,0);
+    }
+
+    function renderQuestion() {
+        if(questions.length === 0) return;
+        const q = questions[currentQuestion];
+        const container = document.getElementById('quizContainer');
+        const letters = ['A', 'B', 'C', 'D'];
+        const ans = userAnswers[currentQuestion];
+
+        let badgeClass = '';
+        if(q.level === 'Fácil') badgeClass = 'dif-facil';
+        else if(q.level === 'Médio') badgeClass = 'dif-medio';
+        else badgeClass = 'dif-dificil';
+
+        container.innerHTML = `
+            <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+                <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+                <div style="margin-bottom: 20px;">
+                    <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+                    <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+                </div>
+                
+                <div class="options-list">
+                    ${q.options.map((opt, i) => {
+                        let cls = '';
+                        if (ans !== null) {
+                            if (i === q.correct) cls = 'correct';
+                            else if (i === ans) cls = 'wrong';
+                            else cls = 'disabled';
+                        }
+                        return `
+                        <button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                            <div class="opt-circle">${letters[i]}</div>
+                            <div>${opt}</div>
+                        </button>`;
+                    }).join('')}
+                </div>
+                
+                ${ans !== null ? `
+                <div class="feedback-box">
+                    <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                        ${ans === q.correct ? '✅ Raciocínio Aprovado!' : '⚠️ Ops! Falha Detectada:'}
+                    </div>
+                    <div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+                    <div style="margin-top: 10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                        ${q.explanation.correct}
+                    </div>
+                    
+                    <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                        <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+                        ${q.explanation.options.map((exp, i) => i !== q.correct ? `
+                            <div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>(${letters[i]})</strong> ${exp}</div>
+                        ` : '').join('')}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        updateNav();
+    }
+
+    function handleAnswer(idx) {
+        if (userAnswers[currentQuestion] !== null) return;
+        
+        userAnswers[currentQuestion] = idx;
+        localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+        
+        if (idx === questions[currentQuestion].correct) {
+            const duration = 1500;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        } else {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.classList.remove('shake-effect');
+            void quizContainer.offsetWidth; 
+            quizContainer.classList.add('shake-effect');
+            setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+        }
+        
+        renderQuestion();
+        renderMap();
+    }
+
+    function renderMap() {
+        if(questions.length === 0) return;
+        const map = document.getElementById('qMap');
+        map.innerHTML = questions.map((q, i) => {
+            let cls = 'map-dot';
+            if (i === currentQuestion) cls += ' active';
+            if (userAnswers[i] !== null) {
+                cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+            }
+            return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+        }).join('');
+
+        setTimeout(() => {
+            const activeDot = map.querySelector('.map-dot.active');
+            if (activeDot) {
+                activeDot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }, 50);
+    }
+
+    function goTo(i) {
+        if (window.confetti) confetti.reset();
+        currentQuestion = i;
+        renderQuestion();
+        renderMap();
+    }
+
+    function changeQuestion(d) {
+        let n = currentQuestion + d;
+        if (n >= 0 && n < questions.length) goTo(n);
+    }
+
+    function updateNav() {
+        document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+        const next = document.getElementById('btnNext');
+        if (currentQuestion === questions.length - 1) {
+            next.textContent = "Finalizar Diagnóstico";
+            next.onclick = finish;
+        } else {
+            next.textContent = "Avançar";
+            next.onclick = () => changeQuestion(1);
+        }
+    }
+
+    function finish() {
+        let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+        let percent = Math.round((correct / questions.length) * 100);
+        
+        if (window.confetti) confetti.reset();
+        
+        document.getElementById('finalPercent').textContent = percent + "%";
+        document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+        document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐" : percent >= 60 ? "⭐⭐" : "⭐";
+
+        let summary = '<div style="text-align:left; margin-top:20px;">';
+        
+        if (percent < 80) {
+            summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+                <strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Atingir a pontuação mínima é obrigatório nesta prova. Revise a teoria com rigor antes de tentar novamente.
+            </div>`;
+            document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Limpar Histórico e Refazer Prova</button>';
+        } else {
+            summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+                <strong>🏆 Excelente Desempenho!</strong> Você demonstrou uma base sólida, clínica e exata sobre os conceitos avaliados. A sua aprovação técnica está garantida neste módulo.
+            </div>`;
+            document.getElementById('action-buttons').innerHTML = '<button class="btn-action" onclick="reset()">Refazer Prova (Zerar Histórico)</button>';
+        }
+
+        if (correct < questions.length) {
+            summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+            questions.forEach((q, i) => {
+                if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+                    summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                        <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                        <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+                        <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                    </div>`;
+                }
+            });
+        }
+        
+        summary += '</div>';
+        document.getElementById('review-container').innerHTML = summary;
+        setMode('result');
+    }
+
+    function reset() {
+        localStorage.removeItem(storageKey);
+        userAnswers = new Array(questions.length).fill(null);
+        currentQuestion = 0;
+        setMode('practice');
+    }
+
+    // Inicializa direto na Teoria ou onde parou (se houver salvamento)
+    setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
