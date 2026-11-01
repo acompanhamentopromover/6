@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atividades Econômicas e Fontes de Energia - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root {
+/* Cores do tema: Geografia (verde da natureza + âmbar da energia) */
+--bg-color: #F0FDF4;
+--text-color: #14532D;
+--border-color: #000000;
+--white: #FFFFFF;
+--theme-light: #DCFCE7;
+--theme-medium: #4ADE80;
+--theme-dark: #166534;
+--theme-contrast: #F59E0B;
+--theme-accent: #0EA5E9;
+--theme-text-active: #FFFFFF;
+/* NÃO ALTERAR AS CORES ABAIXO */
+--correct-bg: #D1FAE5;
+--correct-border: #059669;
+--wrong-bg: #FFE4E6;
+--wrong-border: #BE123C;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color);
+display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-bottom: 100px;
+background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+background-size: 20px 20px;
+}
+@keyframes shake {
+0% { transform: translateX(0); }
+25% { transform: translateX(-6px); }
+50% { transform: translateX(6px); }
+75% { transform: translateX(-6px); }
+100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+0% { transform: scale(1); }
+15% { transform: scale(1.15); color: var(--theme-contrast); }
+30% { transform: scale(1); }
+45% { transform: scale(1.15); color: var(--theme-contrast); }
+100% { transform: scale(1); }
+}
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center;}
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container { position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 { font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil { background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+.result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big { font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+</style>
+</head>
+<body>
+<div class="container">
+<header class="logo-header">
+<div class="css-logo"><span class="pulse-effect">🚀</span> PROMOVER</div>
+<h1>Geografia • 6º Ano</h1>
+<p class="subtitle">Atividades econômicas e fontes de energia • Revisão para a prova da escola</p>
+</header>
+<div class="toggle-container">
+<button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📘 Teoria</button>
+<button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🧠 Prática (30)</button>
+</div>
+<div id="viewExplanation" class="view-section" style="display: flex;">
+<div class="search-container">
+<span class="search-icon" aria-hidden="true">🔍</span>
+<input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+</div>
+<div id="no-results"><p>😕 Termo não encontrado.</p></div>
+
+<!-- 1. ESPAÇO GEOGRÁFICO -->
+<div class="content-group">
+<span class="section-badge">1. A ação humana e o espaço geográfico</span>
+<div class="theory-box">
+<h3>🌍 O que é espaço geográfico?</h3>
+<p>É o espaço <strong>transformado pela sociedade</strong>. O ser humano usa o seu <strong>trabalho</strong> e as <strong>técnicas</strong> (ferramentas, máquinas, conhecimentos) para modificar a natureza: derruba matas, planta, constrói casas, estradas, açudes e cidades.</p>
+<div class="visual-area">🌳 Natureza ➜ 👷 Trabalho + Técnica ➜ 🏘️ Espaço transformado</div>
+<p><strong>Paisagem natural:</strong> tem pouca ou nenhuma interferência humana (ex.: uma área de dunas sem construções).</p>
+<p><strong>Paisagem cultural (ou humanizada):</strong> foi modificada pelas pessoas (ex.: um bairro com ruas, casas e praça).</p>
+<div class="highlight-box">💡 <strong>Dica de prova:</strong> quanto mais técnica uma sociedade tem, mais rápido e mais profundamente ela transforma o espaço.</div>
+</div>
+</div>
+
+<!-- 2. ATIVIDADES ECONÔMICAS -->
+<div class="content-group">
+<span class="section-badge">2. Atividades econômicas</span>
+<div class="theory-box">
+<h3>💼 Os três setores da economia</h3>
+<p>Atividades econômicas são os trabalhos que as pessoas fazem para <strong>produzir bens e oferecer serviços</strong>. Elas são divididas em três setores:</p>
+<ul style="padding-left:20px;">
+<li><strong>Setor primário:</strong> tira produtos direto da natureza. Ex.: agricultura, pecuária, pesca, extrativismo.</li>
+<li><strong>Setor secundário:</strong> transforma matéria-prima em produtos. Ex.: indústrias e construção civil.</li>
+<li><strong>Setor terciário:</strong> comércio e serviços. Ex.: lojas, escolas, hospitais, transporte, bancos.</li>
+</ul>
+<div class="visual-area">🌾 Primário ➜ 🏭 Secundário ➜ 🛒 Terciário</div>
+<div class="highlight-box">🥤 <strong>Exemplo cearense:</strong> o caju é colhido no campo (primário), vira suco numa fábrica (secundário) e é vendido no supermercado (terciário).</div>
+</div>
+</div>
+
+<!-- 3. EXTRATIVISMO -->
+<div class="content-group">
+<span class="section-badge">3. Extrativismo</span>
+<div class="theory-box">
+<h3>⛏️ Os recursos da natureza</h3>
+<p>Extrativismo é <strong>retirar recursos diretamente da natureza</strong>, sem plantar nem criar. Existem três tipos:</p>
+<ul style="padding-left:20px;">
+<li><strong>Vegetal:</strong> madeira, frutos, castanhas, látex, cera de carnaúba.</li>
+<li><strong>Animal:</strong> pesca e caça (a caça de animais silvestres é proibida na maior parte dos casos no Brasil).</li>
+<li><strong>Mineral:</strong> ferro, ouro, sal, petróleo, areia, pedras.</li>
+</ul>
+<div class="visual-area">🌴 Vegetal • 🐟 Animal • 💎 Mineral</div>
+<p><strong>Extrativismo sustentável:</strong> retira recursos sem destruir a fonte, permitindo que ela continue existindo. Ex.: tirar o pó das folhas da carnaúba sem derrubar a palmeira.</p>
+<p><strong>Extrativismo predatório:</strong> retira de forma exagerada e destrói a fonte. Ex.: derrubar uma floresta inteira para vender a madeira.</p>
+<div class="highlight-box warning">⚠️ <strong>Atenção:</strong> no Ceará existe o <strong>defeso da lagosta</strong>, período em que a pesca é proibida para o animal se reproduzir. Pescar nesse período ou pegar lagostas pequenas é pesca predatória.</div>
+</div>
+</div>
+
+<!-- 4. AGROPECUÁRIA -->
+<div class="content-group">
+<span class="section-badge">4. Agropecuária e espaço geográfico</span>
+<div class="theory-box">
+<h3>🚜 Agricultura + Pecuária</h3>
+<p><strong>Agricultura</strong> é o cultivo de plantas. <strong>Pecuária</strong> é a criação de animais. Juntas, formam a <strong>agropecuária</strong>.</p>
+<ul style="padding-left:20px;">
+<li><strong>Agricultura familiar:</strong> feita pela família em pequenas propriedades, produzindo alimentos como feijão, milho, mandioca e hortaliças.</li>
+<li><strong>Agricultura comercial (agronegócio):</strong> grandes propriedades, muitas máquinas, muitas vezes com <strong>monocultura</strong> (um só produto, como soja) e foco na exportação.</li>
+<li><strong>Pecuária extensiva:</strong> animais soltos em grandes áreas, com pouca tecnologia.</li>
+<li><strong>Pecuária intensiva:</strong> animais em espaços menores, com ração, vacinas e controle técnico.</li>
+</ul>
+<div class="visual-area">🌽 Agricultura + 🐄 Pecuária = 🚜 Agropecuária</div>
+<div class="highlight-box warning">⚠️ <strong>Impactos ambientais:</strong> desmatamento, empobrecimento e erosão do solo e contaminação da água por agrotóxicos.</div>
+<div class="highlight-box">💧 Técnicas como a <strong>irrigação</strong> (levar água de açudes e rios até a plantação) permitem plantar mesmo em áreas secas, como a Caatinga.</div>
+</div>
+</div>
+
+<!-- 5. INDUSTRIALIZAÇÃO -->
+<div class="content-group">
+<span class="section-badge">5. A industrialização</span>
+<div class="theory-box">
+<h3>🏭 Como a produção mudou</h3>
+<ul style="padding-left:20px;">
+<li><strong>Artesanato:</strong> uma pessoa faz o produto inteiro com as mãos e ferramentas simples.</li>
+<li><strong>Manufatura:</strong> vários trabalhadores dividem as tarefas, ainda à mão.</li>
+<li><strong>Maquinofatura:</strong> as máquinas fazem grande parte do trabalho e a produção fica muito maior.</li>
+</ul>
+<div class="visual-area">✋ Artesanato ➜ 👥 Manufatura ➜ ⚙️ Maquinofatura</div>
+<p>A <strong>Revolução Industrial</strong> começou na <strong>Inglaterra, no século XVIII</strong>, com a máquina a vapor movida a carvão.</p>
+<p><strong>Tipos de indústria:</strong></p>
+<ul style="padding-left:20px;">
+<li><strong>Indústria de base:</strong> transforma recursos brutos para outras fábricas usarem. Ex.: siderúrgica (minério de ferro ➜ aço).</li>
+<li><strong>Indústria de bens de consumo:</strong> fabrica o que as pessoas compram. Ex.: roupas, alimentos, celulares.</li>
+</ul>
+<div class="highlight-box">🏙️ <strong>Consequências:</strong> crescimento das cidades, <strong>êxodo rural</strong> (saída de pessoas do campo para a cidade em busca de emprego) e aumento da poluição.</div>
+</div>
+</div>
+
+<!-- 6. FONTES DE ENERGIA -->
+<div class="content-group">
+<span class="section-badge">6. Fontes de energia</span>
+<div class="theory-box">
+<h3>⚡ Renováveis x Não renováveis</h3>
+<p><strong>Renováveis:</strong> se refazem na natureza e não acabam.</p>
+<ul style="padding-left:20px;">
+<li>☀️ <strong>Solar:</strong> luz do Sol.</li>
+<li>🌬️ <strong>Eólica:</strong> força do vento.</li>
+<li>💧 <strong>Hidráulica:</strong> força da água dos rios (usinas hidrelétricas).</li>
+<li>🌱 <strong>Biomassa:</strong> restos de plantas e animais, como o bagaço da cana.</li>
+</ul>
+<p><strong>Não renováveis:</strong> podem acabar, pois levam milhões de anos para se formar.</p>
+<ul style="padding-left:20px;">
+<li>🛢️ <strong>Combustíveis fósseis:</strong> petróleo, carvão mineral e gás natural (formados de restos de seres vivos soterrados há milhões de anos).</li>
+<li>☢️ <strong>Nuclear:</strong> usa urânio e gera lixo radioativo.</li>
+</ul>
+<div class="visual-area">♻️ Renováveis x ⛽ Não renováveis</div>
+<div class="highlight-box">🇧🇷 No Brasil, a maior parte da eletricidade vem de fontes renováveis, principalmente das <strong>hidrelétricas</strong>. O <strong>Nordeste</strong>, incluindo o <strong>Ceará</strong>, se destaca na energia <strong>eólica</strong> e <strong>solar</strong>, por ter ventos fortes e constantes e muito sol.</div>
+<div class="highlight-box warning">⚠️ <strong>Nenhuma fonte é perfeita:</strong> hidrelétricas alagam grandes áreas; solar e eólica dependem do tempo (sol e vento); os combustíveis fósseis liberam gases que aumentam o efeito estufa.</div>
+</div>
+</div>
+
+<!-- RESUMO -->
+<div class="content-group">
+<span class="section-badge">⭐ Resumo para a prova</span>
+<div class="theory-box">
+<h3>📝 Não esqueça!</h3>
+<ul style="padding-left:20px;">
+<li>Espaço geográfico = natureza transformada pelo trabalho e pela técnica.</li>
+<li>Primário (natureza) ➜ Secundário (indústria) ➜ Terciário (comércio e serviços).</li>
+<li>Extrativismo: vegetal, animal e mineral. Sustentável preserva; predatório destrói.</li>
+<li>Pecuária extensiva = solta; intensiva = confinada e com tecnologia.</li>
+<li>Artesanato ➜ Manufatura ➜ Maquinofatura. Revolução Industrial: Inglaterra, século XVIII.</li>
+<li>Renováveis: solar, eólica, hidráulica, biomassa. Não renováveis: petróleo, carvão, gás, nuclear.</li>
+</ul>
+</div>
+</div>
+
+<button class="btn-action" onclick="setMode('practice')">
+Iniciar Diagnóstico (30 Q) ➜
+</button>
+</div>
+<div id="viewPractice" class="view-section">
+<div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+<h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+<p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">30 questões rigorosas. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro!
+</p>
+</div>
+<div class="question-map" id="qMap"></div>
+<div id="quizContainer" style="margin-bottom: 100px;"></div>
+</div>
+<div id="viewResult" class="view-section">
+<div class="result-card">
+<h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+<div class="stars-container" id="finalStars">⭐⭐⭐</div>
+<div class="percentage-big" id="finalPercent">0%</div>
+<p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+<div id="review-container"></div>
+</div>
+<div id="action-buttons"></div>
+</div>
+</div>
+<footer class="quiz-footer" id="quizFooter">
+<button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+<button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+<script>
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+searchInput.addEventListener('input', function(e) {
+const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+let totalVisible = 0;
+contentGroups.forEach(group => {
+const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+if (textContent.includes(term)) {
+group.style.display = 'flex';
+totalVisible++;
+} else {
+group.style.display = 'none';
+}
+});
+noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+const questions = [
+// ===================== FÁCEIS =====================
+{
+id: 1, level: "Fácil",
+text: "O que é o espaço geográfico?",
+options: ["O espaço natural que nunca foi modificado pelo ser humano", "O espaço transformado pela sociedade por meio do trabalho e das técnicas", "Apenas o espaço das grandes cidades", "O espaço sideral, onde ficam os planetas e as estrelas"],
+correct: 1,
+explanation: {
+correct: "Espaço geográfico é a natureza modificada pelas pessoas. Campo, cidade, estradas e açudes fazem parte dele.",
+options: ["Isso é uma paisagem natural, não o espaço geográfico.", "Correta: trabalho e técnica transformam a natureza.", "O campo e as áreas rurais também são espaço geográfico.", "O espaço sideral é estudado pela Astronomia."]
+}
+},
+{
+id: 2, level: "Fácil",
+text: "Qual das atividades abaixo pertence ao setor primário?",
+options: ["Venda de roupas em uma loja", "Fabricação de carros", "Cultivo de feijão", "Atendimento em um hospital"],
+correct: 2,
+explanation: {
+correct: "O setor primário retira produtos direto da natureza. Plantar feijão é agricultura, uma atividade primária.",
+options: ["Comércio é setor terciário.", "Fábrica é setor secundário.", "Correta: agricultura é setor primário.", "Saúde é um serviço, setor terciário."]
+}
+},
+{
+id: 3, level: "Fácil",
+text: "O extrativismo é a atividade de:",
+options: ["Retirar recursos diretamente da natureza", "Transformar matéria-prima em produtos nas fábricas", "Vender produtos em lojas e feiras", "Criar animais em fazendas"],
+correct: 0,
+explanation: {
+correct: "No extrativismo, nada é plantado nem criado: os recursos são apenas retirados da natureza.",
+options: ["Correta.", "Isso é a indústria (setor secundário).", "Isso é o comércio (setor terciário).", "Isso é pecuária, pois os animais são criados."]
+}
+},
+{
+id: 4, level: "Fácil",
+text: "O que é pecuária?",
+options: ["Cultivo de plantas como milho e feijão", "Extração de minérios do subsolo", "Coleta de frutos na floresta", "Criação de animais, como bois, cabras e galinhas"],
+correct: 3,
+explanation: {
+correct: "Pecuária é a criação de animais para obter carne, leite, ovos, couro e lã.",
+options: ["Cultivo de plantas é agricultura.", "Isso é extrativismo mineral.", "Isso é extrativismo vegetal.", "Correta."]
+}
+},
+{
+id: 5, level: "Fácil",
+text: "Qual destas é uma fonte de energia renovável?",
+options: ["Petróleo", "Carvão mineral", "Gás natural", "Energia solar"],
+correct: 3,
+explanation: {
+correct: "A luz do Sol não acaba, por isso a energia solar é renovável.",
+options: ["Petróleo é fóssil e pode acabar.", "Carvão mineral é fóssil e não renovável.", "Gás natural também é fóssil e não renovável.", "Correta."]
+}
+},
+{
+id: 6, level: "Fácil",
+text: "Qual alternativa traz somente atividades do setor terciário?",
+options: ["Pesca e mineração", "Plantação de milho e criação de gado", "Comércio, transporte e educação", "Fábrica de sapatos e construção civil"],
+correct: 2,
+explanation: {
+correct: "O setor terciário reúne comércio e serviços: lojas, transporte, escolas, hospitais e bancos.",
+options: ["Pesca e mineração são do setor primário.", "Agricultura e pecuária são do setor primário.", "Correta.", "Fábricas e construção civil são do setor secundário."]
+}
+},
+{
+id: 7, level: "Fácil",
+text: "Qual é um exemplo de extrativismo mineral?",
+options: ["Retirada de minério de ferro do solo", "Coleta de castanhas na floresta", "Pesca de peixes no mar", "Plantio de milho"],
+correct: 0,
+explanation: {
+correct: "Extrativismo mineral é retirar minerais da natureza, como ferro, ouro, sal e petróleo.",
+options: ["Correta.", "Castanha vem de planta: extrativismo vegetal.", "Pesca é extrativismo animal.", "Plantar é agricultura, não extrativismo."]
+}
+},
+{
+id: 8, level: "Fácil",
+text: "Onde e quando começou a Revolução Industrial?",
+options: ["No Brasil, no século XX", "Na Inglaterra, no século XVIII", "Na China, no século XXI", "Em Portugal, no século XVI"],
+correct: 1,
+explanation: {
+correct: "A Revolução Industrial começou na Inglaterra, no século XVIII, com a máquina a vapor.",
+options: ["O Brasil se industrializou bem depois, principalmente no século XX.", "Correta.", "A China se industrializou muito mais tarde.", "No século XVI, Portugal fazia as Grandes Navegações."]
+}
+},
+{
+id: 9, level: "Fácil",
+text: "Uma usina hidrelétrica produz energia usando:",
+options: ["A força do vento", "A luz do Sol", "A força da água dos rios", "A queima do carvão"],
+correct: 2,
+explanation: {
+correct: "Hidro quer dizer água. A água represada passa pelas turbinas e gera eletricidade.",
+options: ["Força do vento é energia eólica.", "Luz do Sol é energia solar.", "Correta.", "Queimar carvão é usado nas usinas termelétricas."]
+}
+},
+{
+id: 10, level: "Fácil",
+text: "Qual destes é um exemplo de paisagem cultural (humanizada)?",
+options: ["Uma floresta que nunca foi tocada pelo ser humano", "Um bairro com casas, ruas asfaltadas e uma praça", "Uma cachoeira em uma área isolada", "Uma área de dunas sem construções"],
+correct: 1,
+explanation: {
+correct: "Paisagem cultural é aquela modificada pelas pessoas. Casas, ruas e praças foram construídas pelo ser humano.",
+options: ["Sem interferência humana, é paisagem natural.", "Correta.", "Área isolada e sem modificações é paisagem natural.", "Dunas sem construções formam uma paisagem natural."]
+}
+},
+// ===================== MÉDIAS =====================
+{
+id: 11, level: "Médio",
+text: "Qual situação representa uma atividade do setor secundário?",
+options: ["Colher algodão na plantação", "Transformar algodão em tecido numa fábrica", "Vender camisas numa loja do shopping", "Transportar camisas em caminhões"],
+correct: 1,
+explanation: {
+correct: "O setor secundário transforma matéria-prima em produto. Algodão virando tecido é trabalho da indústria.",
+options: ["Colher é setor primário.", "Correta.", "Vender é comércio, setor terciário.", "Transporte é um serviço, setor terciário."]
+}
+},
+{
+id: 12, level: "Médio",
+text: "No Ceará, comunidades retiram o pó das folhas da carnaúba para fazer cera, sem derrubar a palmeira, que continua produzindo. Esse é um exemplo de:",
+options: ["Extrativismo predatório", "Pecuária extensiva", "Extrativismo sustentável", "Indústria de base"],
+correct: 2,
+explanation: {
+correct: "A palmeira continua viva e produzindo. Retirar o recurso sem destruir a fonte é extrativismo sustentável.",
+options: ["Predatório destruiria a palmeira ou a área.", "Pecuária é criação de animais.", "Correta.", "Indústria de base transforma recursos brutos, como ferro em aço."]
+}
+},
+{
+id: 13, level: "Médio",
+text: "Qual alternativa descreve a pecuária extensiva?",
+options: ["Animais criados soltos em grandes áreas, com pouca tecnologia", "Animais confinados, com ração e vacinas controladas", "Criação de peixes em tanques com controle da água", "Plantação de capim para vender aos fazendeiros"],
+correct: 0,
+explanation: {
+correct: "Extensiva lembra extensão: muito espaço e pouca tecnologia. Os animais pastam soltos.",
+options: ["Correta.", "Essa é a pecuária intensiva.", "Isso é piscicultura, uma criação com controle técnico.", "Plantar capim é agricultura, não pecuária."]
+}
+},
+{
+id: 14, level: "Médio",
+text: "O que é monocultura?",
+options: ["Plantio de várias culturas misturadas para alimentar a família", "Criação de uma só espécie de animal", "Plantio feito apenas em pequenas hortas na cidade", "Plantio de um único produto em grandes áreas, geralmente para exportação"],
+correct: 3,
+explanation: {
+correct: "Mono quer dizer um. Monocultura é plantar só um produto, como soja, em grandes extensões de terra.",
+options: ["Várias culturas juntas é policultura.", "Monocultura se refere a plantas, não a animais.", "Hortas urbanas pequenas costumam ter vários produtos.", "Correta."]
+}
+},
+{
+id: 15, level: "Médio",
+text: "Os combustíveis fósseis, como o petróleo e o carvão, se formaram a partir de:",
+options: ["Restos de seres vivos soterrados há milhões de anos", "Rochas vulcânicas formadas recentemente", "Sal retirado da água dos oceanos", "Luz do Sol armazenada em placas"],
+correct: 0,
+explanation: {
+correct: "Fóssil é resto de ser vivo antigo. Plantas e animais soterrados por milhões de anos viraram petróleo, carvão e gás.",
+options: ["Correta.", "Lava vulcânica forma rochas, não combustíveis.", "O sal do mar não vira petróleo.", "Placas solares geram eletricidade, não combustíveis."]
+}
+},
+{
+id: 16, level: "Médio",
+text: "Qual alternativa descreve a agricultura familiar?",
+options: ["Produção feita só com aviões e grandes máquinas", "Plantio exclusivo de soja para vender a outros países", "Trabalho feito principalmente pela família, em pequenas propriedades, produzindo alimentos como feijão e mandioca", "Atividade que deixou de existir no Brasil"],
+correct: 2,
+explanation: {
+correct: "Na agricultura familiar, a própria família trabalha na terra, produzindo alimentos que chegam à mesa dos brasileiros.",
+options: ["Uso intenso de grandes máquinas é típico do agronegócio.", "Soja para exportação é monocultura comercial.", "Correta.", "A agricultura familiar é muito importante no Brasil, inclusive no Ceará."]
+}
+},
+{
+id: 17, level: "Médio",
+text: "Com a industrialização, muitas pessoas saíram do campo e foram morar nas cidades. Por quê?",
+options: ["Porque a lei passou a proibir morar no campo", "Porque as cidades ofereciam empregos nas fábricas e as máquinas diminuíram o trabalho no campo", "Porque o campo ficou sem água no mundo inteiro", "Porque as cidades eram menores e mais tranquilas"],
+correct: 1,
+explanation: {
+correct: "Esse movimento é o êxodo rural. As fábricas atraíam trabalhadores e as máquinas substituíam pessoas no campo.",
+options: ["Nunca houve lei proibindo morar no campo.", "Correta.", "A falta de água atinge algumas regiões, não o mundo todo.", "As cidades cresceram e ficaram mais movimentadas."]
+}
+},
+{
+id: 18, level: "Médio",
+text: "O litoral do Ceará tem muitos parques de energia eólica. Isso acontece porque a região tem:",
+options: ["Ventos fortes e constantes", "Muitos rios com grande volume de água", "Grandes reservas de carvão mineral", "Pouca luz do Sol durante o ano"],
+correct: 0,
+explanation: {
+correct: "Energia eólica depende do vento. O litoral cearense tem ventos fortes e que sopram quase o ano todo.",
+options: ["Correta.", "Rios caudalosos favorecem hidrelétricas, não eólicas.", "Carvão é usado em termelétricas.", "O Ceará tem muito sol, e isso não tem relação com o vento."]
+}
+},
+{
+id: 19, level: "Médio",
+text: "Sobre a energia nuclear, é correto afirmar que ela:",
+options: ["É renovável e não oferece nenhum risco", "É não renovável, usa urânio e gera lixo radioativo", "Funciona com a força do vento", "É o mesmo que energia de biomassa"],
+correct: 1,
+explanation: {
+correct: "A energia nuclear usa urânio, um mineral que pode acabar, e produz lixo radioativo perigoso.",
+options: ["O urânio pode acabar e há riscos de acidentes.", "Correta.", "Força do vento é energia eólica.", "Biomassa usa restos de plantas e animais."]
+}
+},
+{
+id: 20, level: "Médio",
+text: "Qual alternativa descreve a maquinofatura?",
+options: ["Uma pessoa faz o produto inteiro com as mãos, do início ao fim", "Vários trabalhadores dividem as tarefas usando ferramentas simples, sem máquinas", "Produção feita com a força de animais", "Máquinas fazem grande parte do trabalho, produzindo em grande quantidade"],
+correct: 3,
+explanation: {
+correct: "Maquinofatura é a produção com máquinas, que surgiu com a Revolução Industrial e aumentou muito a produção.",
+options: ["Isso é o artesanato.", "Isso é a manufatura.", "Força animal não caracteriza nenhuma dessas etapas.", "Correta."]
+}
+},
+// ===================== DIFÍCEIS =====================
+{
+id: 21, level: "Difícil",
+text: "Um caju é colhido no interior do Ceará, vira suco em uma fábrica e é vendido em um supermercado. Os setores envolvidos, nessa ordem, são:",
+options: ["Primário, secundário e terciário", "Secundário, primário e terciário", "Terciário, secundário e primário", "Primário, terciário e secundário"],
+correct: 0,
+explanation: {
+correct: "Colher é primário, fabricar o suco é secundário e vender é terciário.",
+options: ["Correta.", "A colheita não é indústria; é setor primário.", "A ordem está invertida: a venda vem por último.", "A fábrica (secundário) vem antes da venda (terciário)."]
+}
+},
+{
+id: 22, level: "Difícil",
+text: "As hidrelétricas usam uma fonte renovável. Mesmo assim, qual é um impacto causado por elas?",
+options: ["Não causam nenhum impacto, por serem renováveis", "Alagam grandes áreas, afetando florestas, animais e comunidades", "Poluem o ar com fumaça de carvão", "Produzem lixo radioativo"],
+correct: 1,
+explanation: {
+correct: "Para formar a represa, grandes áreas são alagadas. Isso destrói vegetação e obriga famílias a mudar de lugar.",
+options: ["Ser renovável não significa não causar impacto.", "Correta.", "Fumaça de carvão é problema das termelétricas.", "Lixo radioativo vem das usinas nucleares."]
+}
+},
+{
+id: 23, level: "Difícil",
+text: "A maior parte da eletricidade produzida no Brasil vem de:",
+options: ["Usinas nucleares", "Usinas termelétricas a carvão", "Fontes renováveis, principalmente hidrelétricas", "Petróleo comprado de outros países"],
+correct: 2,
+explanation: {
+correct: "O Brasil tem muitos rios com grande volume de água. Por isso, as hidrelétricas são a principal fonte de eletricidade.",
+options: ["O Brasil tem poucas usinas nucleares (Angra 1 e 2).", "As termelétricas a carvão têm participação pequena.", "Correta.", "O petróleo é usado mais em combustíveis para veículos."]
+}
+},
+{
+id: 24, level: "Difícil",
+text: "Qual consequência ambiental está ligada ao crescimento da agropecuária sem planejamento?",
+options: ["Aumento das florestas nativas", "Desmatamento e empobrecimento do solo", "Fim da poluição dos rios", "Diminuição do uso de agrotóxicos"],
+correct: 1,
+explanation: {
+correct: "Para abrir pastos e plantações, matas são derrubadas. Sem cuidado, o solo perde nutrientes e sofre erosão.",
+options: ["Ocorre o contrário: as florestas diminuem.", "Correta.", "Agrotóxicos e erosão podem poluir os rios.", "O uso de agrotóxicos costuma aumentar."]
+}
+},
+{
+id: 25, level: "Difícil",
+text: "Uma siderúrgica transforma minério de ferro em aço, que depois é usado por outras fábricas. Ela é um exemplo de:",
+options: ["Indústria de bens de consumo", "Extrativismo mineral", "Setor terciário", "Indústria de base"],
+correct: 3,
+explanation: {
+correct: "A indústria de base produz materiais para outras indústrias. O aço será usado para fazer carros, máquinas e prédios.",
+options: ["Bens de consumo são vendidos direto às pessoas.", "A siderúrgica transforma o ferro; quem o retira do solo é a mineração.", "Transformar matéria-prima é setor secundário.", "Correta."]
+}
+},
+{
+id: 26, level: "Difícil",
+text: "Usinas que queimam o bagaço da cana-de-açúcar para gerar eletricidade utilizam qual fonte de energia?",
+options: ["Biomassa", "Combustível fóssil", "Energia nuclear", "Energia eólica"],
+correct: 0,
+explanation: {
+correct: "Biomassa é a energia vinda de restos de plantas e animais. O bagaço da cana é um exemplo e é renovável.",
+options: ["Correta.", "Fósseis são formados há milhões de anos; o bagaço é recente.", "A nuclear usa urânio.", "A eólica usa o vento."]
+}
+},
+{
+id: 27, level: "Difícil",
+text: "Pescar lagostas pequenas, que ainda não se reproduziram, durante o período de defeso pode causar:",
+options: ["Aumento da quantidade de lagostas no mar", "Diminuição da espécie e prejuízo futuro para os próprios pescadores", "Preços baixos para sempre", "Nenhum efeito, pois o mar tem recursos infinitos"],
+correct: 1,
+explanation: {
+correct: "Se as lagostas não se reproduzem, a população diminui. Com o tempo, falta lagosta e os pescadores perdem renda.",
+options: ["Sem reprodução, a quantidade diminui.", "Correta.", "Com menos lagostas, o preço tende a subir, não a cair.", "Os recursos do mar podem se esgotar."]
+}
+},
+{
+id: 28, level: "Difícil",
+text: "Uma área de Caatinga foi transformada em plantação irrigada com água de um açude. Esse exemplo mostra que:",
+options: ["A natureza não pode ser modificada pelo ser humano", "Apenas a natureza produz o espaço geográfico", "O ser humano usa trabalho e técnicas para transformar o espaço geográfico", "A irrigação é uma atividade do setor terciário"],
+correct: 2,
+explanation: {
+correct: "O açude e a irrigação são técnicas. Com elas, as pessoas transformaram uma área seca em área produtiva.",
+options: ["O exemplo mostra o contrário: a natureza foi modificada.", "O espaço geográfico é produzido pela sociedade.", "Correta.", "Irrigar para plantar faz parte da agricultura, setor primário."]
+}
+},
+{
+id: 29, level: "Difícil",
+text: "Qual é uma dificuldade no uso das energias solar e eólica?",
+options: ["Elas se esgotam rapidamente", "Liberam muita fumaça poluente", "Só podem ser usadas em países frios", "Dependem das condições do tempo, como sol e vento, que variam"],
+correct: 3,
+explanation: {
+correct: "À noite não há sol, e o vento pode enfraquecer. Por isso, a produção dessas energias varia.",
+options: ["Sol e vento são renováveis e não se esgotam.", "Elas não queimam nada, logo não soltam fumaça.", "Países quentes e com vento, como o Brasil, usam muito essas fontes.", "Correta."]
+}
+},
+{
+id: 30, level: "Difícil",
+text: "A queima de petróleo, carvão e gás natural é um problema ambiental principalmente porque:",
+options: ["Deixa a água dos rios mais limpa", "Esses combustíveis são renováveis e infinitos", "Libera gases que aumentam o efeito estufa e o aquecimento global", "Não gera nenhuma energia útil"],
+correct: 2,
+explanation: {
+correct: "Ao queimar combustíveis fósseis, são liberados gases como o gás carbônico, que intensificam o efeito estufa.",
+options: ["A queima polui, não limpa.", "Combustíveis fósseis são não renováveis.", "Correta.", "Eles geram muita energia; o problema é a poluição."]
+}
+}
+];
+
+// --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g, '_');
+let currentQuestion = 0;
+let savedAnswers = localStorage.getItem(storageKey);
+let userAnswers = savedAnswers ? JSON.parse(savedAnswers) : new Array(questions.length).fill(null);
+function setMode(mode) {
+const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+views.forEach(v => document.getElementById(v).style.display = 'none');
+document.getElementById('quizFooter').style.display = 'none';
+if(mode === 'explanation') {
+document.getElementById('viewExplanation').style.display = 'flex';
+document.getElementById('btnExp').classList.add('active');
+document.getElementById('btnPrac').classList.remove('active');
+} else if (mode === 'practice') {
+document.getElementById('viewPractice').style.display = 'block';
+document.getElementById('quizFooter').style.display = 'flex';
+document.getElementById('btnExp').classList.remove('active');
+document.getElementById('btnPrac').classList.add('active');
+renderQuestion();
+renderMap();
+} else if (mode === 'result') {
+document.getElementById('viewResult').style.display = 'block';
+document.getElementById('quizFooter').style.display = 'none';
+}
+window.scrollTo(0,0);
+}
+function renderQuestion() {
+if(questions.length === 0) return;
+const q = questions[currentQuestion];
+const container = document.getElementById('quizContainer');
+const letters = ['A', 'B', 'C', 'D'];
+const ans = userAnswers[currentQuestion];
+let badgeClass = '';
+if(q.level === 'Fácil') badgeClass = 'dif-facil';
+else if(q.level === 'Médio') badgeClass = 'dif-medio';
+else badgeClass = 'dif-dificil';
+container.innerHTML = `
+<div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+<span class="difficulty-badge ${badgeClass}">${q.level}</span>
+<div style="margin-bottom: 20px;">
+<span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+<h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+</div>
+<div class="options-list">
+${q.options.map((opt, i) => {
+let cls = '';
+if (ans !== null) {
+if (i === q.correct) cls = 'correct';
+else if (i === ans) cls = 'wrong';
+else cls = 'disabled';
+}
+return `<button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+<div class="opt-circle">${letters[i]}</div>
+<div>${opt}</div>
+</button>
+`;
+}).join('')}
+</div>
+${ans !== null ? `
+<div class="feedback-box">
+<div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+${ans === q.correct ? '✅ Raciocínio Aprovado!' : '❌ Ops! Falha Detectada:'}
+</div>
+<div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+<div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+${q.explanation.correct}
+</div>
+<div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+<small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+</div>
+</div>
+` : ''}
+</div>
+`;
+updateNav();
+}
+function handleAnswer(idx) {
+if (userAnswers[currentQuestion] !== null) return;
+userAnswers[currentQuestion] = idx;
+localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+if (idx === questions[currentQuestion].correct) {
+const duration = 1500;
+const end = Date.now() + duration;
+(function frame() {
+confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+if (Date.now() < end) { requestAnimationFrame(frame); }
+}());
+} else {
+const quizContainer = document.getElementById('quizContainer');
+quizContainer.classList.remove('shake-effect');
+void quizContainer.offsetWidth;
+quizContainer.classList.add('shake-effect');
+setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+}
+renderQuestion();
+renderMap();
+}
+function renderMap() {
+if(questions.length === 0) return;
+const map = document.getElementById('qMap');
+map.innerHTML = questions.map((q, i) => {
+let cls = 'map-dot';
+if (i === currentQuestion) cls += ' active';
+if (userAnswers[i] !== null) {
+cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+}
+return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+}).join('');
+setTimeout(() => {
+const activeDot = map.querySelector('.map-dot.active');
+if (activeDot) {
+activeDot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+}, 50);
+}
+function goTo(i) {
+if (window.confetti) confetti.reset();
+currentQuestion = i;
+renderQuestion();
+renderMap();
+}
+function changeQuestion(d) {
+let n = currentQuestion + d;
+if (n >= 0 && n < questions.length) goTo(n);
+}
+function updateNav() {
+document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+const next = document.getElementById('btnNext');
+if (currentQuestion === questions.length - 1) {
+next.textContent = "Finalizar Diagnóstico";
+next.onclick = finish;
+} else {
+next.textContent = "Avançar";
+next.onclick = () => changeQuestion(1);
+}
+}
+function finish() {
+let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+let percent = Math.round((correct / questions.length) * 100);
+if (window.confetti) confetti.reset();
+document.getElementById('finalPercent').textContent = percent + "%";
+document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐⭐⭐" : percent >= 60 ? "⭐⭐⭐" : "⭐";
+let summary = '<div style="text-align:left; margin-top:20px;">';
+if (percent < 80) {
+summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+<strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Atingir a pontuação mínima é obrigatório nesta prova. Revise a teoria com rigor antes de tentar novamente.
+</div>`;
+document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Limpar Histórico e Refazer Prova</button>`;
+} else {
+summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+<strong>🎉 Excelente Desempenho!</strong> Você demonstrou uma base sólida, clínica e exata sobre os conceitos avaliados. A sua aprovação técnica está garantida neste módulo.
+</div>`;
+document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Refazer Prova (Zerar Histórico)</button>`;
+}
+if (correct < questions.length) {
+summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+questions.forEach((q, i) => {
+if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+<strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+<span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+<span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+</div>`;
+}
+});
+}
+summary += '</div>';
+document.getElementById('review-container').innerHTML = summary;
+setMode('result');
+}
+function reset() {
+localStorage.removeItem(storageKey);
+userAnswers = new Array(questions.length).fill(null);
+currentQuestion = 0;
+setMode('practice');
+}
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
