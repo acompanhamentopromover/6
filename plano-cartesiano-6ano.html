@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano Cartesiano e Coordenadas - Promover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root {
+/* Cores do tema: Matemática (azul + laranja de destaque) */
+--bg-color: #EFF6FF;
+--text-color: #1E3A8A;
+--border-color: #000000;
+--white: #FFFFFF;
+--theme-light: #DBEAFE;
+--theme-medium: #60A5FA;
+--theme-dark: #1D4ED8;
+--theme-contrast: #F97316;
+--theme-accent: #8B5CF6;
+--theme-text-active: #FFFFFF;
+/* NÃO ALTERAR AS CORES ABAIXO */
+--correct-bg: #D1FAE5;
+--correct-border: #059669;
+--wrong-bg: #FFE4E6;
+--wrong-border: #BE123C;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color);
+display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-bottom: 100px;
+background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+background-size: 20px 20px;
+}
+@keyframes shake {
+0% { transform: translateX(0); }
+25% { transform: translateX(-6px); }
+50% { transform: translateX(6px); }
+75% { transform: translateX(-6px); }
+100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+0% { transform: scale(1); }
+15% { transform: scale(1.15); color: var(--theme-contrast); }
+30% { transform: scale(1); }
+45% { transform: scale(1.15); color: var(--theme-contrast); }
+100% { transform: scale(1); }
+}
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center;}
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container { position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 { font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil { background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+.result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big { font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+</style>
+</head>
+<body>
+<div class="container">
+<header class="logo-header">
+<div class="css-logo"><span class="pulse-effect">🚀</span> PROMOVER</div>
+<h1>Matemática • 6º Ano</h1>
+<p class="subtitle">Plano cartesiano: eixos x e y e coordenadas • Revisão para a prova da escola</p>
+</header>
+<div class="toggle-container">
+<button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📘 Teoria</button>
+<button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🧠 Prática (30)</button>
+</div>
+<div id="viewExplanation" class="view-section" style="display: flex;">
+<div class="search-container">
+<span class="search-icon" aria-hidden="true">🔍</span>
+<input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+</div>
+<div id="no-results"><p>😕 Termo não encontrado.</p></div>
+
+<!-- 1. O QUE É -->
+<div class="content-group">
+<span class="section-badge">1. O que é o plano cartesiano</span>
+<div class="theory-box">
+<h3>🗺️ Um mapa feito de números</h3>
+<p>O plano cartesiano é formado por <strong>duas retas numeradas</strong> que se cruzam formando um ângulo reto (90°). Ele serve para <strong>localizar pontos</strong> com exatidão, como num mapa ou num jogo de batalha naval.</p>
+<p>O nome é uma homenagem ao matemático francês <strong>René Descartes</strong>.</p>
+<div class="visual-area"><svg viewBox='0 0 200 166' width='200' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='200' height='166' fill='#FFFFFF'/><line x1='26' y1='144' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='144' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='144' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='144' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='144' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='144' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='144' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='182' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='182' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='182' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='182' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='182' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='192' y2='144' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='144' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='196,144 188,140 188,148' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='188' y='136' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><circle cx='26' cy='144' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='33' y='137' font-size='13' font-weight='800' fill='#1D4ED8'>O</text></svg></div>
+<p>O ponto onde as duas retas se cruzam se chama <strong>origem</strong> (ponto O). As coordenadas da origem são <strong>(0, 0)</strong>.</p>
+</div>
+</div>
+
+<!-- 2. EIXOS -->
+<div class="content-group">
+<span class="section-badge">2. Eixo x e eixo y</span>
+<div class="theory-box">
+<h3>↔️ ↕️ As duas retas</h3>
+<ul style="padding-left:20px;">
+<li><strong>Eixo x:</strong> é a reta <strong>horizontal</strong> (deitada). Também é chamado de <strong>eixo das abscissas</strong>.</li>
+<li><strong>Eixo y:</strong> é a reta <strong>vertical</strong> (em pé). Também é chamado de <strong>eixo das ordenadas</strong>.</li>
+</ul>
+<div class="visual-area">↔️ Eixo x = horizontal &nbsp; | &nbsp; ↕️ Eixo y = vertical</div>
+<div class="highlight-box">💡 <strong>Truque para não esquecer:</strong> no alfabeto, o <strong>x</strong> vem antes do <strong>y</strong>. No plano também: primeiro você <strong>anda</strong> no eixo x (para a direita), depois <strong>sobe</strong> no eixo y.</div>
+</div>
+</div>
+
+<!-- 3. PAR ORDENADO -->
+<div class="content-group">
+<span class="section-badge">3. Par ordenado (coordenadas)</span>
+<div class="theory-box">
+<h3>📍 Como localizar um ponto</h3>
+<p>Cada ponto é indicado por dois números entre parênteses, chamados de <strong>par ordenado</strong> ou <strong>coordenadas</strong>: <strong>(x, y)</strong>.</p>
+<ul style="padding-left:20px;">
+<li>O <strong>primeiro número</strong> (abscissa) diz quantas casas andar <strong>para a direita</strong>.</li>
+<li>O <strong>segundo número</strong> (ordenada) diz quantas casas <strong>subir</strong>.</li>
+</ul>
+<p><strong>Exemplo:</strong> para marcar o ponto <strong>A (4, 3)</strong>, saia da origem, ande <strong>4 casas para a direita</strong> e depois <strong>suba 3 casas</strong>.</p>
+<div class="visual-area"><svg viewBox='0 0 200 166' width='200' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='200' height='166' fill='#FFFFFF'/><line x1='26' y1='144' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='144' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='144' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='144' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='144' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='144' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='144' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='182' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='182' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='182' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='182' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='182' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='192' y2='144' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='144' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='196,144 188,140 188,148' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='188' y='136' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><line x1='130' y1='144' x2='130' y2='66' stroke='#F97316' stroke-width='2' stroke-dasharray='4 3'/><line x1='26' y1='66' x2='130' y2='66' stroke='#F97316' stroke-width='2' stroke-dasharray='4 3'/><circle cx='130' cy='66' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='137' y='59' font-size='13' font-weight='800' fill='#1D4ED8'>A (4, 3)</text></svg></div>
+<div class="highlight-box warning">⚠️ <strong>A ordem importa!</strong> O ponto (2, 5) é diferente do ponto (5, 2). Trocar a ordem dos números muda o lugar do ponto. Esse é o erro mais comum na prova!</div>
+</div>
+</div>
+
+<!-- 4. PONTOS SOBRE OS EIXOS -->
+<div class="content-group">
+<span class="section-badge">4. Pontos sobre os eixos</span>
+<div class="theory-box">
+<h3>📏 Quando aparece o zero</h3>
+<ul style="padding-left:20px;">
+<li>Se o <strong>primeiro número é zero</strong>, você não anda para a direita: o ponto fica <strong>em cima do eixo y</strong>. Ex.: B (0, 4).</li>
+<li>Se o <strong>segundo número é zero</strong>, você não sobe: o ponto fica <strong>em cima do eixo x</strong>. Ex.: C (5, 0).</li>
+<li>Se os <strong>dois são zero</strong>, o ponto é a <strong>origem</strong> (0, 0).</li>
+</ul>
+<div class="visual-area"><svg viewBox='0 0 200 166' width='200' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='200' height='166' fill='#FFFFFF'/><line x1='26' y1='144' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='144' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='144' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='144' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='144' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='144' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='144' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='182' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='182' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='182' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='182' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='182' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='192' y2='144' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='144' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='196,144 188,140 188,148' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='188' y='136' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><circle cx='26' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='33' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>B (0, 4)</text><circle cx='156' cy='144' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='163' y='137' font-size='13' font-weight='800' fill='#1D4ED8'>C (5, 0)</text></svg></div>
+</div>
+</div>
+
+<!-- 5. DESLOCAMENTOS -->
+<div class="content-group">
+<span class="section-badge">5. Deslocamentos no plano</span>
+<div class="theory-box">
+<h3>🤖 Andando de um ponto para outro</h3>
+<ul style="padding-left:20px;">
+<li>Andar para a <strong>direita</strong>: o primeiro número <strong>aumenta</strong>.</li>
+<li>Andar para a <strong>esquerda</strong>: o primeiro número <strong>diminui</strong>.</li>
+<li><strong>Subir</strong>: o segundo número <strong>aumenta</strong>.</li>
+<li><strong>Descer</strong>: o segundo número <strong>diminui</strong>.</li>
+</ul>
+<div class="visual-area">(2, 1) ➜ 3 para a direita ➜ (5, 1) ➜ sobe 2 ➜ (5, 3)</div>
+<div class="highlight-box">💡 Ao andar na horizontal, só muda o primeiro número. Ao andar na vertical, só muda o segundo.</div>
+</div>
+</div>
+
+<!-- 6. FIGURAS -->
+<div class="content-group">
+<span class="section-badge">6. Figuras no plano cartesiano</span>
+<div class="theory-box">
+<h3>🔷 Vértices, lados, perímetro e área</h3>
+<p>Podemos desenhar figuras ligando pontos. Os pontos dos "cantos" da figura são os <strong>vértices</strong>.</p>
+<div class="visual-area"><svg viewBox='0 0 226 166' width='226' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='226' height='166' fill='#FFFFFF'/><line x1='26' y1='144' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='144' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='144' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='144' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='144' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='144' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='144' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='208' y1='144' x2='208' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='208' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='208' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='208' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='208' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='208' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='208' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='218' y2='144' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='144' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='222,144 214,140 214,148' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='208' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>7</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='214' y='136' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><polygon points='52,118 182,118 182,40 52,40' fill='#DBEAFE' fill-opacity='0.7' stroke='#1D4ED8' stroke-width='2.5'/><circle cx='52' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>A</text><circle cx='182' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='189' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>B</text><circle cx='182' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='189' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>C</text><circle cx='52' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>D</text></svg></div>
+<p>No retângulo acima: A (1, 1), B (6, 1), C (6, 4) e D (1, 4).</p>
+<ul style="padding-left:20px;">
+<li><strong>Lado deitado (AB):</strong> compare os primeiros números: 6 − 1 = <strong>5 unidades</strong>.</li>
+<li><strong>Lado em pé (BC):</strong> compare os segundos números: 4 − 1 = <strong>3 unidades</strong>.</li>
+<li><strong>Perímetro</strong> (contorno): 5 + 3 + 5 + 3 = <strong>16 unidades</strong>.</li>
+<li><strong>Área</strong> (quadradinhos dentro): 5 × 3 = <strong>15 quadradinhos</strong>.</li>
+</ul>
+<div class="highlight-box">💡 Para medir a distância entre dois pontos na mesma linha, faça <strong>o número maior menos o número menor</strong>. Você também pode contar os quadradinhos!</div>
+</div>
+</div>
+
+<!-- 7. PARA IR ALÉM -->
+<div class="content-group">
+<span class="section-badge">7. Para ir além</span>
+<div class="theory-box">
+<h3>🚀 E se os eixos continuarem?</h3>
+<p>Os eixos também continuam para a <strong>esquerda</strong> e para <strong>baixo</strong>, com números negativos. Assim, o plano fica dividido em <strong>quatro partes</strong>, chamadas de <strong>quadrantes</strong>.</p>
+<div class="highlight-box">📚 No 6º ano, trabalhamos principalmente com a parte de cima e da direita (o <strong>1º quadrante</strong>), onde os dois números são positivos. Os números negativos aparecem com mais força no 7º ano.</div>
+</div>
+</div>
+
+<!-- RESUMO -->
+<div class="content-group">
+<span class="section-badge">⭐ Resumo para a prova</span>
+<div class="theory-box">
+<h3>📝 Não esqueça!</h3>
+<ul style="padding-left:20px;">
+<li>Eixo x = horizontal (abscissas). Eixo y = vertical (ordenadas).</li>
+<li>Origem = cruzamento dos eixos = (0, 0).</li>
+<li>Par ordenado (x, y): primeiro anda para a direita, depois sobe.</li>
+<li>(2, 5) e (5, 2) são pontos diferentes: a ordem importa!</li>
+<li>Primeiro número zero: ponto no eixo y. Segundo número zero: ponto no eixo x.</li>
+<li>Distância na mesma linha: número maior menos número menor.</li>
+</ul>
+</div>
+</div>
+
+<button class="btn-action" onclick="setMode('practice')">
+Iniciar Diagnóstico (30 Q) ➜
+</button>
+</div>
+<div id="viewPractice" class="view-section">
+<div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+<h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+<p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">30 questões rigorosas. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro!
+</p>
+</div>
+<div class="question-map" id="qMap"></div>
+<div id="quizContainer" style="margin-bottom: 100px;"></div>
+</div>
+<div id="viewResult" class="view-section">
+<div class="result-card">
+<h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+<div class="stars-container" id="finalStars">⭐⭐⭐</div>
+<div class="percentage-big" id="finalPercent">0%</div>
+<p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+<div id="review-container"></div>
+</div>
+<div id="action-buttons"></div>
+</div>
+</div>
+<footer class="quiz-footer" id="quizFooter">
+<button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+<button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Avançar</button>
+</footer>
+<script>
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+searchInput.addEventListener('input', function(e) {
+const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+let totalVisible = 0;
+contentGroups.forEach(group => {
+const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+if (textContent.includes(term)) {
+group.style.display = 'flex';
+totalVisible++;
+} else {
+group.style.display = 'none';
+}
+});
+noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+const questions = [
+{
+id: 1, level: "Fácil",
+text: "Como se chama a reta horizontal (deitada) do plano cartesiano?",
+options: ["Eixo y", "Eixo x", "Origem", "Quadrante"],
+correct: 1,
+explanation: {
+correct: "A reta horizontal é o eixo x, também chamado de eixo das abscissas.",
+options: ["O eixo y é a reta vertical (em pé).", "Correta.", "A origem é um ponto, o cruzamento dos eixos.", "Quadrante é cada parte em que o plano é dividido."]
+}
+},
+{
+id: 2, level: "Fácil",
+text: "O ponto onde o eixo x e o eixo y se cruzam se chama:",
+options: ["Origem", "Vértice", "Abscissa", "Ordenada"],
+correct: 0,
+explanation: {
+correct: "O cruzamento dos eixos é a origem, e suas coordenadas são (0, 0).",
+options: ["Correta.", "Vértice é o canto de uma figura.", "Abscissa é o primeiro número do par ordenado.", "Ordenada é o segundo número do par ordenado."]
+}
+},
+{
+id: 3, level: "Fácil",
+text: "No par ordenado (4, 7), qual número indica a posição no eixo x?",
+options: ["7", "11", "4", "3"],
+correct: 2,
+explanation: {
+correct: "No par (x, y), o primeiro número é sempre o do eixo x. Então é o 4.",
+options: ["O 7 é o segundo número, indica o eixo y.", "Não se somam os números do par.", "Correta.", "Não se subtraem os números do par."]
+}
+},
+{
+id: 4, level: "Fácil",
+text: "Observe a malha. Quais são as coordenadas do ponto A?<svg viewBox='0 0 174 140' width='174' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='174' height='140' fill='#FFFFFF'/><line x1='26' y1='118' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='118' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='118' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='118' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='118' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='118' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='156' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='156' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='156' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='156' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='166' y2='118' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='118' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='170,118 162,114 162,122' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='133' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='133' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='133' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='133' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='133' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='133' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='162' y='110' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><circle cx='104' cy='66' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='111' y='59' font-size='13' font-weight='800' fill='#1D4ED8'>A</text></svg>",
+options: ["(2, 3)", "(3, 2)", "(3, 3)", "(2, 2)"],
+correct: 1,
+explanation: {
+correct: "Saindo da origem, andamos 3 casas para a direita e subimos 2. Logo, A = (3, 2).",
+options: ["A ordem foi trocada: primeiro vem o x.", "Correta.", "O ponto está na altura 2, não 3.", "O ponto está 3 casas para a direita, não 2."]
+}
+},
+{
+id: 5, level: "Fácil",
+text: "Quais são as coordenadas da origem?",
+options: ["(1, 1)", "(0, 1)", "(1, 0)", "(0, 0)"],
+correct: 3,
+explanation: {
+correct: "Na origem ainda não andamos nem subimos nada. Por isso, ela é (0, 0).",
+options: ["O ponto (1, 1) já andou uma casa e subiu uma.", "O ponto (0, 1) fica em cima do eixo y.", "O ponto (1, 0) fica em cima do eixo x.", "Correta."]
+}
+},
+{
+id: 6, level: "Fácil",
+text: "Para marcar o ponto (5, 1) a partir da origem, devemos:",
+options: ["andar 5 casas para a direita e subir 1", "andar 1 casa para a direita e subir 5", "subir 5 casas e andar 1 para a direita", "andar 5 casas para a direita e subir 5"],
+correct: 0,
+explanation: {
+correct: "O primeiro número (5) diz quanto andar para a direita, e o segundo (1) diz quanto subir.",
+options: ["Correta.", "Os números foram trocados de lugar.", "Isso marca o ponto (1, 5), outro ponto.", "O segundo número é 1, então sobe só 1 casa."]
+}
+},
+{
+id: 7, level: "Fácil",
+text: "O eixo y do plano cartesiano é a reta:",
+options: ["horizontal", "inclinada", "curva", "vertical"],
+correct: 3,
+explanation: {
+correct: "O eixo y é a reta vertical (em pé), também chamada de eixo das ordenadas.",
+options: ["A reta horizontal é o eixo x.", "Os eixos não são inclinados; eles formam um ângulo reto.", "Os eixos são retas, não curvas.", "Correta."]
+}
+},
+{
+id: 8, level: "Fácil",
+text: "Observe a malha. Qual ponto tem coordenadas (4, 1)?<svg viewBox='0 0 174 166' width='174' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='174' height='166' fill='#FFFFFF'/><line x1='26' y1='144' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='144' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='144' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='144' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='144' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='144' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='156' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='156' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='156' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='156' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='156' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='166' y2='144' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='144' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='170,144 162,140 162,148' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='162' y='136' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><circle cx='52' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>P</text><circle cx='130' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='137' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>Q</text><circle cx='78' cy='92' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='85' y='85' font-size='13' font-weight='800' fill='#1D4ED8'>R</text><circle cx='130' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='137' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>S</text></svg>",
+options: ["P", "Q", "R", "S"],
+correct: 1,
+explanation: {
+correct: "Andando 4 casas para a direita e subindo 1, chegamos ao ponto Q.",
+options: ["P é (1, 4): os números estão invertidos.", "Correta.", "R é (2, 2).", "S é (4, 4): está na coluna certa, mas alto demais."]
+}
+},
+{
+id: 9, level: "Fácil",
+text: "O plano cartesiano recebeu esse nome em homenagem a qual matemático?",
+options: ["Isaac Newton", "Pitágoras", "René Descartes", "Albert Einstein"],
+correct: 2,
+explanation: {
+correct: "Cartesiano vem de Descartes, o matemático francês René Descartes.",
+options: ["Newton ficou famoso pelas leis do movimento e da gravidade.", "Pitágoras é conhecido pelo teorema dos triângulos retângulos.", "Correta.", "Einstein foi um físico, famoso pela teoria da relatividade."]
+}
+},
+{
+id: 10, level: "Fácil",
+text: "Como se chama o primeiro número de um par ordenado?",
+options: ["Abscissa", "Ordenada", "Origem", "Quadrante"],
+correct: 0,
+explanation: {
+correct: "O primeiro número (do eixo x) é a abscissa. O segundo (do eixo y) é a ordenada.",
+options: ["Correta.", "Ordenada é o segundo número.", "Origem é o ponto (0, 0).", "Quadrante é uma parte do plano."]
+}
+},
+{
+id: 11, level: "Médio",
+text: "Onde fica o ponto (0, 6)?",
+options: ["Em cima do eixo x", "Em cima do eixo y", "Na origem", "Fora dos dois eixos"],
+correct: 1,
+explanation: {
+correct: "O primeiro número é zero: não andamos para a direita, só subimos 6. Por isso o ponto fica no eixo y.",
+options: ["Para ficar no eixo x, o segundo número teria que ser zero.", "Correta.", "A origem é (0, 0), e aqui subimos 6 casas.", "Como um dos números é zero, o ponto está em um eixo."]
+}
+},
+{
+id: 12, level: "Médio",
+text: "O que podemos dizer dos pontos (2, 5) e (5, 2)?",
+options: ["São o mesmo ponto, porque usam os mesmos números", "Os dois ficam em cima do eixo y", "São pontos diferentes, porque a ordem dos números muda a posição", "Os dois ficam na origem"],
+correct: 2,
+explanation: {
+correct: "Em (2, 5) andamos 2 e subimos 5. Em (5, 2) andamos 5 e subimos 2. São lugares diferentes.",
+options: ["A ordem importa no par ordenado.", "Nenhum deles tem o primeiro número igual a zero.", "Correta.", "A origem é apenas o ponto (0, 0)."]
+}
+},
+{
+id: 13, level: "Médio",
+text: "Um ponto está em (3, 4) e anda 2 casas para a direita. Qual é a nova posição?",
+options: ["(5, 4)", "(3, 6)", "(1, 4)", "(5, 6)"],
+correct: 0,
+explanation: {
+correct: "Andar para a direita aumenta só o primeiro número: 3 + 2 = 5. O segundo continua 4.",
+options: ["Correta.", "Aumentar o segundo número seria subir, não andar para a direita.", "Diminuir o primeiro número seria andar para a esquerda.", "Só um número muda quando andamos na horizontal."]
+}
+},
+{
+id: 14, level: "Médio",
+text: "Um ponto está em (6, 2) e sobe 3 casas. Qual é a nova posição?",
+options: ["(9, 2)", "(3, 2)", "(9, 5)", "(6, 5)"],
+correct: 3,
+explanation: {
+correct: "Subir aumenta só o segundo número: 2 + 3 = 5. O primeiro continua 6.",
+options: ["Aumentar o primeiro número seria andar para a direita.", "Diminuir o primeiro número seria andar para a esquerda.", "Ao subir, o primeiro número não muda.", "Correta."]
+}
+},
+{
+id: 15, level: "Médio",
+text: "Observe o triângulo na malha. Quais são as coordenadas do vértice C?<svg viewBox='0 0 200 166' width='200' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='200' height='166' fill='#FFFFFF'/><line x1='26' y1='144' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='144' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='144' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='144' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='144' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='144' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='144' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='182' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='182' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='182' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='182' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='182' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='192' y2='144' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='144' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='196,144 188,140 188,148' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='188' y='136' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><polygon points='52,118 156,118 104,40' fill='#DBEAFE' fill-opacity='0.7' stroke='#1D4ED8' stroke-width='2.5'/><circle cx='52' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>A</text><circle cx='156' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='163' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>B</text><circle cx='104' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='111' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>C</text></svg>",
+options: ["(4, 3)", "(3, 4)", "(3, 3)", "(4, 4)"],
+correct: 1,
+explanation: {
+correct: "C está 3 casas para a direita da origem e 4 casas para cima. Então C = (3, 4).",
+options: ["A ordem foi trocada: primeiro vem o número do eixo x.", "Correta.", "C está na altura 4, não 3.", "C está na coluna 3, não 4."]
+}
+},
+{
+id: 16, level: "Médio",
+text: "Qual destes pontos está em cima do eixo x?",
+options: ["(0, 3)", "(3, 3)", "(4, 0)", "(1, 2)"],
+correct: 2,
+explanation: {
+correct: "Para ficar no eixo x, o ponto não pode subir nada. Então o segundo número tem que ser zero: (4, 0).",
+options: ["(0, 3) tem o primeiro número zero, então fica no eixo y.", "(3, 3) não tem zero, fica fora dos eixos.", "Correta.", "(1, 2) não tem zero, fica fora dos eixos."]
+}
+},
+{
+id: 17, level: "Médio",
+text: "Em um mapa quadriculado, a escola fica em (2, 6) e a padaria em (7, 6). Quantas casas separam a escola da padaria?",
+options: ["5", "6", "9", "13"],
+correct: 0,
+explanation: {
+correct: "Os dois lugares estão na mesma altura (6). Basta fazer o número maior menos o menor: 7 − 2 = 5.",
+options: ["Correta.", "O 6 é a altura dos dois pontos, não a distância.", "O 9 é a soma 7 + 2, mas a distância é uma subtração.", "O 13 é a soma 7 + 6, que mistura coordenadas diferentes."]
+}
+},
+{
+id: 18, level: "Médio",
+text: "Observe a malha. Qual ponto está mais distante do eixo y (a reta vertical)?<svg viewBox='0 0 200 192' width='200' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='200' height='192' fill='#FFFFFF'/><line x1='26' y1='170' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='170' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='170' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='170' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='170' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='170' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='170' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='170' x2='182' y2='170' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='182' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='182' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='182' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='182' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='182' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='170' x2='192' y2='170' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='170' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='196,170 188,166 188,174' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='18' y='148' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>6</text><text x='188' y='162' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><circle cx='52' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>A</text><circle cx='182' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='189' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>B</text><circle cx='104' cy='92' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='111' y='85' font-size='13' font-weight='800' fill='#1D4ED8'>C</text><circle cx='78' cy='14' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='85' y='7' font-size='13' font-weight='800' fill='#1D4ED8'>D</text></svg>",
+options: ["A", "B", "C", "D"],
+correct: 1,
+explanation: {
+correct: "A distância até o eixo y é dada pelo primeiro número. B (6, 2) tem o maior primeiro número.",
+options: ["A (1, 5) está a só 1 casa do eixo y.", "Correta.", "C (3, 3) está a 3 casas do eixo y.", "D é o ponto mais alto, mas isso é distância do eixo x."]
+}
+},
+{
+id: 19, level: "Médio",
+text: "Em um jogo de caça ao tesouro, o primeiro número indica a coluna e o segundo indica a linha. O tesouro está na coluna 2 e na linha 7. Qual par ordenado indica o tesouro?",
+options: ["(7, 2)", "(9, 0)", "(7, 7)", "(2, 7)"],
+correct: 3,
+explanation: {
+correct: "O primeiro número é a coluna (2) e o segundo é a linha (7). Então o par é (2, 7).",
+options: ["A ordem foi trocada.", "Não se somam os números.", "A coluna é 2, não 7.", "Correta."]
+}
+},
+{
+id: 20, level: "Médio",
+text: "Qual destes pontos fica mais alto no plano cartesiano?",
+options: ["(1, 6)", "(8, 2)", "(5, 5)", "(7, 3)"],
+correct: 0,
+explanation: {
+correct: "Quem decide a altura é o segundo número. O maior segundo número é o 6, do ponto (1, 6).",
+options: ["Correta.", "O 8 indica que o ponto está mais à direita, não mais alto.", "(5, 5) está na altura 5, abaixo do 6.", "(7, 3) está na altura 3."]
+}
+},
+{
+id: 21, level: "Difícil",
+text: "Observe o retângulo ABCD na malha. Qual é o perímetro dele?<svg viewBox='0 0 226 166' width='226' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='226' height='166' fill='#FFFFFF'/><line x1='26' y1='144' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='144' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='144' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='144' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='144' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='144' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='144' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='208' y1='144' x2='208' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='208' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='208' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='208' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='208' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='208' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='208' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='218' y2='144' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='144' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='222,144 214,140 214,148' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='208' y='159' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>7</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='214' y='136' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><polygon points='52,118 182,118 182,40 52,40' fill='#DBEAFE' fill-opacity='0.7' stroke='#1D4ED8' stroke-width='2.5'/><circle cx='52' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>A</text><circle cx='182' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='189' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>B</text><circle cx='182' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='189' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>C</text><circle cx='52' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>D</text></svg>",
+options: ["15 unidades", "16 unidades", "8 unidades", "20 unidades"],
+correct: 1,
+explanation: {
+correct: "Lado AB: 6 − 1 = 5. Lado BC: 4 − 1 = 3. Perímetro: 5 + 3 + 5 + 3 = 16.",
+options: ["15 é a área (5 × 3), não o perímetro.", "Correta.", "8 é só a soma de dois lados (5 + 3).", "20 aparece se contar 5 em todos os lados."]
+}
+},
+{
+id: 22, level: "Difícil",
+text: "Observe o retângulo na malha. Quantos quadradinhos ele ocupa (qual é a área)?<svg viewBox='0 0 200 192' width='200' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='200' height='192' fill='#FFFFFF'/><line x1='26' y1='170' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='170' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='170' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='170' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='170' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='170' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='170' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='170' x2='182' y2='170' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='182' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='182' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='182' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='182' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='182' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='170' x2='192' y2='170' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='170' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='196,170 188,166 188,174' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='18' y='148' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>6</text><text x='188' y='162' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><polygon points='52,118 156,118 156,40 52,40' fill='#DBEAFE' fill-opacity='0.7' stroke='#1D4ED8' stroke-width='2.5'/><circle cx='52' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><circle cx='156' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><circle cx='156' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><circle cx='52' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/></svg>",
+options: ["14", "7", "12", "20"],
+correct: 2,
+explanation: {
+correct: "O lado deitado mede 5 − 1 = 4 e o lado em pé mede 5 − 2 = 3. Área: 4 × 3 = 12 quadradinhos.",
+options: ["14 é o perímetro (4 + 3 + 4 + 3), não a área.", "7 é a soma 4 + 3, não a multiplicação.", "Correta.", "20 aparece se usar 5 × 4, lendo as coordenadas em vez das medidas."]
+}
+},
+{
+id: 23, level: "Difícil",
+text: "Os pontos A, B e C são três vértices de um quadrado. Qual é a coordenada do quarto vértice?<svg viewBox='0 0 200 192' width='200' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='200' height='192' fill='#FFFFFF'/><line x1='26' y1='170' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='170' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='170' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='170' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='170' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='170' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='182' y1='170' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='170' x2='182' y2='170' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='182' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='182' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='182' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='182' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='182' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='182' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='170' x2='192' y2='170' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='170' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='196,170 188,166 188,174' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='182' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>6</text><text x='18' y='148' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>6</text><text x='188' y='162' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><circle cx='78' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='85' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>A</text><circle cx='156' cy='118' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='163' y='111' font-size='13' font-weight='800' fill='#1D4ED8'>B</text><circle cx='156' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='163' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>C</text></svg>",
+options: ["(5, 8)", "(3, 3)", "(8, 2)", "(2, 5)"],
+correct: 3,
+explanation: {
+correct: "O quarto vértice fica acima de A (mesmo primeiro número, 2) e na altura de C (mesmo segundo número, 5): (2, 5).",
+options: ["(5, 8) fica acima de C, fora do quadrado.", "(3, 3) fica dentro da figura, não num canto.", "(8, 2) fica à direita de B, fora do quadrado.", "Correta."]
+}
+},
+{
+id: 24, level: "Difícil",
+text: "Um robô sai da origem, anda 4 casas para a direita, sobe 3, anda mais 2 casas para a direita e sobe mais 1. Onde ele para?",
+options: ["(6, 4)", "(4, 6)", "(10, 0)", "(5, 3)"],
+correct: 0,
+explanation: {
+correct: "Para a direita: 4 + 2 = 6. Para cima: 3 + 1 = 4. O robô para em (6, 4).",
+options: ["Correta.", "A ordem foi trocada: primeiro vem o total andado para a direita.", "Somar tudo num número só não indica a posição.", "Faltou somar os passos corretamente."]
+}
+},
+{
+id: 25, level: "Difícil",
+text: "Os pontos (1, 3), (4, 3) e (7, 3) estão sobre uma mesma reta. Como é essa reta?",
+options: ["Vertical", "Horizontal, porque todos os pontos estão na mesma altura", "Passa pela origem", "É o próprio eixo y"],
+correct: 1,
+explanation: {
+correct: "O segundo número (a altura) é 3 em todos os pontos. Então eles estão na mesma altura, numa reta horizontal.",
+options: ["Numa reta vertical, o primeiro número seria igual em todos.", "Correta.", "A origem (0, 0) não está nessa reta, pois ela fica na altura 3.", "No eixo y, o primeiro número seria zero."]
+}
+},
+{
+id: 26, level: "Difícil",
+text: "Todos os pontos que ficam em cima do eixo y têm:",
+options: ["o segundo número igual a zero", "os dois números iguais", "o primeiro número igual a zero", "o primeiro número maior que o segundo"],
+correct: 2,
+explanation: {
+correct: "Para ficar no eixo y, o ponto não anda nada para a direita. Por isso, o primeiro número é sempre zero.",
+options: ["Segundo número zero é o que acontece no eixo x.", "Números iguais, como (3, 3), ficam fora dos eixos.", "Correta.", "Isso não define a posição em um eixo."]
+}
+},
+{
+id: 27, level: "Difícil",
+text: "O ponto A está em (3, 1) e o ponto B está em (3, 8). Quantas unidades separam A de B?",
+options: ["11", "4", "9", "7"],
+correct: 3,
+explanation: {
+correct: "Os dois têm o mesmo primeiro número (3), então estão na mesma coluna. Distância: 8 − 1 = 7.",
+options: ["11 é a soma 3 + 8, que mistura coordenadas.", "4 é a soma 3 + 1, que não mede a distância.", "9 é a soma 8 + 1, mas a distância é uma subtração.", "Correta."]
+}
+},
+{
+id: 28, level: "Difícil",
+text: "Observe o triângulo ABC na malha. Quanto mede o lado AB?<svg viewBox='0 0 174 192' width='174' style='max-width:100%;height:auto;display:block;margin:12px auto;' xmlns='http://www.w3.org/2000/svg' font-family='Poppins, sans-serif'><rect x='0' y='0' width='174' height='192' fill='#FFFFFF'/><line x1='26' y1='170' x2='26' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='52' y1='170' x2='52' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='78' y1='170' x2='78' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='104' y1='170' x2='104' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='130' y1='170' x2='130' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='156' y1='170' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='170' x2='156' y2='170' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='144' x2='156' y2='144' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='118' x2='156' y2='118' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='92' x2='156' y2='92' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='66' x2='156' y2='66' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='40' x2='156' y2='40' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='14' x2='156' y2='14' stroke='#CBD5E1' stroke-width='1'/><line x1='26' y1='170' x2='166' y2='170' stroke='#0F172A' stroke-width='2'/><line x1='26' y1='170' x2='26' y2='4' stroke='#0F172A' stroke-width='2'/><polygon points='170,170 162,166 162,174' fill='#0F172A'/><polygon points='26,0 22,8 30,8' fill='#0F172A'/><text x='26' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>0</text><text x='52' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>1</text><text x='78' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>2</text><text x='104' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>3</text><text x='130' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>4</text><text x='156' y='185' font-size='10' font-weight='600' fill='#334155' text-anchor='middle'>5</text><text x='18' y='148' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>1</text><text x='18' y='122' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>2</text><text x='18' y='96' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>3</text><text x='18' y='70' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>4</text><text x='18' y='44' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>5</text><text x='18' y='18' font-size='10' font-weight='600' fill='#334155' text-anchor='end'>6</text><text x='162' y='162' font-size='12' font-weight='800' fill='#1D4ED8'>x</text><text x='33' y='12' font-size='12' font-weight='800' fill='#1D4ED8'>y</text><polygon points='52,144 52,40 130,144' fill='#DBEAFE' fill-opacity='0.7' stroke='#1D4ED8' stroke-width='2.5'/><circle cx='52' cy='144' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='137' font-size='13' font-weight='800' fill='#1D4ED8'>A</text><circle cx='52' cy='40' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='59' y='33' font-size='13' font-weight='800' fill='#1D4ED8'>B</text><circle cx='130' cy='144' r='5' fill='#F97316' stroke='#0F172A' stroke-width='1.5'/><text x='137' y='137' font-size='13' font-weight='800' fill='#1D4ED8'>C</text></svg>",
+options: ["3 unidades", "4 unidades", "5 unidades", "1 unidade"],
+correct: 1,
+explanation: {
+correct: "A (1, 1) e B (1, 5) estão na mesma coluna. O lado AB mede 5 − 1 = 4 unidades.",
+options: ["3 é a medida do lado AC (4 − 1).", "Correta.", "5 é o segundo número de B, não a medida do lado.", "1 é o primeiro número dos dois pontos."]
+}
+},
+{
+id: 29, level: "Difícil",
+text: "Um quadrado tem vértices em (0, 0), (2, 0), (2, 2) e (0, 2). Se dobrarmos todas as coordenadas, quanto medirá o lado do novo quadrado?",
+options: ["4 unidades", "2 unidades", "8 unidades", "16 unidades"],
+correct: 0,
+explanation: {
+correct: "Os novos vértices serão (0, 0), (4, 0), (4, 4) e (0, 4). O lado passa de 2 para 4: dobra também.",
+options: ["Correta.", "2 é a medida do lado antigo.", "8 seria o lado multiplicado por 4, e não pelo dobro.", "16 é a área do novo quadrado, não o lado."]
+}
+},
+{
+id: 30, level: "Difícil",
+text: "Um ponto está 3 unidades à direita do eixo y e 6 unidades acima do eixo x. Quais são as coordenadas dele?",
+options: ["(6, 3)", "(3, 3)", "(3, 6)", "(9, 0)"],
+correct: 2,
+explanation: {
+correct: "Estar à direita do eixo y define o primeiro número (3). Estar acima do eixo x define o segundo (6). Ponto: (3, 6).",
+options: ["A ordem foi trocada.", "O ponto está 6 casas acima, não 3.", "Correta.", "Não se somam as distâncias."]
+}
+}
+];
+
+// --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g, '_');
+let currentQuestion = 0;
+function loadAnswers() {
+const empty = new Array(questions.length).fill(null);
+try {
+const saved = JSON.parse(localStorage.getItem(storageKey));
+if (Array.isArray(saved) && saved.length === questions.length &&
+saved.every(a => a === null || (Number.isInteger(a) && a >= 0 && a <= 3))) return saved;
+} catch (e) {}
+return empty;
+}
+function saveAnswers() {
+try { localStorage.setItem(storageKey, JSON.stringify(userAnswers)); } catch (e) {}
+}
+let userAnswers = loadAnswers();
+function setMode(mode) {
+const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+views.forEach(v => document.getElementById(v).style.display = 'none');
+document.getElementById('quizFooter').style.display = 'none';
+if(mode === 'explanation') {
+document.getElementById('viewExplanation').style.display = 'flex';
+document.getElementById('btnExp').classList.add('active');
+document.getElementById('btnPrac').classList.remove('active');
+} else if (mode === 'practice') {
+document.getElementById('viewPractice').style.display = 'block';
+document.getElementById('quizFooter').style.display = 'flex';
+document.getElementById('btnExp').classList.remove('active');
+document.getElementById('btnPrac').classList.add('active');
+renderQuestion();
+renderMap();
+} else if (mode === 'result') {
+document.getElementById('viewResult').style.display = 'block';
+document.getElementById('quizFooter').style.display = 'none';
+}
+window.scrollTo(0,0);
+}
+function renderQuestion() {
+if(questions.length === 0) return;
+const q = questions[currentQuestion];
+const container = document.getElementById('quizContainer');
+const letters = ['A', 'B', 'C', 'D'];
+const ans = userAnswers[currentQuestion];
+let badgeClass = '';
+if(q.level === 'Fácil') badgeClass = 'dif-facil';
+else if(q.level === 'Médio') badgeClass = 'dif-medio';
+else badgeClass = 'dif-dificil';
+container.innerHTML = `
+<div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+<span class="difficulty-badge ${badgeClass}">${q.level}</span>
+<div style="margin-bottom: 20px;">
+<span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+<h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+</div>
+<div class="options-list">
+${q.options.map((opt, i) => {
+let cls = '';
+if (ans !== null) {
+if (i === q.correct) cls = 'correct';
+else if (i === ans) cls = 'wrong';
+else cls = 'disabled';
+}
+return `<button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+<div class="opt-circle">${letters[i]}</div>
+<div>${opt}</div>
+</button>
+`;
+}).join('')}
+</div>
+${ans !== null ? `
+<div class="feedback-box">
+<div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+${ans === q.correct ? '✅ Raciocínio Aprovado!' : '❌ Ops! Falha Detectada:'}
+</div>
+<div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+<div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+${q.explanation.correct}
+</div>
+<div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+<small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+</div>
+</div>
+` : ''}
+</div>
+`;
+updateNav();
+}
+function handleAnswer(idx) {
+if (userAnswers[currentQuestion] !== null) return;
+userAnswers[currentQuestion] = idx;
+saveAnswers();
+if (idx === questions[currentQuestion].correct && window.confetti) {
+const duration = 1500;
+const end = Date.now() + duration;
+(function frame() {
+confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+if (Date.now() < end) { requestAnimationFrame(frame); }
+}());
+} else if (idx !== questions[currentQuestion].correct) {
+const quizContainer = document.getElementById('quizContainer');
+quizContainer.classList.remove('shake-effect');
+void quizContainer.offsetWidth;
+quizContainer.classList.add('shake-effect');
+setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+}
+renderQuestion();
+renderMap();
+const fb = document.querySelector('.feedback-box');
+if (fb) fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function renderMap() {
+if(questions.length === 0) return;
+const map = document.getElementById('qMap');
+map.innerHTML = questions.map((q, i) => {
+let cls = 'map-dot';
+if (i === currentQuestion) cls += ' active';
+if (userAnswers[i] !== null) {
+cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+}
+return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+}).join('');
+setTimeout(() => {
+const activeDot = map.querySelector('.map-dot.active');
+if (activeDot) {
+map.scrollTo({ left: activeDot.offsetLeft - map.clientWidth / 2 + activeDot.offsetWidth / 2, behavior: 'smooth' });
+}
+}, 50);
+}
+function goTo(i) {
+if (window.confetti) confetti.reset();
+currentQuestion = i;
+renderQuestion();
+renderMap();
+const mapTop = document.getElementById('qMap').getBoundingClientRect().top + window.scrollY - 10;
+window.scrollTo({ top: Math.max(0, mapTop), behavior: 'smooth' });
+}
+function changeQuestion(d) {
+let n = currentQuestion + d;
+if (n >= 0 && n < questions.length) goTo(n);
+}
+function updateNav() {
+document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+const next = document.getElementById('btnNext');
+if (currentQuestion === questions.length - 1) {
+next.textContent = "Finalizar Diagnóstico";
+next.onclick = finish;
+} else {
+next.textContent = "Avançar";
+next.onclick = () => changeQuestion(1);
+}
+}
+function finish() {
+const blank = userAnswers.filter(a => a === null).length;
+if (blank > 0 && !confirm(`Você ainda não respondeu ${blank} questão(ões). Deseja finalizar mesmo assim?`)) {
+goTo(userAnswers.indexOf(null));
+return;
+}
+let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+let percent = Math.round((correct / questions.length) * 100);
+if (window.confetti) confetti.reset();
+document.getElementById('finalPercent').textContent = percent + "%";
+document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.` + (blank > 0 ? ` (${blank} em branco)` : '');
+document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐⭐⭐" : percent >= 60 ? "⭐⭐⭐" : "⭐";
+let summary = '<div style="text-align:left; margin-top:20px;">';
+if (percent < 80) {
+summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+<strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a nota de corte (80%). Atingir a pontuação mínima é obrigatório nesta prova. Revise a teoria com rigor antes de tentar novamente.
+</div>`;
+document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Limpar Histórico e Refazer Prova</button>`;
+} else {
+summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+<strong>🎉 Excelente Desempenho!</strong> Você demonstrou uma base sólida, clínica e exata sobre os conceitos avaliados. A sua aprovação técnica está garantida neste módulo.
+</div>`;
+document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Refazer Prova (Zerar Histórico)</button>`;
+}
+if (correct < questions.length) {
+summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+questions.forEach((q, i) => {
+if(userAnswers[i] !== q.correct && userAnswers[i] !== null) {
+summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+<strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+<span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">Seu Erro: ${q.options[userAnswers[i]]}</span>
+<span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+</div>`;
+}
+});
+}
+summary += '</div>';
+document.getElementById('review-container').innerHTML = summary;
+setMode('result');
+}
+function reset() {
+try { localStorage.removeItem(storageKey); } catch (e) {}
+userAnswers = new Array(questions.length).fill(null);
+currentQuestion = 0;
+setMode('practice');
+}
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+</script>
+</body>
+</html>
