@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ZONA 1 INICIO: TITULO DA ABA -->
+<title>Gramática Cap. 10 6º Ano - Promover</title>
+<!-- ZONA 1 FIM -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- BLOCO TRAVADO: CSS DO MOTOR. COPIE IGUAL. -->
+<style id="css-motor">
+:root {
+    --border-color: #000000;
+    --white: #FFFFFF;
+    --theme-text-active: #FFFFFF;
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #BE123C;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color);
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-bottom: 100px;
+    background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.15); color: var(--theme-contrast); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center;}
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container { position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 { font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil { background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+.result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big { font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+.nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.feedback-box { scroll-margin-top: 12px; scroll-margin-bottom: 90px; }
+.question-map { scroll-margin-top: 8px; }
+td, th { padding: 6px 8px; }
+#bancoQuestoes { display: none; }
+.visual-area.texto { font-size: 0.95rem; flex-direction: column; gap: 8px; }
+.tabela { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.85rem; font-weight: 600; margin-top: 10px; }
+.tabela th { background: var(--theme-light); }
+.tabela th, .tabela td { border: 1px solid var(--border-color); }
+.lista { padding-left: 20px; }
+.desenho { width: 100%; max-width: 420px; height: auto; display: block; margin: 10px auto; }
+.d-cor1 { fill: var(--theme-dark); }
+.d-cor2 { fill: var(--theme-contrast); }
+.d-cor3 { fill: var(--theme-medium); }
+.d-fundo { fill: var(--theme-light); stroke: var(--text-color); stroke-width: 2; }
+.d-linha { fill: none; stroke: var(--text-color); stroke-width: 2; }
+.d-texto { fill: var(--text-color); font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600; }
+</style>
+<!-- ZONA 2 INICIO: CORES E CSS EXTRA -->
+<style id="css-tema">
+:root {
+    --bg-color: #F5F3FF;
+    --text-color: #1E1B2E;
+    --theme-light: #EDE9FE;
+    --theme-medium: #A78BFA;
+    --theme-dark: #4C1D95;
+    --theme-contrast: #B45309;
+    --theme-accent: #7C3AED;
+}
+</style>
+<!-- ZONA 2 FIM -->
+</head>
+<body>
+<div id="avisoMotor" style="display:block; max-width:600px; width:100%; margin:0 auto 16px; padding:14px; background:#FFE4E6; color:#881337; border:3px solid #BE123C; border-radius:12px; font-family:sans-serif; font-size:15px; font-weight:600; line-height:1.5;">⚠️ Este arquivo está incompleto ou com erro no código. Não envie aos alunos. Peça ao Gemini para gerar o arquivo completo de novo.</div>
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🚀</span> PROMOVER</div>
+        <!-- ZONA 3 INICIO: CABECALHO -->
+        <h1>Gramática – 6º&nbsp;Ano</h1>
+        <p class="subtitle">Cap. 10 (Histórias de vida): Verbo, Advérbio, Ortografia, Concordância e Figuras</p>
+        <!-- ZONA 3 FIM -->
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📘 Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🧠 Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>😕 Termo não encontrado.</p></div>
+
+        <!-- ZONA 4 INICIO: TEORIA -->
+        <div class="content-group">
+            <span class="section-badge">1. Verbo: Ação, Estado e Fenômeno</span>
+            <div class="theory-box">
+                <h3>⚡ O que é o Verbo?</h3>
+                <p>O <strong>verbo</strong> é a palavra variável (que muda de forma para indicar tempo, pessoa e número) que expressa um fato situado no tempo (passado, presente ou futuro). De acordo com o sentido que transmite na frase, ele se divide em três tipos principais:</p>
+                <ul class="lista">
+                    <li><strong>Verbo de ação:</strong> indica uma atividade, movimento ou realização feita por alguém (ou algo). Exemplos: <strong>correr</strong>, <strong>escrever</strong>, <strong>estudar</strong>, <strong>pular</strong>, <strong>construir</strong>.</li>
+                    <li><strong>Verbo de estado:</strong> indica uma condição, situação, característica ou mudança de estado do sujeito (também chamado de verbo de ligação). Exemplos: <strong>ser</strong>, <strong>estar</strong>, <strong>permanecer</strong>, <strong>ficar</strong>, <strong>parecer</strong>, <strong>continuar</strong>, <strong>andar</strong> (no sentido de estar).</li>
+                    <li><strong>Verbo de fenômeno da natureza:</strong> indica acontecimentos naturais que não dependem da vontade humana. Exemplos: <strong>chover</strong>, <strong>ventar</strong>, <strong>nevar</strong>, <strong>trovejar</strong>, <strong>anoitecer</strong>, <strong>amanhecer</strong>.</li>
+                </ul>
+                <div class="highlight-box warning">
+                    <strong>Cuidado:</strong> O mesmo verbo pode mudar de classificação conforme o contexto! Veja:<br>
+                    • "Pedro <strong>andou</strong> pelo parque." (Ação = caminhar)<br>
+                    • "Pedro <strong>anda</strong> meio triste ultimamente." (Estado = está triste)<br>
+                    • "Maria <strong>ficou</strong> em casa." (Ação/permanência em um lugar)<br>
+                    • "Maria <strong>ficou</strong> feliz com a nota." (Estado/mudança de estado)<br>
+                    • "<strong>Choveu</strong> muito ontem." (Fenômeno da natureza)<br>
+                    • "<strong>Choveram</strong> elogios para a autora." (Ação em sentido figurado!)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">2. Advérbio: Conceito e Classificação</span>
+            <div class="theory-box">
+                <h3>🎯 O que faz um Advérbio?</h3>
+                <p>O <strong>advérbio</strong> é uma palavra <strong>invariável</strong> (não tem plural nem feminino) que funciona como um modificador. Ele serve para acrescentar uma circunstância e pode modificar três classes de palavras: um <strong>verbo</strong>, um <strong>adjetivo</strong> ou <strong>outro advérbio</strong>.</p>
+                <div class="visual-area texto">
+                    <span>Modificando verbo: Ela canta <strong>bem</strong>.</span>
+                    <span>Modificando adjetivo: Ela é <strong>muito</strong> inteligente.</span>
+                    <span>Modificando advérbio: Ela canta <strong>muito</strong> bem.</span>
+                </div>
+                <p>Conforme a circunstância que expressam, os advérbios classificam-se em 7 tipos principais no nosso estudo:</p>
+                <table class="tabela">
+                    <tr><th>Classificação</th><th>Pergunta-chave</th><th>Exemplos principais</th></tr>
+                    <tr><td><strong>Tempo</strong></td><td>Quando?</td><td>hoje, ontem, amanhã, cedo, tarde, já, agora, sempre, nunca, jamais</td></tr>
+                    <tr><td><strong>Lugar</strong></td><td>Onde?</td><td>aqui, ali, lá, cá, perto, longe, dentro, fora, acima, abaixo</td></tr>
+                    <tr><td><strong>Modo</strong></td><td>Como?</td><td>bem, mal, assim, depressa, devagar, calmamente (e a maioria terminada em -mente)</td></tr>
+                    <tr><td><strong>Intensidade</strong></td><td>Quanto?</td><td>muito, pouco, bastante, mais, menos, demais, tão, quão, meio, todo</td></tr>
+                    <tr><td><strong>Negação</strong></td><td>Nega?</td><td>não, nem, tampouco (e "nunca/jamais" quando reforçam negação)</td></tr>
+                    <tr><td><strong>Afirmação</strong></td><td>Confirma?</td><td>sim, certamente, realmente, deveras, efetivamente</td></tr>
+                    <tr><td><strong>Dúvida</strong></td><td>Há incerteza?</td><td>talvez, acaso, porventura, quiçá, possivelmente, provavelmente</td></tr>
+                </table>
+                <div class="highlight-box warning">
+                    <strong>Cuidado com a pegadinha (Advérbio × Pronome Indefinido):</strong> Palavras como <strong>muito</strong>, <strong>pouco</strong>, <strong>bastante</strong> e <strong>meio</strong> só são advérbios quando são <strong>invariáveis</strong> (ligadas a verbo, adjetivo ou advérbio). Se acompanharem um <strong>substantivo</strong> e variarem no plural ou feminino, não são advérbios!<br>
+                    • "Eles treinaram <strong>bastante</strong>." (Advérbio de intensidade – modifica o verbo "treinaram")<br>
+                    • "Eles têm <strong>bastantes</strong> amigos." (Pronome indefinido – acompanha o substantivo "amigos")<br>
+                    • "A porta está <strong>meio</strong> aberta." (Advérbio = um pouco)<br>
+                    • "Comi <strong>meia</strong> maçã." (Numeral = metade)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">3. Ortografia: Dígrafos (XC, SC, SÇ) e Uso do Til</span>
+            <div class="theory-box">
+                <h3>🔤 Dígrafos Consonantais: XC, SC e SÇ</h3>
+                <p>Um <strong>dígrafo</strong> ocorre quando <strong>duas letras</strong> juntas representam <strong>um único som</strong> (fonema). Os grupos <strong>XC</strong>, <strong>SC</strong> (antes de E ou I) e <strong>SÇ</strong> (antes de A ou O) formam dígrafos quando têm o som de um único <strong>/s/</strong>:</p>
+                <ul class="lista">
+                    <li><strong>XC</strong> (usado antes de E ou I): <strong>exceção</strong>, <strong>excelente</strong>, <strong>excesso</strong>, <strong>exceto</strong>, <strong>excitar</strong>.</li>
+                    <li><strong>SC</strong> (dígrafo apenas antes de <strong>E</strong> ou <strong>I</strong>): <strong>nascer</strong>, <strong>crescer</strong>, <strong>descer</strong>, <strong>piscina</strong>, <strong>adolescente</strong>, <strong>disciplina</strong>, <strong>fascínio</strong>.</li>
+                    <li><strong>SÇ</strong> (usado antes de <strong>A</strong> ou <strong>O</strong> nas formas conjugadas dos verbos terminados em -scer): eu <strong>nasço</strong>, que eu <strong>nasça</strong>, eu <strong>cresço</strong>, que ele <strong>cresça</strong>, eu <strong>desço</strong>, que nós <strong>desçamos</strong>.</li>
+                </ul>
+                <div class="highlight-box warning">
+                    <strong>Cuidado:</strong> Na separação silábica, os dígrafos <strong>XC</strong>, <strong>SC</strong> e <strong>SÇ</strong> sempre se separam! Exemplo: <strong>ex-ce-ção</strong>, <strong>nas-cer</strong>, <strong>cres-ço</strong>.<br>
+                    Além disso, quando <strong>SC</strong> vem antes de <strong>A, O ou U</strong> (como em <strong>es-ca-da</strong>, <strong>es-co-la</strong>, <strong>es-cu-ro</strong>), você pronuncia os dois sons (/s/ e /k/). Portanto, nesses casos, <strong>NÃO é dígrafo</strong>, e sim encontro consonantal!
+                </div>
+                <h3>〰️ O Uso do Til (~)</h3>
+                <p>O <strong>til (~)</strong> é um <strong>sinal gráfico auxiliar de nasalização</strong> (não é considerado acento gráfico na gramática, mas pode coincidir com a sílaba tônica quando não há outro acento na palavra). Ele é colocado sobre as vogais <strong>a</strong> e <strong>o</strong> para indicar que o som sai parte pela boca e parte pelo nariz:</p>
+                <ul class="lista">
+                    <li>Aparece em vogal nasal ou ditongos nasais: <strong>mãe</strong>, <strong>pão</strong>, <strong>irmã</strong>, <strong>coração</strong>, <strong>cidadãos</strong>, <strong>corações</strong>, <strong>põe</strong>, <strong>campeões</strong>.</li>
+                    <li>Se a palavra tiver outro acento gráfico (agudo ou circunflexo), a sílaba mais forte (tônica) é a que recebe o acento, mesmo que haja til no final: <strong>órfão</strong> (tônica: <strong>ór</strong>), <strong>bênção</strong> (tônica: <strong>bên</strong>), <strong>ímã</strong> (tônica: <strong>í</strong>), <strong>acórdão</strong> (tônica: <strong>cór</strong>).</li>
+                    <li>Se a palavra só tiver o til e nenhum acento gráfico, a sílaba com til é a tônica: <strong>maçã</strong> (tônica: <strong>çã</strong>), <strong>feijão</strong> (tônica: <strong>jão</strong>).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">4. Biografia e Marcadores Temporais</span>
+            <div class="theory-box">
+                <h3>📖 O Gênero Biografia</h3>
+                <p>A <strong>biografia</strong> (do grego <em>bios</em> = vida + <em>graphein</em> = escrever) é um gênero textual narrativo e expositivo que relata a trajetória de vida de uma pessoa real, destacando seus principais acontecimentos, conquistas e contexto histórico.</p>
+                <ul class="lista">
+                    <li><strong>3ª pessoa gramatical:</strong> Na biografia, o autor escreve sobre a vida de outra pessoa, usando verbos e pronomes na <strong>3ª pessoa</strong> (ele/ela). Já na <strong>autobiografia</strong>, a própria pessoa narra sua vida em <strong>1ª pessoa</strong> (eu).</li>
+                    <li><strong>Verbos no pretérito (passado):</strong> Como a maioria dos fatos narrados já aconteceu, predominam verbos no passado (ex.: <em>nasceu</em>, <em>estudou</em>, <em>publicou</em>, <em>vivia</em>).</li>
+                    <li><strong>Ordem cronológica e marcadores temporais:</strong> Os acontecimentos costumam seguir a linha do tempo (do nascimento até o presente ou até a morte do biografado). Para organizar essa sequência, usam-se <strong>marcadores temporais</strong>.</li>
+                </ul>
+                <svg class="desenho" viewBox="0 0 320 90" role="img" aria-label="Linha do tempo biográfica: Infância, Juventude e Conquistas">
+                    <line class="d-linha" x1="25" y1="45" x2="295" y2="45"/>
+                    <circle class="d-cor1" cx="55" cy="45" r="8"/>
+                    <circle class="d-cor2" cx="160" cy="45" r="8"/>
+                    <circle class="d-cor1" cx="265" cy="45" r="8"/>
+                    <text class="d-texto" x="55" y="25" text-anchor="middle">Infância</text>
+                    <text class="d-texto" x="160" y="25" text-anchor="middle">Juventude</text>
+                    <text class="d-texto" x="265" y="25" text-anchor="middle">Obras</text>
+                    <text class="d-texto" x="55" y="72" text-anchor="middle">Em 1920</text>
+                    <text class="d-texto" x="160" y="72" text-anchor="middle">Anos depois</text>
+                    <text class="d-texto" x="265" y="72" text-anchor="middle">Nessa época</text>
+                </svg>
+                <div class="highlight-box">
+                    <strong>Dica – O que são Marcadores Temporais?</strong> São palavras ou expressões (advérbios e locuções adverbiais de tempo) que situam os eventos no tempo e garantem a progressão da história. Exemplos: <strong>"Em 12 de outubro de 1950"</strong>, <strong>"Na infância"</strong>, <strong>"Cinco anos depois"</strong>, <strong>"Durante a juventude"</strong>, <strong>"Naquela época"</strong>, <strong>"Mais tarde"</strong>, <strong>"Atualmente"</strong>.
+                </div>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">5. Concordância Nominal</span>
+            <div class="theory-box">
+                <h3>⚖️ Regra Geral e Casos Importantes</h3>
+                <p>A <strong>concordância nominal</strong> é a combinação harmoniosa em <strong>gênero</strong> (masculino/feminino) e <strong>número</strong> (singular/plural) entre o <strong>substantivo</strong> (que é o núcleo) e as palavras que se referem a ele: <strong>artigos</strong>, <strong>adjetivos</strong>, <strong>pronomes</strong> e <strong>numerais</strong>.</p>
+                <div class="visual-area texto">
+                    <span><strong>As nossas duas primeiras histórias</strong> foram <strong>emocionantes</strong>.</span>
+                    <span>(Tudo no feminino plural para concordar com o substantivo "histórias"!)</span>
+                </div>
+                <p>Além da regra geral, fique atento às regras especiais com mais de um substantivo e expressões frequentes:</p>
+                <ul class="lista">
+                    <li><strong>Adjetivo DEPOIS de substantivos de gêneros diferentes:</strong> Pode concordar com o substantivo <strong>mais próximo</strong> (concordância atrativa) OU ir para o <strong>masculino plural</strong> (concordância gramatical). Exemplo: "Comprou um livro e uma revista <strong>antiga</strong>" ou "Comprou um livro e uma revista <strong>antigos</strong>".</li>
+                    <li><strong>Adjetivo ANTES de dois ou mais substantivos:</strong> Concorda obrigatoriamente com o substantivo <strong>mais próximo</strong>. Exemplo: "Escolheu <strong>belas</strong> poesias e contos" ou "Escolheu <strong>belos</strong> contos e poesias".</li>
+                    <li><strong>Obrigado / Mesmo / Próprio:</strong> Concordam em gênero e número com a pessoa a quem se referem. Mulher diz "Muito <strong>obrigada</strong>", "Eu <strong>mesma</strong> fiz"; homem diz "Muito <strong>obrigado</strong>", "Eu <strong>mesmo</strong> fiz".</li>
+                    <li><strong>Anexo / Incluso:</strong> Concordam com o substantivo a que se referem: "As fotos seguem <strong>anexas</strong>" / "Os documentos estão <strong>inclusos</strong>". (Já a expressão <strong>"em anexo"</strong> é invariável!).</li>
+                    <li><strong>É proibido / É necessário / É bom:</strong> Sem artigo antes do substantivo, ficam no masculino singular ("<strong>É proibido</strong> entrada"). Com artigo determinando o substantivo, concordam com ele ("<strong>É proibida a</strong> entrada").</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">6. Figuras de Linguagem</span>
+            <div class="theory-box">
+                <h3>🎨 Comparação, Metáfora, Personificação e Hipérbole</h3>
+                <p>As <strong>figuras de linguagem</strong> são recursos expressivos que usam palavras em <strong>sentido figurado</strong> (conotativo) para tornar o texto mais criativo, emocionante ou intenso. No Capítulo 10, estudamos quatro figuras fundamentais:</p>
+                <table class="tabela">
+                    <tr><th>Figura</th><th>Como funciona</th><th>Exemplo claro</th></tr>
+                    <tr><td><strong>Comparação</strong></td><td>Aproxima dois elementos usando <strong>conectivo explícito</strong> (<em>como</em>, <em>feito</em>, <em>tal qual</em>, <em>igual a</em>, <em>parece</em>).</td><td>"Seus olhos brilhavam <strong>como</strong> estrelas."</td></tr>
+                    <tr><td><strong>Metáfora</strong></td><td>Faz uma comparação <strong>implícita (sem conectivo)</strong>, afirmando que uma coisa é outra por semelhança.</td><td>"Seus olhos <strong>eram estrelas</strong> na noite."</td></tr>
+                    <tr><td><strong>Personificação (Prosopopeia)</strong></td><td>Atribui ações, sentimentos ou qualidades <strong>humanas</strong> a seres inanimados, objetos ou animais.</td><td>"O vento <strong>sussurrava</strong> segredos às árvores."</td></tr>
+                    <tr><td><strong>Hipérbole</strong></td><td>Expressa uma ideia com <strong>exagero intencional</strong> para destacar a intensidade de algo.</td><td>"<strong>Chorei rios de lágrimas</strong> ao ler o final."</td></tr>
+                </table>
+                <div class="highlight-box warning">
+                    <strong>Cuidado (Comparação × Metáfora):</strong> As duas aproximam ideias parecidas! A diferença é a presença da palavra comparativa. Se tiver <strong>"como"</strong>, <strong>"feito"</strong> ou <strong>"tal qual"</strong> ligando os dois termos, é <strong>Comparação</strong> ("Aquele atleta corre <strong>feito</strong> um relâmpago"). Se transformar direto um termo no outro sem conectivo, é <strong>Metáfora</strong> ("Aquele atleta <strong>é um relâmpago</strong> na pista").
+                </div>
+            </div>
+        </div>
+        <!-- ZONA 4 FIM -->
+
+        <button class="btn-action" onclick="setMode('practice')">
+            Iniciar Diagnóstico (30 Q) ➜
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">30 questões rigorosas. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro!</p>
+        </div>
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars">⭐⭐⭐</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+
+    <!-- ZONA 5 INICIO: 30 QUESTOES -->
+    <section id="bancoQuestoes" hidden>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Na frase "Os atletas <u>treinaram</u> durante toda a manhã na quadra", o verbo sublinhado expressa uma:</div>
+            <div class="alternativa certa">
+                <div class="opcao">ação realizada pelo sujeito.</div>
+                <div class="porque">"Treinaram" indica uma atividade física praticada pelos atletas.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">condição permanente de estado.</div>
+                <div class="porque">Verbos de estado são como "ser", "estar" ou "permanecer".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">manifestação de fenômeno natural.</div>
+                <div class="porque">Treinar é ato humano, não um evento climático da natureza.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">dúvida sobre o tempo presente.</div>
+                <div class="porque">O verbo está no passado e expressa certeza de uma ação.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Assinale a alternativa em que o verbo destacado indica um <strong>fenômeno da natureza</strong> em sentido literal:</div>
+            <div class="alternativa">
+                <div class="opcao">O menino <u>permaneceu</u> calado na sala.</div>
+                <div class="porque">"Permaneceu" é um verbo de estado (ligação), não fenômeno.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Ontem <u>trovejou</u> forte na nossa cidade.</div>
+                <div class="porque">"Trovejou" indica um evento atmosférico natural.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A escritora <u>publicou</u> suas memórias.</div>
+                <div class="porque">"Publicou" é um verbo que indica ação realizada pela autora.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Todos <u>estavam</u> ansiosos pelo passeio.</div>
+                <div class="porque">"Estavam" indica estado passageiro das pessoas na frase.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Na frase "A biógrafa pesquisou <u>cuidadosamente</u> os diários antigos", a palavra sublinhada é um advérbio de:</div>
+            <div class="alternativa">
+                <div class="opcao">tempo, pois indica quando pesquisou.</div>
+                <div class="porque">Não responde "quando?", mas sim "como?" ela pesquisou.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">lugar, pois aponta onde estavam os diários.</div>
+                <div class="porque">Não indica localização espacial, e sim a maneira da ação.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">modo, pois mostra como ela pesquisou.</div>
+                <div class="porque">"Cuidadosamente" indica a maneira (como) a pesquisa foi feita.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">negação, pois nega a leitura dos diários.</div>
+                <div class="porque">O termo afirma o cuidado da ação, sem negar o verbo.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual das palavras abaixo apresenta o dígrafo <strong>SC</strong> com som de um único <strong>/s/</strong> corretamente grafado?</div>
+            <div class="alternativa">
+                <div class="opcao">Escada</div>
+                <div class="porque">Antes de "a", pronunciam-se os dois sons (/s/ e /k/).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Escola</div>
+                <div class="porque">Antes de "o", o grupo SC é encontro consonantal, não dígrafo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Escuro</div>
+                <div class="porque">Antes de "u", ouvimos tanto o som do S quanto o do C.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Piscina</div>
+                <div class="porque">Antes de "i", as letras SC têm som único de /s/ (dígrafo).</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Sobre o uso do <strong>til (~)</strong> na língua portuguesa, é correto afirmar que ele serve para:</div>
+            <div class="alternativa certa">
+                <div class="opcao">indicar a nasalização das vogais A e O.</div>
+                <div class="porque">O til marca o som nasal sobre as letras A e O (ex.: maçã, põe).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">marcar o som aberto das vogais E e I.</div>
+                <div class="porque">O som aberto é marcado pelo acento agudo, não pelo til.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">substituir a vírgula nas frases longas.</div>
+                <div class="porque">O til é um sinal gráfico usado sobre letras, não pontuação.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">separar sílabas de palavras com dígrafo.</div>
+                <div class="porque">Quem separa sílabas ou une palavras é o hífen (-), não o til.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual é a principal característica que define o gênero textual <strong>biografia</strong>?</div>
+            <div class="alternativa">
+                <div class="opcao">Inventar histórias mágicas com animais falantes.</div>
+                <div class="porque">Isso caracteriza a fábula ou o conto maravilhoso, não biografia.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Narrar a história de vida real de uma pessoa.</div>
+                <div class="porque">A biografia relata fatos reais da trajetória de alguém.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Ensinar o passo a passo para preparar um prato.</div>
+                <div class="porque">Ensinar o preparo de alimentos é a função da receita culinária.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Convencer o leitor a comprar um produto novo.</div>
+                <div class="porque">Convencer a comprar algo é o objetivo do anúncio publicitário.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Na frase "<u>As</u> <u>primeiras</u> páginas da biografia são <u>fascinantes</u>", as palavras sublinhadas estão no feminino plural para concordar com o substantivo:</div>
+            <div class="alternativa">
+                <div class="opcao">biografia, que está no feminino singular.</div>
+                <div class="porque">"Biografia" está no singular; não explicaria o plural "primeiras".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">são, que é o verbo de estado da oração.</div>
+                <div class="porque">Artigos e adjetivos concordam com o substantivo, não com o verbo.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">páginas, que é o núcleo no feminino plural.</div>
+                <div class="porque">O artigo "as" e os adjetivos concordam com "páginas".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">da, que funciona como marcador de tempo.</div>
+                <div class="porque">"Da" é apenas a contração da preposição "de" com o artigo "a".</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Na frase "A memória daquele avô era <u>como</u> um baú cheio de tesouros", qual figura de linguagem está presente?</div>
+            <div class="alternativa">
+                <div class="opcao">Personificação, pois o baú ganhou vida humana.</div>
+                <div class="porque">O baú não realiza nenhuma ação ou sentimento humano na frase.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Hipérbole, pois há um exagero impossível.</div>
+                <div class="porque">Não há exagero numérico, mas aproximação entre dois elementos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Metáfora, pois não existe conectivo na frase.</div>
+                <div class="porque">A presença da palavra "como" impede que seja metáfora.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Comparação, pois usa o conectivo "como".</div>
+                <div class="porque">A palavra "como" estabelece uma comparação explícita na frase.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Em "Já li essa história <u>um milhão de vezes</u> nesta semana!", a expressão sublinhada é um exemplo de:</div>
+            <div class="alternativa">
+                <div class="opcao">Comparação, pelo uso da palavra "vezes".</div>
+                <div class="porque">Não há conectivo comparativo nem relação entre dois seres.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Hipérbole, pelo exagero intencional da ideia.</div>
+                <div class="porque">Dizer "um milhão de vezes" é um exagero para destacar frequência.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Personificação, pois a história ganhou voz.</div>
+                <div class="porque">Nenhuma característica humana foi dada ao substantivo "história".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Metáfora, por substituir o verbo ler.</div>
+                <div class="porque">Trata-se de aumento exagerado da quantidade, ou seja, hipérbole.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual das alternativas apresenta um advérbio classificado como de <strong>dúvida</strong>?</div>
+            <div class="alternativa">
+                <div class="opcao">Certamente visitaremos o museu amanhã.</div>
+                <div class="porque">"Certamente" expressa certeza (afirmação) e "amanhã", tempo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Jamais esquecerei os conselhos da vovó.</div>
+                <div class="porque">"Jamais" expressa tempo/negação absoluta, sem qualquer incerteza.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Talvez o autor autografe nossos livros.</div>
+                <div class="porque">"Talvez" indica incerteza ou possibilidade, sendo advérbio de dúvida.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Os documentos antigos estavam ali.</div>
+                <div class="porque">"Ali" aponta localização espacial, sendo advérbio de lugar.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Compare as frases:<br>I. "O artista <u>andava</u> rápido pelas ruas de Ouro Preto."<br>II. "O artista <u>andava</u> preocupado com a saúde."<br>Os verbos sublinhados indicam, respectivamente:</div>
+            <div class="alternativa">
+                <div class="opcao">estado na frase I e ação na frase II.</div>
+                <div class="porque">Foi invertido: na frase I ele caminhava (ação); na II, estava (estado).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">fenômeno natural em I e estado em II.</div>
+                <div class="porque">Caminhar pelas ruas é ação humana, não fenômeno da natureza.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">ação em ambas as frases apresentadas.</div>
+                <div class="porque">Na frase II, "andava preocupado" equivale a "estava preocupado".</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">ação na frase I e estado na frase II.</div>
+                <div class="porque">Em I, "andava" é caminhar (ação); em II, equivale a "estava" (estado).</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Na frase "O jovem escritor ficou <u>muito</u> feliz porque falou <u>bem</u> no evento", as palavras sublinhadas modificam, respectivamente:</div>
+            <div class="alternativa certa">
+                <div class="opcao">o adjetivo "feliz" e o verbo "falou".</div>
+                <div class="porque">"Muito" intensifica o adjetivo "feliz" e "bem" modifica o verbo "falou".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">o substantivo "escritor" e o nome "evento".</div>
+                <div class="porque">Advérbios não modificam substantivos como "escritor" ou "evento".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">o verbo "ficou" e o adjetivo "jovem".</div>
+                <div class="porque">"Muito" refere-se a "feliz", e "bem" refere-se à ação de falar.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">dois advérbios de lugar presentes na frase.</div>
+                <div class="porque">Nem "feliz" nem "falou" são advérbios de lugar na oração.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Assinale a alternativa em que todas as palavras estão grafadas corretamente com os dígrafos <strong>XC</strong>, <strong>SC</strong> ou <strong>SÇ</strong>:</div>
+            <div class="alternativa">
+                <div class="opcao">Exelente – adolecente – eu creso</div>
+                <div class="porque">O correto é "excelente" (XC), "adolescente" (SC) e "cresço" (SÇ).</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Exceção – disciplina – eu desço</div>
+                <div class="porque">Todas seguem a ortografia correta: exceção, disciplina e desço.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Exesso – nascer – que ele nasca</div>
+                <div class="porque">O correto é "excesso" (com XC e SS) e "que ele nasça" (com SÇ).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Exceto – picina – eu floresço</div>
+                <div class="porque">A palavra "piscina" exige o dígrafo SC antes da vogal I.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Em qual das palavras abaixo o <strong>til (~)</strong> recai sobre uma sílaba <strong>átona</strong> (ou seja, que NÃO é a sílaba mais forte da palavra)?</div>
+            <div class="alternativa">
+                <div class="opcao">Coração</div>
+                <div class="porque">Em "coração", a sílaba tônica é a última (-ção), que leva o til.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Campeões</div>
+                <div class="porque">Em "campeões", a sílaba mais forte é "-ões", marcada pelo til.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Bênção</div>
+                <div class="porque">A sílaba tônica é "bên-" (com circunflexo); "-ção" é sílaba átona.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Amanhã</div>
+                <div class="porque">Em "amanhã", não há outro acento; a sílaba tônica é "-nhã".</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Leia o trecho biográfico: "Machado de Assis nasceu no Rio de Janeiro <u>em 1839</u>. <u>Na juventude</u>, aprendeu francês e começou a escrever." As expressões sublinhadas funcionam como:</div>
+            <div class="alternativa">
+                <div class="opcao">figuras de linguagem que exageram a vida do autor.</div>
+                <div class="porque">São dados cronológicos reais, sem exagero figurado (hipérbole).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">concordâncias nominais com o substantivo "francês".</div>
+                <div class="porque">Locuções adverbiais de tempo são invariáveis e não concordam.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">marcas de 1ª pessoa típicas de uma autobiografia.</div>
+                <div class="porque">O trecho está em 3ª pessoa ("nasceu", "aprendeu"), não em 1ª.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">marcadores temporais que organizam a cronologia.</div>
+                <div class="porque">Situam os eventos no tempo, garantindo a ordem cronológica.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">De acordo com as regras de <strong>concordância nominal</strong>, qual frase está totalmente correta?</div>
+            <div class="alternativa">
+                <div class="opcao">Muito obrigado pela ajuda, disse a diretora.</div>
+                <div class="porque">Como a diretora é mulher, deve dizer "Muito obrigada".</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">As fotografias da família seguem anexas ao texto.</div>
+                <div class="porque">O adjetivo "anexas" concorda no feminino plural com "fotografias".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">É proibido a entrada de visitantes sem crachá.</div>
+                <div class="porque">Como há o artigo "a" antes de "entrada", o certo é "É proibida a entrada".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Elas mesmo escreveram o roteiro do teatro.</div>
+                <div class="porque">"Mesmo" deve concordar com "Elas": "Elas mesmas escreveram".</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Na frase "O velho diário <u>guardava segredos e sorria</u> para quem abria suas páginas", qual figura de linguagem foi empregada no trecho sublinhado?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Personificação, pois dá ações humanas ao diário.</div>
+                <div class="porque">Sorrir é uma ação humana atribuída a um objeto inanimado (diário).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Comparação, pois usa conectivo entre dois termos.</div>
+                <div class="porque">Não há conectivo comparativo (como, feito, tal qual) na oração.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Hipérbole, pois aumenta o tamanho real do livro.</div>
+                <div class="porque">Não há exagero de quantidade ou dimensão, mas humanização.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Metáfora, pois transforma o leitor em uma página.</div>
+                <div class="porque">O recurso central aqui é atribuir o ato humano de sorrir ao diário.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Leia: "Aquela professora <u>é um farol</u> na vida dos seus alunos." A expressão destacada constitui uma <strong>metáfora</strong> porque:</div>
+            <div class="alternativa">
+                <div class="opcao">utiliza a palavra "como" para comparar dois objetos.</div>
+                <div class="porque">Na frase não existe a palavra "como"; se houvesse, seria comparação.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">exagera a altura real da professora na sala de aula.</div>
+                <div class="porque">"Farol" refere-se a guiar com sabedoria, não à altura física.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">afirma que ela é um farol sem usar conectivo comparativo.</div>
+                <div class="porque">A metáfora faz uma comparação implícita (direta), sem conectivos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">dá sentimentos humanos às ondas agitadas do mar.</div>
+                <div class="porque">O sujeito da frase é uma pessoa (professora), não um ser inanimado.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Na frase "<u>Ontem</u> os alunos leram <u>bastante</u> <u>aqui</u> na biblioteca", os três advérbios sublinhados classificam-se, na ordem, em:</div>
+            <div class="alternativa">
+                <div class="opcao">lugar, modo e intensidade.</div>
+                <div class="porque">"Ontem" é tempo, "bastante" é intensidade e "aqui" é lugar.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">tempo, afirmação e modo.</div>
+                <div class="porque">"Bastante" indica intensidade (quanto) e "aqui" indica lugar (onde).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">modo, intensidade e tempo.</div>
+                <div class="porque">"Ontem" responde "quando?" (tempo), e "aqui" responde "onde?" (lugar).</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">tempo, intensidade e lugar.</div>
+                <div class="porque">Ontem = quando (tempo); bastante = quanto (intensidade); aqui = onde (lugar).</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual das opções mostra a separação silábica correta de palavras com dígrafos consonantais?</div>
+            <div class="alternativa">
+                <div class="opcao">e-xce-ção / na-scer / cre-sço</div>
+                <div class="porque">Os dígrafos XC, SC e SÇ nunca ficam na mesma sílaba.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">ex-ce-ção / nas-cer / cres-ço</div>
+                <div class="porque">As letras dos dígrafos XC, SC e SÇ separam-se em sílabas diferentes.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">ex-ceç-ão / nasc-er / cresç-o</div>
+                <div class="porque">A consoante C ou Ç deve iniciar a sílaba seguinte junto da vogal.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">exc-e-ção / na-sc-er / cr-es-ço</div>
+                <div class="porque">Divisão incorreta; separa-se exatamente entre as duas letras do dígrafo.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Em qual das alternativas o verbo tipicamente de <strong>fenômeno da natureza</strong> foi usado em <strong>sentido figurado</strong>, passando a indicar uma ação?</div>
+            <div class="alternativa">
+                <div class="opcao"><u>Choveu</u> sem parar durante toda a madrugada fria.</div>
+                <div class="porque">Aqui "choveu" refere-se à água da chuva real (sentido literal).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">No inverno passado, <u>nevou</u> nas serras do Sul.</div>
+                <div class="porque">"Nevou" indica o fenômeno meteorológico real no inverno.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao"><u>Choveram</u> aplausos quando a escritora subiu ao palco.</div>
+                <div class="porque">Não caiu água do céu; "choveram" foi usado para indicar muitos aplausos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao"><u>Amanheceu</u> muito cedo naquele domingo de verão.</div>
+                <div class="porque">"Amanheceu" indica o fenômeno natural do nascer do sol.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Sabendo que o <strong>advérbio é invariável</strong>, em qual frase a palavra destacada funciona realmente como um <strong>advérbio de intensidade</strong>?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Os biógrafos entrevistaram <u>bastante</u> os moradores.</div>
+                <div class="porque">"Bastante" está no singular modificando o verbo "entrevistaram".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Os biógrafos encontraram <u>bastantes</u> cartas antigas.</div>
+                <div class="porque">No plural antes do substantivo "cartas", é pronome indefinido.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A autora escreveu <u>muitas</u> crônicas na juventude.</div>
+                <div class="porque">"Muitas" varia no feminino plural para concordar com "crônicas".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Restavam <u>poucos</u> exemplares da primeira edição.</div>
+                <div class="porque">"Poucos" concorda com o substantivo "exemplares" (não é advérbio).</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Analise a frase: "A janela do quarto estava <u>meio</u> aberta, e a menina comeu apenas <u>meia</u> maçã." A concordância das palavras sublinhadas está correta porque:</div>
+            <div class="alternativa">
+                <div class="opcao">ambas são adjetivos que concordam com "quarto" e "maçã".</div>
+                <div class="porque">O primeiro "meio" modifica o adjetivo "aberta", não o substantivo "quarto".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">ambas são advérbios invariáveis de modo e de lugar.</div>
+                <div class="porque">"Meia" variou no feminino porque é numeral fracionário (metade).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">o primeiro é numeral e o segundo é advérbio de dúvida.</div>
+                <div class="porque">Foi trocado: o primeiro é advérbio ("um pouco") e o segundo, numeral.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">o primeiro é advérbio invariável e o segundo refere-se a "maçã".</div>
+                <div class="porque">"Meio" (= um pouco) é advérbio invariável; "meia" (= metade) concorda com "maçã".</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Em qual alternativa TODAS as palavras possuem a mesma quantidade de <strong>dígrafos</strong> (considerando XC, SC e SÇ)?</div>
+            <div class="alternativa">
+                <div class="opcao">Escada – piscina – exceção</div>
+                <div class="porque">"Escada" não tem dígrafo, pois antes de A pronuncia-se /s/ e /k/.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Nascer – excelente – cresça</div>
+                <div class="porque">Todas têm um dígrafo estudado: SC (nascer), XC (excelente) e SÇ (cresça).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Escola – descer – escuro</div>
+                <div class="porque">"Escola" e "escuro" não têm dígrafo SC, pois vêm antes de O e U.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Excesso – esquilo – fosco</div>
+                <div class="porque">"Fosco" tem SC antes de O, sendo encontro consonantal, não dígrafo.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Alguns substantivos terminados em <strong>-ão</strong> fazem o plural em <strong>-ãos</strong>, outros em <strong>-ães</strong> e outros em <strong>-ões</strong>. Qual alternativa traz o plural correto das três palavras: <strong>cidadão</strong>, <strong>alemão</strong> e <strong>coração</strong>?</div>
+            <div class="alternativa">
+                <div class="opcao">cidadões – alemães – corações</div>
+                <div class="porque">O plural correto de "cidadão" é "cidadãos", e não "cidadões".</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">cidadãos – alemões – corações</div>
+                <div class="porque">O plural correto de "alemão" é "alemães", e não "alemões".</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">cidadãos – alemães – corações</div>
+                <div class="porque">As três formas seguem o padrão culto: cidadãos, alemães e corações.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">cidadães – alemãos – corações</div>
+                <div class="porque">Foram invertidas as terminações de "cidadãos" e "alemães".</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Ao transformar o trecho de <strong>autobiografia</strong> "<u>Nasci</u> no Ceará e, <u>anos depois</u>, <u>publiquei</u> meu primeiro livro" em uma <strong>biografia</strong>, mantendo o marcador temporal, obtém-se:</div>
+            <div class="alternativa">
+                <div class="opcao">Nascemos no Ceará e, hoje, publicamos nosso primeiro livro.</div>
+                <div class="porque">Mudou para 1ª pessoa do plural (nós) e trocou o marcador temporal.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Nascerei no Ceará e, anos depois, publicarei meu livro.</div>
+                <div class="porque">Manteve a 1ª pessoa e jogou os fatos passados para o futuro.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Nasceu no Ceará, mas nunca publicou nenhum livro na vida.</div>
+                <div class="porque">Apagou o marcador temporal "anos depois" e alterou o sentido original.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Nasceu no Ceará e, anos depois, publicou seu primeiro livro.</div>
+                <div class="porque">Passou para a 3ª pessoa do pretérito e manteve o marcador "anos depois".</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Sobre a concordância do adjetivo com dois substantivos de gêneros diferentes (masculino e feminino), qual construção está <strong>ERRADA</strong> segundo a norma-padrão?</div>
+            <div class="alternativa">
+                <div class="opcao">A autora escreveu um romance e uma crônica emocionante.</div>
+                <div class="porque">Correta: o adjetivo posposto concordou com o mais próximo ("crônica").</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">A autora escreveu emocionantes uma crônica e um romance.</div>
+                <div class="porque">Errada: adjetivo ANTES dos substantivos concorda com o mais próximo (singular).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A autora escreveu um romance e uma crônica emocionantes.</div>
+                <div class="porque">Correta: o adjetivo posposto foi para o plural concordando com ambos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A autora escreveu emocionante crônica e romance de época.</div>
+                <div class="porque">Correta: o adjetivo anteposto concordou com o mais próximo ("crônica").</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Leia o período: "O tempo, <u>aquele velho sábio</u>, <u>sussurrou conselhos</u> ao jovem que <u>chorava um oceano de lágrimas</u>." Os três trechos sublinhados apresentam, respectivamente:</div>
+            <div class="alternativa certa">
+                <div class="opcao">metáfora, personificação e hipérbole.</div>
+                <div class="porque">Tempo = sábio (metáfora); sussurrou (personificação); oceano (hipérbole).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">comparação, metáfora e personificação.</div>
+                <div class="porque">Não há conectivo no 1º trecho, e "oceano de lágrimas" é hipérbole.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">hipérbole, comparação e metáfora.</div>
+                <div class="porque">A ordem está trocada; o exagero ("oceano de lágrimas") está no fim.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">personificação, hipérbole e comparação.</div>
+                <div class="porque">"Sussurrou" é personificação (2º trecho), e não há comparação no 3º.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Na frase "<u>Certamente</u> o museu <u>não</u> abrirá <u>tarde</u>", temos três advérbios. Se trocarmos o verbo para o plural ("Os museus..."), o que acontece com esses três advérbios?</div>
+            <div class="alternativa">
+                <div class="opcao">Vão para o plural para concordar com o substantivo "museus".</div>
+                <div class="porque">Advérbios nunca fazem concordância nominal nem verbal.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Apenas "tarde" vai para o plural ("tardes") junto ao verbo.</div>
+                <div class="porque">Como advérbio de tempo ("abrir tarde"), a palavra permanece no singular.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Continuam exatamente iguais, pois advérbios são invariáveis.</div>
+                <div class="porque">Por serem palavras invariáveis, os advérbios não sofrem flexão de número.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Passam para o feminino se trocarmos "museus" por "escolas".</div>
+                <div class="porque">Advérbios não variam em gênero (masculino/feminino).</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Assinale a alternativa que reúne, na mesma frase, um <strong>verbo de estado</strong>, um <strong>dígrafo SC</strong> e uma <strong>comparação</strong>:</div>
+            <div class="alternativa">
+                <div class="opcao">O menino desceu a escada correndo e gritou mil vezes.</div>
+                <div class="porque">"Desceu" e "gritou" são verbos de ação, e "mil vezes" é hipérbole.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A chuva forte caiu na piscina e a noite era um breu.</div>
+                <div class="porque">"Caiu" é ação e "a noite era um breu" é metáfora (sem conectivo).</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">O sol nasceu sorrindo para a escola logo pela manhã.</div>
+                <div class="porque">"Escola" não tem dígrafo SC, e "sol sorrindo" é personificação.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">O adolescente permaneceu calmo como um lago na piscina.</div>
+                <div class="porque">"Permaneceu" (estado), "adolescente/piscina" (dígrafo SC) e "como um lago" (comparação).</div>
+            </div>
+        </div>
+    </section>
+    <!-- ZONA 5 FIM -->
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<!-- BLOCO TRAVADO: SELOS E MOTOR. COPIE IGUAL. -->
+<script id="selo">
+const SELO_MOTOR = "db5bcc72";
+const SELO_CSS = "1b813fa0";
+</script>
+<script id="motor">
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+// --- LEITURA DAS QUESTOES (vem do HTML) ---
+function htmlDe(pai, seletor) {
+    const el = pai ? pai.querySelector(seletor) : null;
+    return el ? el.innerHTML.trim() : '';
+}
+
+const questions = Array.from(document.querySelectorAll('#bancoQuestoes .questao')).map((bloco, i) => {
+    const alternativas = Array.from(bloco.querySelectorAll(':scope > .alternativa'));
+    const certa = Math.max(alternativas.findIndex(a => a.classList.contains('certa')), 0);
+    return {
+        id: i + 1,
+        level: bloco.dataset.nivel,
+        text: htmlDe(bloco, ':scope > .enunciado'),
+        options: alternativas.map(a => htmlDe(a, ':scope > .opcao')),
+        correct: certa,
+        explanation: {
+            correct: htmlDe(alternativas[certa], ':scope > .porque'),
+            options: alternativas.map((a, j) => j === certa ? 'Certa' : htmlDe(a, ':scope > .porque'))
+        }
+    };
+});
+
+// --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g, '_');
+let currentQuestion = 0;
+let userAnswers = new Array(questions.length).fill(null);
+try {
+    const savedAnswers = JSON.parse(localStorage.getItem(storageKey));
+    if (Array.isArray(savedAnswers) && savedAnswers.length === questions.length) userAnswers = savedAnswers;
+} catch (e) { /* Sem salvamento disponível: a página continua funcionando. */ }
+
+function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+    if(mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        renderQuestion();
+        renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+    }
+    window.scrollTo(0,0);
+}
+
+function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    let badgeClass = '';
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+        </div>
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `<button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `;
+            }).join('')}
+        </div>
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '✅ Raciocínio Aprovado!' : '❌ Ops! Falha Detectada:'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                ${q.explanation.correct}
+            </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>
+    `;
+    updateNav();
+}
+
+function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    try { localStorage.setItem(storageKey, JSON.stringify(userAnswers)); } catch (e) { /* Sem salvamento disponível. */ }
+    if (idx === questions[currentQuestion].correct) {
+        if (window.confetti) {
+            const duration = 1500;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        }
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+    const feedback = document.querySelector('.feedback-box');
+    if (feedback) feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+    }).join('');
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            const mapBox = map.getBoundingClientRect();
+            const dotBox = activeDot.getBoundingClientRect();
+            map.scrollTo({ left: map.scrollLeft + dotBox.left - mapBox.left - (mapBox.width - dotBox.width) / 2, behavior: 'smooth' });
+        }
+    }, 50);
+}
+
+function goTo(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+    document.getElementById('qMap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar Diagnóstico";
+        next.onclick = finish;
+    } else {
+        next.textContent = "Avançar";
+        next.onclick = () => changeQuestion(1);
+    }
+}
+
+function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    if (window.confetti) confetti.reset();
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐⭐⭐" : percent >= 60 ? "⭐⭐⭐" : "⭐";
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    if (percent < 80) {
+        summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+            <strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a meta de 80%. Revise a teoria com atenção antes de tentar novamente.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Limpar Histórico e Refazer Prova</button>`;
+    } else {
+        summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+            <strong>🎉 Excelente Desempenho!</strong> Você demonstrou uma base sólida sobre os conceitos avaliados. Continue revisando para fazer a prova com segurança.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Refazer Prova (Zerar Histórico)</button>`;
+    }
+    if (correct < questions.length) {
+        summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+        questions.forEach((q, i) => {
+            if(userAnswers[i] !== q.correct) {
+                summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                    <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                    <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">${userAnswers[i] === null ? 'Questão não respondida' : 'Seu Erro: ' + q.options[userAnswers[i]]}</span>
+                    <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+}
+
+function reset() {
+    try { localStorage.removeItem(storageKey); } catch (e) { /* Sem salvamento disponível. */ }
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+}
+
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+
+// --- VERIFICADOR AUTOMATICO DA PAGINA ---
+function seloDe(texto) {
+    const limpo = texto.replace(/[^\x21-\x7E]/g, '');
+    let h = 2166136261;
+    for (let i = 0; i < limpo.length; i++) {
+        h ^= limpo.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(16);
+}
+
+function textoDe(html) {
+    const modelo = document.createElement('template');
+    modelo.innerHTML = html;
+    return modelo.content.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function verificarPagina() {
+    const erros = [];
+    const letras = ['A', 'B', 'C', 'D'];
+    const conteudo = [
+        document.title,
+        document.querySelector('.logo-header').innerHTML,
+        document.getElementById('viewExplanation').innerHTML,
+        document.getElementById('bancoQuestoes').innerHTML
+    ].join(' ');
+
+    const seloMotor = document.getElementById('motor');
+    const seloCss = document.getElementById('css-motor');
+    if (typeof SELO_MOTOR === 'undefined' || !seloMotor || seloDe(seloMotor.textContent) !== SELO_MOTOR) erros.push('O motor JavaScript foi alterado. Copie de novo o bloco do esqueleto, sem mudar nada.');
+    if (typeof SELO_CSS === 'undefined' || !seloCss || seloDe(seloCss.textContent) !== SELO_CSS) erros.push('O CSS do motor foi alterado. Copie de novo o bloco do esqueleto, sem mudar nada.');
+    if (conteudo.includes('[[') || conteudo.includes(']]')) erros.push('Ficou algum campo [[...]] sem preencher.');
+    if (conteudo.includes('**')) erros.push('Há Markdown (**) dentro do HTML. Use <strong>.');
+    if (document.querySelector('#viewExplanation script, #bancoQuestoes script, #viewExplanation iframe, #bancoQuestoes iframe')) erros.push('Há script ou iframe dentro das zonas de conteúdo.');
+    if (document.querySelector('#viewExplanation img, #bancoQuestoes img')) erros.push('Há imagem externa. Desenhe com SVG.');
+
+    document.querySelectorAll('#viewExplanation svg, #bancoQuestoes svg').forEach((svg, i) => {
+        if (!svg.getAttribute('viewBox') || !svg.getAttribute('aria-label')) erros.push('O desenho SVG ' + (i + 1) + ' precisa de viewBox e aria-label.');
+    });
+
+    const grupos = document.querySelectorAll('#viewExplanation .content-group');
+    if (grupos.length < 2) erros.push('A teoria precisa de pelo menos 2 temas.');
+    grupos.forEach((g, i) => {
+        if (!g.querySelector('.section-badge') || !g.querySelector('.theory-box')) erros.push('O tema ' + (i + 1) + ' da teoria está sem .section-badge ou .theory-box.');
+    });
+
+    const blocos = Array.from(document.querySelectorAll('#bancoQuestoes .questao'));
+    if (blocos.length !== 30) erros.push('São ' + blocos.length + ' questões, mas precisam ser exatamente 30.');
+
+    const enunciados = new Set();
+    const contagem = [0, 0, 0, 0];
+    let longas = 0;
+    let sequencia = 0;
+    let ultima = -1;
+
+    blocos.forEach((bloco, i) => {
+        const q = 'Questão ' + (i + 1) + ': ';
+        const esperado = i < 10 ? 'Fácil' : i < 20 ? 'Médio' : 'Difícil';
+        if (bloco.dataset.nivel !== esperado) erros.push(q + 'o nível deveria ser ' + esperado + '.');
+
+        const enunciadoEl = bloco.querySelector(':scope > .enunciado');
+        const enunciado = enunciadoEl ? textoDe(enunciadoEl.innerHTML) : '';
+        if (!enunciado) erros.push(q + 'falta o enunciado.');
+        if (enunciado && enunciados.has(enunciado)) erros.push(q + 'enunciado repetido.');
+        enunciados.add(enunciado);
+
+        const alternativas = Array.from(bloco.querySelectorAll(':scope > .alternativa'));
+        if (alternativas.length !== 4) erros.push(q + 'precisa de exatamente 4 alternativas.');
+        const certas = alternativas.filter(a => a.classList.contains('certa'));
+        if (certas.length !== 1) erros.push(q + 'precisa de exatamente 1 alternativa certa.');
+
+        const textos = alternativas.map(a => {
+            const el = a.querySelector(':scope > .opcao');
+            return el ? textoDe(el.innerHTML) : '';
+        });
+        if (textos.some(t => !t)) erros.push(q + 'há alternativa sem texto.');
+        if (new Set(textos).size !== textos.length) erros.push(q + 'há alternativas repetidas.');
+
+        alternativas.forEach((a, j) => {
+            const el = a.querySelector(':scope > .porque');
+            const porque = el ? textoDe(el.innerHTML) : '';
+            const letra = letras[j] || '?';
+            if (!porque) erros.push(q + 'a alternativa ' + letra + ' está sem explicação.');
+            if (porque.length > 110) erros.push(q + 'a explicação da alternativa ' + letra + ' passou de 110 caracteres.');
+        });
+
+        const indice = alternativas.findIndex(a => a.classList.contains('certa'));
+        if (indice >= 0 && indice < 4) {
+            contagem[indice]++;
+            sequencia = indice === ultima ? sequencia + 1 : 1;
+            ultima = indice;
+            if (sequencia === 4) erros.push(q + 'são 4 respostas seguidas com a mesma letra.');
+            const tamanhos = textos.map(t => t.length);
+            const outros = tamanhos.filter((_, j) => j !== indice);
+            if (tamanhos[indice] > 20 && tamanhos[indice] - Math.max(...outros) >= 6) longas++;
+        }
+    });
+
+    contagem.forEach((total, i) => {
+        if (blocos.length === 30 && (total < 5 || total > 10)) erros.push('A letra ' + letras[i] + ' é a certa em ' + total + ' questões. Use de 6 a 9.');
+    });
+    if (longas > 3) erros.push('A alternativa certa é claramente a mais longa em ' + longas + ' questões. Equilibre os tamanhos.');
+
+    const aviso = document.getElementById('avisoMotor');
+    if (erros.length === 0) {
+        aviso.remove();
+        window.PAGINA_OK = true;
+        return;
+    }
+    const lista = erros.slice(0, 25).map(e => '<li>' + e.replace(/</g, '&lt;') + '</li>').join('');
+    aviso.innerHTML = '<strong>⚠️ A página precisa de correção. Não envie aos alunos.</strong><br>Copie esta lista, cole no Gemini e peça para corrigir só estes itens:<ol style="margin:8px 0 0 20px;">' + lista + '</ol>';
+}
+
+verificarPagina();
+</script>
+</body>
+</html>
