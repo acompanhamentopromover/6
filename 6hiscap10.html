@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ZONA 1 INICIO: TITULO DA ABA -->
+<title>Império Romano 6º Ano - Promover</title>
+<!-- ZONA 1 FIM -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- BLOCO TRAVADO: CSS DO MOTOR. COPIE IGUAL. -->
+<style id="css-motor">
+:root {
+    --border-color: #000000;
+    --white: #FFFFFF;
+    --theme-text-active: #FFFFFF;
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #BE123C;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color);
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-bottom: 100px;
+    background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.15); color: var(--theme-contrast); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center;}
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container { position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 { font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil { background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+.result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big { font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+.nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.feedback-box { scroll-margin-top: 12px; scroll-margin-bottom: 90px; }
+.question-map { scroll-margin-top: 8px; }
+td, th { padding: 6px 8px; }
+#bancoQuestoes { display: none; }
+.visual-area.texto { font-size: 0.95rem; flex-direction: column; gap: 8px; }
+.tabela { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.85rem; font-weight: 600; margin-top: 10px; }
+.tabela th { background: var(--theme-light); }
+.tabela th, .tabela td { border: 1px solid var(--border-color); }
+.lista { padding-left: 20px; }
+.desenho { width: 100%; max-width: 420px; height: auto; display: block; margin: 10px auto; }
+.d-cor1 { fill: var(--theme-dark); }
+.d-cor2 { fill: var(--theme-contrast); }
+.d-cor3 { fill: var(--theme-medium); }
+.d-fundo { fill: var(--theme-light); stroke: var(--text-color); stroke-width: 2; }
+.d-linha { fill: none; stroke: var(--text-color); stroke-width: 2; }
+.d-texto { fill: var(--text-color); font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600; }
+</style>
+<!-- ZONA 2 INICIO: CORES E CSS EXTRA -->
+<style id="css-tema">
+:root {
+    --bg-color: #EFF6FF;
+    --text-color: #0F172A;
+    --theme-light: #DBEAFE;
+    --theme-medium: #60A5FA;
+    --theme-dark: #1E3A8A;
+    --theme-contrast: #B45309;
+    --theme-accent: #2563EB;
+}
+</style>
+<!-- ZONA 2 FIM -->
+</head>
+<body>
+<div id="avisoMotor" style="display:block; max-width:600px; width:100%; margin:0 auto 16px; padding:14px; background:#FFE4E6; color:#881337; border:3px solid #BE123C; border-radius:12px; font-family:sans-serif; font-size:15px; font-weight:600; line-height:1.5;">⚠️ Este arquivo está incompleto ou com erro no código. Não envie aos alunos. Peça ao Gemini para gerar o arquivo completo de novo.</div>
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🚀</span> PROMOVER</div>
+        <!-- ZONA 3 INICIO: CABECALHO -->
+        <h1>História – 6º&nbsp;Ano</h1>
+        <p class="subtitle">O Império Romano: Formação, Sociedade e Cristianismo</p>
+        <!-- ZONA 3 FIM -->
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📘 Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🧠 Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>😕 Termo não encontrado.</p></div>
+
+        <!-- ZONA 4 INICIO: TEORIA -->
+        <div class="content-group">
+            <span class="section-badge">1. A Fundação e a Sociedade Romana</span>
+            <div class="theory-box">
+                <h3>🏛️ De República a Império</h3>
+                <p>Roma começou como uma cidade pequena, mas seu exército conquistou todo o Mediterrâneo. Após muitas crises e guerras civis, o general <strong>Otávio</strong> saiu vencedor. Em <strong>27 a.C.</strong>, o Senado deu a ele o título de <strong>Augusto</strong>. Era o fim da República e o começo do <strong>Império Romano</strong>. O Senado continuou existindo, mas o poder total ficou com o imperador.</p>
+                <svg class="desenho" viewBox="0 0 320 90" role="img" aria-label="Linha do tempo: Da República para o Império Romano no ano 27 a.C.">
+                    <line class="d-linha" x1="20" y1="45" x2="300" y2="45"/>
+                    <rect class="d-fundo" x="30" y="25" width="100" height="40" rx="8"/>
+                    <rect class="d-fundo" x="190" y="25" width="100" height="40" rx="8"/>
+                    <line class="d-linha" x1="130" y1="45" x2="190" y2="45"/>
+                    <polygon class="d-cor1" points="190,45 180,39 180,51"/>
+                    <text class="d-texto" x="80" y="50" text-anchor="middle">República</text>
+                    <text class="d-texto" x="240" y="50" text-anchor="middle">Império</text>
+                    <text class="d-texto" x="160" y="35" text-anchor="middle" style="font-size:10px;">27 a.C.</text>
+                </svg>
+                <h3>👥 Quem formava a sociedade?</h3>
+                <ul class="lista">
+                    <li><strong>Patrícios:</strong> Eram os ricos donos de terras, com amplos direitos e privilégios.</li>
+                    <li><strong>Plebeus:</strong> Eram pessoas livres e mais pobres (artesãos, comerciantes, camponeses).</li>
+                    <li><strong>Escravizados:</strong> Não tinham direitos. Falaremos mais deles adiante!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">2. Cultura, Pax Romana e Pão e Circo</span>
+            <div class="theory-box">
+                <h3>🏺 A Cultura e a Pax Romana</h3>
+                <p>A religião de Roma era <strong>politeísta</strong> (cultuava vários deuses) e tinha enorme influência da cultura grega. Por exemplo, o deus grego Zeus virou <strong>Júpiter</strong> em Roma, e Afrodite virou <strong>Vênus</strong>. Eles também cultuavam o imperador como se fosse um deus. Falavam o <strong>latim</strong>, que séculos depois deu origem à nossa língua portuguesa.</p>
+                <div class="highlight-box"><strong>Dica:</strong> O legado dos romanos está presente até hoje, como no nosso Direito (leis), nas grandes estradas, nos aquedutos, nas termas e nos anfiteatros.</div>
+                <p>O Império viveu um longo período de paz e estabilidade chamado <strong>Pax Romana</strong> (de 27 a.C. a 180 d.C.). O exército garantia a ordem, as estradas e a moeda comum ajudavam o comércio a fluir, e as leis valiam para todo o império.</p>
+                <h3>🍞 A Política do Pão e Circo</h3>
+                <p>Para evitar revoltas da população pobre que sofria com a desigualdade, o governo distribuía alimentos (pão, trigo) e dava espetáculos de graça. As emocionantes lutas de gladiadores aconteciam no <strong>Coliseu</strong> e as perigosas corridas de carruagem, no <strong>Circo Máximo</strong>. O grande objetivo era <strong>agradar e controlar o povo</strong>, mantendo-os distraídos dos problemas.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">3. Escravidão e O Cristianismo</span>
+            <div class="theory-box">
+                <h3>⛓️ A Escravidão em Roma</h3>
+                <p>Em Roma, uma pessoa virava escravizada se fosse <strong>prisioneira de guerra</strong>, por <strong>dívidas</strong> ou se nascesse de mãe escravizada. Eles eram propriedades de seus donos e trabalhavam arduamente nos campos, minas, obras, casas e até mesmo lutando como gladiadores.</p>
+                <div class="highlight-box warning"><strong>Cuidado:</strong> Os escravizados não aceitavam tudo calados. A maior e mais famosa revolta foi liderada por <strong>Espártaco</strong> (73 a 71 a.C.), um habilidoso gladiador que juntou milhares de escravizados contra as tropas de Roma.</div>
+                <h3>🕊️ O Surgimento do Cristianismo</h3>
+                <p>O Cristianismo surgiu na região da Judeia, com os ensinamentos de <strong>Jesus de Nazaré</strong>. Era uma religião <strong>monoteísta</strong> (apenas um Deus) que pregava o amor ao próximo e a igualdade. Por causa dessa mensagem de esperança, atraiu rapidamente muitos pobres e escravizados.</p>
+                <p>Os romanos perseguiram os cristãos duramente e de forma violenta, porque os cristãos se recusavam a cultuar o imperador e os deuses romanos. Essa situação só foi mudar muito tempo depois, através de duas grandes decisões:</p>
+                <ul class="lista">
+                    <li><strong>Ano 313 (Édito de Milão):</strong> O imperador <strong>Constantino</strong> deu liberdade de culto aos cristãos, acabando com as perseguições.</li>
+                    <li><strong>Ano 380:</strong> O imperador <strong>Teodósio</strong> transformou o Cristianismo na religião oficial de todo o Império Romano.</li>
+                </ul>
+                <svg class="desenho" viewBox="0 0 320 90" role="img" aria-label="Linha do tempo do Cristianismo em Roma com origem, liberdade e oficialização">
+                    <line class="d-linha" x1="20" y1="45" x2="300" y2="45"/>
+                    <circle class="d-cor1" cx="60" cy="45" r="7"/>
+                    <circle class="d-cor2" cx="160" cy="45" r="7"/>
+                    <circle class="d-cor1" cx="260" cy="45" r="7"/>
+                    <text class="d-texto" x="60" y="25" text-anchor="middle">Séc I</text>
+                    <text class="d-texto" x="160" y="25" text-anchor="middle">313</text>
+                    <text class="d-texto" x="260" y="25" text-anchor="middle">380</text>
+                    <text class="d-texto" x="60" y="65" text-anchor="middle" style="font-size:10px;">Origem</text>
+                    <text class="d-texto" x="160" y="65" text-anchor="middle" style="font-size:10px;">Liberdade</text>
+                    <text class="d-texto" x="260" y="65" text-anchor="middle" style="font-size:10px;">Religião Oficial</text>
+                </svg>
+            </div>
+        </div>
+        <!-- ZONA 4 FIM -->
+
+        <button class="btn-action" onclick="setMode('practice')">
+            Iniciar Diagnóstico (30 Q) ➜
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">30 questões rigorosas. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro!</p>
+        </div>
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars">⭐⭐⭐</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+
+    <!-- ZONA 5 INICIO: 30 QUESTOES -->
+    <section id="bancoQuestoes" hidden>
+        <!-- 1 a 10 Fáceis -->
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Quem se tornou o primeiro imperador romano no ano de 27 a.C.?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Otávio Augusto</div>
+                <div class="porque">Ele concentrou o poder em suas mãos após vencer as grandes guerras civis em Roma.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Júlio César</div>
+                <div class="porque">Ele foi um grande líder anterior ao império, mas não foi coroado imperador.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Teodósio</div>
+                <div class="porque">Ele governou séculos depois e foi quem oficializou o Cristianismo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Espártaco</div>
+                <div class="porque">Espártaco foi um gladiador que liderou uma revolta, não um político.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Como eram chamados os ricos proprietários de terras em Roma que possuíam grandes direitos?</div>
+            <div class="alternativa">
+                <div class="opcao">Plebeus</div>
+                <div class="porque">Eram pessoas livres, mas, em sua maioria, trabalhadoras e mais pobres.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Patrícios</div>
+                <div class="porque">Eram a elite de Roma, donos de grandes terras e donos da maior parte dos privilégios.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Gladiadores</div>
+                <div class="porque">Eram lutadores, quase sempre escravizados, não proprietários ricos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Comerciantes</div>
+                <div class="porque">O comércio era uma atividade geralmente praticada pelos plebeus, não pelos patrícios.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Como a religião romana original é classificada em relação à quantidade de deuses?</div>
+            <div class="alternativa">
+                <div class="opcao">Monoteísta</div>
+                <div class="porque">Monoteísta é a crença em apenas um deus, o que surgiu forte com o Cristianismo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Ateísta</div>
+                <div class="porque">Os romanos eram extremamente devotos e acreditavam em muitas divindades.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Politeísta</div>
+                <div class="porque">A religião clássica de Roma cultuava vários deuses, como Júpiter e Vênus.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Budista</div>
+                <div class="porque">O Budismo é uma religião que surgiu na Ásia e não fazia parte da cultura romana.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual língua era falada no Império Romano e serviu de base para o português moderno?</div>
+            <div class="alternativa">
+                <div class="opcao">Grego</div>
+                <div class="porque">Os romanos admiravam o grego, mas o idioma oficial do império era outro.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Hebraico</div>
+                <div class="porque">O hebraico era falado por povos na região da Judeia, não a língua de todo o império.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Inglês</div>
+                <div class="porque">O inglês é uma língua de origem germânica, não falada na Roma antiga.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Latim</div>
+                <div class="porque">O latim era o idioma de Roma, espalhado pelas conquistas e base para o português.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual é o nome dado ao longo período de paz e estabilidade do Império Romano?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Pax Romana</div>
+                <div class="porque">Foi um longo período de paz e desenvolvimento, de quase 200 anos, iniciado por Augusto.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Guerra Civil</div>
+                <div class="porque">Uma guerra civil é um conflito armado interno, o oposto exato de paz e estabilidade.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Pão e Circo</div>
+                <div class="porque">Essa era a política social de distribuição de comida e entretenimento.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Édito de Milão</div>
+                <div class="porque">Foi a lei criada em 313 que concedeu a liberdade de culto aos cristãos.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">O que o governo distribuía ao povo pobre através da política do "Pão e Circo"?</div>
+            <div class="alternativa">
+                <div class="opcao">Armas e escudos</div>
+                <div class="porque">Equipamentos militares eram fornecidos apenas aos soldados do exército.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Pão e espetáculos</div>
+                <div class="porque">O governo literalmente dava trigo (pão) e financiava espetáculos gratuitos de lutas.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Terras e moradias</div>
+                <div class="porque">O governo não redistribuía terras para resolver a pobreza estrutural.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Ouro e joias</div>
+                <div class="porque">Riquezas eram privilégios da classe dos patrícios e dos imperadores.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual construção famosa em Roma era o grande palco das sangrentas lutas de gladiadores?</div>
+            <div class="alternativa">
+                <div class="opcao">Palácio Imperial</div>
+                <div class="porque">O palácio era apenas a luxuosa moradia da família do imperador.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Templo de Júpiter</div>
+                <div class="porque">Os templos serviam exclusivamente para fins e ritos religiosos.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Coliseu</div>
+                <div class="porque">Era o gigante anfiteatro romano construído exatamente para esses grandes combates.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Circo Máximo</div>
+                <div class="porque">O Circo Máximo era focado, na verdade, nas perigosas corridas de carruagens.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Em Roma, uma pessoa virava escravizada se acontecesse qual destas opções?</div>
+            <div class="alternativa">
+                <div class="opcao">Perdesse suas terras rurais</div>
+                <div class="porque">Perder terras causava grande pobreza, mas a lei exigia um motivo específico.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Desrespeitasse os deuses</div>
+                <div class="porque">Desrespeitar deuses gerava punições ou morte, mas não gerava um contrato de escravidão.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Mudasse de religião pagã</div>
+                <div class="porque">Havia liberdade para vários cultos antes da perseguição severa aos cristãos.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Deixasse de pagar suas dívidas</div>
+                <div class="porque">A escravidão por dívidas não pagas era uma lei real que destruiu famílias inteiras.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Quem liderou a maior e mais famosa revolta de escravizados em Roma entre 73 e 71 a.C.?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Espártaco</div>
+                <div class="porque">Ele foi um gladiador que mobilizou milhares de outros escravizados contra Roma.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Otávio Augusto</div>
+                <div class="porque">Otávio foi o imperador de Roma, e não o líder de uma rebelião contra ele mesmo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Jesus de Nazaré</div>
+                <div class="porque">Jesus fundou o Cristianismo e pregou a paz, não uma guerra armada de gladiadores.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Constantino</div>
+                <div class="porque">Constantino foi o imperador que apenas deu liberdade de culto aos cristãos, depois.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Em qual região do Império Romano surgiu a religião do Cristianismo?</div>
+            <div class="alternativa">
+                <div class="opcao">Grécia</div>
+                <div class="porque">A Grécia influenciou muito a religião politeísta, mas não foi onde Jesus nasceu.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Judeia</div>
+                <div class="porque">O Cristianismo nasceu na região da Judeia com os ensinamentos originais de Jesus.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Roma Antiga</div>
+                <div class="porque">O Cristianismo chegou a Roma tempos depois, tornando-se muito popular e perseguido lá.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Península Ibérica</div>
+                <div class="porque">Esta é a região onde hoje ficam Portugal e Espanha, não o berço cristão.</div>
+            </div>
+        </div>
+
+        <!-- 11 a 20 Médias -->
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Na transição turbulenta da República para o Império, o que aconteceu de fato com o Senado?</div>
+            <div class="alternativa">
+                <div class="opcao">Assumiu o poder absoluto</div>
+                <div class="porque">O Senado perdeu o poder na transição para o Império, em vez de assumir mais controle.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Foi totalmente extinto</div>
+                <div class="porque">Augusto não acabou com o Senado, apenas retirou o seu poder prático de governar o povo.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Perdeu o seu poder prático</div>
+                <div class="porque">O Senado continuou a existir apenas em aparência, pois o poder real estava com o imperador.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Virou um grupo religioso cristão</div>
+                <div class="porque">O Senado sempre foi um corpo político, nunca uma ordem religiosa na história romana.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Como a religião romana clássica adaptou e transformou a forte influência grega?</div>
+            <div class="alternativa">
+                <div class="opcao">Proibindo os deuses gregos</div>
+                <div class="porque">Os romanos adoravam a rica cultura da Grécia e abraçaram rapidamente as suas crenças divinas.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Destruindo os santuários</div>
+                <div class="porque">Os romanos preservaram a grandiosa cultura grega e chegaram a construir belos templos parecidos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Traduzindo somente os mitos</div>
+                <div class="porque">Não foi apenas uma simples tradução, mas uma profunda mistura cultural na sociedade romana.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Renomeando suas divindades</div>
+                <div class="porque">Eles pegaram os deuses gregos e deram novos nomes: Zeus virou Júpiter; Afrodite virou Vênus.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual foi a principal intenção política para a criação duradoura da política do Pão e Circo?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Controlar os mais pobres e evitar revoltas</div>
+                <div class="porque">O governo temia rebeliões, então agradava e distraía a população faminta com comida e diversão.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Enriquecer rapidamente os gladiadores</div>
+                <div class="porque">Os gladiadores frequentemente eram escravizados; o lucro das arenas pertencia ao Estado romano.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Alimentar os fortes soldados do exército</div>
+                <div class="porque">O exército recebia seu próprio suprimento. O Pão e Circo focava na população pobre civil da cidade.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Vender mais carruagens aos cidadãos</div>
+                <div class="porque">Os espetáculos eram sempre gratuitos e o objetivo real era obter puro controle social em Roma.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Por qual razão fundamental o intenso comércio romano foi tão beneficiado durante a Pax Romana?</div>
+            <div class="alternativa">
+                <div class="opcao">Pela eliminação das moedas em metal</div>
+                <div class="porque">Na verdade, o uso de uma excelente moeda comum em todo o território é o que facilitava as trocas.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Pelas boas estradas e pela moeda comum</div>
+                <div class="porque">Com estradas seguras pelo exército e dinheiro unificado, os comerciantes prosperaram livremente.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Pela doação de novas lojas ao povo</div>
+                <div class="porque">O Estado romano não focava em doar espaços comerciais aos seus cidadãos, mas sim em expandir domínios.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Pela proibição temporária da escravidão</div>
+                <div class="porque">A injusta escravidão continuou firme e forte, sendo o motor econômico da Pax Romana.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Além das severas dívidas impagáveis e do nascimento, qual era outra forma comum de virar escravizado em Roma?</div>
+            <div class="alternativa">
+                <div class="opcao">Falar a língua grega no Senado</div>
+                <div class="porque">Falar grego era tido como um claro sinal de alta educação e inteligência entre os mais ricos de Roma.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Ser de uma família patrícia falida</div>
+                <div class="porque">Os patrícios formavam a elite privilegiada; um patrício empobrecido mantinha os direitos de cidadão.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Tornar-se prisioneiro de guerra</div>
+                <div class="porque">Todo povo que perdia as grandes batalhas contra o exército romano perdia sua liberdade imediatamente.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Escolher livremente essa profissão</div>
+                <div class="porque">A escravidão era uma imposição trágica e humilhante, e nunca uma opção profissional escolhida.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual característica do início do Cristianismo mais desagradou e ameaçou as rigorosas autoridades romanas?</div>
+            <div class="alternativa">
+                <div class="opcao">A pregação ativa pela destruição de Roma</div>
+                <div class="porque">Eles não queriam destruir as cidades do império, apenas espalhavam o amor ao próximo ensinado.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A total recusa em comparecer aos jogos do Coliseu</div>
+                <div class="porque">Ausentar-se da arena era apenas uma escolha pessoal, não a grande causa legal da severa perseguição.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A realização de um culto secreto originário da Grécia</div>
+                <div class="porque">O cristianismo nem ao menos surgiu na Grécia (foi na Judeia) e cresceu nas periferias romanas.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">A firme rejeição ao culto obrigatório do imperador</div>
+                <div class="porque">Como acreditavam em um único Deus (monoteísmo), eles se recusavam a curvar-se ao imperador como divindade.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">O imperador Constantino entrou para a história religiosa romana pelo Édito de Milão (313). O que isso significou?</div>
+            <div class="alternativa certa">
+                <div class="opcao">O império permitiu a adoração cristã livremente</div>
+                <div class="porque">Ele encerrou a perseguição sangrenta do Estado e concedeu, finalmente, a liberdade de culto aos cristãos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Ele ordenou a prisão de Jesus de Nazaré</div>
+                <div class="porque">Jesus já havia sido crucificado no começo do século I, centenas de anos antes de Constantino governar.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A lei transformou a capital romana em cidade grega</div>
+                <div class="porque">O decreto tratou de direitos e leis de tolerância religiosa, não de alterar o DNA da cidade.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">O imperador acabou totalmente com a escravidão</div>
+                <div class="porque">Infelizmente, a cruel e desumana escravidão continuou operando mesmo quando os imperadores viraram cristãos.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Em Roma, qual vasto grupo social era formado por pessoas livres, mas geralmente pobres, artesãos e camponeses?</div>
+            <div class="alternativa">
+                <div class="opcao">Imperadores</div>
+                <div class="porque">Havia sempre apenas um imperador de cada vez, que desfrutava do poder e riqueza absolutos no território.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Plebeus</div>
+                <div class="porque">A plebe era o grupo enorme e livre de trabalhadores comuns, porém afastados dos privilégios dos ricos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Patrícios</div>
+                <div class="porque">Eles ficavam no topo da pirâmide; formavam a super rica e poderosa elite de proprietários de terras em Roma.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Escravizados</div>
+                <div class="porque">Esses, por sua vez, não eram livres; suas vidas pertenciam totalmente e legalmente aos seus donos.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Por que a mensagem inicial cristã atraiu e reconfortou tão rápido os escravizados e os mais pobres em Roma?</div>
+            <div class="alternativa">
+                <div class="opcao">Dava riqueza material imediata a quem fosse batizado</div>
+                <div class="porque">A religião primitiva cristã não oferecia lucro e dinheiro, mas sim valores como esperança, compaixão e fé.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Garantia excelentes e raros cargos dentro do Senado</div>
+                <div class="porque">Pobres, camponeses e escravizados jamais chegariam nem perto do Senado, reservado aos mais ricos.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Pregava fielmente o amor, compaixão e a igualdade</div>
+                <div class="porque">A ideia de que, perante um Deus único e amoroso, todos tinham o exato mesmo valor confortava os despossuídos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Garantia a rápida alforria libertando da escravidão</div>
+                <div class="porque">Por incrível que pareça, o Cristianismo inicial não impunha o fim imediato da escravidão na lei dos romanos.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual foi a principal e definitiva decisão do imperador Teodósio no ano de 380 d.C.?</div>
+            <div class="alternativa">
+                <div class="opcao">Começou a mais violenta e triste guerra civil romana</div>
+                <div class="porque">Teodósio viveu já no declínio e, nesta época, as grandes guerras civis republicanas já eram passado.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Mudou a gigantesca capital de Roma para o outro lado</div>
+                <div class="porque">Quem fez isso, dividindo forças com a construção e fundação de Constantinopla, foi Constantino antes dele.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Fechou eternamente as perigosas pistas do Circo Máximo</div>
+                <div class="porque">As divertidas e mortais corridas de espetáculos continuaram fortes entre o povo romano por vários anos.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Oficializou o Cristianismo em toda a extensa Roma</div>
+                <div class="porque">Teodósio baniu os antigos e tradicionais rituais pagãos politeístas, oficializando e blindando o Cristianismo.</div>
+            </div>
+        </div>
+
+        <!-- 21 a 30 Difíceis -->
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Avalie cuidadosamente o importante papel do exército romano durante a Pax Romana. Qual era sua real função?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Assegurar a ordem política e afastar as invasões bárbaras</div>
+                <div class="porque">A força dos exércitos impedia revoltas e afastava inimigos externos, permitindo assim 200 anos de firme paz interna.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Escolher pacificamente a próxima e principal religião do povo</div>
+                <div class="porque">A religião era inicialmente livre aos civis, e quando mudou, foi por imposição dura dos imperadores, não soldados.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Cozinhar, transportar e distribuir os muitos alimentos gratuitos</div>
+                <div class="porque">Quem realizava as complexas doações de pão para o povo humilde era a extensa burocracia do Estado e seus servos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Estudar intensamente e escrever pesadas e sábias leis novas</div>
+                <div class="porque">Quem discutia as antigas leis e o Direito em Roma era o Senado romano e o imperador, deixando aos soldados a força bruta.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Se um rico patrício e um trabalhador plebeu discutissem política ativamente no senado, qual seria a clara diferença de poder?</div>
+            <div class="alternativa">
+                <div class="opcao">O plebeu era o verdadeiro escravizado e não possuía leis favoráveis</div>
+                <div class="porque">A história nos conta que plebeus nasciam e continuavam livres. Somente em caso de dívida extrema viravam servos amarrados.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Nenhum deles detinha direitos autênticos sobre a própria cidade e família</div>
+                <div class="porque">Eles de fato detinham muitos direitos básicos, no entanto as grandiosas propriedades conferiam ao patrício poder superior e inigualável.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Os patrícios tinham expressamente a esmagadora maioria de privilégios e vez</div>
+                <div class="porque">Patrícios, sendo abastados donos de colossais propriedades, influenciavam sempre as decisões nas votações importantes.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">O plebeu pobre dominava amplamente toda a tomada e execução de decisões</div>
+                <div class="porque">Em toda a saga republicana e imperial, a extensa plebe era, e foi, rotineiramente silenciada perante as altas ordens e interesses ricos de Roma.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Apesar das vastas inovações, engenharia e do belíssimo comércio, o Império Romano dependia de algo extremamente imoral para funcionar. O que movimentava o trabalho braçal diariamente em Roma?</div>
+            <div class="alternativa">
+                <div class="opcao">A grande participação dos poderosos líderes nobres e eleitos pelo próprio Senado</div>
+                <div class="porque">Os riquíssimos senadores em seus mantos debatiam e planejavam as grandiosas expansões e leis, longe de realizarem dolorosos trabalhos e limpezas pelas ruas.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">A pesada e contínua mão de obra dos escravizados, carentes de todo direito humano e legal básico</div>
+                <div class="porque">Sem as infinitas e cansativas horas de esforço de prisioneiros escravizados sem leis de amparo social, a gloriosa Roma sofreria instantâneo e amargo colapso estrutural.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">O imenso uso das ágeis engenhocas movidas magicamente a vapor para construção de gigantes aquedutos</div>
+                <div class="porque">Estas complexas invenções com caldeiras só existiriam prontas cerca de dois extensos milênios depois em meio às cortinas da Revolução Industrial britânica.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Os formidáveis e invejáveis salários bem pagos à enorme parcela pobre dos bravos camponeses no interior</div>
+                <div class="porque">Ainda que se atestasse o uso de trabalho livre nas colheitas, sem o principal e cruel motor escravo as antigas mansões ruiriam por falhas contínuas de força braçal humana e livre.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">A duradoura religião da antiga Roma enfrentou uma transformação inacreditável, partindo de dezenas de deuses para a veneração rígida de apenas um. Qual destas grandes opções consolida tal transição surpreendente na lei?</div>
+            <div class="alternativa">
+                <div class="opcao">A majestosa e irrefutável sagração vitoriosa do primeiro imperador Otávio o Augusto</div>
+                <div class="porque">Ele foi e se tornou responsável por estabelecer a base e força final ao já popular império romano de fortes tradições pagãs politeístas de muitas cabeças celestes.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A rápida idealização da construção impecável em pedra do popular monumento cultural de mortes: o Coliseu</div>
+                <div class="porque">Foi uma formidável arena brutal concebida para saciar o apetite sedento da população através de muito perigo de vida contínuo sem forte elo de fé.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A dolorosa revolta organizada pacientemente pelo ágil e valente gladiador acorrentado e ofendido Espártaco</div>
+                <div class="porque">Os violentos confrontos se desencadearam num grito ardente de liberdade física de grilhões sem visar apagar todo o antigo folclore espiritual e divino romano consolidado.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">A ordem legal irrevogável de tornar oficial em leis rígidas os dogmas cristãos via as falas imperiais de Teodósio</div>
+                <div class="porque">Pela lei, no marcante ano de 380 d.C., todos os templos antigos se apagaram à força cedendo caminho à força monoteísta do Cristianismo dominante de fato e de lei por Teodósio.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">O precioso legado romano está incrivelmente vivo mesmo em incontáveis cidades hoje, inspirando obras e leis vitais. Historicamente, qual destas imponentes construções romanas garantia a sobrevivência higiênica e básica das grandes metrópoles abastecendo de água corrente cada canto delas?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Os belíssimos, compridos, gigantes e calculados aquedutos que desciam as longas colinas trazendo vida</div>
+                <div class="porque">A engenharia genial destes compridos caminhos permitia à fresca água potável cruzar infinitas léguas em desnível chegando para limpezas extremas, bebedouros de animais ou grandiosas e úmidas termas.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">As largas e abertas planícies ovais bem montadas e bem desenhadas em madeira chamadas de famosíssimo Circo Máximo</div>
+                <div class="porque">Tal local majestoso serviu estritamente a um intenso propósito recreativo festivo regado com competições velozes mortais guiando animais em percursos de pura exaustão e alegria pública.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Os maciços palcos cobertos no chão duro em pura areia molhada, apelidados genericamente pelos mestres como anfiteatros cruéis de lutas</div>
+                <div class="porque">O Coliseu e os colossais recintos mortais semelhantes sediaram banhos infinitos de sangue derramado entre corajosas vidas, jamais funcionando como base das extensas hidratações locais.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Os abafados e fechados santuários sagrados criados especialmente aos deuses como as residências exclusivas de Júpiter em ritos fechados</div>
+                <div class="porque">A essência única do imenso lugar santo devia ser reverenciar e rogar intensamente pelo impossível proteção dos céus chuvosos sem relação prática com captações eficientes físicas aos lares imperiais.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">A conflituosa relação mantida firmemente entre vários imperadores temidos e a ascendente expansão do humilde Cristianismo viveu reviravoltas inimagináveis entre os séculos turbulentos. Qual dessas avaliações pontuais é a mais certeira em resumir o que se passava nas transformações do império daquela época?</div>
+            <div class="alternativa">
+                <div class="opcao">O império permitiu que iniciassem tranquilamente adorando todos os seus símbolos, porém acabou os oprimindo duramente perante a lei forte ao final</div>
+                <div class="porque">Isso aponta ao exato reverso daquilo que os grandes fatos e livros confirmam repetidamente ao passar os anos: do sangramento da opressão à oficialização livre de opressores.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Atravessou as densas épocas tristes do preconceito, onde eram caçados aos montes, para o patamar oficial de proteção inquebrável, finalizado por leis imperiais</div>
+                <div class="porque">É fato: os que não temiam a morte adorando nas famosas sombras catacumbas passaram à condição respeitada em que os outros é que fugiam da mesma e fortíssima lei da coroa cristã unificada.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Houve uma estranha tolerância e silêncio permanente absoluto sem causar qualquer medo real e tangível para quem mandava de cima nas engrenagens das cidades</div>
+                <div class="porque">Ao não respeitarem curvar humildemente diante das divinas representações encarnadas do senhor de tudo o império impiedoso descarregou perseguições trágicas terríveis a eles logo depois.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Todo crente que orava continuou escondendo-se temeroso a sós, não pisando nas avenidas diurnas livre mesmo muito e bastante após o bom Édito de Constantino ter chegado de surpresa</div>
+                <div class="porque">Isso desconsidera o fato cristalino do milagre legal em que Constantino livrou quem sofria concedendo culto visível público encerrando medo duradouro do julgamento desleal imperial da arena triste.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">A perversa criação de espetáculos grátis baseada na "Política do Pão e Circo" era uma excelente cortina de ilusões. Por qual destes sombrios e verdadeiros motivos podemos concordar que esse mecanismo realmente gerava uma alienação tão completa da massa humana pobre ali presente?</div>
+            <div class="alternativa">
+                <div class="opcao">Porque as multidões ricas exerciam voto imposto sobre os pobres de forma violenta ao terminar os shows, impedindo debates</div>
+                <div class="porque">Os jogos não incluíam eleições. A ausência massiva de democracia plena mantinha firme as amarras na lei. Não ocorria para esconder urnas.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque acabou misteriosamente matando perante as vistas do mundo o único prazer sadio de antigamente e todos os perigosos lutadores bons com ele</div>
+                <div class="porque">A verdadeira alienação popular acontecia precisamente estimulando continuamente com sangue quente novos gladiadores em arenas até onde o dinheiro compunha fortunas cruéis desmedidas sempre ativas.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Porque focava perfeitamente em paralisar as mentes desamparadas afastando seus pensamentos revoltados diários com emoções rasas num palco e algumas migalhas alimentares diárias</div>
+                <div class="porque">Para barrar focos flamejantes violentíssimos e famintos pelas condições infernais vividas a enorme elite mantinha sorrisos na face deles ofertando comida básica grátis sem garantir nenhum outro futuro livre além da diversão momentânea que cega.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque todo custo alto da grande festa absurda esmagadora arruinava diariamente as magras poupanças pagas nos altos e constantes impostos dos mais desvalidos do povo</div>
+                <div class="porque">Quem pagava verdadeiramente os jogos desumanos eram de praxe tesouros esbanjados do próprio majestoso dono e império dominador que sugava muito dos ricos e perdedores distantes sem extorquir apenas ali do povão farto da festança.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">A marcante revolução liderada de forma heroica pelo inesquecível escravizado Espártaco espantou generais e balançou as espadas perfeitamente alinhadas de uma orgulhosa Roma. Caso ele não tivesse suportado o violento treino nas temidas e difíceis escolas para grandes gladiadores brutais, qual seria a provável consequência crucial limitando seu movimento antes das glórias de resistência atingirem altas escalas de medo no exército central?</div>
+            <div class="alternativa">
+                <div class="opcao">Ele obteria milagrosamente mais proteção armamento cortante impenetrável cedido secretamente por senadores corruptos compadecidos e tristes e ocultos da elite traidora central aliada ao plebeu</div>
+                <div class="porque">Tivesse sido mero servente pacífico limpando o assoalho poeirento escuro e úmido sem contatos não receberia acesso escondido imediato sequer em sonhos aos nobres punhais para grandes e impossíveis fugas mortais noturnas imensas.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Ele facilmente lideraria ataques coordenados espetaculares furtivos pelo grande mar escuro utilizando amplos navios velozes piratas escondidos bem de forma rápida distante de patrulhas imperiais que cobriam costas limpas inteiras ali perto</div>
+                <div class="porque">Não há coerência histórica visível relacionando a profissão amarga mortal na arena a liderança técnica perita conduzindo marinheiros fugitivos para um grande resgate através das perigosas frotas navais romanas poderosas sem barco a vista.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Ele passaria brilhantemente sem pânico imenso esmagando exércitos coesos muito superiores pelo tamanho colossal graças à fé inabalável contagiante na boa e única esperança sagrada dos novos fiéis seguidores amigáveis logo atrás do líder fraco</div>
+                <div class="porque">Por toda garra indomável ele no ápice de energia esbarrou fatal e perdidamente perante o aço unificado dos batalhões superiores romanos experientes sem chance de superá-los sendo inexperiente, findando seu sopro de vida escrava revoltada perigosa nas perigosas matas ao final.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Ele desconheceria intimamente a grande experiência marcial de combates letais diminuindo severamente sua tremenda habilidade impressionante para reunir perfeitamente batalhas épicas perante os espertos soldados profissionais cruéis enviados na sua trilha dolorosa de pânico em Roma</div>
+                <div class="porque">Justamente o infernal treinamento tático da escola amarga diária mortal encheu Espártaco das incríveis capacidades indispensáveis para aguentar liderando batalhas com táticas inteligentes causando grandes medos inesperados à nação em seu perigoso conflito épico e muito fatal armado em grupo ali.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">O culto imperial era essencial em Roma: tratar o imperador sempre com inquestionável devoção religiosa servia a interesses muito óbvios unificando províncias pela pura fé forçada. Do estrito ponto de vista pragmático e direto dos pobres oprimidos e perseguidos dos primórdios cristãos desarmados, qual era a principal objeção ética causando risco mortal imediato a cada dia neles nessa exigência dura nas ruas que cobrava louvor a homens vis de sangue, luxúria e poder enorme terreno perigoso e muito absoluto lá atrás antes da queda?</div>
+            <div class="alternativa">
+                <div class="opcao">Eles percebiam com bastante ira raivosa pecaminosa excessiva e indomável indignação pesada injustiça econômica financeira altíssima onde impostos exorbantes desumanos deviam unicamente servir para obras caras pagãs não a fins nobres cristãos corretos belos e santos deles antes de crer mais lá</div>
+                <div class="porque">O embate era religioso íntimo monoteísta não meramente um conflito terreno perigoso econômico fiscal e material no fundo pois a crença e adoração não estavam à venda em balcões nem trocavam vida e devoção a moedas fáceis impuras e muito cheias de falhas sempre que cobrados.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Conflitava intensamente com a premissa sagrada fundamental na qual se apoiavam em totalidade, já que como severos monoteístas pacíficos convictos render veneração divina a um humano violento passageiro era pecado e heresia mortal inadmissível perante os mandamentos que regiam a vida fiel</div>
+                <div class="porque">Isso atesta o coração da verdadeira perseguição implacável no coliseu, já que idolatrar generais mortais desbancava exatamente o amor focado ao seu Deus uno não abrindo qualquer brecha moral flexível pacífica para curvar pescoços em rituais diários obrigatórios a qualquer poderoso homem imperador perverso.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Eles enfrentavam dificuldade prática física gigante diária imensa e intransponível ao expressarem louvores puros por rejeitarem falar qualquer latim de fato e preferirem falar nos becos só outra língua sagrada ininteligível a ouvidos patrícios severos muito confusos na tradução e comunicação</div>
+                <div class="porque">Os valentes devotos sabiam perfeitamente se expressarem bem de fato usando a comunicação usual oficial se precisassem gritar preces e não usavam idiomas impenetráveis falsos para evitar orações, mas a grande barreira visível não era falta de voz, era forte fé.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Somente grupos estritos formados de imensa riqueza oriundos das longínquas alas exclusivas patrícias é que participavam rotineiramente sendo obrigados no fim do mês às exaustivas sessões cultuais imperiais que eram inacessíveis ou desimportantes à plebe inteira cega miserável nos porões cheios esquecidos no lixo sujo lá e em casa livre ao menos</div>
+                <div class="porque">Muito longe de ser rito seleto vip reservado só à farta classe patrícia opressora abastada das colinas o ato cívico sagrado no altar incluía coercivamente das grandes elites pomposas e arrogantes a miseráveis esfarrapados humildes unidos pela fé unificadora no chefe maior perigoso e muito furioso ditador sem fim ali mandando todos temerem muito com armas lá longe onde dava antes de sumir.</div>
+            </div>
+        </div>
+
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">No amanhecer conturbado e genial da complexa era imperial sob o comando do famoso soberano muito absoluto e forte Otávio Augusto, o experiente líder unificou enorme quantia inimaginável de grande poder total absoluto e invicto em si para conseguir a Pax. Apesar desta façanha enorme tirânica de realeza ele incrivelmente insistiu astuciosamente e calado em não fechar portas ou queimar os belos assentos onde as antigas cabeças grisalhas cheias de rancor debatiam e planejavam e mandavam no povo romano: O imponente e antes dominante Senado forte se manteve lá inteiro, embora esvaziado, em silêncio cego prático. Qual seria uma claríssima e provável brilhante e genial intenção muito política calculista para que tamanho ditador fingisse manter de perto a velha roda republicana inútil no final sem força aparente?</div>
+            <div class="alternativa">
+                <div class="opcao">Ele amedrontava-se covardemente diante pesadas árduas exaustivas infinitas difíceis impossíveis imensas dolorosas intermináveis cansativas chatas trabalhosas pesadíssimas pavorosas longas perigosas funções políticas e detestava governar com responsabilidade total no topo enorme mandando num colossal pântano repleto sujo perigoso povo inteiro sozinho ali fugindo</div>
+                <div class="porque">Otávio desejava muito deter em sua coroa brilhante total peso ditatorial e mandatório governando sempre acima das frágeis cabeças temerosas vencidas não recuando jamais ante o árduo trabalho e ofício cruel e fatal amargo que roubou à custa de ferimentos muitos o império.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Propunha ingenuamente a verdadeira expansão de sinceras aberturas de acesso rápido humilde inclusivo com belas urnas limpas a milhares incontáveis plebeus famintos garantindo enfim acentos estofados vermelhos quentes justos a vozes excluídas invisíveis em Roma dando chance de lei em grupo feliz ao sol brilhante matinal lá para todos nós</div>
+                <div class="porque">Ele seguia firme amparado e apoiado sempre apenas pelas mãos duras das classes riquíssimas patrícias influentes detentoras plenas da verdadeira força em cada canto; aos pobres sofredores ignorados restava continuar eternamente às duras margens perigosas distantes sofrendo sempre à mercê calados aceitando imposições fortes muito maiores do destino cruel sem fala no belo fórum calado lá.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Preservar intencionalmente uma inofensiva mansa aparência muito branda moderada enganosa mantendo casca e fachada legal republicana calma apaziguando astuciosamente descontentamentos sérios ou conjurações de adagas sangrentas patrícias sem lhes conferir ameaçadora perigosa ação imprevista em votos livres mortais lá num dia claro de céu aberto</div>
+                <div class="porque">Manter esvaziado de perigos iminentes porém ilusoriamente ativo todo um lindo senado e pomposo aplacou receios muito e profundamente enraizados ocultos de fortes velhos poderosos senadores temerosos garantindo com brilhante enganação política calmaria em longas horas escuras do seu perigoso novo início lá perfeitamente e sem risco forte sem lhes causar medo fatal neles vivos livres soltos hoje no palco.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Percebia tristemente séria profunda terrível insuperável enorme carência comunicativa inata e crônica inibição aguda verbal de linguagem perigosa precisando desesperadamente ansiosamente usar sábios idosos bons senadores apenas como bons eficientes intérpretes rápidos traduzindo leis gigantes provinciais chatas distantes locais nas confusas batalhas campais ali perigosas antes longe sujas da guerra</div>
+                <div class="porque">Augusto jamais precisou recorrer humildemente calado triste pedindo favores a fracos homens falantes velhos ou a senadores traidores visando apenas traduções bestas simples sendo ele ótimo e formidável político mestre hábil no latim limpo claro altivo dominador perfeito muito bem ouvido imponente por multidões gigantes onde as palavras dele soavam altas e muito claras limpas e diretas lá sozinhas soando.</div>
+            </div>
+        </div>
+    </section>
+    <!-- ZONA 5 FIM -->
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<!-- BLOCO TRAVADO: SELOS E MOTOR. COPIE IGUAL. -->
+<script id="selo">
+const SELO_MOTOR = "db5bcc72";
+const SELO_CSS = "1b813fa0";
+</script>
+<script id="motor">
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+// --- LEITURA DAS QUESTOES (vem do HTML) ---
+function htmlDe(pai, seletor) {
+    const el = pai ? pai.querySelector(seletor) : null;
+    return el ? el.innerHTML.trim() : '';
+}
+
+const questions = Array.from(document.querySelectorAll('#bancoQuestoes .questao')).map((bloco, i) => {
+    const alternativas = Array.from(bloco.querySelectorAll(':scope > .alternativa'));
+    const certa = Math.max(alternativas.findIndex(a => a.classList.contains('certa')), 0);
+    return {
+        id: i + 1,
+        level: bloco.dataset.nivel,
+        text: htmlDe(bloco, ':scope > .enunciado'),
+        options: alternativas.map(a => htmlDe(a, ':scope > .opcao')),
+        correct: certa,
+        explanation: {
+            correct: htmlDe(alternativas[certa], ':scope > .porque'),
+            options: alternativas.map((a, j) => j === certa ? 'Certa' : htmlDe(a, ':scope > .porque'))
+        }
+    };
+});
+
+// --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g, '_');
+let currentQuestion = 0;
+let userAnswers = new Array(questions.length).fill(null);
+try {
+    const savedAnswers = JSON.parse(localStorage.getItem(storageKey));
+    if (Array.isArray(savedAnswers) && savedAnswers.length === questions.length) userAnswers = savedAnswers;
+} catch (e) { /* Sem salvamento disponível: a página continua funcionando. */ }
+
+function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+    if(mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        renderQuestion();
+        renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+    }
+    window.scrollTo(0,0);
+}
+
+function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    let badgeClass = '';
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+        </div>
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `<button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `;
+            }).join('')}
+        </div>
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '✅ Raciocínio Aprovado!' : '❌ Ops! Falha Detectada:'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                ${q.explanation.correct}
+            </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>
+    `;
+    updateNav();
+}
+
+function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    try { localStorage.setItem(storageKey, JSON.stringify(userAnswers)); } catch (e) { /* Sem salvamento disponível. */ }
+    if (idx === questions[currentQuestion].correct) {
+        if (window.confetti) {
+            const duration = 1500;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        }
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+    const feedback = document.querySelector('.feedback-box');
+    if (feedback) feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+    }).join('');
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            const mapBox = map.getBoundingClientRect();
+            const dotBox = activeDot.getBoundingClientRect();
+            map.scrollTo({ left: map.scrollLeft + dotBox.left - mapBox.left - (mapBox.width - dotBox.width) / 2, behavior: 'smooth' });
+        }
+    }, 50);
+}
+
+function goTo(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+    document.getElementById('qMap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar Diagnóstico";
+        next.onclick = finish;
+    } else {
+        next.textContent = "Avançar";
+        next.onclick = () => changeQuestion(1);
+    }
+}
+
+function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    if (window.confetti) confetti.reset();
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐⭐⭐" : percent >= 60 ? "⭐⭐⭐" : "⭐";
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    if (percent < 80) {
+        summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+            <strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a meta de 80%. Revise a teoria com atenção antes de tentar novamente.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Limpar Histórico e Refazer Prova</button>`;
+    } else {
+        summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+            <strong>🎉 Excelente Desempenho!</strong> Você demonstrou uma base sólida sobre os conceitos avaliados. Continue revisando para fazer a prova com segurança.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Refazer Prova (Zerar Histórico)</button>`;
+    }
+    if (correct < questions.length) {
+        summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+        questions.forEach((q, i) => {
+            if(userAnswers[i] !== q.correct) {
+                summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                    <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                    <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">${userAnswers[i] === null ? 'Questão não respondida' : 'Seu Erro: ' + q.options[userAnswers[i]]}</span>
+                    <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+}
+
+function reset() {
+    try { localStorage.removeItem(storageKey); } catch (e) { /* Sem salvamento disponível. */ }
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+}
+
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+
+// --- VERIFICADOR AUTOMATICO DA PAGINA ---
+function seloDe(texto) {
+    const limpo = texto.replace(/[^\x21-\x7E]/g, '');
+    let h = 2166136261;
+    for (let i = 0; i < limpo.length; i++) {
+        h ^= limpo.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(16);
+}
+
+function textoDe(html) {
+    const modelo = document.createElement('template');
+    modelo.innerHTML = html;
+    return modelo.content.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function verificarPagina() {
+    const erros = [];
+    const letras = ['A', 'B', 'C', 'D'];
+    const conteudo = [
+        document.title,
+        document.querySelector('.logo-header').innerHTML,
+        document.getElementById('viewExplanation').innerHTML,
+        document.getElementById('bancoQuestoes').innerHTML
+    ].join(' ');
+
+    const seloMotor = document.getElementById('motor');
+    const seloCss = document.getElementById('css-motor');
+    if (typeof SELO_MOTOR === 'undefined' || !seloMotor || seloDe(seloMotor.textContent) !== SELO_MOTOR) erros.push('O motor JavaScript foi alterado. Copie de novo o bloco do esqueleto, sem mudar nada.');
+    if (typeof SELO_CSS === 'undefined' || !seloCss || seloDe(seloCss.textContent) !== SELO_CSS) erros.push('O CSS do motor foi alterado. Copie de novo o bloco do esqueleto, sem mudar nada.');
+    if (conteudo.includes('[[') || conteudo.includes(']]')) erros.push('Ficou algum campo [[...]] sem preencher.');
+    if (conteudo.includes('**')) erros.push('Há Markdown (**) dentro do HTML. Use <strong>.');
+    if (document.querySelector('#viewExplanation script, #bancoQuestoes script, #viewExplanation iframe, #bancoQuestoes iframe')) erros.push('Há script ou iframe dentro das zonas de conteúdo.');
+    if (document.querySelector('#viewExplanation img, #bancoQuestoes img')) erros.push('Há imagem externa. Desenhe com SVG.');
+
+    document.querySelectorAll('#viewExplanation svg, #bancoQuestoes svg').forEach((svg, i) => {
+        if (!svg.getAttribute('viewBox') || !svg.getAttribute('aria-label')) erros.push('O desenho SVG ' + (i + 1) + ' precisa de viewBox e aria-label.');
+    });
+
+    const grupos = document.querySelectorAll('#viewExplanation .content-group');
+    if (grupos.length < 2) erros.push('A teoria precisa de pelo menos 2 temas.');
+    grupos.forEach((g, i) => {
+        if (!g.querySelector('.section-badge') || !g.querySelector('.theory-box')) erros.push('O tema ' + (i + 1) + ' da teoria está sem .section-badge ou .theory-box.');
+    });
+
+    const blocos = Array.from(document.querySelectorAll('#bancoQuestoes .questao'));
+    if (blocos.length !== 30) erros.push('São ' + blocos.length + ' questões, mas precisam ser exatamente 30.');
+
+    const enunciados = new Set();
+    const contagem = [0, 0, 0, 0];
+    let longas = 0;
+    let sequencia = 0;
+    let ultima = -1;
+
+    blocos.forEach((bloco, i) => {
+        const q = 'Questão ' + (i + 1) + ': ';
+        const esperado = i < 10 ? 'Fácil' : i < 20 ? 'Médio' : 'Difícil';
+        if (bloco.dataset.nivel !== esperado) erros.push(q + 'o nível deveria ser ' + esperado + '.');
+
+        const enunciadoEl = bloco.querySelector(':scope > .enunciado');
+        const enunciado = enunciadoEl ? textoDe(enunciadoEl.innerHTML) : '';
+        if (!enunciado) erros.push(q + 'falta o enunciado.');
+        if (enunciado && enunciados.has(enunciado)) erros.push(q + 'enunciado repetido.');
+        enunciados.add(enunciado);
+
+        const alternativas = Array.from(bloco.querySelectorAll(':scope > .alternativa'));
+        if (alternativas.length !== 4) erros.push(q + 'precisa de exatamente 4 alternativas.');
+        const certas = alternativas.filter(a => a.classList.contains('certa'));
+        if (certas.length !== 1) erros.push(q + 'precisa de exatamente 1 alternativa certa.');
+
+        const textos = alternativas.map(a => {
+            const el = a.querySelector(':scope > .opcao');
+            return el ? textoDe(el.innerHTML) : '';
+        });
+        if (textos.some(t => !t)) erros.push(q + 'há alternativa sem texto.');
+        if (new Set(textos).size !== textos.length) erros.push(q + 'há alternativas repetidas.');
+
+        alternativas.forEach((a, j) => {
+            const el = a.querySelector(':scope > .porque');
+            const porque = el ? textoDe(el.innerHTML) : '';
+            const letra = letras[j] || '?';
+            if (!porque) erros.push(q + 'a alternativa ' + letra + ' está sem explicação.');
+            if (porque.length > 110) erros.push(q + 'a explicação da alternativa ' + letra + ' passou de 110 caracteres.');
+        });
+
+        const indice = alternativas.findIndex(a => a.classList.contains('certa'));
+        if (indice >= 0 && indice < 4) {
+            contagem[indice]++;
+            sequencia = indice === ultima ? sequencia + 1 : 1;
+            ultima = indice;
+            if (sequencia === 4) erros.push(q + 'são 4 respostas seguidas com a mesma letra.');
+            const tamanhos = textos.map(t => t.length);
+            const outros = tamanhos.filter((_, j) => j !== indice);
+            if (tamanhos[indice] > 20 && tamanhos[indice] - Math.max(...outros) >= 6) longas++;
+        }
+    });
+
+    contagem.forEach((total, i) => {
+        if (blocos.length === 30 && (total < 5 || total > 10)) erros.push('A letra ' + letras[i] + ' é a certa em ' + total + ' questões. Use de 6 a 9.');
+    });
+    if (longas > 3) erros.push('A alternativa certa é claramente a mais longa em ' + longas + ' questões. Equilibre os tamanhos.');
+
+    const aviso = document.getElementById('avisoMotor');
+    if (erros.length === 0) {
+        aviso.remove();
+        window.PAGINA_OK = true;
+        return;
+    }
+    const lista = erros.slice(0, 25).map(e => '<li>' + e.replace(/</g, '&lt;') + '</li>').join('');
+    aviso.innerHTML = '<strong>⚠️ A página precisa de correção. Não envie aos alunos.</strong><br>Copie esta lista, cole no Gemini e peça para corrigir só estes itens:<ol style="margin:8px 0 0 20px;">' + lista + '</ol>';
+}
+
+verificarPagina();
+</script>
+</body>
+</html>
