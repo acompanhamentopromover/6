@@ -1,0 +1,1470 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Sistema Nervoso e Órgãos dos Sentidos</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- BLOCO TRAVADO: CSS DO MOTOR. COPIE IGUAL. -->
+<style id="css-motor">
+:root {
+    --border-color: #000000;
+    --white: #FFFFFF;
+    --theme-text-active: #FFFFFF;
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #BE123C;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color);
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-bottom: 100px;
+    background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.15); color: var(--theme-contrast); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center;}
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container { position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 { font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil { background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+.result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big { font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+.nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.feedback-box { scroll-margin-top: 12px; scroll-margin-bottom: 90px; }
+.question-map { scroll-margin-top: 8px; }
+td, th { padding: 6px 8px; }
+#bancoQuestoes { display: none; }
+.visual-area.texto { font-size: 0.95rem; flex-direction: column; gap: 8px; }
+.tabela { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.85rem; font-weight: 600; margin-top: 10px; }
+.tabela th { background: var(--theme-light); }
+.tabela th, .tabela td { border: 1px solid var(--border-color); }
+.lista { padding-left: 20px; }
+.desenho { width: 100%; max-width: 420px; height: auto; display: block; margin: 10px auto; }
+.d-cor1 { fill: var(--theme-dark); }
+.d-cor2 { fill: var(--theme-contrast); }
+.d-cor3 { fill: var(--theme-medium); }
+.d-fundo { fill: var(--theme-light); stroke: var(--text-color); stroke-width: 2; }
+.d-linha { fill: none; stroke: var(--text-color); stroke-width: 2; }
+.d-texto { fill: var(--text-color); font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600; }
+</style>
+<!-- ZONA 2 INICIO: CORES E CSS EXTRA -->
+<style id="css-tema">
+:root {
+    --bg-color: #EEF2FF;
+    --text-color: #1E1B4B;
+    --theme-light: #E0E7FF;
+    --theme-medium: #818CF8;
+    --theme-dark: #3730A3;
+    --theme-contrast: #0E7490;
+    --theme-accent: #4F46E5;
+}
+.d-peq { fill: var(--text-color); font-family: 'Poppins', sans-serif; font-size: 12.5px; font-weight: 600; }
+.d-suave { fill: var(--theme-light); stroke: var(--text-color); stroke-width: 2; }
+.d-tracejado { fill: none; stroke: var(--theme-accent); stroke-width: 2; stroke-dasharray: 5 4; }
+.d-fina { fill: none; stroke: var(--text-color); stroke-width: 1.2; }
+.d-cornea { fill: #FFFFFF; stroke: var(--theme-dark); stroke-width: 3; }
+.d-iris { stroke: var(--theme-contrast); stroke-width: 6; stroke-linecap: round; }
+.d-retina { fill: none; stroke: var(--theme-contrast); stroke-width: 5; }
+.d-nervo { stroke: var(--theme-dark); stroke-width: 7; stroke-linecap: round; }
+.quiz-footer { padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px)); }
+.tabela th, .tabela td { font-size: 0.8rem; }
+</style>
+<!-- ZONA 2 FIM -->
+
+<div id="avisoMotor" style="display:block; max-width:600px; width:100%; margin:0 auto 16px; padding:14px; background:#FFE4E6; color:#881337; border:3px solid #BE123C; border-radius:12px; font-family:sans-serif; font-size:15px; font-weight:600; line-height:1.5;">⚠️ Este arquivo está incompleto ou com erro no código. Não envie aos alunos. Peça ao Gemini para gerar o arquivo completo de novo.</div>
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🚀</span> PROMOVER</div>
+        <!-- ZONA 3 INICIO: CABECALHO -->
+        <h1>Ciências – 6º&nbsp;Ano</h1>
+        <p class="subtitle">Capítulo 10: sistema nervoso e órgãos dos sentidos</p>
+        <!-- ZONA 3 FIM -->
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📘 Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🧠 Prática (30)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>😕 Termo não encontrado.</p></div>
+
+        <!-- ZONA 4 INICIO: TEORIA -->
+        <div class="content-group">
+            <span class="section-badge">1. Os neurônios</span>
+            <div class="theory-box">
+                <h3>⚡ Estímulos e neurônios</h3>
+                <p>Perceber os estímulos do ambiente e reagir a eles é uma característica dos seres vivos. Os <strong>sentidos</strong> captam as informações, e o <strong>sistema nervoso</strong> as interpreta.</p>
+                <p>Os <strong>neurônios</strong> são as principais células do sistema nervoso. Eles <strong>geram, enviam e recebem sinais</strong> de outros neurônios, de células musculares e de células glandulares.</p>
+                <p>Ao nascer, o cérebro tem cerca de 100 bilhões de neurônios. A capacidade de regeneração deles é reduzida, e a criação de novos, a <strong>neurogênese</strong>, ocorre só em algumas partes do cérebro.</p>
+                <div class="highlight-box">
+                    <strong>Detalhe:</strong> 100 bilhões é o número mais citado nos livros. Uma contagem mais recente estimou cerca de 86 bilhões no cérebro adulto.
+                </div>
+            </div>
+            <div class="theory-box">
+                <h3>🔬 Partes do neurônio</h3>
+                <svg class="desenho" viewBox="0 0 340 190" role="img" aria-label="Esquema de um neurônio com dendritos, corpo celular, axônio com bainha de mielina e botões terminais">
+                    <line class="d-linha" x1="46" y1="72" x2="24" y2="50"/>
+                    <line class="d-linha" x1="60" y1="66" x2="60" y2="42"/>
+                    <line class="d-linha" x1="74" y1="72" x2="96" y2="50"/>
+                    <line class="d-linha" x1="40" y1="100" x2="16" y2="112"/>
+                    <circle class="d-suave" cx="60" cy="90" r="24"/>
+                    <circle class="d-cor2" cx="60" cy="90" r="8"/>
+                    <line class="d-linha" x1="84" y1="90" x2="252" y2="90"/>
+                    <rect class="d-cor3" x="100" y="80" width="42" height="20" rx="4"/>
+                    <rect class="d-cor3" x="150" y="80" width="42" height="20" rx="4"/>
+                    <rect class="d-cor3" x="200" y="80" width="42" height="20" rx="4"/>
+                    <line class="d-linha" x1="252" y1="90" x2="284" y2="68"/>
+                    <line class="d-linha" x1="252" y1="90" x2="292" y2="90"/>
+                    <line class="d-linha" x1="252" y1="90" x2="284" y2="112"/>
+                    <circle class="d-cor1" cx="286" cy="66" r="6"/>
+                    <circle class="d-cor1" cx="294" cy="90" r="6"/>
+                    <circle class="d-cor1" cx="286" cy="114" r="6"/>
+                    <text class="d-peq" x="60" y="28" text-anchor="middle">dendritos</text>
+                    <text class="d-peq" x="60" y="136" text-anchor="middle">corpo celular</text>
+                    <text class="d-peq" x="171" y="68" text-anchor="middle">axônio</text>
+                    <text class="d-peq" x="171" y="120" text-anchor="middle">bainha de mielina</text>
+                    <text class="d-peq" x="334" y="46" text-anchor="end">botões terminais</text>
+                    <line class="d-linha" x1="70" y1="170" x2="262" y2="170"/>
+                    <polygon class="d-cor2" points="272,170 260,164 260,176"/>
+                    <text class="d-peq" x="166" y="160" text-anchor="middle">sentido do impulso nervoso</text>
+                </svg>
+                <p><strong>Corpo celular:</strong> tem o núcleo e o citoplasma.</p>
+                <p><strong>Dendritos:</strong> prolongamentos curtos que captam o estímulo.</p>
+                <p><strong>Axônio:</strong> conduz o impulso e pode ter mais de 1 metro.</p>
+                <p><strong>Botões terminais:</strong> também chamados de telodendros, ficam no fim do axônio.</p>
+                <p>O axônio é revestido pelo <strong>estrato mielínico</strong> (bainha de mielina), uma gordura branca feita por células da glia, os oligodendrócitos. Ele <strong>acelera a transmissão</strong>.</p>
+                <p>As <strong>células da glia</strong> nutrem os neurônios e digerem partes de neurônios mortos.</p>
+            </div>
+            <div class="theory-box">
+                <h3>🔁 Impulso nervoso e sinapse</h3>
+                <p>Os neurônios recebem estímulos e os convertem em <strong>impulsos nervosos</strong>, sinais elétricos e químicos.</p>
+                <div class="visual-area texto">
+                    <span>dendritos ➜ corpo celular ➜ axônio ➜ botões terminais</span>
+                </div>
+                <p>A passagem de um neurônio a outro é a <strong>sinapse</strong>: os botões terminais liberam <strong>neurotransmissores</strong> na <strong>fenda sináptica</strong>, e eles se ligam aos receptores do próximo neurônio.</p>
+                <div class="highlight-box warning">
+                    <strong>Cuidado:</strong> a sinapse não exige contato físico. A transmissão é elétrica e química.
+                </div>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">2. Tipos de neurônio e de nervo</span>
+            <div class="theory-box">
+                <h3>🧩 Tipos de neurônio</h3>
+                <p><strong>Sensoriais:</strong> têm receptores que captam sinais do ambiente. Pisar na areia quente envia uma mensagem ao cérebro.</p>
+                <p><strong>Motores:</strong> ligam o encéfalo e a medula aos músculos, órgãos e glândulas. Por exemplo, movem o alimento pelo tubo digestório.</p>
+                <p><strong>Interneurônios:</strong> ficam no encéfalo e na medula e passam o estímulo dos neurônios sensoriais aos motores.</p>
+            </div>
+            <div class="theory-box">
+                <h3>🧵 Tipos de nervo</h3>
+                <p><strong>Nervos</strong> são feixes de axônios e vasos sanguíneos envoltos por tecido conjuntivo.</p>
+                <p><strong>Sensitivos:</strong> levam a informação dos receptores ao sistema nervoso central.</p>
+                <p><strong>Motores:</strong> levam impulsos do sistema nervoso central aos músculos e às glândulas.</p>
+                <p><strong>Mistos:</strong> têm os dois tipos de prolongamento e são os mais numerosos.</p>
+                <div class="highlight-box warning">
+                    <strong>Não confunda:</strong> nervo não é neurônio. O neurônio é uma célula, e o nervo é um feixe.
+                </div>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">3. A organização do sistema nervoso</span>
+            <div class="theory-box">
+                <h3>🧠 SNC e SNP</h3>
+                <svg class="desenho" viewBox="0 0 340 214" role="img" aria-label="Sistema nervoso dividido em central, com encéfalo e medula espinal, e periférico, com nervos e gânglios nervosos">
+                    <line class="d-linha" x1="170" y1="42" x2="88" y2="70"/>
+                    <line class="d-linha" x1="170" y1="42" x2="254" y2="70"/>
+                    <line class="d-linha" x1="88" y1="110" x2="44" y2="134"/>
+                    <line class="d-linha" x1="88" y1="110" x2="126" y2="134"/>
+                    <line class="d-linha" x1="254" y1="110" x2="214" y2="134"/>
+                    <line class="d-linha" x1="254" y1="110" x2="296" y2="134"/>
+                    <rect class="d-fundo" x="90" y="6" width="160" height="36" rx="8"/>
+                    <rect class="d-suave" x="34" y="70" width="108" height="40" rx="8"/>
+                    <rect class="d-suave" x="200" y="70" width="108" height="40" rx="8"/>
+                    <rect class="d-fundo" x="6" y="134" width="76" height="44" rx="8"/>
+                    <rect class="d-fundo" x="88" y="134" width="76" height="44" rx="8"/>
+                    <rect class="d-fundo" x="176" y="134" width="76" height="44" rx="8"/>
+                    <rect class="d-fundo" x="258" y="134" width="76" height="44" rx="8"/>
+                    <text class="d-peq" x="170" y="29" text-anchor="middle">Sistema nervoso</text>
+                    <text class="d-peq" x="88" y="87" text-anchor="middle">SNC</text>
+                    <text class="d-peq" x="88" y="103" text-anchor="middle">central</text>
+                    <text class="d-peq" x="254" y="87" text-anchor="middle">SNP</text>
+                    <text class="d-peq" x="254" y="103" text-anchor="middle">periférico</text>
+                    <text class="d-peq" x="44" y="160" text-anchor="middle">Encéfalo</text>
+                    <text class="d-peq" x="126" y="153" text-anchor="middle">Medula</text>
+                    <text class="d-peq" x="126" y="169" text-anchor="middle">espinal</text>
+                    <text class="d-peq" x="214" y="160" text-anchor="middle">Nervos</text>
+                    <text class="d-peq" x="296" y="160" text-anchor="middle">Gânglios</text>
+                    <text class="d-peq" x="6" y="202">Encéfalo: cérebro, cerebelo e tronco encefálico</text>
+                </svg>
+                <p><strong>Cérebro:</strong> a maior parte do encéfalo. É a sede do pensamento, das sensações, da interpretação das informações e do controle dos movimentos.</p>
+                <p><strong>Cerebelo:</strong> controla o equilíbrio e a coordenação motora.</p>
+                <p><strong>Tronco encefálico:</strong> liga o cérebro à medula e controla os batimentos cardíacos e a respiração.</p>
+                <p><strong>Medula espinal:</strong> cordão dentro da coluna que leva mensagens ao encéfalo e dele às partes do corpo.</p>
+                <p>O encéfalo é protegido pela <strong>caixa craniana</strong>, e a medula, pela <strong>coluna vertebral</strong>.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">4. Os atos reflexos</span>
+            <div class="theory-box">
+                <h3>🔥 Ato reflexo</h3>
+                <p><strong>Ato reflexo</strong> é uma ação <strong>involuntária e automática</strong> em resposta a um estímulo, sem consciência.</p>
+                <p>Exemplos: tirar a mão de uma panela quente, piscar, tossir e o reflexo patelar, em que um toque no joelho levanta a perna.</p>
+                <p>Reflexos como tirar a mão da panela e o reflexo patelar são controlados pela <strong>medula espinal</strong>, sem depender do cérebro para começar.</p>
+                <div class="highlight-box">
+                    <strong>Detalhe:</strong> nem todo reflexo é controlado pela medula. A tosse, por exemplo, é controlada no tronco encefálico.
+                </div>
+            </div>
+            <div class="theory-box">
+                <h3>↩️ Arco reflexo</h3>
+                <p>É o trajeto de ida e volta do impulso:</p>
+                <svg class="desenho" viewBox="0 0 340 196" role="img" aria-label="Arco reflexo: receptor na pele, nervo sensitivo, medula espinal, nervo motor e músculo do braço. Depois o encéfalo sente a dor">
+                    <rect class="d-suave" x="222" y="4" width="112" height="44" rx="8"/>
+                    <rect class="d-fundo" x="6" y="76" width="92" height="46" rx="8"/>
+                    <rect class="d-fundo" x="124" y="76" width="92" height="46" rx="8"/>
+                    <rect class="d-fundo" x="242" y="76" width="92" height="46" rx="8"/>
+                    <rect class="d-fundo" x="242" y="146" width="92" height="46" rx="8"/>
+                    <rect class="d-fundo" x="124" y="146" width="92" height="46" rx="8"/>
+                    <line class="d-linha" x1="98" y1="99" x2="116" y2="99"/>
+                    <polygon class="d-cor2" points="124,99 114,93 114,105"/>
+                    <line class="d-linha" x1="216" y1="99" x2="234" y2="99"/>
+                    <polygon class="d-cor2" points="242,99 232,93 232,105"/>
+                    <line class="d-linha" x1="288" y1="122" x2="288" y2="138"/>
+                    <polygon class="d-cor2" points="288,146 282,136 294,136"/>
+                    <line class="d-linha" x1="242" y1="169" x2="224" y2="169"/>
+                    <polygon class="d-cor2" points="216,169 226,163 226,175"/>
+                    <line class="d-tracejado" x1="288" y1="76" x2="288" y2="56"/>
+                    <polygon class="d-cor3" points="288,48 282,58 294,58"/>
+                    <text class="d-peq" x="278" y="22" text-anchor="middle">Encéfalo sente</text>
+                    <text class="d-peq" x="278" y="38" text-anchor="middle">a dor depois</text>
+                    <text class="d-peq" x="52" y="96" text-anchor="middle">1. Receptor</text>
+                    <text class="d-peq" x="52" y="112" text-anchor="middle">na pele</text>
+                    <text class="d-peq" x="170" y="96" text-anchor="middle">2. Nervo</text>
+                    <text class="d-peq" x="170" y="112" text-anchor="middle">sensitivo</text>
+                    <text class="d-peq" x="288" y="96" text-anchor="middle">3. Medula</text>
+                    <text class="d-peq" x="288" y="112" text-anchor="middle">espinal</text>
+                    <text class="d-peq" x="288" y="166" text-anchor="middle">4. Nervo</text>
+                    <text class="d-peq" x="288" y="182" text-anchor="middle">motor</text>
+                    <text class="d-peq" x="170" y="166" text-anchor="middle">5. Músculo</text>
+                    <text class="d-peq" x="170" y="182" text-anchor="middle">contrai</text>
+                </svg>
+                <p>Os receptores da pele captam o estímulo, os <strong>nervos sensitivos</strong> levam o impulso à medula, e a medula o repassa ao <strong>nervo motor</strong>, às vezes por um <strong>interneurônio</strong>. Então, o músculo se contrai.</p>
+                <p><strong>Só depois</strong> o cérebro recebe a informação e processa a <strong>sensação de dor</strong>. Por isso, afastamos a mão antes de sentir dor.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">5. O sentido da visão</span>
+            <div class="theory-box">
+                <h3>👁️ Por fora do olho</h3>
+                <p><strong>Pálpebras e cílios:</strong> protegem o olho.</p>
+                <p><strong>Glândulas lacrimais:</strong> produzem as lágrimas, drenadas pelo ducto lacrimal.</p>
+                <p><strong>Esclera:</strong> é a parte branca.</p>
+                <p><strong>Córnea:</strong> é transparente e ajuda a focalizar a luz.</p>
+                <p><strong>Íris:</strong> é a parte colorida. Com seus músculos, controla a luz que entra pela <strong>pupila</strong>.</p>
+            </div>
+            <div class="theory-box">
+                <h3>🔭 Por dentro do olho</h3>
+                <svg class="desenho" viewBox="0 0 340 220" role="img" aria-label="Corte do olho com córnea, pupila, íris, lente, humor vítreo, retina, esclera e nervo óptico">
+                    <circle class="d-suave" cx="175" cy="110" r="72"/>
+                    <path class="d-cornea" d="M 112 74 Q 80 110 112 146"/>
+                    <line class="d-iris" x1="116" y1="72" x2="116" y2="98"/>
+                    <line class="d-iris" x1="116" y1="122" x2="116" y2="148"/>
+                    <ellipse class="d-cor3" cx="128" cy="110" rx="8" ry="22"/>
+                    <path class="d-retina" d="M 175 44 A 66 66 0 0 1 175 176"/>
+                    <line class="d-nervo" x1="243" y1="122" x2="306" y2="150"/>
+                    <line class="d-fina" x1="58" y1="58" x2="94" y2="92"/>
+                    <line class="d-fina" x1="62" y1="110" x2="112" y2="110"/>
+                    <line class="d-fina" x1="104" y1="36" x2="116" y2="78"/>
+                    <line class="d-fina" x1="160" y1="36" x2="130" y2="90"/>
+                    <line class="d-fina" x1="270" y1="50" x2="228" y2="70"/>
+                    <line class="d-fina" x1="204" y1="200" x2="196" y2="180"/>
+                    <text class="d-peq" x="40" y="52" text-anchor="middle">córnea</text>
+                    <text class="d-peq" x="34" y="115" text-anchor="middle">pupila</text>
+                    <text class="d-peq" x="100" y="28" text-anchor="middle">íris</text>
+                    <text class="d-peq" x="166" y="28" text-anchor="middle">lente</text>
+                    <text class="d-peq" x="288" y="46" text-anchor="middle">retina</text>
+                    <text class="d-peq" x="190" y="114" text-anchor="middle">humor vítreo</text>
+                    <text class="d-peq" x="288" y="176" text-anchor="middle">nervo óptico</text>
+                    <text class="d-peq" x="210" y="214" text-anchor="middle">esclera</text>
+                </svg>
+                <p>A luz passa pela pupila e atinge a <strong>lente (cristalino)</strong>, que a concentra na <strong>retina</strong>, a camada interna onde ficam os receptores de luz.</p>
+                <p><strong>Corpo ciliar:</strong> muda a forma da lente. Para perto, ela fica mais espessa. Para longe, mais fina.</p>
+                <p><strong>Humor aquoso:</strong> nutre a córnea e a lente.</p>
+                <p><strong>Humor vítreo:</strong> mantém o formato do olho.</p>
+                <p><strong>Corioide:</strong> nutre a retina.</p>
+                <p><strong>Fóvea central:</strong> dá a maior acuidade visual.</p>
+                <p><strong>Nervo óptico:</strong> leva os impulsos ao cérebro, que forma a imagem.</p>
+            </div>
+            <div class="theory-box">
+                <h3>🌈 Células da retina</h3>
+                <table class="tabela">
+                    <tr><th>Células</th><th>Quantidade</th><th>Função</th></tr>
+                    <tr><td>Bastonetes</td><td>Cerca de 120 milhões</td><td>Mais sensíveis à luz. Visão em preto, branco e cinza e com pouca luz.</td></tr>
+                    <tr><td>Cones</td><td>Cerca de 7 milhões</td><td>Cores e formas definidas. Três tipos: vermelho, verde e azul.</td></tr>
+                </table>
+            </div>
+            <div class="theory-box">
+                <h3>👓 Problemas comuns</h3>
+                <p><strong>Miopia:</strong> vê mal de longe.</p>
+                <p><strong>Hipermetropia:</strong> vê mal de perto e usa lente convergente.</p>
+                <p><strong>Astigmatismo</strong> também é um problema comum de visão.</p>
+                <p><strong>Daltonismo:</strong> dificuldade com cores.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">6. O sentido da audição</span>
+            <div class="theory-box">
+                <h3>👂 As partes da orelha</h3>
+                <p>O <strong>som</strong> é energia que se espalha por vibração de ondas sonoras. A orelha as capta e as transforma em <strong>impulsos elétricos</strong>, e o cérebro os reconhece como som.</p>
+                <table class="tabela">
+                    <tr><th>Região</th><th>Estruturas</th></tr>
+                    <tr><td>Orelha externa</td><td>Pavilhão auricular (cartilagem coberta de pele) e meato acústico externo.</td></tr>
+                    <tr><td>Orelha média</td><td>Cavidade cheia de ar, com tímpano, ossículos e tuba auditiva.</td></tr>
+                    <tr><td>Orelha interna</td><td>Cóclea, ductos semicirculares e nervo vestibulococlear.</td></tr>
+                </table>
+                <div class="visual-area texto">
+                    <span>som ➜ meato ➜ tímpano ➜ ossículos ➜ cóclea ➜ nervo ➜ cérebro</span>
+                </div>
+                <p><strong>Tímpano:</strong> vibra e passa a vibração a três ossículos, o <strong>martelo</strong>, a <strong>bigorna</strong> e o <strong>estribo</strong>, o menor osso do corpo.</p>
+                <p><strong>Tuba auditiva:</strong> equilibra a pressão dos dois lados do tímpano. É o estalo na orelha.</p>
+                <p><strong>Cóclea:</strong> tem forma de caracol. Suas células ciliadas convertem a vibração em impulsos.</p>
+                <p><strong>Ductos semicirculares:</strong> tubos com líquido e células ciliadas que informam a posição da cabeça. Cuidam do <strong>equilíbrio</strong>.</p>
+                <p><strong>Nervo vestibulococlear:</strong> tem o ramo coclear (som) e o ramo vestibular (equilíbrio).</p>
+                <div class="highlight-box">
+                    <strong>Curiosidade:</strong> girar e parar causa tontura, porque o líquido dos ductos ainda se move.
+                </div>
+            </div>
+            <div class="theory-box">
+                <h3>🩺 Saúde da audição</h3>
+                <p>O <strong>cerume</strong> é uma barreira e um filtro.</p>
+                <div class="highlight-box warning">
+                    <strong>Cuidado:</strong> não use hastes flexíveis, porque há risco de lesar o tímpano. Enxugue com a ponta da toalha.
+                </div>
+                <p>Evite fones em volume alto e ruídos intensos, e vacine-se contra sarampo e rubéola.</p>
+                <p><strong>Otite média:</strong> infecção da orelha média por vírus ou bactérias.</p>
+                <p><strong>Orelha de nadador:</strong> infecção do meato externo.</p>
+                <p><strong>Surdez:</strong> perda auditiva em vários graus. Ajudam os aparelhos auditivos, o implante coclear, a leitura labial e a Libras.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">7. Olfato e gustação</span>
+            <div class="theory-box">
+                <h3>👃 Olfato</h3>
+                <p>Olfato e gustação são sentidos <strong>inter-relacionados</strong>. Seus receptores são <strong>quimiorreceptores</strong>, estimulados por substâncias químicas dissolvidas no ar ou na boca.</p>
+                <p>As <strong>células olfatórias</strong> são neurônios especializados da mucosa nasal. Elas têm <strong>cílios olfatórios</strong>, onde as moléculas de odor se ligam.</p>
+                <div class="visual-area texto">
+                    <span>moléculas de odor ➜ cílios ➜ nervo olfatório ➜ bulbo olfatório</span>
+                </div>
+                <p>O <strong>bulbo olfatório</strong>, no cérebro, processa a informação como cheiro. Ele fica perto da região das <strong>emoções e memórias</strong>: é a <strong>memória olfativa</strong>.</p>
+                <p>Temos cerca de 20 milhões de quimiorreceptores de 350 tipos, que distinguem cerca de <strong>10 mil odores</strong>. Os ratos têm 1300 tipos. O nariz também aquece e filtra o ar.</p>
+            </div>
+            <div class="theory-box">
+                <h3>👅 Gustação</h3>
+                <p>As <strong>papilas gustatórias</strong>, na língua, no teto da boca e na faringe, têm os <strong>cálculos (botões) gustatórios</strong>. Suas células têm terminações nervosas que são quimiorreceptores.</p>
+                <p>O alimento se mistura à <strong>saliva</strong>. Os <strong>cinco gostos básicos</strong> são salgado, doce, azedo, amargo e umami.</p>
+                <p><strong>Umami</strong> significa “delicioso” em japonês. Aparece em carnes defumadas, frutos do mar, queijo parmesão, cogumelos e tomate.</p>
+                <div class="visual-area texto">
+                    <span>odor + gosto = sabor</span>
+                </div>
+                <p>O <strong>sabor</strong> é construído pelo <strong>cérebro</strong>, que combina odor e gosto, com a ajuda da textura, da temperatura, da visão e das emoções.</p>
+                <p>Os dois sentidos declinam depois dos 50 anos.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">8. O sentido do tato</span>
+            <div class="theory-box">
+                <h3>🖐️ A pele</h3>
+                <p>A <strong>pele</strong> é o maior órgão do corpo. Ela protege, tem sensibilidade tátil e elimina o suor, que ajuda no controle da temperatura.</p>
+                <svg class="desenho" viewBox="0 0 340 168" role="img" aria-label="Camadas da pele: epiderme na superfície, derme no meio e tela subcutânea embaixo">
+                    <rect class="d-cor3" x="6" y="8" width="328" height="34"/>
+                    <rect class="d-suave" x="6" y="42" width="328" height="70"/>
+                    <rect class="d-fundo" x="6" y="112" width="328" height="48"/>
+                    <text class="d-peq" x="170" y="30" text-anchor="middle">Epiderme (melanócitos)</text>
+                    <text class="d-peq" x="170" y="72" text-anchor="middle">Derme (glândulas, vasos,</text>
+                    <text class="d-peq" x="170" y="90" text-anchor="middle">receptores e raiz dos pelos)</text>
+                    <text class="d-peq" x="170" y="141" text-anchor="middle">Tela subcutânea (gordura)</text>
+                </svg>
+                <p><strong>Epiderme:</strong> camada superficial, barreira contra microrganismos e raios ultravioleta, sempre se renovando. Os <strong>melanócitos</strong> produzem a <strong>melanina</strong>, pigmento que dá cor à pele.</p>
+                <p><strong>Derme:</strong> tem glândulas sudoríparas e sebáceas, vasos sanguíneos, receptores e raiz dos pelos.</p>
+                <p><strong>Tela subcutânea:</strong> tecido adiposo que protege contra traumas e ajuda a manter a temperatura em torno de 37 °C.</p>
+            </div>
+            <div class="theory-box">
+                <h3>📡 Receptores da pele</h3>
+                <table class="tabela">
+                    <tr><th>Receptor</th><th>O que percebe</th></tr>
+                    <tr><td>Termorreceptores</td><td>Calor, nas partes profundas da derme, e frio, na superfície.</td></tr>
+                    <tr><td>Nociceptores</td><td>Dor, por terminações livres.</td></tr>
+                    <tr><td>Mecanorreceptores</td><td>Toque leve e textura, perto da epiderme, e pressão, nas partes profundas.</td></tr>
+                </table>
+                <p>Há também receptores internos, em músculos, ossos, articulações e coração, que fazem parte do <strong>sistema somatossensorial</strong>.</p>
+                <p>A distribuição é <strong>desigual</strong>: mãos e lábios são os mais sensíveis. <strong>Cabelos e unhas não têm receptores</strong>, por isso não dói cortá-los.</p>
+                <p>A <strong>dor</strong> é um sinal de alerta interpretado pelo cérebro.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">9. Resumo: do estímulo à resposta</span>
+            <div class="theory-box">
+                <h3>🧭 O caminho completo</h3>
+                <div class="visual-area texto">
+                    <span>Estímulo</span>
+                    <span>➜ receptor sensorial (olho, orelha, nariz, língua ou pele)</span>
+                    <span>➜ neurônios sensoriais</span>
+                    <span>➜ sistema nervoso central</span>
+                    <span>➜ neurônios motores</span>
+                    <span>➜ resposta (músculos e glândulas)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ZONA 4 FIM -->
+
+        <button class="btn-action" onclick="setMode('practice')">
+            Iniciar Diagnóstico (30 Q) ➜
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">30 questões rigorosas. Acerte <strong>80% (24/30)</strong> para provar seu domínio. Leia a correção de cada erro!</p>
+        </div>
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars">⭐⭐⭐</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 30</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+
+    <!-- ZONA 5 INICIO: 30 QUESTOES -->
+    <section id="bancoQuestoes" hidden>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual é a principal célula do sistema nervoso?</div>
+            <div class="alternativa">
+                <div class="opcao">Célula da glia</div>
+                <div class="porque">A glia nutre os neurônios, mas não é a principal célula do sistema.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Neurônio</div>
+                <div class="porque">Os neurônios geram, enviam e recebem sinais no sistema nervoso.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Melanócito</div>
+                <div class="porque">O melanócito produz melanina na pele.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Célula muscular</div>
+                <div class="porque">A célula muscular recebe sinais, mas faz parte dos músculos.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual parte do neurônio capta o estímulo?</div>
+            <div class="alternativa">
+                <div class="opcao">Axônio</div>
+                <div class="porque">O axônio conduz o impulso.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Botões terminais</div>
+                <div class="porque">Os botões terminais liberam neurotransmissores.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Estrato mielínico</div>
+                <div class="porque">O estrato mielínico acelera a transmissão.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Dendritos</div>
+                <div class="porque">Os dendritos são prolongamentos curtos que captam o estímulo.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">O que forma o sistema nervoso central?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Encéfalo e medula espinal</div>
+                <div class="porque">O sistema nervoso central é formado pelo encéfalo e pela medula espinal.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Nervos e gânglios nervosos</div>
+                <div class="porque">Nervos e gânglios formam o sistema nervoso periférico.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Cérebro e nervos sensitivos</div>
+                <div class="porque">Os nervos fazem parte do sistema nervoso periférico.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Medula e gânglios nervosos</div>
+                <div class="porque">Os gânglios fazem parte do sistema nervoso periférico.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual parte do encéfalo controla o equilíbrio e a coordenação motora?</div>
+            <div class="alternativa">
+                <div class="opcao">Cérebro</div>
+                <div class="porque">O cérebro é a sede do pensamento e da interpretação das informações.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Tronco encefálico</div>
+                <div class="porque">O tronco controla os batimentos cardíacos e a respiração.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Cerebelo</div>
+                <div class="porque">O cerebelo controla o equilíbrio e a coordenação motora.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Bulbo olfatório</div>
+                <div class="porque">O bulbo olfatório processa os cheiros.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">O que é um ato reflexo?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Uma ação involuntária e automática a um estímulo</div>
+                <div class="porque">O ato reflexo é automático e acontece sem consciência.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Uma ação que depende da nossa vontade</div>
+                <div class="porque">O ato reflexo é involuntário.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Uma ação planejada com calma antes de acontecer</div>
+                <div class="porque">O ato reflexo acontece sem planejamento.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Uma ação que só acontece durante o sono</div>
+                <div class="porque">Reflexos também acontecem quando estamos acordados.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual estrutura do olho controla a luz que entra pela pupila?</div>
+            <div class="alternativa">
+                <div class="opcao">Esclera</div>
+                <div class="porque">A esclera é a parte branca do olho.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Retina</div>
+                <div class="porque">Na retina ficam os receptores de luz.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Íris</div>
+                <div class="porque">Com seus músculos, a íris controla a luz que entra pela pupila.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Córnea</div>
+                <div class="porque">A córnea é transparente e ajuda a focalizar a luz.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Quais são os três ossículos da orelha média?</div>
+            <div class="alternativa">
+                <div class="opcao">Cóclea, tímpano e tuba auditiva</div>
+                <div class="porque">Essas estruturas não são os três ossículos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Lente, retina e córnea</div>
+                <div class="porque">Essas estruturas fazem parte do olho.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Pavilhão, meato e tímpano</div>
+                <div class="porque">O pavilhão e o meato fazem parte da orelha externa.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Martelo, bigorna e estribo</div>
+                <div class="porque">Martelo, bigorna e estribo recebem a vibração do tímpano.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual parte do encéfalo controla os batimentos cardíacos e a respiração?</div>
+            <div class="alternativa">
+                <div class="opcao">Cerebelo</div>
+                <div class="porque">O cerebelo controla o equilíbrio e a coordenação motora.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Tronco encefálico</div>
+                <div class="porque">O tronco liga o cérebro à medula e controla essas funções.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Cérebro</div>
+                <div class="porque">O cérebro é a sede do pensamento e das sensações.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Medula espinal</div>
+                <div class="porque">A medula não faz parte do encéfalo.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Quais são os cinco gostos básicos?</div>
+            <div class="alternativa">
+                <div class="opcao">Salgado, doce, azedo, macio e umami</div>
+                <div class="porque">Macio é uma textura, não um gosto.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Salgado, doce, azedo, amargo e ardido</div>
+                <div class="porque">Ardido não está entre os cinco gostos básicos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Doce, frio, quente, azedo e umami</div>
+                <div class="porque">Frio e quente são temperaturas, não gostos.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Salgado, doce, azedo, amargo e umami</div>
+                <div class="porque">Esses são os cinco gostos básicos.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Qual é o maior órgão do corpo?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Pele</div>
+                <div class="porque">A pele é o maior órgão do corpo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Cérebro</div>
+                <div class="porque">O cérebro é a maior parte do encéfalo, não do corpo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Fígado</div>
+                <div class="porque">O fígado é um órgão grande, mas a pele é maior.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Coração</div>
+                <div class="porque">O coração é bem menor que a pele.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual é o caminho do impulso nervoso dentro do neurônio?</div>
+            <div class="alternativa">
+                <div class="opcao">Axônio → dendritos → corpo celular → botões terminais</div>
+                <div class="porque">O impulso começa nos dendritos, não no axônio.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Botões terminais → axônio → corpo celular → dendritos</div>
+                <div class="porque">Esse caminho está invertido.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Dendritos → corpo celular → axônio → botões terminais</div>
+                <div class="porque">O impulso vai dos dendritos aos botões terminais.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Corpo celular → dendritos → botões terminais → axônio</div>
+                <div class="porque">Os botões terminais ficam no fim do axônio.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual é a função do estrato mielínico?</div>
+            <div class="alternativa">
+                <div class="opcao">Produzir a melanina da pele</div>
+                <div class="porque">A melanina é produzida pelos melanócitos.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Acelerar a transmissão do impulso</div>
+                <div class="porque">O estrato mielínico reveste o axônio e acelera a transmissão.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Captar os estímulos do ambiente</div>
+                <div class="porque">Os receptores e os dendritos participam dessa captação.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Nutrir os neurônios</div>
+                <div class="porque">Quem nutre os neurônios são as células da glia.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">O que acontece em uma sinapse?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Neurotransmissores passam pela fenda sináptica</div>
+                <div class="porque">Eles são liberados na fenda e se ligam aos receptores do próximo neurônio.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Dois neurônios se fundem em uma só célula</div>
+                <div class="porque">Os neurônios não se fundem, e a sinapse não exige contato físico.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">O axônio se solta do corpo celular</div>
+                <div class="porque">O axônio continua ligado ao corpo celular.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">O impulso nervoso deixa o sistema nervoso</div>
+                <div class="porque">A sinapse passa o sinal adiante, sem encerrar o caminho.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Uma pessoa pisa na areia quente, e receptores captam esse sinal. Qual tipo de neurônio faz isso?</div>
+            <div class="alternativa">
+                <div class="opcao">Motor</div>
+                <div class="porque">O neurônio motor leva o comando aos músculos, órgãos e glândulas.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Interneurônio</div>
+                <div class="porque">O interneurônio passa o estímulo dos sensoriais aos motores.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Glial</div>
+                <div class="porque">As células da glia nutrem os neurônios e não captam esse sinal.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Sensorial</div>
+                <div class="porque">Os neurônios sensoriais têm receptores que captam sinais do ambiente.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">O que caracteriza os nervos mistos?</div>
+            <div class="alternativa">
+                <div class="opcao">Levam impulsos só aos músculos</div>
+                <div class="porque">Isso descreve os nervos motores.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Têm prolongamentos sensitivos e motores</div>
+                <div class="porque">Os nervos mistos têm os dois tipos de prolongamento.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Levam informações só ao sistema central</div>
+                <div class="porque">Isso descreve os nervos sensitivos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">São neurônios isolados e bem pequenos</div>
+                <div class="porque">Nervos são feixes, e não neurônios isolados.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Em qual camada da pele ficam os melanócitos, que produzem a melanina?</div>
+            <div class="alternativa">
+                <div class="opcao">Tela subcutânea</div>
+                <div class="porque">A tela subcutânea é o tecido adiposo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Derme</div>
+                <div class="porque">A derme tem glândulas, vasos sanguíneos, receptores e raiz dos pelos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Cóclea</div>
+                <div class="porque">A cóclea fica na orelha interna.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Epiderme</div>
+                <div class="porque">Os melanócitos ficam na epiderme, a camada superficial.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual é a diferença entre cones e bastonetes?</div>
+            <div class="alternativa">
+                <div class="opcao">Cones ficam na íris; bastonetes ficam na córnea</div>
+                <div class="porque">Cones e bastonetes ficam na retina.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Cones atuam com pouca luz; bastonetes percebem cores</div>
+                <div class="porque">As funções estão invertidas.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Cones percebem cores; bastonetes atuam com pouca luz</div>
+                <div class="porque">Cones dão cores e formas, e bastonetes atuam na visão com pouca luz.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Cones e bastonetes percebem só preto e branco</div>
+                <div class="porque">Os cones também permitem perceber as cores.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Uma pessoa enxerga bem de perto, mas mal de longe. Qual problema ela tem?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Miopia</div>
+                <div class="porque">Na miopia, a pessoa vê mal de longe.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Daltonismo</div>
+                <div class="porque">No daltonismo, há dificuldade com cores.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Hipermetropia</div>
+                <div class="porque">Na hipermetropia, a pessoa vê mal de perto.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Otite média</div>
+                <div class="porque">A otite média é uma infecção da orelha.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Por que não se devem usar hastes flexíveis na orelha?</div>
+            <div class="alternativa">
+                <div class="opcao">Porque elas aumentam a produção de lágrimas</div>
+                <div class="porque">As lágrimas são produzidas pelas glândulas lacrimais.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque elas desligam o nervo vestibulococlear</div>
+                <div class="porque">As hastes não desligam esse nervo.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Porque há risco de lesar o tímpano</div>
+                <div class="porque">A haste pode atingir o tímpano, e o cerume já protege a orelha.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque elas transformam o som em imagem</div>
+                <div class="porque">Quem forma imagens é o cérebro, a partir da visão.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual é a função dos ductos semicirculares?</div>
+            <div class="alternativa">
+                <div class="opcao">Equilibrar a pressão dos dois lados do tímpano</div>
+                <div class="porque">Essa é a função da tuba auditiva.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Informar a posição da cabeça para o equilíbrio</div>
+                <div class="porque">Eles têm líquido e células ciliadas que informam a posição da cabeça.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Passar a vibração do tímpano aos ossículos</div>
+                <div class="porque">O próprio tímpano vibra e passa a vibração aos ossículos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Transformar a vibração em impulsos</div>
+                <div class="porque">Essa é a função das células ciliadas da cóclea.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Uma pessoa encosta a mão em uma panela quente. Por que ela afasta a mão antes de sentir dor?</div>
+            <div class="alternativa">
+                <div class="opcao">Porque o cérebro decide tudo antes da medula</div>
+                <div class="porque">A resposta começa antes de o cérebro processar a dor.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque os músculos não usam nervos nesse caso</div>
+                <div class="porque">O nervo motor leva o impulso ao músculo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque a pele não tem receptores de calor</div>
+                <div class="porque">A pele tem termorreceptores.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Porque a medula comanda a resposta antes da dor</div>
+                <div class="porque">A medula repassa o impulso, e só depois o cérebro processa a dor.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Qual é a ordem correta do arco reflexo?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Receptor, nervo sensitivo, medula, nervo motor, músculo</div>
+                <div class="porque">O impulso vai do receptor à medula e volta pelo nervo motor.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Receptor, nervo motor, medula, nervo sensitivo, músculo</div>
+                <div class="porque">Os nervos estão trocados.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Músculo, nervo motor, medula, nervo sensitivo, receptor</div>
+                <div class="porque">Esse caminho está invertido.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Medula, receptor, nervo sensitivo, nervo motor, músculo</div>
+                <div class="porque">O estímulo começa no receptor, e não na medula.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Qual é o caminho da luz dentro do olho?</div>
+            <div class="alternativa">
+                <div class="opcao">Pupila, córnea, retina e lente</div>
+                <div class="porque">A luz passa antes pela córnea, e a lente vem antes da retina.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Retina, lente, pupila e córnea</div>
+                <div class="porque">Esse caminho está invertido.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Córnea, pupila, lente e retina</div>
+                <div class="porque">A luz atravessa a córnea e a pupila, e a lente a concentra na retina.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Córnea, lente, pupila e retina</div>
+                <div class="porque">A pupila vem antes da lente.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">O que acontece com a lente quando olhamos para um objeto perto?</div>
+            <div class="alternativa">
+                <div class="opcao">Ela é retirada do caminho da luz</div>
+                <div class="porque">A lente continua no mesmo lugar.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">O corpo ciliar a deixa mais espessa</div>
+                <div class="porque">Para enxergar perto, a lente fica mais espessa.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">O corpo ciliar a deixa mais fina</div>
+                <div class="porque">A lente fica mais fina para enxergar longe.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">A íris a transforma em retina</div>
+                <div class="porque">A íris controla a luz que entra pela pupila.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Qual é o caminho do som até o cérebro?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Meato, tímpano, ossículos, cóclea e nervo</div>
+                <div class="porque">O som vibra o tímpano, passa aos ossículos e chega à cóclea.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Cóclea, ossículos, tímpano, meato e nervo</div>
+                <div class="porque">Esse caminho está invertido.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Tímpano, meato, cóclea, ossículos e nervo</div>
+                <div class="porque">O som entra primeiro pelo meato.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Meato, ossículos, tímpano, nervo e cóclea</div>
+                <div class="porque">O tímpano vibra antes dos ossículos.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Por que sentimos tontura ao girar e parar de repente?</div>
+            <div class="alternativa">
+                <div class="opcao">Porque a tuba auditiva fica cheia de cerume</div>
+                <div class="porque">O cerume fica no meato, e a tontura vem dos ductos.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque o tímpano para de vibrar para sempre</div>
+                <div class="porque">O tímpano não para de funcionar.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque os ossículos saem do lugar</div>
+                <div class="porque">Os ossículos não saem do lugar ao girar.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Porque o líquido dos ductos ainda se move</div>
+                <div class="porque">O corpo para, mas o líquido dos ductos semicirculares continua se movendo.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Por que um alimento pode parecer sem sabor quando o nariz está entupido?</div>
+            <div class="alternativa">
+                <div class="opcao">Porque a língua perde todas as papilas</div>
+                <div class="porque">As papilas continuam na língua.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Porque o cérebro une odor e gosto no sabor</div>
+                <div class="porque">Com o nariz entupido, falta o odor para o cérebro construir o sabor.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque o sabor depende só da temperatura</div>
+                <div class="porque">A temperatura ajuda, mas o sabor depende de vários fatores.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque a saliva deixa de existir na boca</div>
+                <div class="porque">A saliva continua sendo produzida.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Por que um cheiro pode trazer uma lembrança?</div>
+            <div class="alternativa">
+                <div class="opcao">Porque os cílios olfatórios guardam as lembranças</div>
+                <div class="porque">Os cílios recebem as moléculas de odor.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque o nervo óptico leva os cheiros ao cérebro</div>
+                <div class="porque">O nervo óptico leva impulsos da visão.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Porque o bulbo olfatório fica perto das memórias</div>
+                <div class="porque">Essa proximidade explica a memória olfativa.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Porque a língua identifica as moléculas de odor</div>
+                <div class="porque">As moléculas de odor se ligam aos cílios olfatórios.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Qual alternativa relaciona corretamente o receptor ao estímulo?</div>
+            <div class="alternativa">
+                <div class="opcao">Nociceptor: textura; mecanorreceptor: dor</div>
+                <div class="porque">As funções estão trocadas.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Termorreceptor: dor; nociceptor: pressão</div>
+                <div class="porque">O termorreceptor percebe temperatura.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Mecanorreceptor: frio; termorreceptor: toque</div>
+                <div class="porque">As funções estão trocadas.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Nociceptor: dor; termorreceptor: temperatura</div>
+                <div class="porque">Nociceptores percebem dor, e termorreceptores, calor e frio.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Você sente cheiro de bolo e vai até a cozinha. Qual sequência explica isso?</div>
+            <div class="alternativa certa">
+                <div class="opcao">Estímulo, receptor, neurônios sensoriais, SNC, neurônios motores, resposta</div>
+                <div class="porque">O estímulo é captado, processado no SNC e gera a resposta.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Resposta, neurônios motores, SNC, neurônios sensoriais, receptor, estímulo</div>
+                <div class="porque">Essa sequência está invertida.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Estímulo, neurônios motores, SNC, receptor, neurônios sensoriais, resposta</div>
+                <div class="porque">Os neurônios motores atuam depois do SNC.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Receptor, estímulo, SNC, neurônios sensoriais, resposta, neurônios motores</div>
+                <div class="porque">O estímulo vem antes do receptor.</div>
+            </div>
+        </div>
+    </section>
+    <!-- ZONA 5 FIM -->
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<!-- BLOCO TRAVADO: SELOS E MOTOR. COPIE IGUAL. -->
+<script id="selo">
+const SELO_MOTOR = "db5bcc72";
+const SELO_CSS = "1b813fa0";
+</script>
+<script id="motor">
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+// --- LEITURA DAS QUESTOES (vem do HTML) ---
+function htmlDe(pai, seletor) {
+    const el = pai ? pai.querySelector(seletor) : null;
+    return el ? el.innerHTML.trim() : '';
+}
+
+const questions = Array.from(document.querySelectorAll('#bancoQuestoes .questao')).map((bloco, i) => {
+    const alternativas = Array.from(bloco.querySelectorAll(':scope > .alternativa'));
+    const certa = Math.max(alternativas.findIndex(a => a.classList.contains('certa')), 0);
+    return {
+        id: i + 1,
+        level: bloco.dataset.nivel,
+        text: htmlDe(bloco, ':scope > .enunciado'),
+        options: alternativas.map(a => htmlDe(a, ':scope > .opcao')),
+        correct: certa,
+        explanation: {
+            correct: htmlDe(alternativas[certa], ':scope > .porque'),
+            options: alternativas.map((a, j) => j === certa ? 'Certa' : htmlDe(a, ':scope > .porque'))
+        }
+    };
+});
+
+// --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g, '_');
+let currentQuestion = 0;
+let userAnswers = new Array(questions.length).fill(null);
+try {
+    const savedAnswers = JSON.parse(localStorage.getItem(storageKey));
+    if (Array.isArray(savedAnswers) && savedAnswers.length === questions.length) userAnswers = savedAnswers;
+} catch (e) { /* Sem salvamento disponível: a página continua funcionando. */ }
+
+function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+    if(mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        renderQuestion();
+        renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+    }
+    window.scrollTo(0,0);
+}
+
+function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    let badgeClass = '';
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+        </div>
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `<button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `;
+            }).join('')}
+        </div>
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '✅ Raciocínio Aprovado!' : '❌ Ops! Falha Detectada:'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                ${q.explanation.correct}
+            </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>
+    `;
+    updateNav();
+}
+
+function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    try { localStorage.setItem(storageKey, JSON.stringify(userAnswers)); } catch (e) { /* Sem salvamento disponível. */ }
+    if (idx === questions[currentQuestion].correct) {
+        if (window.confetti) {
+            const duration = 1500;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        }
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+    const feedback = document.querySelector('.feedback-box');
+    if (feedback) feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+    }).join('');
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            const mapBox = map.getBoundingClientRect();
+            const dotBox = activeDot.getBoundingClientRect();
+            map.scrollTo({ left: map.scrollLeft + dotBox.left - mapBox.left - (mapBox.width - dotBox.width) / 2, behavior: 'smooth' });
+        }
+    }, 50);
+}
+
+function goTo(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+    document.getElementById('qMap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar Diagnóstico";
+        next.onclick = finish;
+    } else {
+        next.textContent = "Avançar";
+        next.onclick = () => changeQuestion(1);
+    }
+}
+
+function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    if (window.confetti) confetti.reset();
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐⭐⭐" : percent >= 60 ? "⭐⭐⭐" : "⭐";
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    if (percent < 80) {
+        summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+            <strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a meta de 80%. Revise a teoria com atenção antes de tentar novamente.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Limpar Histórico e Refazer Prova</button>`;
+    } else {
+        summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+            <strong>🎉 Excelente Desempenho!</strong> Você demonstrou uma base sólida sobre os conceitos avaliados. Continue revisando para fazer a prova com segurança.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Refazer Prova (Zerar Histórico)</button>`;
+    }
+    if (correct < questions.length) {
+        summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+        questions.forEach((q, i) => {
+            if(userAnswers[i] !== q.correct) {
+                summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                    <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                    <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">${userAnswers[i] === null ? 'Questão não respondida' : 'Seu Erro: ' + q.options[userAnswers[i]]}</span>
+                    <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+}
+
+function reset() {
+    try { localStorage.removeItem(storageKey); } catch (e) { /* Sem salvamento disponível. */ }
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+}
+
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+
+// --- VERIFICADOR AUTOMATICO DA PAGINA ---
+function seloDe(texto) {
+    const limpo = texto.replace(/[^\x21-\x7E]/g, '');
+    let h = 2166136261;
+    for (let i = 0; i < limpo.length; i++) {
+        h ^= limpo.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(16);
+}
+
+function textoDe(html) {
+    const modelo = document.createElement('template');
+    modelo.innerHTML = html;
+    return modelo.content.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function verificarPagina() {
+    const erros = [];
+    const letras = ['A', 'B', 'C', 'D'];
+    const conteudo = [
+        document.title,
+        document.querySelector('.logo-header').innerHTML,
+        document.getElementById('viewExplanation').innerHTML,
+        document.getElementById('bancoQuestoes').innerHTML
+    ].join(' ');
+
+    const seloMotor = document.getElementById('motor');
+    const seloCss = document.getElementById('css-motor');
+    if (typeof SELO_MOTOR === 'undefined' || !seloMotor || seloDe(seloMotor.textContent) !== SELO_MOTOR) erros.push('O motor JavaScript foi alterado. Copie de novo o bloco do esqueleto, sem mudar nada.');
+    if (typeof SELO_CSS === 'undefined' || !seloCss || seloDe(seloCss.textContent) !== SELO_CSS) erros.push('O CSS do motor foi alterado. Copie de novo o bloco do esqueleto, sem mudar nada.');
+    if (conteudo.includes('[[') || conteudo.includes(']]')) erros.push('Ficou algum campo [[...]] sem preencher.');
+    if (conteudo.includes('**')) erros.push('Há Markdown (**) dentro do HTML. Use <strong>.');
+    if (document.querySelector('#viewExplanation script, #bancoQuestoes script, #viewExplanation iframe, #bancoQuestoes iframe')) erros.push('Há script ou iframe dentro das zonas de conteúdo.');
+    if (document.querySelector('#viewExplanation img, #bancoQuestoes img')) erros.push('Há imagem externa. Desenhe com SVG.');
+
+    document.querySelectorAll('#viewExplanation svg, #bancoQuestoes svg').forEach((svg, i) => {
+        if (!svg.getAttribute('viewBox') || !svg.getAttribute('aria-label')) erros.push('O desenho SVG ' + (i + 1) + ' precisa de viewBox e aria-label.');
+    });
+
+    const grupos = document.querySelectorAll('#viewExplanation .content-group');
+    if (grupos.length < 2) erros.push('A teoria precisa de pelo menos 2 temas.');
+    grupos.forEach((g, i) => {
+        if (!g.querySelector('.section-badge') || !g.querySelector('.theory-box')) erros.push('O tema ' + (i + 1) + ' da teoria está sem .section-badge ou .theory-box.');
+    });
+
+    const blocos = Array.from(document.querySelectorAll('#bancoQuestoes .questao'));
+    if (blocos.length !== 30) erros.push('São ' + blocos.length + ' questões, mas precisam ser exatamente 30.');
+
+    const enunciados = new Set();
+    const contagem = [0, 0, 0, 0];
+    let longas = 0;
+    let sequencia = 0;
+    let ultima = -1;
+
+    blocos.forEach((bloco, i) => {
+        const q = 'Questão ' + (i + 1) + ': ';
+        const esperado = i < 10 ? 'Fácil' : i < 20 ? 'Médio' : 'Difícil';
+        if (bloco.dataset.nivel !== esperado) erros.push(q + 'o nível deveria ser ' + esperado + '.');
+
+        const enunciadoEl = bloco.querySelector(':scope > .enunciado');
+        const enunciado = enunciadoEl ? textoDe(enunciadoEl.innerHTML) : '';
+        if (!enunciado) erros.push(q + 'falta o enunciado.');
+        if (enunciado && enunciados.has(enunciado)) erros.push(q + 'enunciado repetido.');
+        enunciados.add(enunciado);
+
+        const alternativas = Array.from(bloco.querySelectorAll(':scope > .alternativa'));
+        if (alternativas.length !== 4) erros.push(q + 'precisa de exatamente 4 alternativas.');
+        const certas = alternativas.filter(a => a.classList.contains('certa'));
+        if (certas.length !== 1) erros.push(q + 'precisa de exatamente 1 alternativa certa.');
+
+        const textos = alternativas.map(a => {
+            const el = a.querySelector(':scope > .opcao');
+            return el ? textoDe(el.innerHTML) : '';
+        });
+        if (textos.some(t => !t)) erros.push(q + 'há alternativa sem texto.');
+        if (new Set(textos).size !== textos.length) erros.push(q + 'há alternativas repetidas.');
+
+        alternativas.forEach((a, j) => {
+            const el = a.querySelector(':scope > .porque');
+            const porque = el ? textoDe(el.innerHTML) : '';
+            const letra = letras[j] || '?';
+            if (!porque) erros.push(q + 'a alternativa ' + letra + ' está sem explicação.');
+            if (porque.length > 110) erros.push(q + 'a explicação da alternativa ' + letra + ' passou de 110 caracteres.');
+        });
+
+        const indice = alternativas.findIndex(a => a.classList.contains('certa'));
+        if (indice >= 0 && indice < 4) {
+            contagem[indice]++;
+            sequencia = indice === ultima ? sequencia + 1 : 1;
+            ultima = indice;
+            if (sequencia === 4) erros.push(q + 'são 4 respostas seguidas com a mesma letra.');
+            const tamanhos = textos.map(t => t.length);
+            const outros = tamanhos.filter((_, j) => j !== indice);
+            if (tamanhos[indice] > 20 && tamanhos[indice] - Math.max(...outros) >= 6) longas++;
+        }
+    });
+
+    contagem.forEach((total, i) => {
+        if (blocos.length === 30 && (total < 5 || total > 10)) erros.push('A letra ' + letras[i] + ' é a certa em ' + total + ' questões. Use de 6 a 9.');
+    });
+    if (longas > 3) erros.push('A alternativa certa é claramente a mais longa em ' + longas + ' questões. Equilibre os tamanhos.');
+
+    const aviso = document.getElementById('avisoMotor');
+    if (erros.length === 0) {
+        aviso.remove();
+        window.PAGINA_OK = true;
+        return;
+    }
+    const lista = erros.slice(0, 25).map(e => '<li>' + e.replace(/</g, '&lt;') + '</li>').join('');
+    aviso.innerHTML = '<strong>⚠️ A página precisa de correção. Não envie aos alunos.</strong><br>Copie esta lista, cole no Gemini e peça para corrigir só estes itens:<ol style="margin:8px 0 0 20px;">' + lista + '</ol>';
+}
+
+verificarPagina();
+</script>
+
+</body></html>
