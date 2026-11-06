@@ -1,0 +1,1019 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>8mat2</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- BLOCO TRAVADO: CSS DO MOTOR. COPIE IGUAL. -->
+<style id="css-motor">
+:root {
+    --border-color: #000000;
+    --white: #FFFFFF;
+    --theme-text-active: #FFFFFF;
+    --correct-bg: #D1FAE5;
+    --correct-border: #059669;
+    --wrong-bg: #FFE4E6;
+    --wrong-border: #BE123C;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-color);
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; padding-bottom: 100px;
+    background-image: linear-gradient(var(--theme-light) 1px, transparent 1px), linear-gradient(90deg, var(--theme-light) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+}
+.shake-effect { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pulse-effect { animation: pulse 1s infinite; display: inline-block; }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.15); color: var(--theme-contrast); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); color: var(--theme-contrast); }
+    100% { transform: scale(1); }
+}
+.logo-header { width: 100%; max-width: 600px; display: flex; justify-content: center; flex-direction: column; align-items: center; padding: 20px 0 10px 0; }
+.css-logo { font-size: 1.6rem; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: -1px; border: 3px solid var(--border-color); padding: 8px 20px; border-radius: 12px; background: var(--theme-dark); box-shadow: 4px 4px 0px var(--theme-contrast); text-align: center; margin-bottom: 15px; }
+h1 { font-size: 1.8rem; font-weight: 900; color: var(--text-color); text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); text-align: center; }
+.subtitle { font-size: 0.95rem; color: var(--theme-dark); font-weight: 600; text-align: center;}
+.container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+.toggle-container { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 50px; padding: 4px; display: flex; margin-bottom: 10px; box-shadow: 3px 3px 0px var(--border-color); }
+.toggle-btn { flex: 1; border: none; background: none; padding: 12px 0; border-radius: 40px; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem; color: var(--theme-dark); cursor: pointer; transition: all 0.3s ease; }
+.toggle-btn.active { background-color: var(--theme-dark); color: var(--theme-text-active); box-shadow: 0px 2px 5px rgba(0,0,0,0.2); }
+.view-section { display: none; animation: fadeIn 0.4s ease; flex-direction: column; gap: 20px; }
+.search-container { position: relative; width: 100%; }
+.search-input { width: 100%; padding: 15px 20px 15px 50px; border: 2px solid var(--border-color); border-radius: 50px; background-color: var(--white); font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; transition: all 0.2s ease; }
+.search-input:focus { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.7; }
+#no-results { text-align: center; color: var(--theme-dark); font-weight: 600; display: none; }
+.content-group { display: flex; flex-direction: column; gap: 12px; }
+.section-badge { display: inline-block; padding: 8px 16px; background-color: var(--theme-dark); color: var(--white); font-size: 0.9rem; font-weight: 700; border-radius: 8px; border: 2px solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.2); text-transform: uppercase; align-self: flex-start; margin-bottom: 5px; }
+.theory-box { display: flex; flex-direction: column; padding: 20px; border-radius: 16px; background-color: var(--white); border: 2px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); font-weight: 500; font-size: 0.95rem; line-height: 1.6; position: relative; overflow: hidden; gap: 15px; }
+.theory-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background-color: var(--theme-contrast); border-right: 2px solid var(--border-color); }
+.theory-box h3 { font-size: 1.2rem; font-weight: 900; color: var(--theme-dark); margin-bottom: 5px; border-bottom: 2px solid var(--theme-light); padding-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+.visual-area { background: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 8px; padding: 15px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; font-weight: bold; font-size: 1.5rem; color: var(--theme-contrast); text-align: center; }
+.highlight-box { background-color: #E0F2FE; border-left: 4px solid var(--theme-contrast); padding: 15px; border-radius: 6px; font-size: 0.9rem; color: #075985; }
+.highlight-box.warning { background-color: #FEF2F2; border-left-color: #BE123C; color: #881337; }
+.difficulty-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; border: 2px solid var(--border-color); box-shadow: 2px 2px 0px rgba(0,0,0,1); }
+.dif-facil { background: #D1FAE5; color: #065F46; }
+.dif-medio { background: #FEF08A; color: #713F12; }
+.dif-dificil { background: #FECACA; color: #7F1D1D; }
+.question-map { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; margin-bottom: 20px; white-space: nowrap; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+.question-map::-webkit-scrollbar { display: none; }
+.map-dot { min-width: 35px; height: 35px; border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; color: var(--theme-dark); background: white; cursor: pointer; transition: all 0.2s; }
+.map-dot.active { background-color: var(--theme-dark); color: white; box-shadow: 2px 2px 0px var(--theme-contrast); transform: scale(1.1); }
+.map-dot.answered-correct { background-color: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-border); }
+.map-dot.answered-wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong-border); }
+.option-btn { display: flex; align-items: center; width: 100%; padding: 16px; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.1s ease; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; text-align: left; color: var(--text-color); }
+.option-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0px var(--theme-contrast); border-color: var(--theme-dark); }
+.opt-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border-color); margin-right: 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; flex-shrink: 0; background: var(--theme-light); color: var(--theme-dark); }
+.option-btn.correct { background-color: var(--correct-bg); border-color: var(--correct-border); box-shadow: 2px 2px 0px var(--correct-border); }
+.option-btn.correct .opt-circle { background-color: var(--correct-border); color: white; border-color: var(--correct-border); }
+.option-btn.wrong { background-color: var(--wrong-bg); border-color: var(--wrong-border); opacity: 0.9; box-shadow: none; }
+.option-btn.wrong .opt-circle { background-color: var(--wrong-border); color: white; border-color: var(--wrong-border); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+.feedback-box { display: block; margin-top: 20px; background-color: #FAFAFA; border: 2px dashed var(--theme-dark); border-radius: 12px; padding: 20px; animation: slideUp 0.3s ease-out; }
+.feedback-title { font-weight: 900; text-transform: uppercase; font-size: 0.95rem; margin-bottom: 10px; display:flex; align-items:center; gap:8px; color: var(--theme-dark); }
+.feedback-item { margin-bottom: 8px; font-size: 0.85rem; padding-left: 10px; border-left: 3px solid #CBD5E1; line-height: 1.5; color: #0F172A; }
+.feedback-item.correct-opt { border-left-color: var(--correct-border); font-weight: 700; color: var(--correct-border); background: var(--correct-bg); padding: 10px; border-radius: 0 6px 6px 0; }
+.feedback-item.wrong-opt { border-left-color: var(--wrong-border); color: #7F1D1D; }
+.result-card { background: white; border: 3px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 6px 6px 0px var(--border-color); margin-bottom: 30px; text-align: center; }
+.stars-container { font-size: 3.5rem; margin: 10px 0; letter-spacing: 5px; }
+.percentage-big { font-size: 4.5rem; font-weight: 900; color: var(--theme-dark); line-height: 1; margin: 10px 0; text-shadow: 3px 3px 0px var(--theme-contrast); }
+.btn-action { width: 100%; padding: 18px; background-color: var(--theme-dark); color: white; border: 3px solid var(--border-color); border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px var(--theme-contrast); transition: all 0.1s; text-transform: uppercase; margin-top: 20px; }
+.btn-action:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--theme-contrast); }
+.quiz-footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-color); border-top: 3px solid var(--border-color); padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+.nav-btn { padding: 12px 24px; border-radius: 8px; font-weight: 800; border: 2px solid var(--border-color); cursor: pointer; box-shadow: 2px 2px 0px var(--border-color); font-family: 'Poppins', sans-serif; text-transform: uppercase;}
+.btn-next { background-color: var(--theme-dark); color: white; }
+.btn-prev { background-color: white; color: var(--text-color); }
+.nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.feedback-box { scroll-margin-top: 12px; scroll-margin-bottom: 90px; }
+.question-map { scroll-margin-top: 8px; }
+td, th { padding: 6px 8px; }
+#bancoQuestoes { display: none; }
+.visual-area.texto { font-size: 0.95rem; flex-direction: column; gap: 8px; }
+.tabela { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.85rem; font-weight: 600; margin-top: 10px; }
+.tabela th { background: var(--theme-light); }
+.tabela th, .tabela td { border: 1px solid var(--border-color); }
+.lista { padding-left: 20px; }
+.desenho { width: 100%; max-width: 420px; height: auto; display: block; margin: 10px auto; }
+.d-cor1 { fill: var(--theme-dark); }
+.d-cor2 { fill: var(--theme-contrast); }
+.d-cor3 { fill: var(--theme-medium); }
+.d-fundo { fill: var(--theme-light); stroke: var(--text-color); stroke-width: 2; }
+.d-linha { fill: none; stroke: var(--text-color); stroke-width: 2; }
+.d-texto { fill: var(--text-color); font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 600; }
+</style>
+<!-- ZONA 2 INICIO: CORES E CSS EXTRA -->
+<style id="css-tema">
+:root {
+    --bg-color: #ECFEFF;
+    --text-color: #0F172A;
+    --theme-light: #CFFAFE;
+    --theme-medium: #22D3EE;
+    --theme-dark: #155E75;
+    --theme-contrast: #C2410C;
+    --theme-accent: #0891B2;
+}
+.d-peq { fill: var(--text-color); font-family: 'Poppins', sans-serif; font-size: 12.5px; font-weight: 600; }
+.d-suave { fill: var(--theme-light); stroke: var(--text-color); stroke-width: 2; }
+.d-tracejado { fill: none; stroke: var(--theme-accent); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.d-fina { fill: none; stroke: var(--text-color); stroke-width: 1.2; }
+.quiz-footer { padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px)); }
+.tabela.compacta th, .tabela.compacta td { padding: 5px 2px; font-size: 0.72rem; }
+.d-h { paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+.d-fig { fill: var(--theme-light); stroke: var(--text-color); stroke-width: 2.5; }
+.d-fig2 { fill: var(--theme-medium); stroke: var(--text-color); stroke-width: 2.5; }
+.d-sem { fill: none; stroke: var(--text-color); stroke-width: 2.5; }
+.d-sem2 { fill: none; stroke: var(--theme-contrast); stroke-width: 4; }
+.d-furo { fill: #fff; stroke: var(--text-color); stroke-width: 2.5; }
+.d-roda2 { fill: var(--text-color); }
+.d-tr { stroke: var(--theme-contrast); stroke-width: 2; stroke-dasharray: 5 4; fill: none; }
+.d-tr2 { stroke: var(--theme-dark); stroke-width: 1.6; stroke-dasharray: 5 4; fill: none; }
+.d-gr { stroke: #64748B; stroke-width: 0.8; }
+.d-lin2 { stroke: var(--theme-contrast); stroke-width: 3; }
+.d-lin3 { stroke: var(--theme-dark); stroke-width: 3; }
+.d-arco { fill: none; stroke: var(--theme-contrast); stroke-width: 5; }
+.d-pt { fill: var(--text-color); }
+.d-pt2 { fill: var(--theme-contrast); }
+.d-pt3 { fill: var(--theme-contrast); }
+.d-rot { fill: var(--theme-dark); font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 800; }
+.d-med { stroke: var(--text-color); stroke-width: 1.5; }
+.d-linha { stroke: var(--text-color); stroke-width: 2.5; }
+</style>
+<!-- ZONA 2 FIM -->
+
+<div id="avisoMotor" style="display:block; max-width:600px; width:100%; margin:0 auto 16px; padding:14px; background:#FFE4E6; color:#881337; border:3px solid #BE123C; border-radius:12px; font-family:sans-serif; font-size:15px; font-weight:600; line-height:1.5;">⚠️ Este arquivo está incompleto ou com erro no código. Não envie aos alunos. Peça ao Gemini para gerar o arquivo completo de novo.</div>
+<div class="container">
+    <header class="logo-header">
+        <div class="css-logo"><span class="pulse-effect">🚀</span> PROMOVER</div>
+        <!-- ZONA 3 INICIO: CABECALHO -->
+        <h1>Matemática – 8º&nbsp;Ano</h1>
+        <p class="subtitle">Medidas de superfície, áreas das figuras planas, circunferência e círculo</p>
+        <!-- ZONA 3 FIM -->
+    </header>
+
+    <div class="toggle-container">
+        <button class="toggle-btn active" id="btnExp" onclick="setMode('explanation')">📘 Teoria</button>
+        <button class="toggle-btn" id="btnPrac" onclick="setMode('practice')">🧠 Prática (15)</button>
+    </div>
+
+    <div id="viewExplanation" class="view-section" style="display: flex;">
+        <div class="search-container">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="searchInput" class="search-input" aria-label="Pesquisar conteúdo" placeholder="Pesquisar conceito...">
+        </div>
+        <div id="no-results"><p>😕 Termo não encontrado.</p></div>
+
+        <!-- ZONA 4 INICIO: TEORIA -->
+        <div class="content-group">
+            <span class="section-badge">1. Medidas de superfície</span>
+            <div class="theory-box">
+                <h3>🟦 O que é área?</h3>
+                <p><strong>Área</strong> é a medida de uma superfície. Ela diz quantos quadradinhos cabem dentro de uma figura.</p>
+                <p>A unidade principal é o <strong>metro quadrado (m²)</strong>: a área de um quadrado com 1 m de lado.</p>
+                <svg class="desenho" viewBox="0 0 340 166" role="img" aria-label="Quadrado de 1 metro de lado dividido em 100 quadradinhos de 1 decímetro quadrado"><rect class="d-fig" x="36" y="26" width="120" height="120.0"/><rect class="d-fig2" x="36.0" y="26.0" width="12.0" height="12.0"/><line class="d-gr" x1="48.0" y1="26" x2="48.0" y2="146.0"/><line class="d-gr" x1="60.0" y1="26" x2="60.0" y2="146.0"/><line class="d-gr" x1="72.0" y1="26" x2="72.0" y2="146.0"/><line class="d-gr" x1="84.0" y1="26" x2="84.0" y2="146.0"/><line class="d-gr" x1="96.0" y1="26" x2="96.0" y2="146.0"/><line class="d-gr" x1="108.0" y1="26" x2="108.0" y2="146.0"/><line class="d-gr" x1="120.0" y1="26" x2="120.0" y2="146.0"/><line class="d-gr" x1="132.0" y1="26" x2="132.0" y2="146.0"/><line class="d-gr" x1="144.0" y1="26" x2="144.0" y2="146.0"/><line class="d-gr" x1="36" y1="38.0" x2="156" y2="38.0"/><line class="d-gr" x1="36" y1="50.0" x2="156" y2="50.0"/><line class="d-gr" x1="36" y1="62.0" x2="156" y2="62.0"/><line class="d-gr" x1="36" y1="74.0" x2="156" y2="74.0"/><line class="d-gr" x1="36" y1="86.0" x2="156" y2="86.0"/><line class="d-gr" x1="36" y1="98.0" x2="156" y2="98.0"/><line class="d-gr" x1="36" y1="110.0" x2="156" y2="110.0"/><line class="d-gr" x1="36" y1="122.0" x2="156" y2="122.0"/><line class="d-gr" x1="36" y1="134.0" x2="156" y2="134.0"/><rect class="d-sem" x="36" y="26" width="120" height="120.0"/><text class="d-peq d-h" x="96" y="18" text-anchor="middle">1 m = 10 dm</text><text class="d-peq d-h" x="176" y="52" text-anchor="start">1 quadradinho</text><text class="d-peq d-h" x="176" y="70" text-anchor="start">tem área de 1 dm²</text><text class="d-peq d-h" x="176" y="108" text-anchor="start">10 × 10 = 100</text><text class="d-rot" x="176" y="126" text-anchor="start">1 m² = 100 dm²</text></svg>
+            </div>
+            <div class="theory-box">
+                <h3>🪜 Trocando de unidade</h3>
+                <p>Cada degrau da escada vale <strong>100</strong>, e não 10.</p>
+                <svg class="desenho" viewBox="0 0 340 164" role="img" aria-label="Escada das unidades de área, de quilômetro quadrado a milímetro quadrado: descendo multiplica por 100 e subindo divide por 100"><rect class="d-fig" x="4" y="8" width="47" height="24"/><text class="d-peq" x="27.5" y="25" text-anchor="middle">km²</text><rect class="d-fig" x="51" y="30" width="47" height="24"/><text class="d-peq" x="74.5" y="47" text-anchor="middle">hm²</text><rect class="d-fig" x="98" y="52" width="47" height="24"/><text class="d-peq" x="121.5" y="69" text-anchor="middle">dam²</text><rect class="d-fig2" x="145" y="74" width="47" height="24"/><text class="d-peq" x="168.5" y="91" text-anchor="middle">m²</text><rect class="d-fig" x="192" y="96" width="47" height="24"/><text class="d-peq" x="215.5" y="113" text-anchor="middle">dm²</text><rect class="d-fig" x="239" y="118" width="47" height="24"/><text class="d-peq" x="262.5" y="135" text-anchor="middle">cm²</text><rect class="d-fig" x="286" y="140" width="47" height="24"/><text class="d-peq" x="309.5" y="157" text-anchor="middle">mm²</text><text class="d-rot" x="336" y="30" text-anchor="end">Subindo: ÷ 100</text><text class="d-rot" x="6" y="150" text-anchor="start">Descendo: × 100</text></svg>
+                <div class="visual-area texto">
+                    <span>3 m² = 3 × 100 = 300 dm²</span>
+                    <span>450 cm² = 450 ÷ 100 = 4,5 dm²</span>
+                    <span>2 km² = 2 × 100 × 100 × 100 = 2 000 000 m²</span>
+                </div>
+                <p><strong>Para terrenos:</strong> 1 hectare (ha) = 10 000 m².</p>
+                <div class="highlight-box warning">
+                    <strong>Cuidado:</strong> em medidas de comprimento, o degrau vale 10. Em medidas de área, vale 100.
+                </div>
+            </div>
+            <div class="theory-box">
+                <h3>📏 Perímetro não é área</h3>
+                <svg class="desenho" viewBox="0 0 340 146" role="img" aria-label="Mesmo retângulo de 5 por 3 metros: perímetro de 16 metros no contorno e área de 15 metros quadrados no interior"><text class="d-peq d-h" x="88" y="20" text-anchor="middle">Perímetro: o contorno</text><rect class="d-sem2" x="28" y="32" width="120" height="72"/><text class="d-peq d-h" x="88" y="73" text-anchor="middle">5 m por 3 m</text><text class="d-peq d-h" x="88" y="124" text-anchor="middle">5 + 3 + 5 + 3 = 16 m</text><text class="d-peq d-h" x="252" y="20" text-anchor="middle">Área: o interior</text><rect class="d-fig" x="192" y="32" width="120" height="72.0"/><line class="d-gr" x1="216.0" y1="32" x2="216.0" y2="104.0"/><line class="d-gr" x1="240.0" y1="32" x2="240.0" y2="104.0"/><line class="d-gr" x1="264.0" y1="32" x2="264.0" y2="104.0"/><line class="d-gr" x1="288.0" y1="32" x2="288.0" y2="104.0"/><line class="d-gr" x1="192" y1="56.0" x2="312" y2="56.0"/><line class="d-gr" x1="192" y1="80.0" x2="312" y2="80.0"/><rect class="d-sem" x="192" y="32" width="120" height="72.0"/><text class="d-peq d-h" x="252" y="124" text-anchor="middle">5 × 3 = 15 m²</text></svg>
+                <p><strong>Perímetro:</strong> soma dos lados, em m.</p>
+                <p><strong>Área:</strong> medida do interior, em m².</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">2. Áreas das figuras planas</span>
+            <div class="theory-box">
+                <h3>⬜ Quadrado e retângulo</h3>
+                <svg class="desenho" viewBox="0 0 340 136" role="img" aria-label="Quadrado com lado indicado e retângulo com base e altura indicadas"><rect class="d-fig" x="40" y="24" width="84" height="84"/><text class="d-peq d-h" x="82" y="18" text-anchor="middle">lado</text><text class="d-peq d-h" x="82" y="124" text-anchor="middle">Quadrado</text><rect class="d-fig" x="160" y="34" width="120" height="70"/><text class="d-peq d-h" x="220" y="28" text-anchor="middle">base</text><text class="d-peq d-h" x="286" y="74" text-anchor="start">altura</text><text class="d-peq d-h" x="220" y="124" text-anchor="middle">Retângulo</text></svg>
+                <div class="visual-area texto">
+                    <span>Área do quadrado = lado × lado</span>
+                    <span>Área do retângulo = base × altura</span>
+                </div>
+                <p><strong>Exemplo:</strong> um retângulo de 6 m por 4 m tem área de 6 × 4 = <strong>24 m²</strong>.</p>
+            </div>
+            <div class="theory-box">
+                <h3>▱ Paralelogramo</h3>
+                <svg class="desenho" viewBox="0 0 340 166" role="img" aria-label="Um triângulo cortado do paralelogramo vai para o outro lado e forma um retângulo de mesma base e mesma altura"><polygon class="d-fig" points="16,114 116,114 146,44 46,44"/><polygon class="d-fig2" points="16,114 46,114 46,44"/><line class="d-tr" x1="46" y1="44" x2="46" y2="114"/><text class="d-peq d-h" x="52" y="84" text-anchor="start">altura</text><text class="d-peq d-h" x="66" y="132" text-anchor="middle">base</text><line class="d-lin2" x1="156" y1="80" x2="174" y2="80"/><polygon class="d-pt2" points="182,80 172,75 172,85"/><rect class="d-fig" x="190" y="44" width="100" height="70"/><polygon class="d-fig2" points="260,114 290,114 290,44"/><text class="d-peq d-h" x="296" y="84" text-anchor="start">altura</text><text class="d-peq d-h" x="240" y="132" text-anchor="middle">base</text><text class="d-peq d-h" x="170" y="156" text-anchor="middle">O pedaço muda de lugar, e a área não muda.</text></svg>
+                <div class="visual-area texto"><span>Área = base × altura</span></div>
+                <p><strong>Exemplo:</strong> base de 8 cm e altura de 3 cm: 8 × 3 = <strong>24 cm²</strong>.</p>
+                <div class="highlight-box warning">
+                    <strong>Cuidado:</strong> a altura forma ângulo reto com a base. O lado inclinado não é a altura.
+                </div>
+            </div>
+            <div class="theory-box">
+                <h3>🔺 Triângulo</h3>
+                <svg class="desenho" viewBox="0 0 340 146" role="img" aria-label="Triângulo dentro de um retângulo de mesma base e mesma altura, ocupando metade dele"><rect class="d-sem" x="24" y="24" width="136" height="92"/><polygon class="d-fig" points="24,116 160,116 76,24"/><line class="d-tr" x1="76" y1="24" x2="76" y2="116"/><text class="d-peq d-h" x="82" y="84" text-anchor="start">altura</text><text class="d-peq d-h" x="92" y="134" text-anchor="middle">base</text><text class="d-peq d-h" x="174" y="48" text-anchor="start">O triângulo ocupa</text><text class="d-peq d-h" x="174" y="66" text-anchor="start">metade do retângulo</text><text class="d-peq d-h" x="174" y="84" text-anchor="start">de mesma base</text><text class="d-peq d-h" x="174" y="102" text-anchor="start">e mesma altura.</text></svg>
+                <div class="visual-area texto"><span>Área = base × altura ÷ 2</span></div>
+                <p><strong>Exemplo:</strong> base de 8 cm e altura de 5 cm: 8 × 5 ÷ 2 = <strong>20 cm²</strong>.</p>
+            </div>
+            <div class="theory-box">
+                <h3>⏢ Trapézio</h3>
+                <svg class="desenho" viewBox="0 0 340 144" role="img" aria-label="Trapézio com base maior, base menor e altura indicadas"><polygon class="d-fig" points="60,112 280,112 220,38 120,38"/><line class="d-tr" x1="120" y1="38" x2="120" y2="112"/><path class="d-fina" d="M130 112 L130 102 L120 102"/><text class="d-peq d-h" x="170" y="30" text-anchor="middle">base menor</text><text class="d-peq d-h" x="170" y="130" text-anchor="middle">base maior</text><text class="d-peq d-h" x="136" y="80" text-anchor="start">altura</text></svg>
+                <div class="visual-area texto"><span>Área = (base maior + base menor) × altura ÷ 2</span></div>
+                <p><strong>Exemplo:</strong> bases de 10 m e 6 m, altura de 4 m: (10 + 6) × 4 ÷ 2 = <strong>32 m²</strong>.</p>
+            </div>
+            <div class="theory-box">
+                <h3>🔷 Losango</h3>
+                <svg class="desenho" viewBox="0 0 340 158" role="img" aria-label="Losango dentro de um retângulo com as medidas das diagonais; o losango ocupa metade do retângulo"><rect class="d-tr2" x="70" y="18" width="180" height="112"/><polygon class="d-fig" points="160,18 250,74 160,130 70,74"/><line class="d-tr" x1="70" y1="74" x2="250" y2="74"/><line class="d-tr" x1="160" y1="18" x2="160" y2="130"/><text class="d-peq d-h" x="160" y="148" text-anchor="middle">diagonal maior</text><text class="d-peq d-h" x="258" y="68" text-anchor="start">diagonal</text><text class="d-peq d-h" x="258" y="86" text-anchor="start">menor</text></svg>
+                <div class="visual-area texto"><span>Área = diagonal maior × diagonal menor ÷ 2</span></div>
+                <p><strong>Exemplo:</strong> diagonais de 8 cm e 5 cm: 8 × 5 ÷ 2 = <strong>20 cm²</strong>.</p>
+            </div>
+            <div class="theory-box">
+                <h3>🧩 Figuras compostas</h3>
+                <p>Divida a figura em partes conhecidas ou complete um retângulo e tire o que sobra.</p>
+                <p><strong>Exemplo:</strong> retângulo de 8 m por 6 m sem um canto de 3 m por 2 m.</p>
+                <svg class="desenho" viewBox="0 0 340 150" role="img" aria-label="Figura em L de duas formas: somando dois retângulos, 30 mais 12, ou tirando um canto do retângulo maior, 48 menos 6; o resultado é 42"><polygon class="d-fig" points="20,24 95,24 95,54 140,54 140,114 20,114"/><line class="d-tr" x1="95" y1="54" x2="95" y2="114"/><text class="d-peq d-h" x="57" y="66" text-anchor="middle">5 × 6</text><text class="d-peq d-h" x="57" y="84" text-anchor="middle">= 30</text><text class="d-peq d-h" x="117" y="80" text-anchor="middle">3 × 4</text><text class="d-peq d-h" x="117" y="98" text-anchor="middle">= 12</text><text class="d-peq d-h" x="85" y="136" text-anchor="middle">Somando: 30 + 12 = 42</text><rect class="d-fig" x="190" y="24" width="120" height="90"/><rect class="d-furo" x="265" y="24" width="45" height="30"/><text class="d-peq d-h" x="240" y="76" text-anchor="middle">8 × 6 = 48</text><text class="d-peq d-h" x="287" y="44" text-anchor="middle">6</text><text class="d-peq d-h" x="255" y="136" text-anchor="middle">Tirando: 48 − 6 = 42</text></svg>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">3. Circunferência e círculo</span>
+            <div class="theory-box">
+                <h3>⭕ Qual é a diferença?</h3>
+                <svg class="desenho" viewBox="0 0 340 140" role="img" aria-label="Circunferência é só a linha; círculo é a linha e o interior"><circle class="d-sem2" cx="90" cy="52" r="42"/><text class="d-peq d-h" x="90" y="114" text-anchor="middle">Circunferência</text><text class="d-peq d-h" x="90" y="132" text-anchor="middle">só a linha</text><circle class="d-fig" cx="250" cy="52" r="42"/><text class="d-peq d-h" x="250" y="114" text-anchor="middle">Círculo</text><text class="d-peq d-h" x="250" y="132" text-anchor="middle">a linha e o interior</text></svg>
+            </div>
+            <div class="theory-box">
+                <h3>📍 Elementos</h3>
+                <svg class="desenho" viewBox="0 0 340 200" role="img" aria-label="Círculo com centro, raio, diâmetro, corda e arco indicados"><circle class="d-fig" cx="150" cy="100" r="84"/><line class="d-lin2" x1="66" y1="100" x2="234" y2="100"/><line class="d-lin3" x1="150" y1="100" x2="198.2" y2="31.2"/><line class="d-lin3" x1="87.6" y1="156.2" x2="212.4" y2="156.2"/><path class="d-arco" d="M128.3 18.9 A84 84 0 0 0 71.1 71.3"/><circle class="d-pt" cx="150" cy="100" r="3.5"/><text class="d-peq d-h" x="150" y="118" text-anchor="middle">centro</text><text class="d-peq d-h" x="105" y="94" text-anchor="middle">diâmetro</text><text class="d-peq d-h" x="186" y="62" text-anchor="start">raio</text><text class="d-peq d-h" x="150" y="174" text-anchor="middle">corda</text><text class="d-peq d-h" x="70" y="26" text-anchor="middle">arco</text></svg>
+                <table class="tabela">
+                    <tr><th>Elemento</th><th>O que é</th></tr>
+                    <tr><td>Centro</td><td>Ponto do meio, à mesma distância de toda a linha</td></tr>
+                    <tr><td>Raio</td><td>Vai do centro até a linha</td></tr>
+                    <tr><td>Corda</td><td>Liga dois pontos da linha</td></tr>
+                    <tr><td>Diâmetro</td><td>Corda que passa pelo centro. É a maior corda</td></tr>
+                    <tr><td>Arco</td><td>Pedaço da linha da circunferência</td></tr>
+                </table>
+                <div class="visual-area texto"><span>diâmetro = 2 × raio</span></div>
+            </div>
+            <div class="theory-box">
+                <h3>📐 Reta e circunferência</h3>
+                <svg class="desenho" viewBox="0 0 340 150" role="img" aria-label="Reta secante toca em dois pontos, tangente em um ponto e externa em nenhum ponto"><circle class="d-sem" cx="58" cy="54" r="36"/><line class="d-lin2" x1="6" y1="74" x2="110" y2="34"/><circle class="d-sem" cx="170" cy="54" r="36"/><line class="d-lin2" x1="120" y1="90" x2="220" y2="90"/><circle class="d-pt2" cx="170" cy="90" r="4"/><circle class="d-sem" cx="282" cy="54" r="36"/><line class="d-lin2" x1="232" y1="102" x2="332" y2="102"/><text class="d-peq d-h" x="58" y="126" text-anchor="middle">Secante</text><text class="d-peq d-h" x="58" y="143" text-anchor="middle">2 pontos</text><text class="d-peq d-h" x="170" y="126" text-anchor="middle">Tangente</text><text class="d-peq d-h" x="170" y="143" text-anchor="middle">1 ponto</text><text class="d-peq d-h" x="282" y="126" text-anchor="middle">Externa</text><text class="d-peq d-h" x="282" y="143" text-anchor="middle">nenhum ponto</text></svg>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">4. Comprimento e área do círculo</span>
+            <div class="theory-box">
+                <h3>🔁 Comprimento da circunferência</h3>
+                <p>Em toda circunferência, o comprimento dividido pelo diâmetro dá o mesmo número: <strong>π (pi) ≈ 3,14</strong>.</p>
+                <svg class="desenho" viewBox="0 0 340 136" role="img" aria-label="Ao abrir a circunferência em linha reta, o comprimento é um pouco mais de 3 diâmetros"><circle class="d-fig" cx="60" cy="52" r="30"/><line class="d-lin3" x1="60" y1="22" x2="60" y2="82"/><circle class="d-pt2" cx="60" cy="82" r="4"/><line class="d-lin2" x1="60" y1="82" x2="248.5" y2="82"/><circle class="d-pt2" cx="248.5" cy="82" r="4"/><line class="d-fina" x1="120" y1="76" x2="120" y2="88"/><line class="d-fina" x1="180" y1="76" x2="180" y2="88"/><line class="d-fina" x1="240" y1="76" x2="240" y2="88"/><text class="d-peq d-h" x="90" y="102" text-anchor="middle">1º</text><text class="d-peq d-h" x="150" y="102" text-anchor="middle">2º</text><text class="d-peq d-h" x="210" y="102" text-anchor="middle">3º</text><text class="d-peq d-h" x="100" y="30" text-anchor="start">diâmetro</text><text class="d-peq d-h" x="170" y="124" text-anchor="middle">Abrindo a linha: pouco mais de 3 diâmetros</text></svg>
+                <div class="visual-area texto">
+                    <span>comprimento = 2 × π × raio</span>
+                    <span>ou: comprimento = π × diâmetro</span>
+                </div>
+                <p><strong>Exemplo:</strong> raio de 10 cm: 2 × 3,14 × 10 = <strong>62,8 cm</strong>.</p>
+                <p><strong>Roda:</strong> distância percorrida = número de voltas × comprimento da roda.</p>
+            </div>
+            <div class="theory-box">
+                <h3>🟠 Área do círculo</h3>
+                <svg class="desenho" viewBox="0 0 340 176" role="img" aria-label="Quadrado com lado igual ao raio; no círculo cabem cerca de 3,14 desses quadrados"><circle class="d-fig" cx="90" cy="88" r="72"/><rect class="d-fig2" x="90" y="16" width="72" height="72"/><text class="d-peq d-h" x="126" y="104" text-anchor="middle">raio</text><text class="d-peq d-h" x="84" y="56" text-anchor="end">raio</text><circle class="d-pt" cx="90" cy="88" r="3"/><text class="d-peq d-h" x="176" y="46" text-anchor="start">Esse quadrado tem</text><text class="d-peq d-h" x="176" y="64" text-anchor="start">lado igual ao raio.</text><text class="d-peq d-h" x="176" y="100" text-anchor="start">No círculo, cabem</text><text class="d-peq d-h" x="176" y="118" text-anchor="start">cerca de 3,14 deles.</text></svg>
+                <div class="visual-area texto"><span>Área do círculo = π × raio × raio</span></div>
+                <p><strong>Exemplo:</strong> raio de 3 cm: 3,14 × 3 × 3 = <strong>28,26 cm²</strong>.</p>
+                <div class="highlight-box warning">
+                    <strong>Cuidado:</strong> se o problema der o diâmetro, divida por 2 antes. Raio × raio não é raio × 2.
+                </div>
+            </div>
+            <div class="theory-box">
+                <h3>🍕 Partes do círculo</h3>
+                <svg class="desenho" viewBox="0 0 340 134" role="img" aria-label="Semicírculo, setor circular e coroa circular"><circle class="d-sem" cx="58" cy="52" r="42"/><path class="d-fig2" d="M58 52 L100.0 52.0 A42 42 0 0 0 16.0 52.0 Z"/><circle class="d-fig" cx="170" cy="52" r="42"/><path class="d-fig2" d="M170 52 L206.4 31.0 A42 42 0 0 0 155.6 12.5 Z"/><circle class="d-fig2" cx="282" cy="52" r="42"/><circle class="d-furo" cx="282" cy="52" r="24"/><text class="d-peq d-h" x="58" y="118" text-anchor="middle">Semicírculo</text><text class="d-peq d-h" x="170" y="118" text-anchor="middle">Setor circular</text><text class="d-peq d-h" x="282" y="118" text-anchor="middle">Coroa circular</text></svg>
+                <table class="tabela">
+                    <tr><th>Parte</th><th>Como calcular</th></tr>
+                    <tr><td>Semicírculo</td><td>Área do círculo ÷ 2</td></tr>
+                    <tr><td>Setor circular</td><td>Área do círculo × ângulo ÷ 360</td></tr>
+                    <tr><td>Coroa circular</td><td>Área do círculo maior − área do círculo menor</td></tr>
+                </table>
+                <p><strong>Exemplo:</strong> setor de 36° em um círculo de raio 10 cm: 314 × 36 ÷ 360 = <strong>31,4 cm²</strong>.</p>
+            </div>
+        </div>
+
+        <div class="content-group">
+            <span class="section-badge">5. Resumo das fórmulas</span>
+            <div class="theory-box">
+                <h3>📌 Para revisar</h3>
+                <table class="tabela">
+                    <tr><th>Figura</th><th>Área</th></tr>
+                    <tr><td>Quadrado</td><td>lado × lado</td></tr>
+                    <tr><td>Retângulo</td><td>base × altura</td></tr>
+                    <tr><td>Paralelogramo</td><td>base × altura</td></tr>
+                    <tr><td>Triângulo</td><td>base × altura ÷ 2</td></tr>
+                    <tr><td>Trapézio</td><td>(base maior + base menor) × altura ÷ 2</td></tr>
+                    <tr><td>Losango</td><td>diagonal maior × diagonal menor ÷ 2</td></tr>
+                    <tr><td>Círculo</td><td>π × raio × raio</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- ZONA 4 FIM -->
+
+        <button class="btn-action" onclick="setMode('practice')">
+            Iniciar Diagnóstico (15 Q) ➜
+        </button>
+    </div>
+
+    <div id="viewPractice" class="view-section">
+        <div style="margin-bottom: 20px; background-color: var(--white); padding: 15px; border-radius: 12px; border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color);">
+            <h2 style="color:var(--theme-dark); font-weight:900; margin-bottom: 5px;">A Prova de Fogo</h2>
+            <p style="color: #0F172A; font-size: 0.95rem; font-weight:600;">15 questões rigorosas. Acerte <strong>80% (12/15)</strong> para provar seu domínio. Leia a correção de cada erro!</p>
+        </div>
+        <div class="question-map" id="qMap"></div>
+        <div id="quizContainer" style="margin-bottom: 100px;"></div>
+    </div>
+
+    <div id="viewResult" class="view-section">
+        <div class="result-card">
+            <h2 style="font-weight:900; text-transform:uppercase;">Relatório Final</h2>
+            <div class="stars-container" id="finalStars">⭐⭐⭐</div>
+            <div class="percentage-big" id="finalPercent">0%</div>
+            <p style="font-size:1.2rem; font-weight:700; color:#555;" id="finalScoreText">Você acertou 0 de 15</p>
+            <div id="review-container"></div>
+        </div>
+        <div id="action-buttons"></div>
+    </div>
+
+    <!-- ZONA 5 INICIO: 30 QUESTOES -->
+    <section id="bancoQuestoes" hidden>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">O quadrado tem 1 m² e foi dividido em quadradinhos de 1 dm². Quantos dm² existem em 4 m²?<svg class="desenho" viewBox="0 0 340 160" role="img" aria-label="Quadrado de 1 metro de lado dividido em 100 quadradinhos, com um quadradinho de 1 decímetro quadrado pintado"><rect class="d-fig" x="100" y="26" width="120" height="120.0"/><rect class="d-fig2" x="208.0" y="134.0" width="12.0" height="12.0"/><line class="d-gr" x1="112.0" y1="26" x2="112.0" y2="146.0"/><line class="d-gr" x1="124.0" y1="26" x2="124.0" y2="146.0"/><line class="d-gr" x1="136.0" y1="26" x2="136.0" y2="146.0"/><line class="d-gr" x1="148.0" y1="26" x2="148.0" y2="146.0"/><line class="d-gr" x1="160.0" y1="26" x2="160.0" y2="146.0"/><line class="d-gr" x1="172.0" y1="26" x2="172.0" y2="146.0"/><line class="d-gr" x1="184.0" y1="26" x2="184.0" y2="146.0"/><line class="d-gr" x1="196.0" y1="26" x2="196.0" y2="146.0"/><line class="d-gr" x1="208.0" y1="26" x2="208.0" y2="146.0"/><line class="d-gr" x1="100" y1="38.0" x2="220" y2="38.0"/><line class="d-gr" x1="100" y1="50.0" x2="220" y2="50.0"/><line class="d-gr" x1="100" y1="62.0" x2="220" y2="62.0"/><line class="d-gr" x1="100" y1="74.0" x2="220" y2="74.0"/><line class="d-gr" x1="100" y1="86.0" x2="220" y2="86.0"/><line class="d-gr" x1="100" y1="98.0" x2="220" y2="98.0"/><line class="d-gr" x1="100" y1="110.0" x2="220" y2="110.0"/><line class="d-gr" x1="100" y1="122.0" x2="220" y2="122.0"/><line class="d-gr" x1="100" y1="134.0" x2="220" y2="134.0"/><rect class="d-sem" x="100" y="26" width="120" height="120.0"/><text class="d-peq d-h" x="160" y="18" text-anchor="middle">1 m</text><text class="d-peq d-h" x="92" y="90" text-anchor="end">1 m</text><text class="d-peq d-h" x="232" y="144" text-anchor="start">1 dm²</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">40 dm²</div>
+                <div class="porque">Em área, o degrau vale 100, e não 10.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">400 dm²</div>
+                <div class="porque">Cada m² tem 100 dm²: 4 × 100 = 400.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">4 000 dm²</div>
+                <div class="porque">Foi só um degrau: multiplique por 100.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">4 dm²</div>
+                <div class="porque">A unidade mudou, então o número também muda.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Uma sala retangular tem as medidas do desenho. Qual é a área do piso?<svg class="desenho" viewBox="0 0 340 162" role="img" aria-label="Retângulo de 8 metros por 5 metros"><rect class="d-fig" x="70" y="24" width="200" height="125"/><text class="d-peq d-h" x="170" y="16" text-anchor="middle">8 m</text><text class="d-peq d-h" x="276" y="91" text-anchor="start">5 m</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">64 m²</div>
+                <div class="porque">8 × 8 seria um quadrado. Use 8 × 5.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">26 m²</div>
+                <div class="porque">26 m é o perímetro, e não a área.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">13 m²</div>
+                <div class="porque">Na área, multiplique as medidas.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">40 m²</div>
+                <div class="porque">Área = base × altura = 8 × 5 = 40 m².</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Uma placa triangular tem as medidas do desenho. Qual é a área dela?<svg class="desenho" viewBox="0 0 340 164" role="img" aria-label="Triângulo com base de 10 centímetros e altura de 6 centímetros"><polygon class="d-fig" points="70,140 270,140 130,20"/><line class="d-tr" x1="130" y1="20" x2="130" y2="140"/><path class="d-fina" d="M140 140 L140 130 L130 130"/><text class="d-peq d-h" x="170" y="158" text-anchor="middle">10 cm</text><text class="d-peq d-h" x="146" y="88" text-anchor="start">6 cm</text></svg></div>
+            <div class="alternativa certa">
+                <div class="opcao">30 cm²</div>
+                <div class="porque">Área = 10 × 6 ÷ 2 = 30 cm².</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">60 cm²</div>
+                <div class="porque">Faltou dividir por 2.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">16 cm²</div>
+                <div class="porque">Multiplique base e altura, sem somar.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">15 cm²</div>
+                <div class="porque">Divida 60 por 2, e não por 4.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">O ponto O é o centro da circunferência. Qual segmento é um diâmetro?<svg class="desenho" viewBox="0 0 340 182" role="img" aria-label="Circunferência de centro O com os segmentos AB, OC e DE"><circle class="d-fig" cx="170" cy="92" r="72"/><line class="d-lin2" x1="98.0" y1="92.0" x2="242.0" y2="92.0"/><line class="d-lin3" x1="170" y1="92" x2="197.0" y2="25.2"/><line class="d-lin3" x1="111.0" y1="133.3" x2="225.2" y2="138.3"/><circle class="d-pt" cx="98.0" cy="92.0" r="3.5"/><circle class="d-pt" cx="242.0" cy="92.0" r="3.5"/><circle class="d-pt" cx="197.0" cy="25.2" r="3.5"/><circle class="d-pt" cx="111.0" cy="133.3" r="3.5"/><circle class="d-pt" cx="225.2" cy="138.3" r="3.5"/><circle class="d-pt" cx="170" cy="92" r="3.5"/><text class="d-peq d-h" x="90.0" y="97.0" text-anchor="end">A</text><text class="d-peq d-h" x="250.0" y="97.0" text-anchor="start">B</text><text class="d-peq d-h" x="201.0" y="18.2" text-anchor="start">C</text><text class="d-peq d-h" x="105.0" y="147.3" text-anchor="end">D</text><text class="d-peq d-h" x="231.2" y="152.3" text-anchor="start">E</text><text class="d-peq d-h" x="160" y="109" text-anchor="middle">O</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">DE</div>
+                <div class="porque">DE é corda, mas não passa pelo centro.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">OC</div>
+                <div class="porque">OC vai do centro até a linha, então é raio.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">AB</div>
+                <div class="porque">AB liga dois pontos da linha e passa pelo centro.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">OB</div>
+                <div class="porque">OB vai do centro até a linha, então é raio.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Fácil">
+            <div class="enunciado">Observe as retas r, s e t. Qual delas é tangente à circunferência?<svg class="desenho" viewBox="0 0 340 158" role="img" aria-label="Circunferência com três retas: r cruza a circunferência, s toca em um ponto e t não toca"><circle class="d-sem" cx="170" cy="76" r="52"/><line class="d-lin2" x1="80" y1="20" x2="236" y2="118"/><line class="d-lin2" x1="70" y1="128" x2="270" y2="128"/><circle class="d-pt2" cx="170" cy="128" r="4"/><line class="d-lin2" x1="250" y1="8" x2="322" y2="100"/><text class="d-peq d-h" x="72" y="16" text-anchor="middle">r</text><text class="d-peq d-h" x="58" y="133" text-anchor="middle">s</text><text class="d-peq d-h" x="330" y="114" text-anchor="end">t</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">Reta r</div>
+                <div class="porque">A reta r corta em dois pontos, então é secante.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">Reta s</div>
+                <div class="porque">A reta s toca a circunferência em um único ponto.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Reta t</div>
+                <div class="porque">A reta t não toca, então é externa.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">Nenhuma das três</div>
+                <div class="porque">A reta s toca em um ponto, então é tangente.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Um terreno tem a forma de trapézio, com as medidas do desenho. Qual é a área?<svg class="desenho" viewBox="0 0 340 148" role="img" aria-label="Trapézio com bases de 12 e 8 metros e altura de 5 metros"><polygon class="d-fig" points="80,120 260,120 230,45 110,45"/><line class="d-tr" x1="110" y1="45" x2="110" y2="120"/><path class="d-fina" d="M120 120 L120 110 L110 110"/><text class="d-peq d-h" x="170" y="37" text-anchor="middle">8 m</text><text class="d-peq d-h" x="170" y="138" text-anchor="middle">12 m</text><text class="d-peq d-h" x="126" y="88" text-anchor="start">5 m</text></svg></div>
+            <div class="alternativa certa">
+                <div class="opcao">50 m²</div>
+                <div class="porque">(12 + 8) × 5 ÷ 2 = 20 × 5 ÷ 2 = 50 m².</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">100 m²</div>
+                <div class="porque">Faltou dividir por 2.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">240 m²</div>
+                <div class="porque">Some as bases antes de multiplicar.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">25 m²</div>
+                <div class="porque">Divida 100 por 2, e não por 4.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Qual é a área do paralelogramo do desenho?<svg class="desenho" viewBox="0 0 340 148" role="img" aria-label="Paralelogramo com base de 9 centímetros, lado inclinado de 5 centímetros e altura de 4 centímetros"><polygon class="d-fig" points="50,120 230,120 290,40 110,40"/><line class="d-tr" x1="110" y1="40" x2="110" y2="120"/><path class="d-fina" d="M120 120 L120 110 L110 110"/><text class="d-peq d-h" x="140" y="138" text-anchor="middle">9 cm</text><text class="d-peq d-h" x="126" y="84" text-anchor="start">4 cm</text><text class="d-peq d-h" x="72" y="76" text-anchor="end">5 cm</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">28 cm²</div>
+                <div class="porque">28 cm é o perímetro, e não a área.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">45 cm²</div>
+                <div class="porque">5 cm é o lado inclinado. A altura é 4 cm.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">18 cm²</div>
+                <div class="porque">No paralelogramo, não se divide por 2.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">36 cm²</div>
+                <div class="porque">Base × altura = 9 × 4 = 36 cm².</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Um canteiro tem forma de losango, com as diagonais do desenho. Qual é a área?<svg class="desenho" viewBox="0 0 340 176" role="img" aria-label="Losango com diagonais de 10 e 6 metros"><polygon class="d-fig" points="170,20 270,80 170,140 70,80"/><line class="d-tr" x1="70" y1="80" x2="270" y2="80"/><line class="d-tr" x1="170" y1="20" x2="170" y2="140"/><line class="d-med" x1="70" y1="152" x2="270" y2="152"/><line class="d-med" x1="70" y1="146" x2="70" y2="158"/><line class="d-med" x1="270" y1="146" x2="270" y2="158"/><text class="d-peq d-h" x="170" y="170" text-anchor="middle">10 m</text><line class="d-med" x1="286" y1="20" x2="286" y2="140"/><line class="d-med" x1="280" y1="20" x2="292" y2="20"/><line class="d-med" x1="280" y1="140" x2="292" y2="140"/><text class="d-peq d-h" x="296" y="85" text-anchor="start">6 m</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">16 m²</div>
+                <div class="porque">Multiplique as diagonais, sem somar.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">60 m²</div>
+                <div class="porque">Faltou dividir por 2.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">30 m²</div>
+                <div class="porque">Área = 10 × 6 ÷ 2 = 30 m².</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">15 m²</div>
+                <div class="porque">Divida 60 por 2, e não por 4.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">Um prato tem 12 cm de diâmetro. Qual é a área do círculo? Use π = 3,14.<svg class="desenho" viewBox="0 0 340 158" role="img" aria-label="Círculo com diâmetro de 12 centímetros"><circle class="d-fig" cx="170" cy="80" r="66"/><line class="d-lin2" x1="104" y1="80" x2="236" y2="80"/><circle class="d-pt" cx="170" cy="80" r="3.5"/><text class="d-peq d-h" x="170" y="70" text-anchor="middle">12 cm</text></svg></div>
+            <div class="alternativa certa">
+                <div class="opcao">113,04 cm²</div>
+                <div class="porque">Raio = 6 cm. Área = 3,14 × 6 × 6 = 113,04 cm².</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">452,16 cm²</div>
+                <div class="porque">12 é o diâmetro. O raio é 6 cm.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">37,68 cm²</div>
+                <div class="porque">37,68 cm é o comprimento, e não a área.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">18,84 cm²</div>
+                <div class="porque">Multiplique raio × raio: 6 × 6 = 36.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Médio">
+            <div class="enunciado">A roda de uma bicicleta tem 30 cm de raio. Qual distância ela percorre em 100 voltas? Use π = 3,14.<svg class="desenho" viewBox="0 0 340 150" role="img" aria-label="Roda de bicicleta com raio de 30 centímetros andando 100 voltas sobre o chão"><line class="d-linha" x1="16" y1="120" x2="324" y2="120"/><circle class="d-roda2" cx="90" cy="66" r="50"/><circle class="d-furo" cx="90" cy="66" r="42"/><line class="d-fina" x1="90" y1="66" x2="140.0" y2="66.0"/><line class="d-fina" x1="90" y1="66" x2="125.4" y2="30.6"/><line class="d-fina" x1="90" y1="66" x2="90.0" y2="16.0"/><line class="d-fina" x1="90" y1="66" x2="54.6" y2="30.6"/><line class="d-fina" x1="90" y1="66" x2="40.0" y2="66.0"/><line class="d-fina" x1="90" y1="66" x2="54.6" y2="101.4"/><line class="d-fina" x1="90" y1="66" x2="90.0" y2="116.0"/><line class="d-fina" x1="90" y1="66" x2="125.4" y2="101.4"/><line class="d-lin3" x1="90" y1="66" x2="140" y2="66"/><circle class="d-pt" cx="90" cy="66" r="4"/><text class="d-peq d-h" x="146" y="58" text-anchor="start">30 cm</text><line class="d-lin2" x1="170" y1="92" x2="292" y2="92"/><polygon class="d-pt2" points="300,92 290,87 290,97"/><text class="d-peq d-h" x="236" y="82" text-anchor="middle">100 voltas</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">94,2 m</div>
+                <div class="porque">Faltou o 2: comprimento = 2 × π × raio.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">188,4 m</div>
+                <div class="porque">Uma volta: 188,4 cm. Em 100 voltas: 18 840 cm = 188,4 m.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">18,84 m</div>
+                <div class="porque">18 840 cm ÷ 100 = 188,4 m.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">1 884 m</div>
+                <div class="porque">Para trocar cm por m, divida por 100.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Qual é a área da figura? Todos os cantos são retos.<svg class="desenho" viewBox="0 0 340 164" role="img" aria-label="Figura em L com 10 metros de base, 8 metros de altura e um canto recortado de 4 por 3 metros"><polygon class="d-fig" points="80,18 170,18 170,63 230,63 230,138 80,138"/><text class="d-peq d-h" x="155" y="156" text-anchor="middle">10 m</text><text class="d-peq d-h" x="72" y="82" text-anchor="end">8 m</text><text class="d-peq d-h" x="204" y="55" text-anchor="middle">4 m</text><text class="d-peq d-h" x="176" y="38" text-anchor="start">3 m</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">36 m²</div>
+                <div class="porque">36 m é o perímetro, e não a área.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">80 m²</div>
+                <div class="porque">Faltou tirar o canto de 12 m².</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">92 m²</div>
+                <div class="porque">O canto deve ser subtraído, e não somado.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">68 m²</div>
+                <div class="porque">10 × 8 = 80. Tirando 4 × 3 = 12, restam 68 m².</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Uma fazenda retangular tem as medidas do desenho. Qual é a área em hectares? Lembre: 1 hectare = 10 000 m².<svg class="desenho" viewBox="0 0 340 168" role="img" aria-label="Fazenda retangular de 200 por 150 metros"><rect class="d-fig" x="82" y="24" width="176" height="132"/><circle class="d-fig2" cx="120" cy="60" r="8"/><line class="d-fina" x1="120" y1="68" x2="120" y2="75"/><circle class="d-fig2" cx="170" cy="92" r="8"/><line class="d-fina" x1="170" y1="100" x2="170" y2="107"/><circle class="d-fig2" cx="220" cy="60" r="8"/><line class="d-fina" x1="220" y1="68" x2="220" y2="75"/><circle class="d-fig2" cx="120" cy="118" r="8"/><line class="d-fina" x1="120" y1="126" x2="120" y2="133"/><circle class="d-fig2" cx="220" cy="118" r="8"/><line class="d-fina" x1="220" y1="126" x2="220" y2="133"/><text class="d-peq d-h" x="170" y="16" text-anchor="middle">200 m</text><text class="d-peq d-h" x="264" y="94" text-anchor="start">150 m</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">0,3 hectare</div>
+                <div class="porque">30 000 ÷ 10 000 = 3, e não 0,3.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">30 hectares</div>
+                <div class="porque">Divida 30 000 por 10 000, e não por 1 000.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">3 hectares</div>
+                <div class="porque">200 × 150 = 30 000 m². 30 000 ÷ 10 000 = 3 ha.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">300 hectares</div>
+                <div class="porque">Divida 30 000 por 10 000, e não por 100.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Qual é a área da coroa circular pintada? Use π = 3,14.<svg class="desenho" viewBox="0 0 340 172" role="img" aria-label="Coroa circular pintada entre um círculo de raio 5 centímetros e um círculo de raio 3 centímetros"><circle class="d-fig2" cx="170" cy="88" r="75"/><circle class="d-furo" cx="170" cy="88" r="45"/><line class="d-lin3" x1="170" y1="88" x2="245.0" y2="88.0"/><line class="d-lin3" x1="170" y1="88" x2="133.1" y2="113.8"/><circle class="d-pt" cx="170" cy="88" r="3.5"/><text class="d-peq d-h" x="196" y="80" text-anchor="middle">5 cm</text><text class="d-peq d-h" x="170" y="118" text-anchor="middle">3 cm</text></svg></div>
+            <div class="alternativa certa">
+                <div class="opcao">50,24 cm²</div>
+                <div class="porque">78,5 − 28,26 = 50,24 cm².</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">78,5 cm²</div>
+                <div class="porque">Essa é a área do círculo maior inteiro.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">106,76 cm²</div>
+                <div class="porque">A área do círculo menor deve ser subtraída.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">12,56 cm²</div>
+                <div class="porque">Calcule cada área e depois subtraia.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Um círculo toca os quatro lados de um quadrado. Qual é a área dos quatro cantos pintados? Use π = 3,14.<svg class="desenho" viewBox="0 0 340 188" role="img" aria-label="Quadrado de 10 centímetros de lado com um círculo dentro; os quatro cantos estão pintados"><rect class="d-fig2" x="95" y="14" width="150" height="150"/><circle class="d-furo" cx="170" cy="89" r="75"/><text class="d-peq d-h" x="170" y="182" text-anchor="middle">10 cm</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">68,6 cm²</div>
+                <div class="porque">31,4 cm é o comprimento. Use a área do círculo.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">78,5 cm²</div>
+                <div class="porque">Essa é a área do círculo, e não a dos cantos.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">21,5 cm²</div>
+                <div class="porque">Quadrado: 100. Círculo de raio 5: 78,5. 100 − 78,5 = 21,5.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">100 cm²</div>
+                <div class="porque">Essa é a área do quadrado inteiro.</div>
+            </div>
+        </div>
+        <div class="questao" data-nivel="Difícil">
+            <div class="enunciado">Uma pizza tem 20 cm de raio. Qual é a área da fatia de 90°? Use π = 3,14.<svg class="desenho" viewBox="0 0 340 170" role="img" aria-label="Pizza de raio 20 centímetros com uma fatia de 90 graus pintada"><circle class="d-fig" cx="170" cy="86" r="72"/><path class="d-fig2" d="M170 86 L242.0 86.0 A72 72 0 0 0 170.0 14.0 Z"/><line class="d-lin3" x1="170" y1="86" x2="98" y2="86"/><circle class="d-pt3" cx="137.5" cy="53.5" r="6"/><circle class="d-pt3" cx="123.0" cy="103.1" r="6"/><circle class="d-pt3" cx="155.0" cy="127.3" r="6"/><circle class="d-pt3" cx="196.0" cy="131.0" r="6"/><circle class="d-pt" cx="170" cy="86" r="3.5"/><text class="d-peq d-h" x="134" y="80" text-anchor="middle">20 cm</text><text class="d-peq d-h" x="200" y="70" text-anchor="middle">90°</text></svg></div>
+            <div class="alternativa">
+                <div class="opcao">1 256 cm²</div>
+                <div class="porque">Essa é a área da pizza inteira.</div>
+            </div>
+            <div class="alternativa certa">
+                <div class="opcao">314 cm²</div>
+                <div class="porque">Círculo: 1 256 cm². 90° é 1/4: 1 256 ÷ 4 = 314.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">628 cm²</div>
+                <div class="porque">90° é 1/4 da volta, e não metade.</div>
+            </div>
+            <div class="alternativa">
+                <div class="opcao">31,4 cm²</div>
+                <div class="porque">31,4 cm é 1/4 do comprimento, e não da área.</div>
+            </div>
+        </div>
+    </section>
+    <!-- ZONA 5 FIM -->
+</div>
+
+<footer class="quiz-footer" id="quizFooter">
+    <button class="nav-btn btn-prev" id="btnPrev" onclick="changeQuestion(-1)">Anterior</button>
+    <button class="nav-btn btn-next" id="btnNext" onclick="changeQuestion(1)">Próxima</button>
+</footer>
+
+<!-- BLOCO TRAVADO: SELOS E MOTOR. COPIE IGUAL. -->
+<script id="selo">
+const SELO_MOTOR = "616cbb66";
+const SELO_CSS = "1b813fa0";
+</script>
+<script id="motor">
+const searchInput = document.getElementById('searchInput');
+const contentGroups = document.querySelectorAll('.content-group');
+const noResultsMsg = document.getElementById('no-results');
+
+searchInput.addEventListener('input', function(e) {
+    const term = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let totalVisible = 0;
+    contentGroups.forEach(group => {
+        const textContent = group.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (textContent.includes(term)) {
+            group.style.display = 'flex';
+            totalVisible++;
+        } else {
+            group.style.display = 'none';
+        }
+    });
+    noResultsMsg.style.display = totalVisible === 0 ? 'block' : 'none';
+});
+
+// --- LEITURA DAS QUESTOES (vem do HTML) ---
+function htmlDe(pai, seletor) {
+    const el = pai ? pai.querySelector(seletor) : null;
+    return el ? el.innerHTML.trim() : '';
+}
+
+const questions = Array.from(document.querySelectorAll('#bancoQuestoes .questao')).map((bloco, i) => {
+    const alternativas = Array.from(bloco.querySelectorAll(':scope > .alternativa'));
+    const certa = Math.max(alternativas.findIndex(a => a.classList.contains('certa')), 0);
+    return {
+        id: i + 1,
+        level: bloco.dataset.nivel,
+        text: htmlDe(bloco, ':scope > .enunciado'),
+        options: alternativas.map(a => htmlDe(a, ':scope > .opcao')),
+        correct: certa,
+        explanation: {
+            correct: htmlDe(alternativas[certa], ':scope > .porque'),
+            options: alternativas.map((a, j) => j === certa ? 'Certa' : htmlDe(a, ':scope > .porque'))
+        }
+    };
+});
+
+// --- SISTEMA DE SALVAMENTO (LOCALSTORAGE) E LÓGICA ---
+const storageKey = 'promover_quiz_' + document.title.replace(/\s+/g, '_');
+let currentQuestion = 0;
+let userAnswers = new Array(questions.length).fill(null);
+try {
+    const savedAnswers = JSON.parse(localStorage.getItem(storageKey));
+    if (Array.isArray(savedAnswers) && savedAnswers.length === questions.length) userAnswers = savedAnswers;
+} catch (e) { /* Sem salvamento disponível: a página continua funcionando. */ }
+
+function setMode(mode) {
+    const views = ['viewExplanation', 'viewPractice', 'viewResult'];
+    views.forEach(v => document.getElementById(v).style.display = 'none');
+    document.getElementById('quizFooter').style.display = 'none';
+    if(mode === 'explanation') {
+        document.getElementById('viewExplanation').style.display = 'flex';
+        document.getElementById('btnExp').classList.add('active');
+        document.getElementById('btnPrac').classList.remove('active');
+    } else if (mode === 'practice') {
+        document.getElementById('viewPractice').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'flex';
+        document.getElementById('btnExp').classList.remove('active');
+        document.getElementById('btnPrac').classList.add('active');
+        renderQuestion();
+        renderMap();
+    } else if (mode === 'result') {
+        document.getElementById('viewResult').style.display = 'block';
+        document.getElementById('quizFooter').style.display = 'none';
+    }
+    window.scrollTo(0,0);
+}
+
+function renderQuestion() {
+    if(questions.length === 0) return;
+    const q = questions[currentQuestion];
+    const container = document.getElementById('quizContainer');
+    const letters = ['A', 'B', 'C', 'D'];
+    const ans = userAnswers[currentQuestion];
+    let badgeClass = '';
+    if(q.level === 'Fácil') badgeClass = 'dif-facil';
+    else if(q.level === 'Médio') badgeClass = 'dif-medio';
+    else badgeClass = 'dif-dificil';
+
+    container.innerHTML = `
+    <div class="card-content" style="border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--border-color); padding: 15px; border-radius: 12px; background: white;">
+        <span class="difficulty-badge ${badgeClass}">${q.level}</span>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--theme-dark);">QUESTÃO ${currentQuestion + 1} DE ${questions.length}</span>
+            <h2 style="font-size: 1.15rem; margin-top: 5px; color: var(--text-color); font-weight: 900;">${q.text}</h2>
+        </div>
+        <div class="options-list">
+            ${q.options.map((opt, i) => {
+                let cls = '';
+                if (ans !== null) {
+                    if (i === q.correct) cls = 'correct';
+                    else if (i === ans) cls = 'wrong';
+                    else cls = 'disabled';
+                }
+                return `<button class="option-btn ${cls}" onclick="handleAnswer(${i})" ${ans !== null ? 'disabled' : ''}>
+                    <div class="opt-circle">${letters[i]}</div>
+                    <div>${opt}</div>
+                </button>
+                `;
+            }).join('')}
+        </div>
+        ${ans !== null ? `
+        <div class="feedback-box">
+            <div class="feedback-title" style="color:${ans === q.correct ? 'var(--correct-border)' : 'var(--wrong-border)'}">
+                ${ans === q.correct ? '✅ Raciocínio Aprovado!' : '❌ Ops! Falha Detectada:'}
+            </div>
+            <div class="feedback-item correct-opt"><strong>A Verdade Direta e Certa:</strong> ${q.options[q.correct]}</div>
+            <div style="margin-top:10px; font-size:0.95rem; color:var(--text-color); margin-bottom:15px; font-weight:600;">
+                ${q.explanation.correct}
+            </div>
+            <div style="margin-top:15px; border-top:1px dashed var(--theme-light); padding-top:10px;">
+                <small style="color:var(--theme-dark);"><strong>Diagnóstico das Rasteiras e Distratores:</strong></small>
+                ${q.explanation.options.map((exp, i) => i !== q.correct ? `<div class="feedback-item wrong-opt" style="margin-top:8px;"><strong>${letters[i]})</strong> ${exp}</div>` : '').join('')}
+            </div>
+        </div>
+        ` : ''}
+    </div>
+    `;
+    updateNav();
+}
+
+function handleAnswer(idx) {
+    if (userAnswers[currentQuestion] !== null) return;
+    userAnswers[currentQuestion] = idx;
+    try { localStorage.setItem(storageKey, JSON.stringify(userAnswers)); } catch (e) { /* Sem salvamento disponível. */ }
+    if (idx === questions[currentQuestion].correct) {
+        if (window.confetti) {
+            const duration = 1500;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#10B981', '#059669', '#34D399', '#047857'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        }
+    } else {
+        const quizContainer = document.getElementById('quizContainer');
+        quizContainer.classList.remove('shake-effect');
+        void quizContainer.offsetWidth;
+        quizContainer.classList.add('shake-effect');
+        setTimeout(() => quizContainer.classList.remove('shake-effect'), 500);
+    }
+    renderQuestion();
+    renderMap();
+    const feedback = document.querySelector('.feedback-box');
+    if (feedback) feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function renderMap() {
+    if(questions.length === 0) return;
+    const map = document.getElementById('qMap');
+    map.innerHTML = questions.map((q, i) => {
+        let cls = 'map-dot';
+        if (i === currentQuestion) cls += ' active';
+        if (userAnswers[i] !== null) {
+            cls += userAnswers[i] === q.correct ? ' answered-correct' : ' answered-wrong';
+        }
+        return `<div class="${cls}" onclick="goTo(${i})">${i+1}</div>`;
+    }).join('');
+    setTimeout(() => {
+        const activeDot = map.querySelector('.map-dot.active');
+        if (activeDot) {
+            const mapBox = map.getBoundingClientRect();
+            const dotBox = activeDot.getBoundingClientRect();
+            map.scrollTo({ left: map.scrollLeft + dotBox.left - mapBox.left - (mapBox.width - dotBox.width) / 2, behavior: 'smooth' });
+        }
+    }, 50);
+}
+
+function goTo(i) {
+    if (window.confetti) confetti.reset();
+    currentQuestion = i;
+    renderQuestion();
+    renderMap();
+    document.getElementById('qMap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function changeQuestion(d) {
+    let n = currentQuestion + d;
+    if (n >= 0 && n < questions.length) goTo(n);
+}
+
+function updateNav() {
+    document.getElementById('btnPrev').disabled = (currentQuestion === 0);
+    const next = document.getElementById('btnNext');
+    if (currentQuestion === questions.length - 1) {
+        next.textContent = "Finalizar Diagnóstico";
+        next.onclick = finish;
+    } else {
+        next.textContent = "Avançar";
+        next.onclick = () => changeQuestion(1);
+    }
+}
+
+function finish() {
+    let correct = userAnswers.filter((a, i) => a === questions[i].correct).length;
+    let percent = Math.round((correct / questions.length) * 100);
+    if (window.confetti) confetti.reset();
+    document.getElementById('finalPercent').textContent = percent + "%";
+    document.getElementById('finalScoreText').textContent = `Você acertou ${correct} de ${questions.length} questões.`;
+    document.getElementById('finalStars').textContent = percent >= 80 ? "⭐⭐⭐⭐⭐" : percent >= 60 ? "⭐⭐⭐" : "⭐";
+    let summary = '<div style="text-align:left; margin-top:20px;">';
+    if (percent < 80) {
+        summary += `<div style="background:var(--wrong-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--wrong-border); color:var(--wrong-border);">
+            <strong>⚠️ Domínio Insuficiente!</strong> O seu desempenho não atingiu a meta de 80%. Revise a teoria com atenção antes de tentar novamente.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Limpar Histórico e Refazer Prova</button>`;
+    } else {
+        summary += `<div style="background:var(--correct-bg); padding:15px; border-radius:8px; margin-bottom:20px; border:2px solid var(--correct-border); color:var(--correct-border);">
+            <strong>🎉 Excelente Desempenho!</strong> Você demonstrou uma base sólida sobre os conceitos avaliados. Continue revisando para fazer a prova com segurança.
+        </div>`;
+        document.getElementById('action-buttons').innerHTML = `<button class="btn-action" onclick="reset()">🔄 Refazer Prova (Zerar Histórico)</button>`;
+    }
+    if (correct < questions.length) {
+        summary += '<h4 style="margin-bottom:10px; color:var(--text-color);">Relatório de Falhas e Correções:</h4>';
+        questions.forEach((q, i) => {
+            if(userAnswers[i] !== q.correct) {
+                summary += `<div style="margin-bottom:10px; padding:15px; background:var(--white); border-radius:8px; border:2px dashed var(--theme-dark);">
+                    <strong style="color:var(--theme-dark);">Q${i+1}:</strong> ${q.text}<br>
+                    <span style="color:var(--wrong-border); font-size:0.9rem; font-weight:600; display:block; margin-top:5px;">${userAnswers[i] === null ? 'Questão não respondida' : 'Seu Erro: ' + q.options[userAnswers[i]]}</span>
+                    <span style="color:var(--correct-border); font-size:0.9rem; font-weight:600; display:block; margin-top:2px;">A Verdade: ${q.options[q.correct]}</span>
+                </div>`;
+            }
+        });
+    }
+    summary += '</div>';
+    document.getElementById('review-container').innerHTML = summary;
+    setMode('result');
+}
+
+function reset() {
+    try { localStorage.removeItem(storageKey); } catch (e) { /* Sem salvamento disponível. */ }
+    userAnswers = new Array(questions.length).fill(null);
+    currentQuestion = 0;
+    setMode('practice');
+}
+
+setMode(userAnswers.some(ans => ans !== null) ? 'practice' : 'explanation');
+
+// --- VERIFICADOR AUTOMATICO DA PAGINA ---
+function seloDe(texto) {
+    const limpo = texto.replace(/[^\x21-\x7E]/g, '');
+    let h = 2166136261;
+    for (let i = 0; i < limpo.length; i++) {
+        h ^= limpo.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(16);
+}
+
+function textoDe(html) {
+    const modelo = document.createElement('template');
+    modelo.innerHTML = html;
+    return modelo.content.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function verificarPagina() {
+    const erros = [];
+    const letras = ['A', 'B', 'C', 'D'];
+    const conteudo = [
+        document.title,
+        document.querySelector('.logo-header').innerHTML,
+        document.getElementById('viewExplanation').innerHTML,
+        document.getElementById('bancoQuestoes').innerHTML
+    ].join(' ');
+
+    const seloMotor = document.getElementById('motor');
+    const seloCss = document.getElementById('css-motor');
+    if (typeof SELO_MOTOR === 'undefined' || !seloMotor || seloDe(seloMotor.textContent) !== SELO_MOTOR) erros.push('O motor JavaScript foi alterado. Copie de novo o bloco do esqueleto, sem mudar nada.');
+    if (typeof SELO_CSS === 'undefined' || !seloCss || seloDe(seloCss.textContent) !== SELO_CSS) erros.push('O CSS do motor foi alterado. Copie de novo o bloco do esqueleto, sem mudar nada.');
+    if (conteudo.includes('[[') || conteudo.includes(']]')) erros.push('Ficou algum campo [[...]] sem preencher.');
+    if (conteudo.includes('**')) erros.push('Há Markdown (**) dentro do HTML. Use <strong>.');
+    if (document.querySelector('#viewExplanation script, #bancoQuestoes script, #viewExplanation iframe, #bancoQuestoes iframe')) erros.push('Há script ou iframe dentro das zonas de conteúdo.');
+    if (document.querySelector('#viewExplanation img, #bancoQuestoes img')) erros.push('Há imagem externa. Desenhe com SVG.');
+
+    document.querySelectorAll('#viewExplanation svg, #bancoQuestoes svg').forEach((svg, i) => {
+        if (!svg.getAttribute('viewBox') || !svg.getAttribute('aria-label')) erros.push('O desenho SVG ' + (i + 1) + ' precisa de viewBox e aria-label.');
+    });
+
+    const grupos = document.querySelectorAll('#viewExplanation .content-group');
+    if (grupos.length < 2) erros.push('A teoria precisa de pelo menos 2 temas.');
+    grupos.forEach((g, i) => {
+        if (!g.querySelector('.section-badge') || !g.querySelector('.theory-box')) erros.push('O tema ' + (i + 1) + ' da teoria está sem .section-badge ou .theory-box.');
+    });
+
+    const blocos = Array.from(document.querySelectorAll('#bancoQuestoes .questao'));
+    if (blocos.length !== 15) erros.push('São ' + blocos.length + ' questões, mas precisam ser exatamente 15.');
+
+    const enunciados = new Set();
+    const contagem = [0, 0, 0, 0];
+    let longas = 0;
+    let sequencia = 0;
+    let ultima = -1;
+
+    blocos.forEach((bloco, i) => {
+        const q = 'Questão ' + (i + 1) + ': ';
+        const esperado = i < 5 ? 'Fácil' : i < 10 ? 'Médio' : 'Difícil';
+        if (bloco.dataset.nivel !== esperado) erros.push(q + 'o nível deveria ser ' + esperado + '.');
+
+        const enunciadoEl = bloco.querySelector(':scope > .enunciado');
+        const enunciado = enunciadoEl ? textoDe(enunciadoEl.innerHTML) : '';
+        if (!enunciado) erros.push(q + 'falta o enunciado.');
+        if (enunciado && enunciados.has(enunciado)) erros.push(q + 'enunciado repetido.');
+        enunciados.add(enunciado);
+
+        const alternativas = Array.from(bloco.querySelectorAll(':scope > .alternativa'));
+        if (alternativas.length !== 4) erros.push(q + 'precisa de exatamente 4 alternativas.');
+        const certas = alternativas.filter(a => a.classList.contains('certa'));
+        if (certas.length !== 1) erros.push(q + 'precisa de exatamente 1 alternativa certa.');
+
+        const textos = alternativas.map(a => {
+            const el = a.querySelector(':scope > .opcao');
+            return el ? textoDe(el.innerHTML) : '';
+        });
+        if (textos.some(t => !t)) erros.push(q + 'há alternativa sem texto.');
+        if (new Set(textos).size !== textos.length) erros.push(q + 'há alternativas repetidas.');
+
+        alternativas.forEach((a, j) => {
+            const el = a.querySelector(':scope > .porque');
+            const porque = el ? textoDe(el.innerHTML) : '';
+            const letra = letras[j] || '?';
+            if (!porque) erros.push(q + 'a alternativa ' + letra + ' está sem explicação.');
+            if (porque.length > 110) erros.push(q + 'a explicação da alternativa ' + letra + ' passou de 110 caracteres.');
+        });
+
+        const indice = alternativas.findIndex(a => a.classList.contains('certa'));
+        if (indice >= 0 && indice < 4) {
+            contagem[indice]++;
+            sequencia = indice === ultima ? sequencia + 1 : 1;
+            ultima = indice;
+            if (sequencia === 4) erros.push(q + 'são 4 respostas seguidas com a mesma letra.');
+            const tamanhos = textos.map(t => t.length);
+            const outros = tamanhos.filter((_, j) => j !== indice);
+            if (tamanhos[indice] > 20 && tamanhos[indice] - Math.max(...outros) >= 6) longas++;
+        }
+    });
+
+    contagem.forEach((total, i) => {
+        if (blocos.length === 15 && (total < 2 || total > 5)) erros.push('A letra ' + letras[i] + ' é a certa em ' + total + ' questões. Use de 3 a 4.');
+    });
+    if (longas > 2) erros.push('A alternativa certa é claramente a mais longa em ' + longas + ' questões. Equilibre os tamanhos.');
+
+    const aviso = document.getElementById('avisoMotor');
+    if (erros.length === 0) {
+        aviso.remove();
+        window.PAGINA_OK = true;
+        return;
+    }
+    const lista = erros.slice(0, 25).map(e => '<li>' + e.replace(/</g, '&lt;') + '</li>').join('');
+    aviso.innerHTML = '<strong>⚠️ A página precisa de correção. Não envie aos alunos.</strong><br>Copie esta lista, cole no Gemini e peça para corrigir só estes itens:<ol style="margin:8px 0 0 20px;">' + lista + '</ol>';
+}
+
+verificarPagina();
+</script>
+
+</body></html>
